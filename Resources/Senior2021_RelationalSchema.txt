@@ -1,0 +1,15 @@
+Athlete (id, username, password, registered, firstname, lastname, dateofbirth, lastlogin, Type, weight, height) 
+
+Staff (id, username, password, registered, firstname, lastname, dateofbirth, lastlogin, Type)
+
+Questionnaire (questionNumber, qtype, Th_qtext, Eng_qtext) 
+
+Choice (id, part, point, Th_text, Eng_text, QuestionNumber) 
+
+Athscore (id, Athlete.user_id, Sum, h1_point, h2_point, h3_point, h4_point, h8_text, h9_text, h10_text, h12_text, h11_name, h11_workplace, h12_point, h13_point, other, misstraining, additional, illness, submit_date)  
+
+Injury (id, Athlete.user_id, bodypart, Sum, q1_ans, q2_ans, q3_ans, q4_ans, painlevel, name, workplace, reported_problem, misstraining, additional, First_time, date) 
+
+Psychology (id, Athlete.user_id, Fall_sleep_long, Hours_actual_sleep, 51_point, 52_point, …,59_point, Other_reason, 6_point, 7_point, 8_point, 9_point, roommate, 101_text, 102_text, 103_text, 104_text, Other_restlessness, Component1, Component2, …, Component7, date) 
+
+Psychologypart2 (id, Athlete.user_id, 1_point, 2_point, …, 6_point, date)

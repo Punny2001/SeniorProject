@@ -1,0 +1,10 @@
+users: 
+- Athletes
+- Medical Staff:
+  - coach(don't sure)
+
+planning for 3 ranges
+
+Database
+ - total score for each week for athletes
+ - all answers from athletes
