@@ -1,0 +1,4 @@
+https://github.com/AmirBayat0/Flutter-FireBase-test/blob/main/flutter_new_firebase/lib/screens/signup.dart 
+https://2022sp.netlify.app/#
+https://gist.github.com/nikhilmufc7/6b74a3c12a6e2d3284942d40ff583e37
+https://stackoverflow.com/questions/49125064/how-to-show-hide-password-in-textformfield
