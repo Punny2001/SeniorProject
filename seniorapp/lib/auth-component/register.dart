@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/auth-component/login.dart';
+import 'package:seniorapp/auth-component/userdata.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -11,6 +13,12 @@ class _RegisterState extends State<Register> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _firstnameController = TextEditingController();
+  final _lastnameController = TextEditingController();
+  String _selectedSport = 'Football';
+  bool _passwordhide = true;
+  bool _confirmPasswordhide = true;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +55,7 @@ class _RegisterState extends State<Register> {
                 padding: EdgeInsets.only(bottom: 10),
               ),
 
-              /// Password  registeration
+              /// Password registration
               Text(
                 'Password',
                 style: textCustom(),
@@ -57,16 +65,27 @@ class _RegisterState extends State<Register> {
               ),
               TextField(
                 controller: _passwordController,
+                obscureText: _passwordhide,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(_passwordhide
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _passwordhide = !_passwordhide;
+                      });
+                    },
+                  ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 10),
               ),
 
-              /// Confirm registeration
+              /// Confirm registration
               Text(
                 'Confirm password',
                 style: textCustom(),
@@ -76,14 +95,114 @@ class _RegisterState extends State<Register> {
               ),
               TextField(
                 controller: _confirmPasswordController,
+                obscureText: _confirmPasswordhide,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Confirm password',
+                  suffixIcon: IconButton(
+                    icon: Icon(_confirmPasswordhide
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _confirmPasswordhide = !_confirmPasswordhide;
+                      });
+                    },
+                  ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 10),
               ),
+
+              /// Username textbox
+              Text(
+                'Username',
+                style: textCustom(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+              TextField(
+                controller: _usernameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Username',
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+
+              /// Firstname textbox
+              Text(
+                'Firstname',
+                style: textCustom(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+              TextField(
+                controller: _firstnameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Firstname',
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+
+              /// Lastname textbox
+              Text(
+                'Lastname',
+                style: textCustom(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+              TextField(
+                controller: _lastnameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Lastname',
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+
+              /// Sport Type choosing
+              Text(
+                'Sport Type',
+                style: textCustom(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+              DropdownButtonFormField<String>(
+                // isExpanded: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                ),
+                items: sportList
+                    .map((sport) => DropdownMenuItem(
+                          child: Text(sport),
+                          value: sport,
+                        ))
+                    .toList(),
+                value: _selectedSport,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedSport = value;
+                  });
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+
+              /// Sign Up button
               ElevatedButton(
                 onPressed: () => signup(),
                 child: Text("Sign Up"),
@@ -114,11 +233,20 @@ class _RegisterState extends State<Register> {
     try {
       if (_emailController.text.isNotEmpty &
           _passwordController.text.isNotEmpty &
-          _confirmPasswordController.text.isNotEmpty) {
+          _confirmPasswordController.text.isNotEmpty &
+          _usernameController.text.isNotEmpty &
+          _firstnameController.text.isNotEmpty &
+          _lastnameController.text.isNotEmpty &
+          _selectedSport.isNotEmpty) {
         if (passwordConfirm()) {
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: _emailController.text.trim(),
-            password: _passwordController.text.trim(),
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim());
+          userSetup(
+            _usernameController.text.trim(),
+            _firstnameController.text.trim(),
+            _lastnameController.text.trim(),
+            _selectedSport.trim(),
           );
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => Login()),
@@ -138,8 +266,9 @@ class _RegisterState extends State<Register> {
             content: Text('Your inserted password is weak. Please refill it.'),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('OK'))
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text('OK'),
+              ),
             ],
           ),
         );
@@ -150,7 +279,22 @@ class _RegisterState extends State<Register> {
           builder: (BuildContext context) => AlertDialog(
             title: Text('Registration failed!'),
             content: Text(
-                'The account that used this email is already exist. Plase change your email'),
+                'The account that used this email is already exist. Plase change your email.'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('OK'))
+            ],
+          ),
+        );
+      } else if (error.code == 'invalid-email') {
+        print('Invalid email format');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text('Registration failed!'),
+            content: Text(
+                'The format of email is invalid. Please correct the email.'),
             actions: [
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -171,4 +315,14 @@ class _RegisterState extends State<Register> {
   var passwordNotEqual = const SnackBar(
     content: Text('The password is not match with the confirm password.'),
   );
+
+  List<String> sportList = [
+    'Football',
+    'Basketball',
+    'Badminton',
+    'Boxing',
+    'Judo',
+    'Rugby',
+    'VolleyBall'
+  ];
 }

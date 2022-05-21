@@ -11,6 +11,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _passwordhide = true;
 
   var allSnackbar = const SnackBar(
     content: Text('Please fill in both Email and Password'),
@@ -124,19 +125,33 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 20,
               ),
+
+              /// Password text insertion
               Container(
                 child: TextField(
                   controller: _passwordController,
+                  obscureText: _passwordhide,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Password',
                     prefixIcon: Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      icon: Icon(_passwordhide
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _passwordhide = !_passwordhide;
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),
               SizedBox(
                 height: 20,
               ),
+
               ElevatedButton(
                 onPressed: () => signin(),
                 child: Text("Log In"),
@@ -147,6 +162,7 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 20,
               ),
+              
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
