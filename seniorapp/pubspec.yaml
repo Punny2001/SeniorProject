@@ -38,6 +38,7 @@ dependencies:
   firebase_auth: ^3.3.18
   cloud_firestore: ^3.1.15
   crypt: ^4.2.1
+  date_time_picker: ^2.1.0
 
 dev_dependencies:
   flutter_test:

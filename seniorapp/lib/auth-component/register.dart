@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/auth-component/login.dart';
 import 'package:seniorapp/auth-component/userdata.dart';
+import 'package:date_time_picker/date_time_picker.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _RegisterState extends State<Register> {
   String _selectedSport = 'Football';
   bool _passwordhide = true;
   bool _confirmPasswordhide = true;
+  DateTime _date;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +144,7 @@ class _RegisterState extends State<Register> {
               Padding(
                 padding: EdgeInsets.only(bottom: 10),
               ),
-              TextField(
+              TextFormField(
                 controller: _firstnameController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
@@ -167,6 +169,35 @@ class _RegisterState extends State<Register> {
                   border: OutlineInputBorder(),
                   hintText: 'Lastname',
                 ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+
+              /// BirthDate Picking
+              Text(
+                'Birthdate',
+                style: textCustom(),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 10),
+              ),
+              DateTimePicker(
+                type: DateTimePickerType.date,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime.now(),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Birthdate',
+                  suffixIcon: Icon(Icons.calendar_month),
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _date = DateTime.parse(value);
+                  });
+                },
+                dateMask: 'MMMM d, yyyy',
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 10),
@@ -237,17 +268,18 @@ class _RegisterState extends State<Register> {
           _usernameController.text.isNotEmpty &
           _firstnameController.text.isNotEmpty &
           _lastnameController.text.isNotEmpty &
-          _selectedSport.isNotEmpty) {
+          _selectedSport.isNotEmpty &
+          _date.toString().isNotEmpty) {
         if (passwordConfirm()) {
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim());
           userSetup(
-            _usernameController.text.trim(),
-            _firstnameController.text.trim(),
-            _lastnameController.text.trim(),
-            _selectedSport.trim(),
-          );
+              _usernameController.text.trim(),
+              _firstnameController.text.trim(),
+              _lastnameController.text.trim(),
+              _selectedSport.trim(),
+              _date);
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => Login()),
             (Route<dynamic> route) => false,

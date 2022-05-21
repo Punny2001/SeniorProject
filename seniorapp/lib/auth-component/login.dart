@@ -60,7 +60,6 @@ class _LoginState extends State<Login> {
                 child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  _emailController.clear();
                   _passwordController.clear();
                 },
               ),
@@ -162,7 +161,7 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 20,
               ),
-              
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:crypt/crypt.dart';
 
 Future<void> userSetup(final String _username, final String _firstname,
-    final String _lastname, final String _sportType) {
+    final String _lastname, final String _sportType, final DateTime _date) {
   FirebaseAuth auth = FirebaseAuth.instance;
   final String _uid = auth.currentUser.uid.toString();
   final String _email = auth.currentUser.email.toString();
@@ -15,6 +15,7 @@ Future<void> userSetup(final String _username, final String _firstname,
       'username': _username,
       'firstname': _firstname,
       'lastname': _lastname,
+      'birthdate': _date,
       'sportType': _sportType
     },
   );
