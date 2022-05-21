@@ -29,13 +29,12 @@ class _LoginState extends State<Login> {
       if (_emailController.text.isNotEmpty &
           _passwordController.text.isNotEmpty) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text,
-          password: _passwordController.text,
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
         );
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) {
-            return HomePage();
-          }),
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => HomePage()),
+          (Route<dynamic> route) => false,
         );
       } else if (_emailController.text.isNotEmpty &
           _passwordController.text.isEmpty) {
@@ -92,76 +91,85 @@ class _LoginState extends State<Login> {
         margin: EdgeInsets.all(30),
         width: w,
         height: h,
-        child: Column(
-          children: [
-            Container(
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/mahidol_logo.png"),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Container(
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/mahidol_logo.png"),
+                    ),
                   ),
+                  height: h / 3.25,
+                  width: w / 1.5,
                 ),
-                height: h / 3.25,
-                width: w / 1.5,
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
+              SizedBox(
+                height: 30,
+              ),
 
-            /// Email text insertion
-            Container(
-              child: TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(), hintText: 'Email'),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              child: TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(), hintText: 'Password'),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            ElevatedButton(
-              onPressed: () => signin(),
-              child: Text("Log In"),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(w / 1.1, h / 15),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Don\'t have an account?'),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: ((context) {
-                          return Register();
-                        }),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(decoration: TextDecoration.underline),
+              /// Email text insertion
+              Container(
+                child: TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Email',
+                    prefixIcon: Icon(Icons.email),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                child: TextField(
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: () => signin(),
+                child: Text("Log In"),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(w / 1.1, h / 15),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Don\'t have an account?'),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: ((context) {
+                            return Register();
+                          }),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
