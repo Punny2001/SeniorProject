@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/auth-component/login.dart';
@@ -21,6 +20,7 @@ class _RegisterState extends State<Register> {
   bool _passwordhide = true;
   bool _confirmPasswordhide = true;
   DateTime _date;
+  final _keyForm = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,213 +35,223 @@ class _RegisterState extends State<Register> {
         height: h,
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// Email registeration
-              Text(
-                'Email',
-                style: textCustom(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Email address',
+          child: Form(
+            key: _keyForm,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                /// Email registeration
+                Text(
+                  'Email',
+                  style: textCustom(),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Email address',
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Email is required';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
 
-              /// Password registration
-              Text(
-                'Password',
-                style: textCustom(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              TextField(
-                controller: _passwordController,
-                obscureText: _passwordhide,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Password',
-                  suffixIcon: IconButton(
-                    icon: Icon(_passwordhide
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        _passwordhide = !_passwordhide;
-                      });
-                    },
+                /// Password registration
+                Text(
+                  'Password',
+                  style: textCustom(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: _passwordhide,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Password',
+                    suffixIcon: IconButton(
+                      icon: Icon(_passwordhide
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _passwordhide = !_passwordhide;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
 
-              /// Confirm registration
-              Text(
-                'Confirm password',
-                style: textCustom(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              TextField(
-                controller: _confirmPasswordController,
-                obscureText: _confirmPasswordhide,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Confirm password',
-                  suffixIcon: IconButton(
-                    icon: Icon(_confirmPasswordhide
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                    onPressed: () {
-                      setState(() {
-                        _confirmPasswordhide = !_confirmPasswordhide;
-                      });
-                    },
+                /// Confirm registration
+                Text(
+                  'Confirm password',
+                  style: textCustom(),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+                TextFormField(
+                  controller: _confirmPasswordController,
+                  obscureText: _confirmPasswordhide,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Confirm password',
+                    suffixIcon: IconButton(
+                      icon: Icon(_confirmPasswordhide
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _confirmPasswordhide = !_confirmPasswordhide;
+                        });
+                      },
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-
-              /// Username textbox
-              Text(
-                'Username',
-                style: textCustom(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Username',
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
 
-              /// Firstname textbox
-              Text(
-                'Firstname',
-                style: textCustom(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              TextFormField(
-                controller: _firstnameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Firstname',
+                /// Username textbox
+                Text(
+                  'Username',
+                  style: textCustom(),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+                TextFormField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Username',
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
 
-              /// Lastname textbox
-              Text(
-                'Lastname',
-                style: textCustom(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              TextField(
-                controller: _lastnameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Lastname',
+                /// Firstname textbox
+                Text(
+                  'Firstname',
+                  style: textCustom(),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+                TextFormField(
+                  controller: _firstnameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Firstname',
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
 
-              /// BirthDate Picking
-              Text(
-                'Birthdate',
-                style: textCustom(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              DateTimePicker(
-                type: DateTimePickerType.date,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime.now(),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Birthdate',
-                  suffixIcon: Icon(Icons.calendar_month),
+                /// Lastname textbox
+                Text(
+                  'Lastname',
+                  style: textCustom(),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _date = DateTime.parse(value);
-                  });
-                },
-                dateMask: 'MMMM d, yyyy',
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+                TextFormField(
+                  controller: _lastnameController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Lastname',
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
 
-              /// Sport Type choosing
-              Text(
-                'Sport Type',
-                style: textCustom(),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
-              DropdownButtonFormField<String>(
-                // isExpanded: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                /// BirthDate Picking
+                Text(
+                  'Birthdate',
+                  style: textCustom(),
                 ),
-                items: sportList
-                    .map((sport) => DropdownMenuItem(
-                          child: Text(sport),
-                          value: sport,
-                        ))
-                    .toList(),
-                value: _selectedSport,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedSport = value;
-                  });
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 10),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+                DateTimePicker(
+                  type: DateTimePickerType.date,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Birthdate',
+                    suffixIcon: Icon(Icons.calendar_month),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _date = DateTime.parse(value);
+                    });
+                  },
+                  dateMask: 'MMMM d, yyyy',
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
 
-              /// Sign Up button
-              ElevatedButton(
-                onPressed: () => signup(),
-                child: Text("Sign Up"),
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(w / 1.1, h / 15),
+                /// Sport Type choosing
+                Text(
+                  'Sport Type',
+                  style: textCustom(),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+                DropdownButtonFormField<String>(
+                  // isExpanded: true,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  items: sportList
+                      .map((sport) => DropdownMenuItem(
+                            child: Text(sport),
+                            value: sport,
+                          ))
+                      .toList(),
+                  value: _selectedSport,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedSport = value;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
+
+                /// Sign Up button
+                ElevatedButton(
+                  onPressed: () => signup(),
+                  child: Text("Sign Up"),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(w / 1.1, h / 15),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -270,16 +280,18 @@ class _RegisterState extends State<Register> {
           _lastnameController.text.isNotEmpty &
           _selectedSport.isNotEmpty &
           _date.toString().isNotEmpty) {
+        bool validate = _keyForm.currentState.validate();
         if (passwordConfirm()) {
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim());
-          userSetup(
-              _usernameController.text.trim(),
-              _firstnameController.text.trim(),
-              _lastnameController.text.trim(),
-              _selectedSport.trim(),
-              _date);
+          UserData(
+                  _usernameController.text.trim(),
+                  _firstnameController.text.trim(),
+                  _lastnameController.text.trim(),
+                  _selectedSport.trim(),
+                  _date)
+              .userSetup();
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => Login()),
             (Route<dynamic> route) => false,

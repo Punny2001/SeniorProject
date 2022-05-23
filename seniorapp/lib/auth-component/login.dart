@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/component/home.dart';
 import 'package:seniorapp/auth-component/register.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordhide = true;
+  bool _isEN = true;
 
   var allSnackbar = const SnackBar(
     content: Text('Please fill in both Email and Password'),
@@ -77,15 +80,6 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   // centerTitle: true,
-      //   // title: Text(
-      //   //   'SP2022',
-      //   //   style: TextStyle(color: Colors.black87),
-      //   // ),
-      //   elevation: 0,
-      //   backgroundColor: Colors.white,
-      // ),
       body: Container(
         padding: EdgeInsets.only(top: 50),
         margin: EdgeInsets.all(30),
@@ -95,6 +89,27 @@ class _LoginState extends State<Login> {
           physics: BouncingScrollPhysics(),
           child: Column(
             children: [
+              IconButton(
+                  icon: _isEN
+                      ? SvgPicture.asset(
+                          'icons/flags/svg/th.svg',
+                          package: 'country_icons',
+                        )
+                      : SvgPicture.asset(
+                          'icons/flags/svg/us.svg',
+                          package: 'country_icons',
+                        ),
+                  onPressed: () {
+                    setState(() {
+                      if (context.locale.languageCode == 'en') {
+                        context.setLocale(Locale('th', 'TH'));
+                        _isEN = false;
+                      } else {
+                        context.setLocale(Locale('en', 'US'));
+                        _isEN = true;
+                      }
+                    });
+                  }),
               Container(
                 child: Container(
                   decoration: BoxDecoration(
@@ -165,7 +180,7 @@ class _LoginState extends State<Login> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Don\'t have an account?'),
+                  Text('app.login_description').tr(),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
@@ -177,7 +192,7 @@ class _LoginState extends State<Login> {
                       );
                     },
                     child: Text(
-                      'Sign Up',
+                      'app.signup_textbutton'.tr(),
                       style: TextStyle(decoration: TextDecoration.underline),
                     ),
                   ),
