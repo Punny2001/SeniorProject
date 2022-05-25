@@ -6,3 +6,5 @@ https://www.youtube.com/watch?v=1xPMbwOFa9I
 https://www.youtube.com/watch?v=z0ihUbwlSHs
 https://pub.dev/packages/date_time_picker
 https://blog.intception.me/dev/flutter/easy-localization.html#%E0%B9%80%E0%B8%9E%E0%B8%B4%E0%B9%88%E0%B8%A1%E0%B9%84%E0%B8%9F%E0%B8%A5%E0%B9%8C%E0%B8%A0%E0%B8%B2%E0%B8%A9%E0%B8%B2%E0%B8%95%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B9%86
+https://codeutility.org/android-flutter-dart-how-to-add-validation-to-radio-button-like-textformfield-stack-overflow/
+https://stackoverflow.com/questions/64639883/flutter-radio-button-select-show-hide
