@@ -42,6 +42,8 @@ dependencies:
   flag: ^6.0.0
   country_icons: ^2.0.2
   easy_localization: ^3.0.1
+  flutter_form_builder: ^7.2.1
+  form_builder_validators: ^8.1.1
 
 dev_dependencies:
   flutter_test:

@@ -6,6 +6,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Login extends StatefulWidget {
+  const Login({Key key}) : super(key: key);
+
   @override
   State<Login> createState() => _LoginState();
 }
@@ -37,7 +39,7 @@ class _LoginState extends State<Login> {
           password: _passwordController.text.trim(),
         );
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
           (Route<dynamic> route) => false,
         );
       } else if (_emailController.text.isNotEmpty &
@@ -56,7 +58,7 @@ class _LoginState extends State<Login> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Error Authentication'),
-            content: Text(
+            content: const Text(
                 "The Email and Password are invalid. Please refill your Email and Password"),
             actions: <Widget>[
               TextButton(
@@ -81,12 +83,12 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: EdgeInsets.only(top: 50),
-        margin: EdgeInsets.all(30),
+        padding: const EdgeInsets.only(top: 50),
+        margin: const EdgeInsets.all(30),
         width: w,
         height: h,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               IconButton(
@@ -102,98 +104,93 @@ class _LoginState extends State<Login> {
                   onPressed: () {
                     setState(() {
                       if (context.locale.languageCode == 'en') {
-                        context.setLocale(Locale('th', 'TH'));
+                        context.setLocale(const Locale('th', 'TH'));
                         _isEN = false;
                       } else {
-                        context.setLocale(Locale('en', 'US'));
+                        context.setLocale(const Locale('en', 'US'));
                         _isEN = true;
                       }
                     });
                   }),
               Container(
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/mahidol_logo.png"),
-                    ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/mahidol_logo.png"),
                   ),
-                  height: h / 3.25,
-                  width: w / 1.5,
                 ),
+                height: h / 3.25,
+                width: w / 1.5,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
 
               /// Email text insertion
-              Container(
-                child: TextField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Email',
-                    prefixIcon: Icon(Icons.email),
-                  ),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Email',
+                  prefixIcon: Icon(Icons.email),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
 
               /// Password text insertion
-              Container(
-                child: TextField(
-                  controller: _passwordController,
-                  obscureText: _passwordhide,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(_passwordhide
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _passwordhide = !_passwordhide;
-                        });
-                      },
-                    ),
+              TextField(
+                controller: _passwordController,
+                obscureText: _passwordhide,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: 'Password',
+                  prefixIcon: const Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    icon: Icon(_passwordhide
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _passwordhide = !_passwordhide;
+                      });
+                    },
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
 
               ElevatedButton(
                 onPressed: () => signin(),
-                child: Text("Log In"),
+                child: const Text("Log In"),
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(w / 1.1, h / 15),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('app.login_description').tr(),
+                  const Text('app.login_description').tr(),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: ((context) {
-                            return Register();
+                            return const Register();
                           }),
                         ),
                       );
                     },
                     child: Text(
                       'app.signup_textbutton'.tr(),
-                      style: TextStyle(decoration: TextDecoration.underline),
+                      style:
+                          const TextStyle(decoration: TextDecoration.underline),
                     ),
                   ),
                 ],

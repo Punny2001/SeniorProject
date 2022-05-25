@@ -1,22 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 
-class UserData {
+class Athlete {
   final String _username;
   final String _firstname;
   final String _lastname;
   final String _sportType;
   final DateTime _date;
+  final String _department;
 
-  UserData(this._username, this._firstname, this._lastname, this._sportType,
-      this._date);
+  Athlete(this._username, this._firstname, this._lastname, this._date,
+      this._department, this._sportType);
 
   final String _uid = FirebaseAuth.instance.currentUser.uid.toString();
   final String _email = FirebaseAuth.instance.currentUser.email.toString();
 
-  Future<void> userSetup() {
-    FirebaseFirestore.instance.collection('UserData').add(
+  Future<void> atheleSetup() async {
+    FirebaseFirestore.instance.collection('AthleteData').add(
       {
         'uid': _uid,
         'email': _email,
@@ -24,20 +24,11 @@ class UserData {
         'firstname': _firstname,
         'lastname': _lastname,
         'birthdate': _date,
+        'department': _department,
         'sportType': _sportType
       },
     );
   }
 
-  Future<void> userUpdate() {}
-}
-
-Container getUserData() {
-  final _userData = FirebaseFirestore.instance
-      .collection('UserData')
-      .where('uid', isEqualTo: FirebaseAuth.instance.currentUser.uid)
-      .snapshots();
-  Container(
-    child: Text(_userData.toString()),
-  );
+  Future<void> userUpdate() async {}
 }
