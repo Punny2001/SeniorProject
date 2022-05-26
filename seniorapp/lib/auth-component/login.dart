@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:seniorapp/component/home.dart';
+import 'package:seniorapp/component/page/home.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:seniorapp/component/language.dart';
+import 'package:seniorapp/component/page_choosing.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key key}) : super(key: key);
-
   @override
   State<Login> createState() => _LoginState();
 }
@@ -16,7 +15,6 @@ class _LoginState extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordhide = true;
-  bool _isEN = true;
 
   var allSnackbar = const SnackBar(
     content: Text('Please fill in both Email and Password'),
@@ -39,7 +37,9 @@ class _LoginState extends State<Login> {
           password: _passwordController.text.trim(),
         );
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(
+            builder: (context) => const PageChoosing(),
+          ),
           (Route<dynamic> route) => false,
         );
       } else if (_emailController.text.isNotEmpty &
@@ -82,8 +82,12 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [LanguageSign()],
+      ),
       body: Container(
-        padding: const EdgeInsets.only(top: 50),
         margin: const EdgeInsets.all(30),
         width: w,
         height: h,
@@ -91,34 +95,13 @@ class _LoginState extends State<Login> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
-              IconButton(
-                  icon: _isEN
-                      ? SvgPicture.asset(
-                          'icons/flags/svg/th.svg',
-                          package: 'country_icons',
-                        )
-                      : SvgPicture.asset(
-                          'icons/flags/svg/us.svg',
-                          package: 'country_icons',
-                        ),
-                  onPressed: () {
-                    setState(() {
-                      if (context.locale.languageCode == 'en') {
-                        context.setLocale(const Locale('th', 'TH'));
-                        _isEN = false;
-                      } else {
-                        context.setLocale(const Locale('en', 'US'));
-                        _isEN = true;
-                      }
-                    });
-                  }),
               Container(
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/images/mahidol_logo.png"),
                   ),
                 ),
-                height: h / 3.25,
+                height: h / 3.5,
                 width: w / 1.5,
               ),
               const SizedBox(
@@ -126,7 +109,14 @@ class _LoginState extends State<Login> {
               ),
 
               /// Email text insertion
-              TextField(
+              TextFormField(
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please insert your email';
+                  } else {
+                    return null;
+                  }
+                },
                 controller: _emailController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -176,19 +166,19 @@ class _LoginState extends State<Login> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('app.login_description').tr(),
+                  const Text('login_page.login_description').tr(),
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: ((context) {
-                            return const Register();
+                            return Register();
                           }),
                         ),
                       );
                     },
                     child: Text(
-                      'app.signup_textbutton'.tr(),
+                      'login_page.signup_textbutton'.tr(),
                       style:
                           const TextStyle(decoration: TextDecoration.underline),
                     ),

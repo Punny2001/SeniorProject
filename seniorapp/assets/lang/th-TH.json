@@ -1,6 +1,42 @@
 {
-    "app" : {
+    "login_page" : {
         "login_description" : "ยังไม่มีบัญชีใช่ไหม?",
         "signup_textbutton" : "สมัครที่นี่"
+    },
+
+    "register_page" : {
+        "email" : "อีเมล",
+        "email_description" : "กรอกที่อยู่อีเมล",
+        "password" : "รหัสผ่าน",
+        "password_description" : "รหัสผ่านต้องมีความยาวมากกว่า 6 ตัวอักษร",
+        "confirm_password" : "ยืนยันรหัสผ่าน",
+        "confirmpassword_description" : "กรอกรหัสผ่านอีกครั้ง",
+        "username" : "ชื่อผู้ใช้งาน",
+        "username_description" : "ชื่อผู้ใช้งาน",
+        "firstname" : "ชื่อจริง",
+        "firstname_description" : "ชื่อจริง",
+        "lastname" : "นามสกุล",
+        "lastname_description" : "นามสกุล",
+        "birthdate" : "วันเกิด",
+        "birthdate_description" : "ดดดด วว, ปปปป",
+        "department" : "ประเภทฝ่าย",
+        "athlete" : "นักกีฬา",
+        "staff" : "บุคลากร",
+        "sportType" : "ประเภทกีฬา",
+        "badminton" : "แบดมินตัน",
+        "basketball" : "บาสเกตบอล",
+        "boxing" : "นักมวย",
+        "football" : "ฟุตบอล",
+        "judo" : "จูโด",
+        "rugby" : "รักบี้",
+        "volleyball" : "วอลเล่ย์บอล",
+        "weight" : "น้ำหนัก",
+        "height" : "ส่วนสูง",
+        "staffType" : "ประเภทบุคลากร",
+        "coach" : "โค้ช",
+        "doctor" : "แพทย์",
+        "pt": "นักกายภาพบำบัด",
+        "psycho" : "นักจิตวิทยา",
+        "signup_button" : "สมัครสมาชิก"
     }
 }

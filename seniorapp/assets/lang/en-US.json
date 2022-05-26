@@ -1,6 +1,42 @@
 {
-    "app" : {
+    "login_page" : {
         "login_description" : "Don't have an account?",
         "signup_textbutton" : "Sign Up"
+    },
+
+    "register_page" : {
+        "email" : "Email",
+        "email_description" : "Email address",
+        "password" : "Password",
+        "password_description" : "Password must morethan 6 characters",
+        "confirm_password" : "Confirm password",
+        "confirmpassword_description" : "Confirm password",
+        "username" : "Username",
+        "username_description" : "Username",
+        "firstname" : "Firstname",
+        "firstname_description" : "Firstname",
+        "lastname" : "lastname",
+        "lastname_description" : "lastname",
+        "birthdate" : "Date of birth",
+        "birthdate_description" : "MMMM DD, YYYY",
+        "department" : "Department Type",
+        "athlete" : "Athlete",
+        "staff" : "Staff",
+        "sportType" : "Sport Type",
+        "badminton" : "Badminton",
+        "basketball" : "Basketball",
+        "boxing" : "Boxing",
+        "football" : "Football",
+        "judo" : "Judo",
+        "rugby" : "Rugby",
+        "volleyball" : "Volleyball",
+        "weight" : "Weight",
+        "height" : "Height",
+        "staffType" : "Staff Type",
+        "coach" : "Coach",
+        "doctor" : "Doctor",
+        "pt": "Physical Therapists",
+        "psycho" : "Psychologist",
+        "signup_button" : "Sign Up"
     }
 }

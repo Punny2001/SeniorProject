@@ -10,7 +10,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
-  final String _uid = FirebaseAuth.instance.currentUser.uid;
+  final String uid = FirebaseAuth.instance.currentUser.uid;
+  final String username = FirebaseAuth.instance.currentUser.displayName;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,8 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               Text(
-                'Your uid is "$_uid"',
+                'Welcome back $username\n'
+                'Your uid is "$uid"',
                 style: const TextStyle(
                   fontSize: 50,
                   fontWeight: FontWeight.bold,

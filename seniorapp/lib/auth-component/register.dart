@@ -1,14 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:seniorapp/auth-component/login.dart';
-import 'package:seniorapp/component/athlete/athlete-data.dart';
+import 'package:seniorapp/component/language.dart';
+import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 class Register extends StatefulWidget {
-  const Register({Key key}) : super(key: key);
-
   @override
   State<Register> createState() => _RegisterState();
 }
@@ -22,7 +23,7 @@ class _RegisterState extends State<Register> {
   final _lastnameController = TextEditingController();
   String _selectedDepartment = '';
   int selectedDepartmentValue = 0;
-  String _selectedSport = 'Football';
+  String _selectedSport = 'Badminton';
   String _selectedStaff = 'Coach';
   bool _passwordhide = true;
   bool _confirmPasswordhide = true;
@@ -30,6 +31,8 @@ class _RegisterState extends State<Register> {
   final _keyForm = GlobalKey<FormState>();
   bool isVisibleAthlete = false;
   bool isVisibleStaff = false;
+  double _selectedWeight = 60.0;
+  double _selectedHeight = 170.0;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,9 @@ class _RegisterState extends State<Register> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [LanguageSign()],
+      ),
       body: Container(
         margin: const EdgeInsets.all(30),
         width: w,
@@ -51,17 +56,18 @@ class _RegisterState extends State<Register> {
               children: <Widget>[
                 /// Email registeration
                 Text(
-                  'Email',
+                  'register_page.email'.tr(),
                   style: textCustom(),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
                 TextFormField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Email address',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: 'register_page.email_description'.tr(),
                   ),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -77,7 +83,7 @@ class _RegisterState extends State<Register> {
 
                 /// Password registration
                 Text(
-                  'Password',
+                  'register_page.password'.tr(),
                   style: textCustom(),
                 ),
                 const Padding(
@@ -88,7 +94,7 @@ class _RegisterState extends State<Register> {
                   obscureText: _passwordhide,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    hintText: 'Password must morethan 6 characters',
+                    hintText: 'register_page.password_description'.tr(),
                     suffixIcon: IconButton(
                       icon: Icon(_passwordhide
                           ? Icons.visibility
@@ -116,19 +122,18 @@ class _RegisterState extends State<Register> {
 
                 /// Confirm registration
                 Text(
-                  'Confirm password',
+                  'register_page.confirm_password'.tr(),
                   style: textCustom(),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
                 TextFormField(
-                  enableSuggestions: true,
                   controller: _confirmPasswordController,
                   obscureText: _confirmPasswordhide,
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
-                    hintText: 'Confirm password',
+                    hintText: 'register_page.confirmpassword_description'.tr(),
                     suffixIcon: IconButton(
                       icon: Icon(_confirmPasswordhide
                           ? Icons.visibility
@@ -154,7 +159,7 @@ class _RegisterState extends State<Register> {
 
                 /// Username textbox
                 Text(
-                  'Username',
+                  'register_page.username'.tr(),
                   style: textCustom(),
                 ),
                 const Padding(
@@ -162,9 +167,9 @@ class _RegisterState extends State<Register> {
                 ),
                 TextFormField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Username',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: 'register_page.username_description'.tr(),
                   ),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -180,7 +185,7 @@ class _RegisterState extends State<Register> {
 
                 /// Firstname textbox
                 Text(
-                  'Firstname',
+                  'register_page.firstname'.tr(),
                   style: textCustom(),
                 ),
                 const Padding(
@@ -188,9 +193,9 @@ class _RegisterState extends State<Register> {
                 ),
                 TextFormField(
                   controller: _firstnameController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Firstname',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: 'register_page.firstname_description'.tr(),
                   ),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -206,7 +211,7 @@ class _RegisterState extends State<Register> {
 
                 /// Lastname textbox
                 Text(
-                  'Lastname',
+                  'register_page.lastname'.tr(),
                   style: textCustom(),
                 ),
                 const Padding(
@@ -214,9 +219,9 @@ class _RegisterState extends State<Register> {
                 ),
                 TextFormField(
                   controller: _lastnameController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Lastname',
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: 'register_page.lastname_description'.tr(),
                   ),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -232,7 +237,7 @@ class _RegisterState extends State<Register> {
 
                 /// BirthDate Picking
                 Text(
-                  'Birthdate',
+                  'register_page.birthdate'.tr(),
                   style: textCustom(),
                 ),
                 const Padding(
@@ -243,10 +248,10 @@ class _RegisterState extends State<Register> {
                   initialDate: DateTime.now(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime.now(),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Birthdate',
-                    suffixIcon: Icon(Icons.calendar_month),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    hintText: 'register_page.birthdate_description'.tr(),
+                    suffixIcon: const Icon(Icons.calendar_month),
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -268,7 +273,7 @@ class _RegisterState extends State<Register> {
 
                 /// Department choosing
                 Text(
-                  'Department Type',
+                  'register_page.department'.tr(),
                   style: textCustom(),
                 ),
                 const Padding(
@@ -290,10 +295,11 @@ class _RegisterState extends State<Register> {
                         RadioListTile(
                           value: 1,
                           groupValue: selectedDepartmentValue,
-                          title: const Text(
-                            'Athlete',
+                          title: Text(
+                            'register_page.athlete'.tr(),
                           ),
                           onChanged: (value) {
+                            state.setValue(true);
                             setState(() {
                               selectedDepartmentValue = value;
                               getDepartmentText(value);
@@ -308,7 +314,7 @@ class _RegisterState extends State<Register> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Sport Type',
+                                'register_page.sportType'.tr(),
                                 style: textCustom(),
                               ),
                               const Padding(
@@ -331,6 +337,47 @@ class _RegisterState extends State<Register> {
                                   });
                                 },
                               ),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 20),
+                              ),
+
+                              /// Weight & Height
+                              Text(
+                                'register_page.weight'.tr(),
+                                style: textCustom(),
+                              ),
+                              DecimalNumberPicker(
+                                minValue: 30,
+                                maxValue: 200,
+                                decimalPlaces: 1,
+                                value: _selectedWeight,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedWeight = value;
+                                  });
+                                },
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 10),
+                              ),
+                              Text(
+                                'register_page.height'.tr(),
+                                style: textCustom(),
+                              ),
+                              DecimalNumberPicker(
+                                minValue: 150,
+                                maxValue: 200,
+                                decimalPlaces: 1,
+                                value: _selectedHeight,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedHeight = value;
+                                  });
+                                },
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(bottom: 10),
+                              ),
                             ],
                           ),
                         ),
@@ -339,10 +386,11 @@ class _RegisterState extends State<Register> {
                         RadioListTile(
                           value: 2,
                           groupValue: selectedDepartmentValue,
-                          title: const Text(
-                            'Staff',
+                          title: Text(
+                            'register_page.staff'.tr(),
                           ),
                           onChanged: (value) {
+                            state.setValue(true);
                             setState(() {
                               selectedDepartmentValue = value;
                               getDepartmentText(value);
@@ -357,7 +405,7 @@ class _RegisterState extends State<Register> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Staff Type',
+                                'register_page.staffType'.tr(),
                                 style: textCustom(),
                               ),
                               const Padding(
@@ -400,7 +448,7 @@ class _RegisterState extends State<Register> {
                 /// Sign Up button
                 ElevatedButton(
                   onPressed: () => signup(),
-                  child: const Text("Sign Up"),
+                  child: Text('register_page.signup_button'.tr()),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(w / 1.1, h / 15),
                   ),
@@ -415,7 +463,7 @@ class _RegisterState extends State<Register> {
 
   void getDepartmentText(value) {
     if (value == 1) {
-      _selectedDepartment = 'Athelete';
+      _selectedDepartment = 'Athlete';
     } else if (selectedDepartmentValue == 2) {
       _selectedDepartment = 'Staff';
     } else {
@@ -439,23 +487,60 @@ class _RegisterState extends State<Register> {
   Future signup() async {
     try {
       bool validate = _keyForm.currentState.validate();
+      print(_selectedDepartment);
       if (validate &&
           _selectedSport.isNotEmpty &&
           _selectedDepartment.isNotEmpty) {
         if (passwordConfirm() && selectedDepartmentValue == 1) {
+          await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(
+                  email: _emailController.text.trim(),
+                  password: _passwordController.text.trim())
+              .then((value) async {
+            await value.user
+                .updateProfile(displayName: _usernameController.text.trim())
+                .then((value2) async {
+              String uid = value.user.uid;
+
+              Athlete athleteModel = Athlete(
+                  username: _usernameController.text.trim(),
+                  firstname: _firstnameController.text.trim(),
+                  lastname: _lastnameController.text.trim(),
+                  sportType: _selectedSport,
+                  date: _date,
+                  department: _selectedDepartment,
+                  weight: _selectedWeight,
+                  height: _selectedHeight);
+
+              Map<String, dynamic> data = athleteModel.toMap();
+
+              await FirebaseFirestore.instance
+                  .collection('Athlete')
+                  .doc(uid)
+                  .set(data)
+                  .then(
+                    (value) => print('Insert data to Firestore successfully'),
+                  );
+            });
+          });
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => Login()),
+            (Route<dynamic> route) => false,
+          );
+        } else if (passwordConfirm() && selectedDepartmentValue == 2) {
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim());
-          Athlete(
+          Staff(
                   _usernameController.text.trim(),
                   _firstnameController.text.trim(),
                   _lastnameController.text.trim(),
                   _date,
-                  _selectedDepartment,
-                  _selectedSport)
-              .atheleSetup();
+                  _selectedDepartment.trim(),
+                  _selectedStaff.trim())
+              .staffSetup();
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const Login()),
+            MaterialPageRoute(builder: (context) => Login()),
             (Route<dynamic> route) => false,
           );
         }
@@ -507,8 +592,9 @@ class _RegisterState extends State<Register> {
                 'The format of email is invalid. Please correct the email.'),
             actions: [
               TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('OK'))
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
             ],
           ),
         );
@@ -519,10 +605,10 @@ class _RegisterState extends State<Register> {
   }
 
   List<String> sportList = [
-    'Football',
-    'Basketball',
     'Badminton',
+    'Basketball',
     'Boxing',
+    'Football',
     'Judo',
     'Rugby',
     'VolleyBall'
@@ -531,8 +617,8 @@ class _RegisterState extends State<Register> {
   List<String> staffList = [
     'Coach',
     'Doctor',
+    'Physical Therapist',
     'Psychologist',
-    'Physical Therapist'
   ];
 
   var completeSnackBar = const SnackBar(
