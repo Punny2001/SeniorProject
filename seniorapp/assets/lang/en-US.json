@@ -1,25 +1,46 @@
 {
     "login_page" : {
         "login_description" : "Don't have an account?",
-        "signup_textbutton" : "Sign Up"
+        "signup_textbutton" : "Sign Up",
+        "forgotpassword_textbutton" : "Forgot Pasword"
     },
 
     "register_page" : {
         "email" : "Email",
         "email_description" : "Email address",
+        "email_already_in_use" : "Email is already in use",
+        "invalid_email" : "The format of Email is invalid",
+        "email_required" : "Email is required",
+        
         "password" : "Password",
-        "password_description" : "Password must morethan 6 characters",
+        "password_description" : "Password must morethan 8 characters",
+        "password_required" : "Password is required",
+        "password_length_error" : "Please fill in password morethan 8 characters",
+
         "confirm_password" : "Confirm password",
         "confirmpassword_description" : "Confirm password",
+        "confirmpassword_required" : "Confirm password is required",
+        "confirmpassword_notmatch" : "Confirm password is not match to the password",
+
         "username" : "Username",
         "username_description" : "Username",
+        "username_required" : "Username is required",
+
         "firstname" : "Firstname",
         "firstname_description" : "Firstname",
+        "firstname_required" : "Firstname is required",
+
         "lastname" : "lastname",
         "lastname_description" : "lastname",
+        "lastname_required" : "Lastname is required",
+
         "birthdate" : "Date of birth",
         "birthdate_description" : "MMMM DD, YYYY",
+        "birthdate_required" : "Birthdate is required",
+
         "department" : "Department Type",
+        "departmet_required" : "Please select your department",
+
         "athlete" : "Athlete",
         "staff" : "Staff",
         "sportType" : "Sport Type",
@@ -37,6 +58,25 @@
         "doctor" : "Doctor",
         "pt": "Physical Therapists",
         "psycho" : "Psychologist",
+        
         "signup_button" : "Sign Up"
+    },
+
+    "verifyemail_page" : {
+        "title" : "Email Verification",
+        "description" : "Email verification has been sent to youe email",
+        "warning" : "You do not close this page !!"
+    },
+
+    "forgotpassword_page" : {
+        "email_input" : "Input your email",
+        "email_hinttext" : "Your email address",
+        "reset_button" : "Reset Password",
+        "dialog_title" : "Send email completed",
+        "dialog_content" : "Send email to reset your password successfully",
+        "ok" : "OK",
+        "error_title" : "Reset password failed!",
+        "invalidemail_content" : "The format of email is invalid. Please correct the email.",
+        "usernotfound_content" : "The account is not found in the system. Please reinsert your email."
     }
 }

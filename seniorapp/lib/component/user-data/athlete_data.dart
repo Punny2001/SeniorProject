@@ -54,7 +54,7 @@ class Athlete {
     result.addAll({'firstname': firstname});
     result.addAll({'lastname': lastname});
     result.addAll({'sportType': sportType});
-    result.addAll({'date': date.millisecondsSinceEpoch});
+    result.addAll({'date': date});
     result.addAll({'department': department});
     result.addAll({'weight': weight});
     result.addAll({'height': height});
@@ -68,7 +68,7 @@ class Athlete {
       firstname: map['firstname'] ?? '',
       lastname: map['lastname'] ?? '',
       sportType: map['sportType'] ?? '',
-      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
+      date: DateTime(map['date']),
       department: map['department'] ?? '',
       weight: map['weight'].toDouble() ?? 0.0,
       height: map['height'].toDouble() ?? 0.0,

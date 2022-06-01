@@ -45,6 +45,9 @@ dependencies:
   flutter_form_builder: ^7.2.1
   form_builder_validators: ^8.1.1
   numberpicker: ^2.1.1
+  email_validator: ^2.0.1
+  timer_button: ^2.0.0
+  argon_buttons_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:

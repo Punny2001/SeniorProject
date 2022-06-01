@@ -1,25 +1,46 @@
 {
     "login_page" : {
         "login_description" : "ยังไม่มีบัญชีใช่ไหม?",
-        "signup_textbutton" : "สมัครที่นี่"
+        "signup_textbutton" : "สมัครที่นี่",
+        "forgotpassword_textbutton" : "ลืมรหัสผ่าน"
     },
 
     "register_page" : {
         "email" : "อีเมล",
         "email_description" : "กรอกที่อยู่อีเมล",
+        "email_already_in_use" : "อีเมลนี้ถูกใช้แล้ว",
+        "invalid_email" : "รูปแบบอีเมลไม่ถูกต้อง",
+        "email_required" : "โปรดกรอกอีเมล",
+
         "password" : "รหัสผ่าน",
-        "password_description" : "รหัสผ่านต้องมีความยาวมากกว่า 6 ตัวอักษร",
+        "password_description" : "รหัสผ่านต้องมีความยาวมากกว่า 8 ตัวอักษร",
+        "password_required" : "โปรดกรอกรหัสผ่าน",
+        "password_length_error" : "โปรกหรอกรหัสผ่านให้มีความยาวมากกว่า 8 ตัวอักษร",
+
         "confirm_password" : "ยืนยันรหัสผ่าน",
         "confirmpassword_description" : "กรอกรหัสผ่านอีกครั้ง",
+        "confirmpassword_required" : "โปรดยืนยันรหัสผ่าน",
+        "confirmpassword_notmatch" : "รหัสผ่านที่ยืนยันไม่ตรงกับรหัสผ่านด้านบน โปรดกรอกใหม่",
+
         "username" : "ชื่อผู้ใช้งาน",
         "username_description" : "ชื่อผู้ใช้งาน",
+        "username_required" : "โปรดกรอกชื่อผู้ใช้งาน",
+
         "firstname" : "ชื่อจริง",
         "firstname_description" : "ชื่อจริง",
+        "firstname_required" : "โปรดกรอกชื่อจริง",
+
         "lastname" : "นามสกุล",
         "lastname_description" : "นามสกุล",
+        "lastname_required" : "โปรดกรอกนามสกุล",
+
         "birthdate" : "วันเกิด",
-        "birthdate_description" : "ดดดด วว, ปปปป",
+        "birthdate_description" : "ดดดด วว, ปปปป",        
+        "birthdate_required" : "โปรดเลือกวันเกิด",
+        
         "department" : "ประเภทฝ่าย",
+        "departmet_required" : "โปรดเลือกฝ่ายของคุณ",
+
         "athlete" : "นักกีฬา",
         "staff" : "บุคลากร",
         "sportType" : "ประเภทกีฬา",
@@ -37,6 +58,25 @@
         "doctor" : "แพทย์",
         "pt": "นักกายภาพบำบัด",
         "psycho" : "นักจิตวิทยา",
+
         "signup_button" : "สมัครสมาชิก"
+    },
+
+    "verifyemail_page" : {
+        "title" : "ยืนยันอีเมล",
+        "description" : "อีเมลยืนยันถูกส่งไปที่อีเมลของท่านเรียร้อบแล้ว",
+        "warning" : "ห้ามปิดหน้านี้และแอพเด็ดขาด !!"
+    },
+
+    "forgotpassword_page" : {
+        "email_input" : "กรอกอีเมล",
+        "email_hinttext" : "อีเมลของคุณ",
+        "reset_button" : "รีเซ็ตรหัสผ่าน",
+        "dialog_title" : "ส่งอีเมลเรียบร้อย",
+        "dialog_content" : "ส่งอีเมลเพื่อรีเซ็ตรหัสผ่านของคุณสำเร็จ",
+        "ok" : "โอเค",
+        "error_title" : "รีเซ็ตรหัสผ่านไม่สำเร็จ!",
+        "invalidemail_content" : "รูปแบบของอีเมลไม่ถูกต้อง โปรดกรอกอีเมลใหม่อีกครั้ง",
+        "usernotfound_content" : "ไม่มีบัญชีนี้ในระบบ โปรดกรอกอีเมลใหม่อีกครั้ง"
     }
 }

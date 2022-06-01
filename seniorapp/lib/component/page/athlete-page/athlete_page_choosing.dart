@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/home.dart';
-import 'package:seniorapp/component/page/profile.dart';
+import 'package:seniorapp/component/page/athlete-page/home.dart';
+import 'package:seniorapp/component/page/athlete-page/profile.dart';
 
-class PageChoosing extends StatefulWidget {
-  const PageChoosing({Key key}) : super(key: key);
+class AthletePageChoosing extends StatefulWidget {
+  const AthletePageChoosing({Key key}) : super(key: key);
 
   @override
-  State<PageChoosing> createState() => _PageChoosingState();
+  State<AthletePageChoosing> createState() => _AthletePageChoosingState();
 }
 
-class _PageChoosingState extends State<PageChoosing> {
+class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int _selected_idx = 1;
 
-  static const List<Widget> _pageList = <Widget>[
-    HomePage(),
-    HomePage(),
-    Profile(),
+  static const List<Widget> _athletePageList = <Widget>[
+    AthleteHomePage(),
+    AthleteHomePage(),
+    AthleteProfile(),
   ];
 
   void _onPageTap(int index) {
@@ -28,7 +28,7 @@ class _PageChoosingState extends State<PageChoosing> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: _pageList.elementAt(_selected_idx),
+        child: _athletePageList.elementAt(_selected_idx),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

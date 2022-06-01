@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seniorapp/component/page_route.dart';
-import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/component/user-data/user.dart';
 
 String initPage = '/login';
 
@@ -17,12 +17,20 @@ Future<void> main() async {
       if (event != null) {
         String uid = event.uid;
         await FirebaseFirestore.instance
-            .collection('Athlete')
+            .collection('User')
             .doc(uid)
             .snapshots()
             .listen((event) {
-          Athlete athleteModel = Athlete.fromMap(event.data());
-          initPage = '/pageChoosing';
+          UserData userModel = UserData.fromMap(event.data());
+          switch (userModel.department) {
+            case 'Athlete':
+              initPage = '/athletePageChoosing';
+              break;
+            case 'Staff':
+              initPage = '/staffPageChoosing';
+              break;
+            default:
+          }
           runApp(
             EasyLocalization(
               supportedLocales: const [Locale('en', 'US'), Locale('th', 'TH')],

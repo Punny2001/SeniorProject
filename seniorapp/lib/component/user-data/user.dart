@@ -1,87 +1,98 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
-
-class Staff {
+class UserData {
   final String username;
   final String firstname;
   final String lastname;
   final String staffType;
   final DateTime date;
   final String department;
-  Staff({
+  final double weight;
+  final double height;
+  UserData({
     this.username,
     this.firstname,
     this.lastname,
     this.staffType,
     this.date,
     this.department,
+    this.weight,
+    this.height,
   });
 
-  Staff copyWith({
+  UserData copyWith({
     String username,
     String firstname,
     String lastname,
     String staffType,
     DateTime date,
     String department,
+    double weight,
+    double height,
   }) {
-    return Staff(
+    return UserData(
       username: username ?? this.username,
       firstname: firstname ?? this.firstname,
       lastname: lastname ?? this.lastname,
       staffType: staffType ?? this.staffType,
       date: date ?? this.date,
       department: department ?? this.department,
+      weight: weight ?? this.weight,
+      height: height ?? this.height,
     );
   }
 
-  final String email = FirebaseAuth.instance.currentUser.email.toString();
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
-    result.addAll({'email': email});
     result.addAll({'username': username});
     result.addAll({'firstname': firstname});
     result.addAll({'lastname': lastname});
     result.addAll({'staffType': staffType});
-    result.addAll({'date': date});
+    result.addAll({'date': date.millisecondsSinceEpoch});
     result.addAll({'department': department});
+    result.addAll({'weight': weight});
+    result.addAll({'height': height});
 
     return result;
   }
 
-  factory Staff.fromMap(Map<String, dynamic> map) {
-    return Staff(
+  factory UserData.fromMap(Map<String, dynamic> map) {
+    return UserData(
       username: map['username'] ?? '',
       firstname: map['firstname'] ?? '',
       lastname: map['lastname'] ?? '',
       staffType: map['staffType'] ?? '',
-      date: DateTime(map['date']),
+      date: DateTime.fromMillisecondsSinceEpoch(map['date']),
       department: map['department'] ?? '',
+      weight: map['weight']?.toDouble() ?? 0.0,
+      height: map['height']?.toDouble() ?? 0.0,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Staff.fromJson(String source) => Staff.fromMap(json.decode(source));
+  factory UserData.fromJson(String source) =>
+      UserData.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Staff(username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, date: $date, department: $department)';
+    return 'UserData(username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, date: $date, department: $department, weight: $weight, height: $height)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Staff &&
+    return other is UserData &&
         other.username == username &&
         other.firstname == firstname &&
         other.lastname == lastname &&
         other.staffType == staffType &&
         other.date == date &&
-        other.department == department;
+        other.department == department &&
+        other.weight == weight &&
+        other.height == height;
   }
 
   @override
@@ -91,6 +102,8 @@ class Staff {
         lastname.hashCode ^
         staffType.hashCode ^
         date.hashCode ^
-        department.hashCode;
+        department.hashCode ^
+        weight.hashCode ^
+        height.hashCode;
   }
 }

@@ -1,10 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:seniorapp/component/page/home.dart';
-import 'package:seniorapp/auth-component/register.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seniorapp/component/language.dart';
-import 'package:seniorapp/component/page_choosing.dart';
+import 'package:seniorapp/component/user-data/user.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -12,68 +11,16 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.signOut();
+  }
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _passwordhide = true;
-
-  var allSnackbar = const SnackBar(
-    content: Text('Please fill in both Email and Password'),
-  );
-
-  var emailSnack = const SnackBar(
-    content: Text('Please fill in your Email'),
-  );
-
-  var passwordSnack = const SnackBar(
-    content: Text('Please fill in your Password'),
-  );
-
-  Future signin() async {
-    try {
-      if (_emailController.text.isNotEmpty &
-          _passwordController.text.isNotEmpty) {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const PageChoosing(),
-          ),
-          (Route<dynamic> route) => false,
-        );
-      } else if (_emailController.text.isNotEmpty &
-          _passwordController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(passwordSnack);
-      } else if (_emailController.text.isEmpty &
-          _passwordController.text.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(emailSnack);
-      } else if (_emailController.text.isEmpty &
-          _passwordController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(allSnackbar);
-      }
-    } catch (error) {
-      showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error Authentication'),
-            content: const Text(
-                "The Email and Password are invalid. Please refill your Email and Password"),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _passwordController.clear();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
+  bool isEmailVerified;
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +95,20 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 20,
+
+              /// Forgot Password
+              Container(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed('/forgotPassword'),
+                  child: const Text(
+                    'login_page.forgotpassword_textbutton',
+                  ).tr(),
+                ),
               ),
 
+              /// Sign in button
               ElevatedButton(
                 onPressed: () => signin(),
                 child: const Text("Log In"),
@@ -169,13 +126,7 @@ class _LoginState extends State<Login> {
                   const Text('login_page.login_description').tr(),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: ((context) {
-                            return Register();
-                          }),
-                        ),
-                      );
+                      Navigator.of(context).pushNamed('/register');
                     },
                     child: Text(
                       'login_page.signup_textbutton'.tr(),
@@ -190,5 +141,89 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  var allSnackbar = const SnackBar(
+    content: Text('Please fill in both Email and Password'),
+  );
+
+  var emailSnack = const SnackBar(
+    content: Text('Please fill in your Email'),
+  );
+
+  var passwordSnack = const SnackBar(
+    content: Text('Please fill in your Password'),
+  );
+
+  var emailVerifiedSnack = const SnackBar(
+    content: Text('This email has not verrify yet'),
+  );
+
+  Future signin() async {
+    try {
+      if (_emailController.text.isNotEmpty &
+          _passwordController.text.isNotEmpty) {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        )
+            .then((value) async {
+          isEmailVerified = FirebaseAuth.instance.currentUser.emailVerified;
+          if (isEmailVerified == true) {
+            String uid = value.user.uid;
+            await FirebaseFirestore.instance
+                .collection('User')
+                .doc(uid)
+                .snapshots()
+                .listen((event) {
+              UserData userModel = UserData.fromMap(event.data());
+              switch (userModel.department) {
+                case 'Athlete':
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/athletePageChoosing', (route) => false);
+                  break;
+                case 'Staff':
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/staffPageChoosing', (route) => false);
+                  break;
+                default:
+              }
+            });
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(emailVerifiedSnack);
+          }
+        });
+      } else if (_emailController.text.isNotEmpty &
+          _passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(passwordSnack);
+      } else if (_emailController.text.isEmpty &
+          _passwordController.text.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(emailSnack);
+      } else if (_emailController.text.isEmpty &
+          _passwordController.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(allSnackbar);
+      }
+    } catch (error) {
+      showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error Authentication'),
+            content: const Text(
+                "The Email and Password are invalid. Please refill your Email and Password"),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _passwordController.clear();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }
