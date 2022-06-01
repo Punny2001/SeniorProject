@@ -94,8 +94,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
                     style: TextStyle(
                         color: Colors.red[900],
                         fontWeight: FontWeight.bold,
-                        fontSize: 50),
-                  )
+                        fontSize: 30),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
                 ],
               ),
             ),
