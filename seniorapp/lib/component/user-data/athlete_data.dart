@@ -68,7 +68,7 @@ class Athlete {
       firstname: map['firstname'] ?? '',
       lastname: map['lastname'] ?? '',
       sportType: map['sportType'] ?? '',
-      date: DateTime(map['date']),
+      date: DateTime.parse(map['date'].toDate().toString()),
       department: map['department'] ?? '',
       weight: map['weight'].toDouble() ?? 0.0,
       height: map['height'].toDouble() ?? 0.0,

@@ -59,6 +59,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
     if (isEmailVerified) {
       timer.cancel();
+      timerDeletedAccount.cancel();
     }
   }
 

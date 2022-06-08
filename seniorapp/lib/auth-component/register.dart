@@ -580,7 +580,7 @@ class _RegisterState extends State<Register> {
                   username: _usernameController.text.trim(),
                   firstname: _firstnameController.text.trim(),
                   lastname: _lastnameController.text.trim(),
-                  date: _date,
+                  birthdate: _date,
                   department: _selectedDepartment,
                   staffType: _selectedStaff);
 

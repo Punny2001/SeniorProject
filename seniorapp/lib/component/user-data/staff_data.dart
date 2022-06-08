@@ -7,14 +7,14 @@ class Staff {
   final String firstname;
   final String lastname;
   final String staffType;
-  final DateTime date;
+  final DateTime birthdate;
   final String department;
   Staff({
     this.username,
     this.firstname,
     this.lastname,
     this.staffType,
-    this.date,
+    this.birthdate,
     this.department,
   });
 
@@ -23,7 +23,7 @@ class Staff {
     String firstname,
     String lastname,
     String staffType,
-    DateTime date,
+    DateTime birthdate,
     String department,
   }) {
     return Staff(
@@ -31,7 +31,7 @@ class Staff {
       firstname: firstname ?? this.firstname,
       lastname: lastname ?? this.lastname,
       staffType: staffType ?? this.staffType,
-      date: date ?? this.date,
+      birthdate: birthdate ?? this.birthdate,
       department: department ?? this.department,
     );
   }
@@ -45,7 +45,7 @@ class Staff {
     result.addAll({'firstname': firstname});
     result.addAll({'lastname': lastname});
     result.addAll({'staffType': staffType});
-    result.addAll({'date': date});
+    result.addAll({'date': birthdate});
     result.addAll({'department': department});
 
     return result;
@@ -57,7 +57,7 @@ class Staff {
       firstname: map['firstname'] ?? '',
       lastname: map['lastname'] ?? '',
       staffType: map['staffType'] ?? '',
-      date: DateTime(map['date']),
+      birthdate: DateTime.parse(map['date'].toDate().toString()),
       department: map['department'] ?? '',
     );
   }
@@ -68,7 +68,7 @@ class Staff {
 
   @override
   String toString() {
-    return 'Staff(username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, date: $date, department: $department)';
+    return 'Staff(username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, date: $birthdate, department: $department)';
   }
 
   @override
@@ -80,7 +80,7 @@ class Staff {
         other.firstname == firstname &&
         other.lastname == lastname &&
         other.staffType == staffType &&
-        other.date == date &&
+        other.birthdate == birthdate &&
         other.department == department;
   }
 
@@ -90,7 +90,7 @@ class Staff {
         firstname.hashCode ^
         lastname.hashCode ^
         staffType.hashCode ^
-        date.hashCode ^
+        birthdate.hashCode ^
         department.hashCode;
   }
 }

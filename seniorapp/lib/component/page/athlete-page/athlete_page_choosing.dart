@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/athlete-page/home.dart';
-import 'package:seniorapp/component/page/athlete-page/profile.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_profile.dart';
 
 class AthletePageChoosing extends StatefulWidget {
   const AthletePageChoosing({Key key}) : super(key: key);
@@ -10,7 +10,7 @@ class AthletePageChoosing extends StatefulWidget {
 }
 
 class _AthletePageChoosingState extends State<AthletePageChoosing> {
-  int _selected_idx = 1;
+  int _selected_idx = 0;
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
@@ -33,12 +33,12 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Favorite',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            label: 'Favorite',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu),

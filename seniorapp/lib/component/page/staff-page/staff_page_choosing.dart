@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/Staff-page/home.dart';
-import 'package:seniorapp/component/page/Staff-page/profile.dart';
+import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
+import 'package:seniorapp/component/page/Staff-page/staff_profile.dart';
 
 class StaffPageChoosing extends StatefulWidget {
   const StaffPageChoosing({Key key}) : super(key: key);

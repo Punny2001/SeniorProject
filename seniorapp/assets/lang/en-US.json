@@ -1,8 +1,18 @@
 {
     "login_page" : {
+        "email_hinttext" : "Email",
+        "email_required" : "Please fill in your email",
+        "password_hinttext" : "Password",
+        "password_required" : "Please fill in your password",
         "login_description" : "Don't have an account?",
         "signup_textbutton" : "Sign Up",
-        "forgotpassword_textbutton" : "Forgot Pasword"
+        "forgotpassword_textbutton" : "Forgot Pasword",
+        "login_button" : "Log In",
+        "error_dialog" : "Error Login",
+        "usernotfound" : "There is no user record corresponding to this identifier. The user may have been deleted.",
+        "invalidpassword" : "The password is invalid or the user does not have a password.",
+        "invalidemail" : "The email address is badly formatted.",
+        "ok" : "OK"
     },
 
     "register_page" : {

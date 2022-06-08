@@ -1,8 +1,18 @@
 {
     "login_page" : {
+        "email_hinttext" : "อีเมล",
+        "email_required" : "โปรดกรอกอีเมลของคุณ",
+        "password_hinttext" : "รหัสผ่าน",
+        "password_required" : "โปรดกรอกรหัสผ่านของคุณ",
         "login_description" : "ยังไม่มีบัญชีใช่ไหม?",
         "signup_textbutton" : "สมัครที่นี่",
-        "forgotpassword_textbutton" : "ลืมรหัสผ่าน"
+        "forgotpassword_textbutton" : "ลืมรหัสผ่าน",
+        "login_button" : "ลงชื่อเข้าใช้",
+        "error_dialog" : "ลงชื่อเข้าใช้ไม่สำเร็จ",
+        "usernotfound" : "ไม่มีบันทึกผู้ใช้ที่สอดคล้องกับตัวระบุนี้หรือผู้ใช้อาจถูกลบไปแล้ว",
+        "invalidpassword" : "รหัสผ่านไม่ถูกต้องหรือผู้ใช้ไม่มีรหัสผ่าน",
+        "invalidemail" : "ที่อยู่อีเมลมีรูปแบบไม่ดี",
+        "ok" : "โอเค"
     },
 
     "register_page" : {
