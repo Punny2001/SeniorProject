@@ -14,3 +14,4 @@ https://www.youtube.com/watch?v=rTr8BUlUftg
 https://www.codegrepper.com/code-examples/dart/convert+timestamp+to+date+in+flutter
 https://www.educative.io/edpresso/how-to-use-flutter-to-read-and-write-data-to-firebase
 https://firebase.flutter.dev/docs/firestore/usage/
+https://stackoverflow.com/questions/52030797/making-a-dropdown-menu-in-flutter-with-a-map
