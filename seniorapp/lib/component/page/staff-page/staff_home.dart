@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class StaffHomePage extends StatefulWidget {
   const StaffHomePage({Key key}) : super(key: key);
@@ -9,9 +8,9 @@ class StaffHomePage extends StatefulWidget {
 }
 
 class _StaffHomePageState extends State<StaffHomePage> {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  final String uid = FirebaseAuth.instance.currentUser.uid;
-  final String username = FirebaseAuth.instance.currentUser.displayName;
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // final String uid = FirebaseAuth.instance.currentUser.uid;
+  // final String username = FirebaseAuth.instance.currentUser.displayName;
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +27,10 @@ class _StaffHomePageState extends State<StaffHomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                'Welcome back $username\n'
-                'Your uid is "$uid"\n'
-                'This is Staff Mode',
-                style: const TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
+              Center(
+                child: ElevatedButton(
+                  child: Text('Injury Report'),
+                  onPressed: () => Navigator.of(context).pushNamed('/injuryReport'),
                 ),
               ),
             ],

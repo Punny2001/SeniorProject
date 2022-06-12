@@ -10,11 +10,11 @@ class StaffPageChoosing extends StatefulWidget {
 }
 
 class _StaffPageChoosingState extends State<StaffPageChoosing> {
-  int _selected_idx = 1;
+  int _selected_idx = 0;
 
   static const List<Widget> _StaffPageList = <Widget>[
     StaffHomePage(),
-    StaffHomePage(),
+    null,
     StaffProfile(),
   ];
 
@@ -33,12 +33,12 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Favorite',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            label: 'Favorite',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu),
