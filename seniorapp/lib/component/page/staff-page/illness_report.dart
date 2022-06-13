@@ -2,26 +2,26 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/language.dart';
 
-class InjuryReport extends StatefulWidget {
+class IllnessReport extends StatefulWidget {
   @override
-  _InjuryReportState createState() => _InjuryReportState();
+  _IllnessReportState createState() => _IllnessReportState();
 }
 
-class _InjuryReportState extends State<InjuryReport> {
+class _IllnessReportState extends State<IllnessReport> {
   final _injuryKey = GlobalKey<FormState>();
   final _athleteNo = TextEditingController();
   final _sportEvent = TextEditingController();
-  final _rhtController = TextEditingController();
-  final _codeInjuryType = TextEditingController();
-  final _otherInjuryType = TextEditingController();
-  final _codeInjuryCause = TextEditingController();
-  final _otherInjuryCause = TextEditingController();
+  final _diagnosisController = TextEditingController();
+  final _codeAffectedSystem = TextEditingController();
+  final _otherAffectedSystem = TextEditingController();
+  final _codeMainSymptom = TextEditingController();
+  final _otherMainSymptom = TextEditingController();
   final _absenceDayController = TextEditingController();
-  DateTime _datetime;
-  String _selectedInjuryType = 'Select type of injury';
-  String _selectedInjuryCause = 'Select cause of injury';
-  bool isVisibleOtherInjuryType = false;
-  bool isVisibleOtherInjuryCause = false;
+  DateTime _occuredDate;
+  String _selectedAffected = 'Select affected systems';
+  String _selectedMainSymptom = 'Select main symptom(s)';
+  bool isVisibleOtherAffectedSystem = false;
+  bool isVisibleOtherMainSymptom = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 TextFormField(
                   decoration: InputDecoration(
                     label: Text('Sport and Event'),
-                    hintText: 'Example: athletics, 100m (women)',
+                    hintText: 'Example: football (men)',
                   ),
                   controller: _sportEvent,
                   validator: (value) {
@@ -79,13 +79,13 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 TextFormField(
                   decoration: InputDecoration(
-                    label: Text('Round, Heat, or Training'),
-                    hintText: 'Example: quater final / 1st heat',
+                    label: Text('Diagnosis'),
+                    hintText: 'Example: tonsillitis, cold',
                   ),
-                  controller: _rhtController,
+                  controller: _diagnosisController,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Round, Heat, or Training is required';
+                      return 'Diagnosis is required';
                     } else {
                       return null;
                     }
@@ -95,22 +95,21 @@ class _InjuryReportState extends State<InjuryReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 DateTimePicker(
-                  dateLabelText: 'Date',
-                  timeLabelText: 'Time',
+                  dateLabelText: 'Occured Date',
                   dateMask: 'MMMM d, yyyy',
                   icon: Icon(Icons.event),
-                  type: DateTimePickerType.dateTimeSeparate,
+                  type: DateTimePickerType.date,
                   lastDate: DateTime.now(),
                   firstDate: DateTime(1900),
                   initialDate: DateTime.now(),
                   onChanged: (value) {
                     setState(() {
-                      _datetime = DateTime.parse(value);
+                      _occuredDate = DateTime.parse(value);
                     });
                   },
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Date and Time is required';
+                      return 'Occured date is required';
                     } else {
                       return null;
                     }
@@ -120,7 +119,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   padding: EdgeInsets.all(20),
                 ),
                 Text(
-                  'Type of Injury',
+                  'Affected System',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Padding(
@@ -132,24 +131,24 @@ class _InjuryReportState extends State<InjuryReport> {
                     border: OutlineInputBorder(),
                     labelText: 'Code',
                   ),
-                  controller: _codeInjuryType,
+                  controller: _codeAffectedSystem,
                   onSaved: (value) {
                     setState(() {
-                      _codeInjuryType.text = value;
+                      _codeAffectedSystem.text = value;
                     });
                   },
                   onChanged: (value) {
-                    checkOtherType(value);
+                    checkOtherAffectedSystem(value);
                     setState(() {
-                      _selectedInjuryType = onChangedMethodTypeKey(value);
+                      _selectedAffected = onChangedMethodAffectedKey(value);
                     });
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Please fill in the code of injury types';
-                    } else if (int.parse(value) == 0 || int.parse(value) > 20) {
-                      return 'The code can be between 1-20';
+                      return 'Please fill in the code of affected system';
+                    } else if (int.parse(value) == 0 || int.parse(value) > 12) {
+                      return 'The code can be between 1-12';
                     }
                   },
                 ),
@@ -161,7 +160,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                   ),
-                  items: _injuryType
+                  items: _affectedList
                       .map((key, value) {
                         return MapEntry(
                             key,
@@ -172,17 +171,17 @@ class _InjuryReportState extends State<InjuryReport> {
                       })
                       .values
                       .toList(),
-                  value: _selectedInjuryType,
+                  value: _selectedAffected,
                   onChanged: (value) {
-                    checkOtherType(value);
-                    onChangedMethodTypeValue(value);
+                    checkOtherAffectedSystem(value);
+                    onChangedMethodAffectedValue(value);
                     setState(() {
-                      _selectedInjuryType = value;
+                      _selectedAffected = value;
                     });
                   },
                   validator: (value) {
-                    if (value == 'Select type of injury') {
-                      return 'Please select the type of injury';
+                    if (value == 'Select affected systems') {
+                      return 'Please select the affected systems';
                     } else {
                       return null;
                     }
@@ -192,19 +191,19 @@ class _InjuryReportState extends State<InjuryReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 Visibility(
-                  visible: isVisibleOtherInjuryType,
+                  visible: isVisibleOtherAffectedSystem,
                   child: TextFormField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Your type of injury',
+                      labelText: 'Your affected system',
                     ),
-                    controller: _otherInjuryType,
-                    autovalidateMode: isVisibleOtherInjuryType
+                    controller: _otherAffectedSystem,
+                    autovalidateMode: isVisibleOtherAffectedSystem
                         ? AutovalidateMode.onUserInteraction
                         : AutovalidateMode.disabled,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Please fill in your type of injury';
+                        return 'Please fill in your affected system';
                       } else {
                         return null;
                       }
@@ -215,37 +214,35 @@ class _InjuryReportState extends State<InjuryReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 Text(
-                  'Cause of injury',
+                  'Main Symptom(s)',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 TextFormField(
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Code',
                   ),
-                  controller: _codeInjuryCause,
+                  controller: _codeMainSymptom,
                   onSaved: (value) {
                     setState(() {
-                      _codeInjuryCause.text = value;
+                      _codeMainSymptom.text = value;
                     });
                   },
                   onChanged: (value) {
-                    checkOtherCause(value);
+                    checkOtherSymptom(value);
                     setState(() {
-                      _selectedInjuryCause = onChangedMethodCauseKey(value);
+                      _selectedMainSymptom = onChangedMethodSymptomKey(value);
                     });
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Please fill in the code of cause of injury';
-                    } else if (int.parse(value) == 0 ||
-                        (int.parse(value) > 4 && int.parse(value) < 11) ||
-                        (int.parse(value) > 14 && int.parse(value) < 21) ||
-                        int.parse(value) > 24) {
+                      return 'Please fill in the code of main symptoms';
+                    } else if (int.parse(value) == 0 || int.parse(value) > 12) {
                       return 'The input code is invalid';
                     }
                   },
@@ -258,7 +255,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                   ),
-                  items: _causeOfInjury
+                  items: _mainSymptomList
                       .map((key, value) {
                         return MapEntry(
                             key,
@@ -269,17 +266,17 @@ class _InjuryReportState extends State<InjuryReport> {
                       })
                       .values
                       .toList(),
-                  value: _selectedInjuryCause,
+                  value: _selectedMainSymptom,
                   onChanged: (value) {
-                    checkOtherCause(value);
-                    onChangedMethodCauseValue(value);
+                    checkOtherSymptom(value);
+                    onChangedMethodSymptomValue(value);
                     setState(() {
-                      _selectedInjuryCause = value;
+                      _selectedMainSymptom = value;
                     });
                   },
                   validator: (value) {
-                    if (value == 'Select cause of injury') {
-                      return 'Please select the cause of injury';
+                    if (value == 'Select the main symptom(s)') {
+                      return 'Please select the main symptom(s)';
                     } else {
                       return null;
                     }
@@ -289,15 +286,14 @@ class _InjuryReportState extends State<InjuryReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 Visibility(
-                  visible: isVisibleOtherInjuryCause,
+                  visible: isVisibleOtherMainSymptom,
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'Your cause of injury',
+                      labelText: 'Your main symptom(s)',
                     ),
-                    controller: _otherInjuryCause,
-                    autovalidateMode: isVisibleOtherInjuryCause
+                    controller: _otherMainSymptom,
+                    autovalidateMode: isVisibleOtherMainSymptom
                         ? AutovalidateMode.onUserInteraction
                         : AutovalidateMode.disabled,
                     validator: (value) {
@@ -333,83 +329,99 @@ class _InjuryReportState extends State<InjuryReport> {
     );
   }
 
-  void onChangedMethodTypeValue(String value) {
-    var injuryTypeMapKey = _injuryType.keys
-        .firstWhere((k) => _injuryType[k] == value, orElse: () => null);
+  void onChangedMethodAffectedValue(String value) {
+    var affectedMapKey = _affectedList.keys
+        .firstWhere((k) => _affectedList[k] == value, orElse: () => null);
 
-    _codeInjuryType.text = injuryTypeMapKey;
+    _codeAffectedSystem.text = affectedMapKey;
   }
 
-  String onChangedMethodTypeKey(String value) {
-    String injuryTypeValue = _injuryType[value];
-    return injuryTypeValue;
+  String onChangedMethodAffectedKey(String value) {
+    String AffectedSystemValue = _affectedList[value];
+    return AffectedSystemValue;
   }
 
-  void onChangedMethodCauseValue(String value) {
-    var injuryCauseMapKey = _causeOfInjury.keys
-        .firstWhere((k) => _causeOfInjury[k] == value, orElse: () => null);
+  void onChangedMethodSymptomValue(String value) {
+    var injuryCauseMapKey = _mainSymptomList.keys
+        .firstWhere((k) => _mainSymptomList[k] == value, orElse: () => null);
 
-    _codeInjuryCause.text = injuryCauseMapKey;
+    _codeMainSymptom.text = injuryCauseMapKey;
   }
 
-  String onChangedMethodCauseKey(String value) {
-    String injuryCauseValue = _causeOfInjury[value];
-    return injuryCauseValue;
+  String onChangedMethodSymptomKey(String value) {
+    String mainSymptomValue = _mainSymptomList[value];
+    return mainSymptomValue;
   }
 
-  void checkOtherType(String value) {
-    if (value == '20' || value == 'Other') {
-      isVisibleOtherInjuryType = true;
+  void checkOtherAffectedSystem(String value) {
+    if (value == '12' || value == 'Other') {
+      isVisibleOtherAffectedSystem = true;
     } else {
-      isVisibleOtherInjuryType = false;
+      isVisibleOtherAffectedSystem = false;
     }
   }
 
-  void checkOtherCause(String value) {
-    if (value == '24' || value == 'Other') {
-      isVisibleOtherInjuryCause = true;
+  void checkOtherSymptom(String value) {
+    if (value == '12' || value == 'Other') {
+      isVisibleOtherMainSymptom = true;
     } else {
-      isVisibleOtherInjuryCause = false;
+      isVisibleOtherMainSymptom = false;
     }
   }
 
-  final _injuryType = {
-    '0': 'Select type of injury',
-    '1': 'Concussion',
-    '2': 'Fracture (Traumatic)',
-    '3': 'Stress fracture (Overuse)',
-    '4': 'Other bone injuries',
-    '5': 'Dislocation, Subluxation',
-    '6': 'Tendon rupture',
-    '7': 'Ligamentous rupture',
-    '8': 'Sprain',
-    '9': 'Lesion of meniscus or cartilage',
-    '10': 'Strain / Muscle rupture / Tear',
-    '11': 'Contusion / Haematoma / Bruise',
-    '12': 'Tendinosis / Tendinipathy',
-    '13': 'Arthritis / Synovitis / Bursitis',
-    '14': 'Fasciitis / Aponeourosis injury',
-    '15': 'Impingement',
-    '16': 'Laceration / Abrasion / Skin lesion',
-    '17': 'Dental injury / Broken tooth',
-    '18': 'Nerver injury / Spinal cord injury',
-    '19': 'Muscle cramps or spasm',
-    '20': 'Other',
+  final _affectedList = {
+    '0': 'Select affected systems',
+    '1': 'Respiratory / ear, nose, throat',
+    '2': 'Gastro-intestinal',
+    '3': 'Uro-genital / Gynaecological',
+    '4': 'Cardio-vascular',
+    '5': 'Allergic / Immunological',
+    '6': 'Metabolic / Endocrinological',
+    '7': 'Haematological',
+    '8': 'Neurological / Psychiatric',
+    '9': 'Dermatologic',
+    '10': 'Musculo-skeletal',
+    '11': 'Dental',
+    '12': 'Other',
   };
 
-  final _causeOfInjury = {
-    '0': 'Select cause of injury',
-    '1': 'Overuse (Gradual onset)',
-    '2': 'Overuse (Sudden onset)',
-    '3': 'Non-contact trauma',
-    '4': 'Recurrence of previous injury',
-    '11': 'Contact with another athlete',
-    '12': 'Contact: Moving object',
-    '13': 'Contact: Stagnant object',
-    '14': 'Violation of rules',
-    '21': 'Field of play conditions',
-    '22': 'Weather condition',
-    '23': 'Equipment failure',
-    '24': 'Other',
+  final _injuryTypeTH = {
+    '0': 'เลือกประเภทของการบาดเจ็บ',
+    '1': 'การถูกกระทบกระแทก',
+    '2': 'กระดูกหัก (บาดแผล)',
+    '3': 'การแตกหักของความเครียด (การใช้มากเกินไป)',
+    '4': 'อาการบาดเจ็บที่กระดูกอื่นๆ',
+    '5': 'ความคลาดเคลื่อน, Subluxation',
+    '6': 'เอ็นแตก',
+    '7': 'เอ็นแตก',
+    '8': 'แพลง',
+    '9': 'รอยโรคของวงเดือนหรือกระดูกอ่อน',
+    '10': 'ความเครียด / กล้ามเนื้อแตก / การฉีกขาด',
+    '11': 'ฟกช้ำ / ห้อ / ช้ำ',
+    '12': 'Tendinosis / Tendinipathy',
+    '13': 'ข้ออักเสบ / ไขข้ออักเสบ / Bursitis',
+    '14': 'อาการบาดเจ็บจากโรค Fasciitis / Aponeourosis',
+    '15': 'การปะทะ',
+    '16': 'การฉีกขาด / การถลอก / รอยโรคที่ผิวหนัง',
+    '17': 'ฟันบาดเจ็บ / ฟันหัก',
+    '18': 'อาการบาดเจ็บที่เส้นประสาท / อาการบาดเจ็บที่ไขสันหลัง',
+    '19': 'กล้ามเนื้อเป็นตะคริวหรือกระตุก',
+    '20': 'อื่นๆ',
+  };
+
+  final _mainSymptomList = {
+    '0': 'Select main symptom(s)',
+    '1': 'Fever',
+    '2': 'Pain',
+    '3': 'Diarrhoea, Vomiting',
+    '4': 'Dyspnoea, Cough',
+    '5': 'Palpitations',
+    '6': 'Hyper-thermia',
+    '7': 'Hypo-thermia',
+    '8': 'Dehydration',
+    '9': 'Syncope, Collapse',
+    '10': 'Anaphylaxis',
+    '11': 'Lethargy, Dizziness',
+    '12': 'Other',
   };
 }

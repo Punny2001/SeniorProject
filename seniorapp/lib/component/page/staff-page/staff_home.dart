@@ -30,7 +30,15 @@ class _StaffHomePageState extends State<StaffHomePage> {
               Center(
                 child: ElevatedButton(
                   child: Text('Injury Report'),
-                  onPressed: () => Navigator.of(context).pushNamed('/injuryReport'),
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed('/injuryReport'),
+                ),
+              ),
+              Center(
+                child: ElevatedButton(
+                  child: Text('Illness Report'),
+                  onPressed: () =>
+                      Navigator.of(context).pushNamed('/illnessReport'),
                 ),
               ),
             ],
