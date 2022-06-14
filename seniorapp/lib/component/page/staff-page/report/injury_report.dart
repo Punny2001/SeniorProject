@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/language.dart';
+import 'package:seniorapp/component/report-data/injury_report_data.dart';
 
 class InjuryReport extends StatefulWidget {
   @override
@@ -12,27 +15,32 @@ class _InjuryReportState extends State<InjuryReport> {
   final _athleteNo = TextEditingController();
   final _sportEvent = TextEditingController();
   final _rhtController = TextEditingController();
+  final _codeBodyPart = TextEditingController();
   final _codeInjuryType = TextEditingController();
   final _otherInjuryType = TextEditingController();
   final _codeInjuryCause = TextEditingController();
   final _otherInjuryCause = TextEditingController();
   final _absenceDayController = TextEditingController();
   DateTime _datetime;
+  String _selectedBodyType = 'Select body type';
+  String _selectedBodyHTPart = 'Select head and trunk part';
+  String _selectedBodyUpperPart = 'Select upper extremity part';
+  String _selectedBodyLowerPart = 'Select lower extremity part';
   String _selectedInjuryType = 'Select type of injury';
   String _selectedInjuryCause = 'Select cause of injury';
   bool isVisibleOtherInjuryType = false;
   bool isVisibleOtherInjuryCause = false;
+  bool isHeadTrunkPart = false;
+  bool isUpperPart = false;
+  bool isLowerPart = false;
+  int bodyType;
 
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          LanguageSign(),
-        ],
-      ),
+      appBar: AppBar(actions: [LanguageSign()],),
       body: Container(
         margin: EdgeInsets.all(30),
         width: w,
@@ -45,6 +53,7 @@ class _InjuryReportState extends State<InjuryReport> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TextFormField(
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     label: Text('Athlete No.'),
                   ),
@@ -119,6 +128,143 @@ class _InjuryReportState extends State<InjuryReport> {
                 Padding(
                   padding: EdgeInsets.all(20),
                 ),
+                Text('Injured body part', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                DropdownButtonFormField<String>(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  items: _bodyType
+                      .map((bodyType) => DropdownMenuItem(
+                                          child: Text(bodyType),
+                                          value: bodyType,
+                                        )).toList(),
+                  value: _selectedBodyType,
+                  onChanged: (value) {
+                    checkBodyType(value);
+                    setState(() {
+                      _selectedBodyType = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == 'Select body type') {
+                      return 'Please select the type of body';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                Visibility(
+                  visible: isHeadTrunkPart,
+                  child: DropdownButtonFormField<String>(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: _bodyHeadPart
+                        .map((key, value) {
+                          return MapEntry(
+                              key,
+                              DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ));
+                        })
+                        .values
+                        .toList(),
+                    value: _selectedBodyHTPart,
+                    onChanged: (value) {
+                      onChangedMethodBodyPartValue(value);
+                      setState(() {
+                        _selectedBodyHTPart = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == 'Select head and trunk part') {
+                        return 'Please select the part of body';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+                Visibility(
+                  visible: isUpperPart,
+                  child: DropdownButtonFormField<String>(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: _bodyUpperPart
+                        .map((key, value) {
+                          return MapEntry(
+                              key,
+                              DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ));
+                        })
+                        .values
+                        .toList(),
+                    value: _selectedBodyUpperPart,
+                    onChanged: (value) {
+                      onChangedMethodBodyPartValue(value);
+                      setState(() {
+                        _selectedBodyUpperPart = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == 'Select upper part') {
+                        return 'Please select the part of body';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+                Visibility(child: Column(children: [RadioListTile(value: value, groupValue: groupValue, onChanged: onChanged)],),),
+                Visibility(
+                  visible: isLowerPart,
+                  child: DropdownButtonFormField<String>(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    items: _bodyLowerPart
+                        .map((key, value) {
+                          return MapEntry(
+                              key,
+                              DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ));
+                        })
+                        .values
+                        .toList(),
+                    value: _selectedBodyLowerPart,
+                    onChanged: (value) {
+                      onChangedMethodBodyPartValue(value);
+                      setState(() {
+                        _selectedBodyLowerPart = value;
+                      });
+                    },
+                    validator: (value) {
+                      if (value == 'Select lower part') {
+                        return 'Please select the part of body';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(10),),
+
                 Text(
                   'Type of Injury',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -222,6 +368,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 TextFormField(
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Code',
@@ -291,7 +438,6 @@ class _InjuryReportState extends State<InjuryReport> {
                 Visibility(
                   visible: isVisibleOtherInjuryCause,
                   child: TextFormField(
-                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Your cause of injury',
@@ -325,12 +471,52 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
+                Padding(padding: EdgeInsets.all(10),),
+                Container(
+                  width: w,
+                  height: 50,
+                  child: ElevatedButton(onPressed: () => saveInjuryReport(), child: Text('Save'),),
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void onChangedMethodBodyPartValue(String value) {
+    if (bodyType == 1) {
+      var bodyPartMapKey = _bodyHeadPart.keys
+        .firstWhere((k) => _bodyHeadPart[k] == value, orElse: () => null);
+    _codeBodyPart.text = bodyPartMapKey;
+    }
+    else if (bodyType == 2) {
+      var bodyPartMapKey = _bodyUpperPart.keys
+        .firstWhere((k) => _bodyUpperPart[k] == value, orElse: () => null);
+    _codeBodyPart.text = bodyPartMapKey;
+    }
+    else if (bodyType == 3) {
+      var bodyPartMapKey = _bodyLowerPart.keys
+        .firstWhere((k) => _bodyLowerPart[k] == value, orElse: () => null);
+    _codeBodyPart.text = bodyPartMapKey;
+    }
+  }
+
+  String onChangedMethodBodyPartKey(String value) {
+    if (bodyType == 1) {
+      String _bodyHeadPartValue = _bodyHeadPart[value];
+      return _bodyHeadPartValue;
+    }
+    else if (bodyType == 2) {
+      String _bodyUpperPartValue = _bodyUpperPart[value];
+      return _bodyUpperPartValue;
+    }
+    else if (bodyType == 3) {
+      String _bodyLowerPartValue = _bodyLowerPart[value];
+      return _bodyLowerPartValue;
+    }
+    return null;
   }
 
   void onChangedMethodTypeValue(String value) {
@@ -373,6 +559,76 @@ class _InjuryReportState extends State<InjuryReport> {
     }
   }
 
+  void checkBodyType(String value) {
+    if (value == 'Head and Trunk') {
+      bodyType = 1;
+      isHeadTrunkPart = true;
+      isLowerPart = false;
+      isUpperPart = false;
+    }
+    else if (value == 'Upper extremity') {
+      bodyType = 2;
+      isHeadTrunkPart = false;
+      isLowerPart = false;
+      isUpperPart = true;
+    }
+    else if (value == 'Lower extremity') {
+      bodyType = 3;
+      isHeadTrunkPart = false;
+      isLowerPart = true;
+      isUpperPart = false;
+    }
+    else {
+      bodyType = 0;
+      isHeadTrunkPart = false;
+      isLowerPart = false;
+      isUpperPart = false;
+    }
+  }
+
+  final _bodyType = [
+    'Select body type',
+    'Head and Trunk',
+    'Upper extremity',
+    'Lower extremity',
+  ];
+
+  final _bodyHeadPart = {
+    '0': 'Select head and trunk part',
+    '1': 'Face',
+    '2': 'Head',
+    '3': 'Neck / Cervical spine',
+    '4': 'Thoracic spine / upper back',
+    '5': 'Sternum / ribs',
+    '6': 'Lumbar spine / Lower back',
+    '7': 'Abdomen',
+    '8': 'Pelvis / Sacrum / Buttock',
+  };
+
+  final _bodyUpperPart = {
+    '0': 'Select upper extremity part',
+    '11': 'Shoulder / Clavicle',
+    '12': 'Upper arm',
+    '13': 'Elbow',
+    '14': 'Forearm',
+    '15': 'Wrist',
+    '16': 'Hand',
+    '17': 'Finger',
+    '18': 'Thumb',
+  };
+
+  final _bodyLowerPart = {
+    '0': 'Select lower extremity part',
+    '21': 'Hip',
+    '22': 'Groin',
+    '23': 'Thigh',
+    '24': 'Knee',
+    '25': 'Lower leg',
+    '26': 'Acilles tendon',
+    '27': 'Ankle',
+    '28': 'Foot / Toe',
+  };
+
   final _injuryType = {
     '0': 'Select type of injury',
     '1': 'Concussion',
@@ -412,4 +668,75 @@ class _InjuryReportState extends State<InjuryReport> {
     '23': 'Equipment failure',
     '24': 'Other',
   };
+
+  Future<void> saveInjuryReport() async {
+    var uid = FirebaseAuth.instance.currentUser.uid;
+    
+    if (bodyType == 1) {
+      InjuryReportData injuryReportModel = InjuryReportData(
+        staff_uid: uid,
+        athlete_no: _athleteNo.text.trim(),
+        report_type: 'Injury',
+        sport_event: _sportEvent.text.trim(),
+        round_heat_training: _rhtController.text,
+        injuryDateTime: _datetime,
+        injuredBody: _selectedBodyHTPart,
+        injuryType: _selectedInjuryType,
+        injuryCause: _selectedInjuryCause,
+        no_day: _absenceDayController.text.trim(),
+      );
+
+      Map<String, dynamic> data = injuryReportModel.toMap();
+
+      await FirebaseFirestore.instance.collection('Report')
+        .doc()
+        .set(data)
+        .then((value) => print('Insert data to Firestore successfully')).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
+    }
+    else if (bodyType == 2) {
+      InjuryReportData injuryReportModel = InjuryReportData(
+        staff_uid: uid,
+        athlete_no: _athleteNo.text.trim(),
+        report_type: 'Injury',
+        sport_event: _sportEvent.text.trim(),
+        round_heat_training: _rhtController.text,
+        injuryDateTime: _datetime,
+        injuredBody: _selectedBodyUpperPart,
+        injuryType: _selectedInjuryType,
+        injuryCause: _selectedInjuryCause,
+        no_day: _absenceDayController.text.trim(),
+      );
+
+      Map<String, dynamic> data = injuryReportModel.toMap();
+
+      await FirebaseFirestore.instance.collection('Report')
+        .doc()
+        .set(data)
+        .then((value) => print('Insert data to Firestore successfully')).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
+    }
+    else if (bodyType == 3) {
+      InjuryReportData injuryReportModel = InjuryReportData(
+        staff_uid: uid,
+        athlete_no: _athleteNo.text.trim(),
+        report_type: 'Injury',
+        sport_event: _sportEvent.text.trim(),
+        round_heat_training: _rhtController.text,
+        injuryDateTime: _datetime,
+        injuredBody: _selectedBodyLowerPart,
+        injuryType: _selectedInjuryType,
+        injuryCause: _selectedInjuryCause,
+        no_day: _absenceDayController.text.trim(),
+      );
+
+      Map<String, dynamic> data = injuryReportModel.toMap();
+
+      await FirebaseFirestore.instance.collection('Report')
+        .doc()
+        .set(data)
+        .then((value) => print('Insert data to Firestore successfully')).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
+    }
+  }
+
 }
+
+

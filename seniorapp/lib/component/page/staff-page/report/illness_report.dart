@@ -28,11 +28,7 @@ class _IllnessReportState extends State<IllnessReport> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          LanguageSign(),
-        ],
-      ),
+      appBar: AppBar(),
       body: Container(
         margin: EdgeInsets.all(30),
         width: w,
@@ -385,29 +381,7 @@ class _IllnessReportState extends State<IllnessReport> {
     '12': 'Other',
   };
 
-  final _injuryTypeTH = {
-    '0': 'เลือกประเภทของการบาดเจ็บ',
-    '1': 'การถูกกระทบกระแทก',
-    '2': 'กระดูกหัก (บาดแผล)',
-    '3': 'การแตกหักของความเครียด (การใช้มากเกินไป)',
-    '4': 'อาการบาดเจ็บที่กระดูกอื่นๆ',
-    '5': 'ความคลาดเคลื่อน, Subluxation',
-    '6': 'เอ็นแตก',
-    '7': 'เอ็นแตก',
-    '8': 'แพลง',
-    '9': 'รอยโรคของวงเดือนหรือกระดูกอ่อน',
-    '10': 'ความเครียด / กล้ามเนื้อแตก / การฉีกขาด',
-    '11': 'ฟกช้ำ / ห้อ / ช้ำ',
-    '12': 'Tendinosis / Tendinipathy',
-    '13': 'ข้ออักเสบ / ไขข้ออักเสบ / Bursitis',
-    '14': 'อาการบาดเจ็บจากโรค Fasciitis / Aponeourosis',
-    '15': 'การปะทะ',
-    '16': 'การฉีกขาด / การถลอก / รอยโรคที่ผิวหนัง',
-    '17': 'ฟันบาดเจ็บ / ฟันหัก',
-    '18': 'อาการบาดเจ็บที่เส้นประสาท / อาการบาดเจ็บที่ไขสันหลัง',
-    '19': 'กล้ามเนื้อเป็นตะคริวหรือกระตุก',
-    '20': 'อื่นๆ',
-  };
+  
 
   final _mainSymptomList = {
     '0': 'Select main symptom(s)',
