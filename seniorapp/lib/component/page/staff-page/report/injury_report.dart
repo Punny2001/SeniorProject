@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 
 class InjuryReport extends StatefulWidget {
@@ -28,19 +27,22 @@ class _InjuryReportState extends State<InjuryReport> {
   String _selectedBodyLowerPart = 'Select lower extremity part';
   String _selectedInjuryType = 'Select type of injury';
   String _selectedInjuryCause = 'Select cause of injury';
+  int _selectedSide = 0;
   bool isVisibleOtherInjuryType = false;
   bool isVisibleOtherInjuryCause = false;
   bool isHeadTrunkPart = false;
   bool isUpperPart = false;
   bool isLowerPart = false;
+  bool hasSide = false;
   int bodyType;
+  String _selectedSideString;
 
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(actions: [LanguageSign()],),
+      appBar: AppBar(),
       body: Container(
         margin: EdgeInsets.all(30),
         width: w,
@@ -128,7 +130,10 @@ class _InjuryReportState extends State<InjuryReport> {
                 Padding(
                   padding: EdgeInsets.all(20),
                 ),
-                Text('Injured body part', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                Text(
+                  'Injured body part',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
                 Padding(
                   padding: EdgeInsets.all(10),
                 ),
@@ -139,9 +144,10 @@ class _InjuryReportState extends State<InjuryReport> {
                   ),
                   items: _bodyType
                       .map((bodyType) => DropdownMenuItem(
-                                          child: Text(bodyType),
-                                          value: bodyType,
-                                        )).toList(),
+                            child: Text(bodyType),
+                            value: bodyType,
+                          ))
+                      .toList(),
                   value: _selectedBodyType,
                   onChanged: (value) {
                     checkBodyType(value);
@@ -184,6 +190,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       setState(() {
                         _selectedBodyHTPart = value;
                       });
+                      hasSide = false;
                     },
                     validator: (value) {
                       if (value == 'Select head and trunk part') {
@@ -218,6 +225,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       setState(() {
                         _selectedBodyUpperPart = value;
                       });
+                      hasSide = true;
                     },
                     validator: (value) {
                       if (value == 'Select upper part') {
@@ -228,7 +236,6 @@ class _InjuryReportState extends State<InjuryReport> {
                     },
                   ),
                 ),
-                Visibility(child: Column(children: [RadioListTile(value: value, groupValue: groupValue, onChanged: onChanged)],),),
                 Visibility(
                   visible: isLowerPart,
                   child: DropdownButtonFormField<String>(
@@ -253,6 +260,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       setState(() {
                         _selectedBodyLowerPart = value;
                       });
+                      hasSide = true;
                     },
                     validator: (value) {
                       if (value == 'Select lower part') {
@@ -263,8 +271,53 @@ class _InjuryReportState extends State<InjuryReport> {
                     },
                   ),
                 ),
-                Padding(padding: EdgeInsets.all(10),),
-
+                FormField(
+                  builder: (FormFieldState<bool> state) {
+                    return Visibility(
+                      visible: hasSide,
+                      child: Column(
+                        children: [
+                          RadioListTile(
+                            value: 1,
+                            title: Text('Left'),
+                            groupValue: _selectedSide,
+                            onChanged: (value) {
+                              state.setValue(true);
+                              setState(() {
+                                _selectedSide = value;
+                              });
+                            },
+                          ),
+                          RadioListTile(
+                            value: 2,
+                            title: Text('Right'),
+                            groupValue: _selectedSide,
+                            onChanged: (value) {
+                              state.setValue(true);
+                              setState(() {
+                                _selectedSide = value;
+                              });
+                            },
+                          ),
+                          RadioListTile(
+                            value: 3,
+                            title: Text('Both'),
+                            groupValue: _selectedSide,
+                            onChanged: (value) {
+                              state.setValue(true);
+                              setState(() {
+                                _selectedSide = value;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
                 Text(
                   'Type of Injury',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -471,11 +524,16 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                Padding(padding: EdgeInsets.all(10),),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
                 Container(
                   width: w,
                   height: 50,
-                  child: ElevatedButton(onPressed: () => saveInjuryReport(), child: Text('Save'),),
+                  child: ElevatedButton(
+                    onPressed: () => saveInjuryReport(),
+                    child: Text('Save'),
+                  ),
                 ),
               ],
             ),
@@ -488,18 +546,16 @@ class _InjuryReportState extends State<InjuryReport> {
   void onChangedMethodBodyPartValue(String value) {
     if (bodyType == 1) {
       var bodyPartMapKey = _bodyHeadPart.keys
-        .firstWhere((k) => _bodyHeadPart[k] == value, orElse: () => null);
-    _codeBodyPart.text = bodyPartMapKey;
-    }
-    else if (bodyType == 2) {
+          .firstWhere((k) => _bodyHeadPart[k] == value, orElse: () => null);
+      _codeBodyPart.text = bodyPartMapKey;
+    } else if (bodyType == 2) {
       var bodyPartMapKey = _bodyUpperPart.keys
-        .firstWhere((k) => _bodyUpperPart[k] == value, orElse: () => null);
-    _codeBodyPart.text = bodyPartMapKey;
-    }
-    else if (bodyType == 3) {
+          .firstWhere((k) => _bodyUpperPart[k] == value, orElse: () => null);
+      _codeBodyPart.text = bodyPartMapKey;
+    } else if (bodyType == 3) {
       var bodyPartMapKey = _bodyLowerPart.keys
-        .firstWhere((k) => _bodyLowerPart[k] == value, orElse: () => null);
-    _codeBodyPart.text = bodyPartMapKey;
+          .firstWhere((k) => _bodyLowerPart[k] == value, orElse: () => null);
+      _codeBodyPart.text = bodyPartMapKey;
     }
   }
 
@@ -507,12 +563,10 @@ class _InjuryReportState extends State<InjuryReport> {
     if (bodyType == 1) {
       String _bodyHeadPartValue = _bodyHeadPart[value];
       return _bodyHeadPartValue;
-    }
-    else if (bodyType == 2) {
+    } else if (bodyType == 2) {
       String _bodyUpperPartValue = _bodyUpperPart[value];
       return _bodyUpperPartValue;
-    }
-    else if (bodyType == 3) {
+    } else if (bodyType == 3) {
       String _bodyLowerPartValue = _bodyLowerPart[value];
       return _bodyLowerPartValue;
     }
@@ -565,20 +619,17 @@ class _InjuryReportState extends State<InjuryReport> {
       isHeadTrunkPart = true;
       isLowerPart = false;
       isUpperPart = false;
-    }
-    else if (value == 'Upper extremity') {
+    } else if (value == 'Upper extremity') {
       bodyType = 2;
       isHeadTrunkPart = false;
       isLowerPart = false;
       isUpperPart = true;
-    }
-    else if (value == 'Lower extremity') {
+    } else if (value == 'Lower extremity') {
       bodyType = 3;
       isHeadTrunkPart = false;
       isLowerPart = true;
       isUpperPart = false;
-    }
-    else {
+    } else {
       bodyType = 0;
       isHeadTrunkPart = false;
       isLowerPart = false;
@@ -669,9 +720,26 @@ class _InjuryReportState extends State<InjuryReport> {
     '24': 'Other',
   };
 
+  void changeBodySidetoString() {
+    switch (_selectedSide) {
+      case 1:
+        _selectedSideString = 'Left';
+        break;
+      case 2:
+        _selectedSideString = 'Right';
+        break;
+      case 3:
+        _selectedSideString = 'Both';
+        break;
+      default:
+        break;
+    }
+  }
+
   Future<void> saveInjuryReport() async {
     var uid = FirebaseAuth.instance.currentUser.uid;
-    
+    changeBodySidetoString();
+
     if (bodyType == 1) {
       InjuryReportData injuryReportModel = InjuryReportData(
         staff_uid: uid,
@@ -688,12 +756,14 @@ class _InjuryReportState extends State<InjuryReport> {
 
       Map<String, dynamic> data = injuryReportModel.toMap();
 
-      await FirebaseFirestore.instance.collection('Report')
-        .doc()
-        .set(data)
-        .then((value) => print('Insert data to Firestore successfully')).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
-    }
-    else if (bodyType == 2) {
+      await FirebaseFirestore.instance
+          .collection('Report')
+          .doc()
+          .set(data)
+          .then((value) => print('Insert data to Firestore successfully'))
+          .then((value) => Navigator.of(context)
+              .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
+    } else if (bodyType == 2) {
       InjuryReportData injuryReportModel = InjuryReportData(
         staff_uid: uid,
         athlete_no: _athleteNo.text.trim(),
@@ -701,7 +771,7 @@ class _InjuryReportState extends State<InjuryReport> {
         sport_event: _sportEvent.text.trim(),
         round_heat_training: _rhtController.text,
         injuryDateTime: _datetime,
-        injuredBody: _selectedBodyUpperPart,
+        injuredBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
         injuryType: _selectedInjuryType,
         injuryCause: _selectedInjuryCause,
         no_day: _absenceDayController.text.trim(),
@@ -709,12 +779,14 @@ class _InjuryReportState extends State<InjuryReport> {
 
       Map<String, dynamic> data = injuryReportModel.toMap();
 
-      await FirebaseFirestore.instance.collection('Report')
-        .doc()
-        .set(data)
-        .then((value) => print('Insert data to Firestore successfully')).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
-    }
-    else if (bodyType == 3) {
+      await FirebaseFirestore.instance
+          .collection('Report')
+          .doc()
+          .set(data)
+          .then((value) => print('Insert data to Firestore successfully'))
+          .then((value) => Navigator.of(context)
+              .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
+    } else if (bodyType == 3) {
       InjuryReportData injuryReportModel = InjuryReportData(
         staff_uid: uid,
         athlete_no: _athleteNo.text.trim(),
@@ -722,7 +794,7 @@ class _InjuryReportState extends State<InjuryReport> {
         sport_event: _sportEvent.text.trim(),
         round_heat_training: _rhtController.text,
         injuryDateTime: _datetime,
-        injuredBody: _selectedBodyLowerPart,
+        injuredBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
         injuryType: _selectedInjuryType,
         injuryCause: _selectedInjuryCause,
         no_day: _absenceDayController.text.trim(),
@@ -730,13 +802,13 @@ class _InjuryReportState extends State<InjuryReport> {
 
       Map<String, dynamic> data = injuryReportModel.toMap();
 
-      await FirebaseFirestore.instance.collection('Report')
-        .doc()
-        .set(data)
-        .then((value) => print('Insert data to Firestore successfully')).then((value) => Navigator.of(context).pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
+      await FirebaseFirestore.instance
+          .collection('Report')
+          .doc()
+          .set(data)
+          .then((value) => print('Insert data to Firestore successfully'))
+          .then((value) => Navigator.of(context)
+              .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
     }
   }
-
 }
-
-

@@ -11,7 +11,7 @@ class InjuryReportData {
   final String injuryType;
   final String injuryCause;
   final String no_day;
-  
+
   InjuryReportData({
     this.staff_uid,
     this.athlete_no,
@@ -53,7 +53,7 @@ class InjuryReportData {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
     result.addAll({'staff_uid': staff_uid});
     result.addAll({'athlete_no': athlete_no});
     result.addAll({'report_type': report_type});
@@ -64,7 +64,7 @@ class InjuryReportData {
     result.addAll({'injuryType': injuryType});
     result.addAll({'injuryCause': injuryCause});
     result.addAll({'no_day': no_day});
-  
+
     return result;
   }
 
@@ -85,7 +85,8 @@ class InjuryReportData {
 
   String toJson() => json.encode(toMap());
 
-  factory InjuryReportData.fromJson(String source) => InjuryReportData.fromMap(json.decode(source));
+  factory InjuryReportData.fromJson(String source) =>
+      InjuryReportData.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -95,31 +96,31 @@ class InjuryReportData {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is InjuryReportData &&
-      other.staff_uid == staff_uid &&
-      other.athlete_no == athlete_no &&
-      other.report_type == report_type &&
-      other.sport_event == sport_event &&
-      other.round_heat_training == round_heat_training &&
-      other.injuryDateTime == injuryDateTime &&
-      other.injuredBody == injuredBody &&
-      other.injuryType == injuryType &&
-      other.injuryCause == injuryCause &&
-      other.no_day == no_day;
+        other.staff_uid == staff_uid &&
+        other.athlete_no == athlete_no &&
+        other.report_type == report_type &&
+        other.sport_event == sport_event &&
+        other.round_heat_training == round_heat_training &&
+        other.injuryDateTime == injuryDateTime &&
+        other.injuredBody == injuredBody &&
+        other.injuryType == injuryType &&
+        other.injuryCause == injuryCause &&
+        other.no_day == no_day;
   }
 
   @override
   int get hashCode {
     return staff_uid.hashCode ^
-      athlete_no.hashCode ^
-      report_type.hashCode ^
-      sport_event.hashCode ^
-      round_heat_training.hashCode ^
-      injuryDateTime.hashCode ^
-      injuredBody.hashCode ^
-      injuryType.hashCode ^
-      injuryCause.hashCode ^
-      no_day.hashCode;
+        athlete_no.hashCode ^
+        report_type.hashCode ^
+        sport_event.hashCode ^
+        round_heat_training.hashCode ^
+        injuryDateTime.hashCode ^
+        injuredBody.hashCode ^
+        injuryType.hashCode ^
+        injuryCause.hashCode ^
+        no_day.hashCode;
   }
 }

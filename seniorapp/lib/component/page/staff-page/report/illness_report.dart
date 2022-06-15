@@ -22,6 +22,7 @@ class _IllnessReportState extends State<IllnessReport> {
   String _selectedMainSymptom = 'Select main symptom(s)';
   bool isVisibleOtherAffectedSystem = false;
   bool isVisibleOtherMainSymptom = false;
+  List<String> _selectedMainSymptomList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -380,8 +381,6 @@ class _IllnessReportState extends State<IllnessReport> {
     '11': 'Dental',
     '12': 'Other',
   };
-
-  
 
   final _mainSymptomList = {
     '0': 'Select main symptom(s)',
