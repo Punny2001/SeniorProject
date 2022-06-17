@@ -16,13 +16,22 @@ class _IllnessReportState extends State<IllnessReport> {
   final _otherAffectedSystem = TextEditingController();
   final _codeMainSymptom = TextEditingController();
   final _otherMainSymptom = TextEditingController();
+  final _codeIllnessCause = TextEditingController();
   final _absenceDayController = TextEditingController();
+  final _otherIllnessCause = TextEditingController();
   DateTime _occuredDate;
   String _selectedAffected = 'Select affected systems';
   String _selectedMainSymptom = 'Select main symptom(s)';
+  String _selectedIllnessCause = 'Select cause of illness';
   bool isVisibleOtherAffectedSystem = false;
   bool isVisibleOtherMainSymptom = false;
+  bool isVisibleOtherIllnessCause = false;
   List<String> _selectedMainSymptomList = [];
+  List<String> _selectedMainSymptomCodeList = [];
+
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -279,9 +288,6 @@ class _IllnessReportState extends State<IllnessReport> {
                     }
                   },
                 ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                ),
                 Visibility(
                   visible: isVisibleOtherMainSymptom,
                   child: TextFormField(
@@ -295,7 +301,122 @@ class _IllnessReportState extends State<IllnessReport> {
                         : AutovalidateMode.disabled,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Please fill in your cause of injury';
+                        return 'Please fill in your cause of illness';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+                Container(
+                  child: IconButton(onPressed: () {
+                    if (_codeMainSymptom.text != '0') {
+                      _selectedMainSymptomList.add('['+_selectedMainSymptom+']');
+                    _selectedMainSymptom = '';
+                    _codeMainSymptom.clear();
+                    }
+                    print(_selectedMainSymptomList);
+                  }, 
+                    icon: Icon(Icons.add_circle_outline), 
+                  ), 
+                  alignment: Alignment.centerRight,
+                ),
+                Card(
+                  child: Column(
+                    children: [
+                      // Text(_selectedMainSymptomList.),
+                    ],
+                  ),
+                ),
+                Text(
+                  'Cause of illness',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Code',
+                  ),
+                  controller: _codeIllnessCause,
+                  onSaved: (value) {
+                    setState(() {
+                      _codeIllnessCause.text = value;
+                    });
+                  },
+                  onChanged: (value) {
+                    checkOtherCause(value);
+                    setState(() {
+                      _selectedIllnessCause = onChangedMethodCauseKey(value);
+                    });
+                  },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please fill in the code of cause of injury';
+                    } else if (int.parse(value) == 0 ||
+                        (int.parse(value) > 4 && int.parse(value) < 11) ||
+                        (int.parse(value) > 14 && int.parse(value) < 21) ||
+                        int.parse(value) > 24) {
+                      return 'The input code is invalid';
+                    }
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                DropdownButtonFormField<String>(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  items: _causeIllnessList
+                      .map((key, value) {
+                        return MapEntry(
+                            key,
+                            DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            ));
+                      })
+                      .values
+                      .toList(),
+                  value: _selectedIllnessCause,
+                  onChanged: (value) {
+                    checkOtherCause(value);
+                    onChangedMethodCauseValue(value);
+                    setState(() {
+                      _selectedIllnessCause = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == 'Select cause of illness') {
+                      return 'Please select the cause of injury';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                Visibility(
+                  visible: isVisibleOtherIllnessCause,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Your cause of illness',
+                    ),
+                    controller: _otherIllnessCause,
+                    autovalidateMode: isVisibleOtherIllnessCause
+                        ? AutovalidateMode.onUserInteraction
+                        : AutovalidateMode.disabled,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please fill in your cause of illness';
                       } else {
                         return null;
                       }
@@ -366,6 +487,26 @@ class _IllnessReportState extends State<IllnessReport> {
     }
   }
 
+  void onChangedMethodCauseValue(String value) {
+    var illnessCauseMapKey = _causeIllnessList.keys
+        .firstWhere((k) => _causeIllnessList[k] == value, orElse: () => null);
+
+    _codeIllnessCause.text = illnessCauseMapKey;
+  }
+
+  String onChangedMethodCauseKey(String value) {
+    String illnessCauseValue = _causeIllnessList[value];
+    return illnessCauseValue;
+  }
+
+  void checkOtherCause(String value) {
+    if (value == '6' || value == 'Other') {
+      isVisibleOtherIllnessCause = true;
+    } else {
+      isVisibleOtherIllnessCause = false;
+    }
+  }
+
   final _affectedList = {
     '0': 'Select affected systems',
     '1': 'Respiratory / ear, nose, throat',
@@ -396,5 +537,15 @@ class _IllnessReportState extends State<IllnessReport> {
     '10': 'Anaphylaxis',
     '11': 'Lethargy, Dizziness',
     '12': 'Other',
+  };
+
+  final _causeIllnessList = {
+    '0': 'Select cause of illness',
+    '1': 'Pre-existing',
+    '2': 'Infection',
+    '3': 'Exercise-induced',
+    '4': 'Environmental',
+    '5': 'Reaction to medication',
+    '6': 'Other',
   };
 }

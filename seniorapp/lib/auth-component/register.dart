@@ -601,41 +601,6 @@ class _RegisterState extends State<Register> {
         }
       }
     } on FirebaseAuthException catch (error) {
-      // if (error.code == 'weak-password') {
-      //   print('The password is too weak');
-      //   setState(() {
-      //     _passwordController != _passwordController;
-      //   });
-      //   showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) => AlertDialog(
-      //       title: const Text('Registration failed!'),
-      //       content:
-      //           const Text('Your inserted password is weak. Please refill it.'),
-      //       actions: [
-      //         TextButton(
-      //           onPressed: () => Navigator.of(context).pop(),
-      //           child: const Text('OK'),
-      //         ),
-      //       ],
-      //     ),
-      //   );
-      // } else if (error.code == 'email-already-in-use') {
-      //   print('Email is already exist');
-      //   showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) => AlertDialog(
-      //       title: const Text('Registration failed!'),
-      //       content: const Text(
-      //           'The account that used this email is already exist. Please change your email.'),
-      //       actions: [
-      //         TextButton(
-      //             onPressed: () => Navigator.of(context).pop(),
-      //             child: const Text('OK'))
-      //       ],
-      //     ),
-      //   );
-      // }
       if (error.code == 'invalid-email') {
         print('Invalid email format');
         showDialog(
