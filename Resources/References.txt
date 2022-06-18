@@ -16,3 +16,4 @@ https://www.educative.io/edpresso/how-to-use-flutter-to-read-and-write-data-to-f
 https://firebase.flutter.dev/docs/firestore/usage/
 https://stackoverflow.com/questions/52030797/making-a-dropdown-menu-in-flutter-with-a-map
 https://stackoverflow.com/questions/52052241/how-to-get-map-keys-by-values-in-dart
+https://stackoverflow.com/questions/58554667/how-to-not-duplicate-same-item-in-a-list-dart
