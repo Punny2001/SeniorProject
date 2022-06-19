@@ -1,5 +1,4 @@
 List<String> sport = [
-  'Select sport and event',
   'Ceremony',
   'Beach Volleyball',
   'Karate',

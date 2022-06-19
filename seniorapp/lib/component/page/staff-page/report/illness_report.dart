@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
-import 'package:seniorapp/component/report-data/sport_data.dart';
+import 'package:seniorapp/component/report-data/sport_list.dart';
 
 class IllnessReport extends StatefulWidget {
+  const IllnessReport({Key key}) : super(key: key);
+
   @override
   _IllnessReportState createState() => _IllnessReportState();
 }
@@ -22,15 +25,16 @@ class _IllnessReportState extends State<IllnessReport> {
   final _codeIllnessCause = TextEditingController();
   final _absenceDayController = TextEditingController();
   final _otherIllnessCause = TextEditingController();
+  final _searchController = TextEditingController();
   DateTime _occuredDate;
-  String _selectedSport = 'Select sport and event';
-  String _selectedAffected = 'Select affected systems';
-  String _selectedMainSymptom = 'Select main symptom(s)';
-  String _selectedIllnessCause = 'Select cause of illness';
+  String _selectedSport;
+  String _selectedAffected;
+  String _selectedMainSymptom;
+  String _selectedIllnessCause;
   bool isVisibleOtherAffectedSystem = false;
   bool isVisibleOtherMainSymptom = false;
   bool isVisibleOtherIllnessCause = false;
-  final List<mainSymptomList> mainSymptoms = [];
+  final List<MainSymptomList> mainSymptoms = [];
   bool isRepeat = false;
 
   @override
@@ -40,11 +44,11 @@ class _IllnessReportState extends State<IllnessReport> {
     return Scaffold(
       appBar: AppBar(),
       body: Container(
-        margin: EdgeInsets.all(30),
+        margin: const EdgeInsets.all(30),
         width: w,
         height: h,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Form(
             key: _illnessKey,
             child: Column(
@@ -77,11 +81,12 @@ class _IllnessReportState extends State<IllnessReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  hint: const Text('Select sport and event'),
                   items: sport
                       .map((sport) => DropdownMenuItem(
                             child: Text(sport),
@@ -93,9 +98,39 @@ class _IllnessReportState extends State<IllnessReport> {
                     setState(() {
                       _selectedSport = value;
                     });
+                    _searchController.clear();
+                  },
+                  searchController: _searchController,
+                  searchInnerWidget: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
+                      top: 10,
+                    ),
+                    child: TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () => _searchController.clear(),
+                          icon: const Icon(Icons.close),
+                        ),
+                        hintText: 'Search ...',
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return (item.value.toString().toLowerCase().contains(
+                          searchValue.toLowerCase(),
+                        ));
                   },
                   validator: (value) {
-                    if (value == 'Select sport and event') {
+                    if (value == null) {
                       return 'Please select the sport and event';
                     } else {
                       return null;
@@ -125,7 +160,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 DateTimePicker(
                   dateLabelText: 'Occured Date',
                   dateMask: 'MMMM d, yyyy',
-                  icon: Icon(Icons.event),
+                  icon: const Icon(Icons.event),
                   type: DateTimePickerType.date,
                   lastDate: DateTime.now(),
                   firstDate: DateTime(1900),
@@ -185,11 +220,12 @@ class _IllnessReportState extends State<IllnessReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  hint: const Text('Select affected systems'),
                   items: _affectedList
                       .map((key, value) {
                         return MapEntry(
@@ -208,9 +244,39 @@ class _IllnessReportState extends State<IllnessReport> {
                     setState(() {
                       _selectedAffected = value;
                     });
+                    _searchController.clear();
+                  },
+                  searchController: _searchController,
+                  searchInnerWidget: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
+                      top: 10,
+                    ),
+                    child: TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () => _searchController.clear(),
+                          icon: const Icon(Icons.close),
+                        ),
+                        hintText: 'Search ...',
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return (item.value.toString().toLowerCase().contains(
+                          searchValue.toLowerCase(),
+                        ));
                   },
                   validator: (value) {
-                    if (value == 'Select affected systems') {
+                    if (value == null) {
                       return 'Please select the affected systems';
                     } else {
                       return null;
@@ -294,11 +360,12 @@ class _IllnessReportState extends State<IllnessReport> {
                       const Padding(
                         padding: EdgeInsets.all(10),
                       ),
-                      DropdownButtonFormField<String>(
+                      DropdownButtonFormField2<String>(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                         ),
+                        hint: const Text('Select main symptom(s)'),
                         items: _mainSymptomList
                             .map((key, value) {
                               return MapEntry(
@@ -317,10 +384,39 @@ class _IllnessReportState extends State<IllnessReport> {
                           setState(() {
                             _selectedMainSymptom = value;
                           });
+                          _searchController.clear();
+                        },
+                        searchController: _searchController,
+                        searchInnerWidget: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            bottom: 10,
+                            top: 10,
+                          ),
+                          child: TextFormField(
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () => _searchController.clear(),
+                                icon: const Icon(Icons.close),
+                              ),
+                              hintText: 'Search ...',
+                            ),
+                          ),
+                        ),
+                        searchMatchFn: (item, searchValue) {
+                          return (item.value.toString().toLowerCase().contains(
+                                searchValue.toLowerCase(),
+                              ));
                         },
                         validator: (value) {
-                          if (value == 'Select main symptom(s)' &&
-                              mainSymptoms.isEmpty) {
+                          if (value == null && mainSymptoms.isEmpty) {
                             return 'Please select the main symptom(s)';
                           } else if (isRepeat) {
                             return 'This symptom is already selected';
@@ -448,11 +544,12 @@ class _IllnessReportState extends State<IllnessReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  hint: const Text('Select cause of illness'),
                   items: _causeIllnessList
                       .map((key, value) {
                         return MapEntry(
@@ -471,9 +568,39 @@ class _IllnessReportState extends State<IllnessReport> {
                     setState(() {
                       _selectedIllnessCause = value;
                     });
+                    _searchController.clear();
+                  },
+                  searchController: _searchController,
+                  searchInnerWidget: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
+                      top: 10,
+                    ),
+                    child: TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () => _searchController.clear(),
+                          icon: const Icon(Icons.close),
+                        ),
+                        hintText: 'Search ...',
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return (item.value.toString().toLowerCase().contains(
+                          searchValue.toLowerCase(),
+                        ));
                   },
                   validator: (value) {
-                    if (value == 'Select cause of illness') {
+                    if (value == null) {
                       return 'Please select the cause of injury';
                     } else {
                       return null;
@@ -546,8 +673,8 @@ class _IllnessReportState extends State<IllnessReport> {
   }
 
   String onChangedMethodAffectedKey(String value) {
-    String AffectedSystemValue = _affectedList[value];
-    return AffectedSystemValue;
+    String affectedSystemValue = _affectedList[value];
+    return affectedSystemValue;
   }
 
   void onChangedMethodSymptomValue(String value) {
@@ -599,7 +726,6 @@ class _IllnessReportState extends State<IllnessReport> {
   }
 
   final _affectedList = {
-    '0': 'Select affected systems',
     '1': 'Respiratory / ear, nose, throat',
     '2': 'Gastro-intestinal',
     '3': 'Uro-genital / Gynaecological',
@@ -615,7 +741,6 @@ class _IllnessReportState extends State<IllnessReport> {
   };
 
   final _mainSymptomList = {
-    '0': 'Select main symptom(s)',
     '1': 'Fever',
     '2': 'Pain',
     '3': 'Diarrhoea, Vomiting',
@@ -631,7 +756,6 @@ class _IllnessReportState extends State<IllnessReport> {
   };
 
   final _causeIllnessList = {
-    '0': 'Select cause of illness',
     '1': 'Pre-existing',
     '2': 'Infection',
     '3': 'Exercise-induced',
@@ -643,7 +767,7 @@ class _IllnessReportState extends State<IllnessReport> {
   void addMainSymptomList() {
     isRepeat = false;
     bool addingValidator = _mainSymptomListKey.currentState.validate();
-    mainSymptomList newSymptom = mainSymptomList(
+    MainSymptomList newSymptom = MainSymptomList(
         selectedMainSymptom: _selectedMainSymptom,
         selectedMainSymptomCode: _codeMainSymptom.text);
     if (addingValidator) {
@@ -652,7 +776,7 @@ class _IllnessReportState extends State<IllnessReport> {
         if (mainSymptoms.every((element) =>
             element.selectedMainSymptomCode !=
             newSymptom.selectedMainSymptomCode)) {
-          mainSymptoms.add(mainSymptomList(
+          mainSymptoms.add(MainSymptomList(
             selectedMainSymptom: _selectedMainSymptom,
             selectedMainSymptomCode: _codeMainSymptom.text.toString(),
           ));
@@ -699,11 +823,11 @@ class _IllnessReportState extends State<IllnessReport> {
   }
 }
 
-class mainSymptomList {
+class MainSymptomList {
   final String selectedMainSymptom;
   final String selectedMainSymptomCode;
 
-  mainSymptomList({
+  MainSymptomList({
     @required this.selectedMainSymptom,
     @required this.selectedMainSymptomCode,
   });

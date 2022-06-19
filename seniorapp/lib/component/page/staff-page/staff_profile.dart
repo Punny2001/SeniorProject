@@ -14,7 +14,7 @@ class _StaffProfileState extends State<StaffProfile> {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          child: Text('Log Out'),
+          child: const Text('Log Out'),
           onPressed: () {
             FirebaseAuth.instance.signOut();
             Navigator.of(context).pushNamedAndRemoveUntil(

@@ -29,14 +29,14 @@ class _StaffHomePageState extends State<StaffHomePage> {
             children: [
               Center(
                 child: ElevatedButton(
-                  child: Text('Injury Report'),
+                  child: const Text('Injury Report'),
                   onPressed: () =>
                       Navigator.of(context).pushNamed('/injuryReport'),
                 ),
               ),
               Center(
                 child: ElevatedButton(
-                  child: Text('Illness Report'),
+                  child: const Text('Illness Report'),
                   onPressed: () =>
                       Navigator.of(context).pushNamed('/illnessReport'),
                 ),

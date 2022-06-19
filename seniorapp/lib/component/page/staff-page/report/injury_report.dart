@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
-import 'package:seniorapp/component/report-data/sport_data.dart';
+import 'package:seniorapp/component/report-data/sport_list.dart';
 
 class InjuryReport extends StatefulWidget {
+  const InjuryReport({Key key}) : super(key: key);
+
   @override
   _InjuryReportState createState() => _InjuryReportState();
 }
@@ -20,14 +23,15 @@ class _InjuryReportState extends State<InjuryReport> {
   final _codeInjuryCause = TextEditingController();
   final _otherInjuryCause = TextEditingController();
   final _absenceDayController = TextEditingController();
+  final _searchController = TextEditingController();
   DateTime _datetime;
-  String _selectedSport = 'Select sport and event';
-  String _selectedBodyType = 'Select body type';
-  String _selectedBodyHTPart = 'Select head and trunk part';
-  String _selectedBodyUpperPart = 'Select upper extremity part';
-  String _selectedBodyLowerPart = 'Select lower extremity part';
-  String _selectedInjuryType = 'Select type of injury';
-  String _selectedInjuryCause = 'Select cause of injury';
+  String _selectedSport;
+  String _selectedBodyType;
+  String _selectedBodyHTPart;
+  String _selectedBodyUpperPart;
+  String _selectedBodyLowerPart;
+  String _selectedInjuryType;
+  String _selectedInjuryCause;
   int _selectedSide = 0;
   bool isVisibleOtherInjuryType = false;
   bool isVisibleOtherInjuryCause = false;
@@ -37,6 +41,11 @@ class _InjuryReportState extends State<InjuryReport> {
   bool hasSide = false;
   int bodyType;
   String _selectedSideString;
+
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +88,12 @@ class _InjuryReportState extends State<InjuryReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  hint: const Text('Select sport and event'),
                   items: sport
                       .map((sport) => DropdownMenuItem(
                             child: Text(sport),
@@ -95,9 +105,39 @@ class _InjuryReportState extends State<InjuryReport> {
                     setState(() {
                       _selectedSport = value;
                     });
+                    _searchController.clear();
+                  },
+                  searchController: _searchController,
+                  searchInnerWidget: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
+                      top: 10,
+                    ),
+                    child: TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () => _searchController.clear(),
+                          icon: const Icon(Icons.close),
+                        ),
+                        hintText: 'Search ...',
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return (item.value.toString().toLowerCase().contains(
+                          searchValue.toLowerCase(),
+                        ));
                   },
                   validator: (value) {
-                    if (value == 'Select sport and event') {
+                    if (value == null) {
                       return 'Please select the sport and event';
                     } else {
                       return null;
@@ -156,11 +196,12 @@ class _InjuryReportState extends State<InjuryReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  hint: const Text('Select body type'),
                   items: _bodyType
                       .map((bodyType) => DropdownMenuItem(
                             child: Text(bodyType),
@@ -173,9 +214,39 @@ class _InjuryReportState extends State<InjuryReport> {
                     setState(() {
                       _selectedBodyType = value;
                     });
+                    _searchController.clear();
+                  },
+                  searchController: _searchController,
+                  searchInnerWidget: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
+                      top: 10,
+                    ),
+                    child: TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () => _searchController.clear(),
+                          icon: const Icon(Icons.close),
+                        ),
+                        hintText: 'Search ...',
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return (item.value.toString().toLowerCase().contains(
+                          searchValue.toLowerCase(),
+                        ));
                   },
                   validator: (value) {
-                    if (value == 'Select body type') {
+                    if (value == null) {
                       return 'Please select the type of body';
                     } else {
                       return null;
@@ -187,11 +258,12 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 Visibility(
                   visible: isHeadTrunkPart,
-                  child: DropdownButtonFormField<String>(
+                  child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
+                    hint: const Text('Select head and trunk part'),
                     items: _bodyHeadPart
                         .map((key, value) {
                           return MapEntry(
@@ -210,9 +282,39 @@ class _InjuryReportState extends State<InjuryReport> {
                         _selectedBodyHTPart = value;
                       });
                       hasSide = false;
+                      _searchController.clear();
+                    },
+                    searchController: _searchController,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: TextFormField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _searchController.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
+                        ),
+                      ),
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
                     },
                     validator: (value) {
-                      if (value == 'Select head and trunk part') {
+                      if (value == null) {
                         return 'Please select the part of body';
                       } else {
                         return null;
@@ -222,11 +324,12 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 Visibility(
                   visible: isUpperPart,
-                  child: DropdownButtonFormField<String>(
+                  child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
+                    hint: const Text('Select upper extremity part'),
                     items: _bodyUpperPart
                         .map((key, value) {
                           return MapEntry(
@@ -245,9 +348,39 @@ class _InjuryReportState extends State<InjuryReport> {
                         _selectedBodyUpperPart = value;
                       });
                       hasSide = true;
+                      _searchController.clear();
+                    },
+                    searchController: _searchController,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: TextFormField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _searchController.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
+                        ),
+                      ),
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
                     },
                     validator: (value) {
-                      if (value == 'Select upper extremity part') {
+                      if (value == null) {
                         return 'Please select the part of body';
                       } else {
                         return null;
@@ -257,11 +390,12 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 Visibility(
                   visible: isLowerPart,
-                  child: DropdownButtonFormField<String>(
+                  child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
+                    hint: const Text('Select lower extremity part'),
                     items: _bodyLowerPart
                         .map((key, value) {
                           return MapEntry(
@@ -280,9 +414,39 @@ class _InjuryReportState extends State<InjuryReport> {
                         _selectedBodyLowerPart = value;
                       });
                       hasSide = true;
+                      _searchController.clear();
+                    },
+                    searchController: _searchController,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: TextFormField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _searchController.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
+                        ),
+                      ),
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
                     },
                     validator: (value) {
-                      if (value == 'Select lower extremity part') {
+                      if (value == null) {
                         return 'Please select the part of body';
                       } else {
                         return null;
@@ -394,11 +558,12 @@ class _InjuryReportState extends State<InjuryReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  hint: const Text('Select type of injury'),
                   items: _injuryType
                       .map((key, value) {
                         return MapEntry(
@@ -417,9 +582,39 @@ class _InjuryReportState extends State<InjuryReport> {
                     setState(() {
                       _selectedInjuryType = value;
                     });
+                    _searchController.clear();
+                  },
+                  searchController: _searchController,
+                  searchInnerWidget: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
+                      top: 10,
+                    ),
+                    child: TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () => _searchController.clear(),
+                          icon: const Icon(Icons.close),
+                        ),
+                        hintText: 'Search ...',
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return (item.value.toString().toLowerCase().contains(
+                          searchValue.toLowerCase(),
+                        ));
                   },
                   validator: (value) {
-                    if (value == 'Select type of injury') {
+                    if (value == null) {
                       return 'Please select the type of injury';
                     } else {
                       return null;
@@ -494,11 +689,12 @@ class _InjuryReportState extends State<InjuryReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                DropdownButtonFormField<String>(
+                DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  hint: const Text('Select cause of injury'),
                   items: _causeOfInjury
                       .map((key, value) {
                         return MapEntry(
@@ -517,9 +713,39 @@ class _InjuryReportState extends State<InjuryReport> {
                     setState(() {
                       _selectedInjuryCause = value;
                     });
+                    _searchController.clear();
+                  },
+                  searchController: _searchController,
+                  searchInnerWidget: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      bottom: 10,
+                      top: 10,
+                    ),
+                    child: TextFormField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(20),
+                          ),
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () => _searchController.clear(),
+                          icon: const Icon(Icons.close),
+                        ),
+                        hintText: 'Search ...',
+                      ),
+                    ),
+                  ),
+                  searchMatchFn: (item, searchValue) {
+                    return (item.value.toString().toLowerCase().contains(
+                          searchValue.toLowerCase(),
+                        ));
                   },
                   validator: (value) {
-                    if (value == 'Select cause of injury') {
+                    if (value == null) {
                       return 'Please select the cause of injury';
                     } else {
                       return null;
@@ -679,14 +905,12 @@ class _InjuryReportState extends State<InjuryReport> {
   }
 
   final _bodyType = [
-    'Select body type',
     'Head and Trunk',
     'Upper extremity',
     'Lower extremity',
   ];
 
   final _bodyHeadPart = {
-    '0': 'Select head and trunk part',
     '1': 'Face',
     '2': 'Head',
     '3': 'Neck / Cervical spine',
@@ -698,7 +922,6 @@ class _InjuryReportState extends State<InjuryReport> {
   };
 
   final _bodyUpperPart = {
-    '0': 'Select upper extremity part',
     '11': 'Shoulder / Clavicle',
     '12': 'Upper arm',
     '13': 'Elbow',
@@ -710,7 +933,6 @@ class _InjuryReportState extends State<InjuryReport> {
   };
 
   final _bodyLowerPart = {
-    '0': 'Select lower extremity part',
     '21': 'Hip',
     '22': 'Groin',
     '23': 'Thigh',
@@ -722,7 +944,6 @@ class _InjuryReportState extends State<InjuryReport> {
   };
 
   final _injuryType = {
-    '0': 'Select type of injury',
     '1': 'Concussion',
     '2': 'Fracture (Traumatic)',
     '3': 'Stress fracture (Overuse)',
@@ -746,7 +967,6 @@ class _InjuryReportState extends State<InjuryReport> {
   };
 
   final _causeOfInjury = {
-    '0': 'Select cause of injury',
     '1': 'Overuse (Gradual onset)',
     '2': 'Overuse (Sudden onset)',
     '3': 'Non-contact trauma',

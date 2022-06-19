@@ -12,7 +12,7 @@ Future<void> main() async {
   await EasyLocalization.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().then((value) async {
-    await FirebaseAuth.instance.authStateChanges().listen((event) async {
+    FirebaseAuth.instance.authStateChanges().listen((event) async {
       if (event != null) {
         String uid = event.uid;
         await FirebaseFirestore.instance
