@@ -3,6 +3,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
+import 'package:seniorapp/component/report-data/sport_data.dart';
 
 class InjuryReport extends StatefulWidget {
   @override
@@ -12,7 +13,6 @@ class InjuryReport extends StatefulWidget {
 class _InjuryReportState extends State<InjuryReport> {
   final _injuryKey = GlobalKey<FormState>();
   final _athleteNo = TextEditingController();
-  final _sportEvent = TextEditingController();
   final _rhtController = TextEditingController();
   final _codeBodyPart = TextEditingController();
   final _codeInjuryType = TextEditingController();
@@ -21,6 +21,7 @@ class _InjuryReportState extends State<InjuryReport> {
   final _otherInjuryCause = TextEditingController();
   final _absenceDayController = TextEditingController();
   DateTime _datetime;
+  String _selectedSport = 'Select sport and event';
   String _selectedBodyType = 'Select body type';
   String _selectedBodyHTPart = 'Select head and trunk part';
   String _selectedBodyUpperPart = 'Select upper extremity part';
@@ -44,11 +45,11 @@ class _InjuryReportState extends State<InjuryReport> {
     return Scaffold(
       appBar: AppBar(),
       body: Container(
-        margin: EdgeInsets.all(30),
+        margin: const EdgeInsets.all(30),
         width: w,
         height: h,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Form(
             key: _injuryKey,
             child: Column(
@@ -56,7 +57,7 @@ class _InjuryReportState extends State<InjuryReport> {
               children: <Widget>[
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text('Athlete No.'),
                   ),
                   controller: _athleteNo,
@@ -68,28 +69,46 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    label: Text('Sport and Event'),
-                    hintText: 'Example: athletics, 100m (women)',
+                const Text(
+                  'Sport and Event',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                DropdownButtonFormField<String>(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
                   ),
-                  controller: _sportEvent,
+                  items: sport
+                      .map((sport) => DropdownMenuItem(
+                            child: Text(sport),
+                            value: sport,
+                          ))
+                      .toList(),
+                  value: _selectedSport,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedSport = value;
+                    });
+                  },
                   validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Sport and Event is required';
+                    if (value == 'Select sport and event') {
+                      return 'Please select the sport and event';
                     } else {
                       return null;
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 TextFormField(
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text('Round, Heat, or Training'),
                     hintText: 'Example: quater final / 1st heat',
                   ),
@@ -102,14 +121,14 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 DateTimePicker(
                   dateLabelText: 'Date',
                   timeLabelText: 'Time',
                   dateMask: 'MMMM d, yyyy',
-                  icon: Icon(Icons.event),
+                  icon: const Icon(Icons.event),
                   type: DateTimePickerType.dateTimeSeparate,
                   lastDate: DateTime.now(),
                   firstDate: DateTime(1900),
@@ -127,19 +146,19 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(20),
                 ),
-                Text(
+                const Text(
                   'Injured body part',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 DropdownButtonFormField<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                   items: _bodyType
@@ -163,14 +182,14 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 Visibility(
                   visible: isHeadTrunkPart,
                   child: DropdownButtonFormField<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                     items: _bodyHeadPart
@@ -205,7 +224,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   visible: isUpperPart,
                   child: DropdownButtonFormField<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                     items: _bodyUpperPart
@@ -228,7 +247,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       hasSide = true;
                     },
                     validator: (value) {
-                      if (value == 'Select upper part') {
+                      if (value == 'Select upper extremity part') {
                         return 'Please select the part of body';
                       } else {
                         return null;
@@ -240,7 +259,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   visible: isLowerPart,
                   child: DropdownButtonFormField<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
                     items: _bodyLowerPart
@@ -263,7 +282,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       hasSide = true;
                     },
                     validator: (value) {
-                      if (value == 'Select lower part') {
+                      if (value == 'Select lower extremity part') {
                         return 'Please select the part of body';
                       } else {
                         return null;
@@ -271,15 +290,25 @@ class _InjuryReportState extends State<InjuryReport> {
                     },
                   ),
                 ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                ),
                 FormField(
                   builder: (FormFieldState<bool> state) {
                     return Visibility(
                       visible: hasSide,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          state.hasError
+                              ? Text(
+                                  state.errorText,
+                                  style: const TextStyle(color: Colors.red),
+                                )
+                              : Container(),
                           RadioListTile(
                             value: 1,
-                            title: Text('Left'),
+                            title: const Text('Left'),
                             groupValue: _selectedSide,
                             onChanged: (value) {
                               state.setValue(true);
@@ -290,7 +319,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           ),
                           RadioListTile(
                             value: 2,
-                            title: Text('Right'),
+                            title: const Text('Right'),
                             groupValue: _selectedSide,
                             onChanged: (value) {
                               state.setValue(true);
@@ -301,7 +330,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           ),
                           RadioListTile(
                             value: 3,
-                            title: Text('Both'),
+                            title: const Text('Both'),
                             groupValue: _selectedSide,
                             onChanged: (value) {
                               state.setValue(true);
@@ -314,20 +343,28 @@ class _InjuryReportState extends State<InjuryReport> {
                       ),
                     );
                   },
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value != true) {
+                      return 'Please select the side of body part';
+                    } else {
+                      return null;
+                    }
+                  },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                Text(
+                const Text(
                   'Type of Injury',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Code',
                   ),
@@ -349,15 +386,17 @@ class _InjuryReportState extends State<InjuryReport> {
                       return 'Please fill in the code of injury types';
                     } else if (int.parse(value) == 0 || int.parse(value) > 20) {
                       return 'The code can be between 1-20';
+                    } else {
+                      return null;
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 DropdownButtonFormField<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                   items: _injuryType
@@ -387,13 +426,13 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 Visibility(
                   visible: isVisibleOtherInjuryType,
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Your type of injury',
                     ),
@@ -410,19 +449,19 @@ class _InjuryReportState extends State<InjuryReport> {
                     },
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                Text(
+                const Text(
                   'Cause of injury',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Code',
                   ),
@@ -447,15 +486,17 @@ class _InjuryReportState extends State<InjuryReport> {
                         (int.parse(value) > 14 && int.parse(value) < 21) ||
                         int.parse(value) > 24) {
                       return 'The input code is invalid';
+                    } else {
+                      return null;
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 DropdownButtonFormField<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
                   items: _causeOfInjury
@@ -485,13 +526,13 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 Visibility(
                   visible: isVisibleOtherInjuryCause,
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Your cause of injury',
                     ),
@@ -510,7 +551,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     label: Text('Absence in days'),
                     hintText: 'Example: 10 days',
                     suffixText: 'days',
@@ -524,15 +565,15 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                Container(
+                SizedBox(
                   width: w,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () => saveInjuryReport(),
-                    child: Text('Save'),
+                    child: const Text('Save'),
                   ),
                 ),
               ],
@@ -739,76 +780,79 @@ class _InjuryReportState extends State<InjuryReport> {
   Future<void> saveInjuryReport() async {
     var uid = FirebaseAuth.instance.currentUser.uid;
     changeBodySidetoString();
+    bool isValidate = _injuryKey.currentState.validate();
 
-    if (bodyType == 1) {
-      InjuryReportData injuryReportModel = InjuryReportData(
-        staff_uid: uid,
-        athlete_no: _athleteNo.text.trim(),
-        report_type: 'Injury',
-        sport_event: _sportEvent.text.trim(),
-        round_heat_training: _rhtController.text,
-        injuryDateTime: _datetime,
-        injuredBody: _selectedBodyHTPart,
-        injuryType: _selectedInjuryType,
-        injuryCause: _selectedInjuryCause,
-        no_day: _absenceDayController.text.trim(),
-      );
+    if (isValidate) {
+      if (bodyType == 1) {
+        InjuryReportData injuryReportModel = InjuryReportData(
+          staff_uid: uid,
+          athlete_no: _athleteNo.text.trim(),
+          report_type: 'Injury',
+          sport_event: _selectedSport,
+          round_heat_training: _rhtController.text,
+          injuryDateTime: _datetime,
+          injuredBody: _selectedBodyHTPart,
+          injuryType: _selectedInjuryType,
+          injuryCause: _selectedInjuryCause,
+          no_day: _absenceDayController.text.trim(),
+        );
 
-      Map<String, dynamic> data = injuryReportModel.toMap();
+        Map<String, dynamic> data = injuryReportModel.toMap();
 
-      await FirebaseFirestore.instance
-          .collection('Report')
-          .doc()
-          .set(data)
-          .then((value) => print('Insert data to Firestore successfully'))
-          .then((value) => Navigator.of(context)
-              .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
-    } else if (bodyType == 2) {
-      InjuryReportData injuryReportModel = InjuryReportData(
-        staff_uid: uid,
-        athlete_no: _athleteNo.text.trim(),
-        report_type: 'Injury',
-        sport_event: _sportEvent.text.trim(),
-        round_heat_training: _rhtController.text,
-        injuryDateTime: _datetime,
-        injuredBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
-        injuryType: _selectedInjuryType,
-        injuryCause: _selectedInjuryCause,
-        no_day: _absenceDayController.text.trim(),
-      );
+        await FirebaseFirestore.instance
+            .collection('Report')
+            .doc()
+            .set(data)
+            .then((value) => print('Insert data to Firestore successfully'))
+            .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
+                '/staffPageChoosing', (route) => false));
+      } else if (bodyType == 2) {
+        InjuryReportData injuryReportModel = InjuryReportData(
+          staff_uid: uid,
+          athlete_no: _athleteNo.text.trim(),
+          report_type: 'Injury',
+          sport_event: _selectedSport,
+          round_heat_training: _rhtController.text,
+          injuryDateTime: _datetime,
+          injuredBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
+          injuryType: _selectedInjuryType,
+          injuryCause: _selectedInjuryCause,
+          no_day: _absenceDayController.text.trim(),
+        );
 
-      Map<String, dynamic> data = injuryReportModel.toMap();
+        Map<String, dynamic> data = injuryReportModel.toMap();
 
-      await FirebaseFirestore.instance
-          .collection('Report')
-          .doc()
-          .set(data)
-          .then((value) => print('Insert data to Firestore successfully'))
-          .then((value) => Navigator.of(context)
-              .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
-    } else if (bodyType == 3) {
-      InjuryReportData injuryReportModel = InjuryReportData(
-        staff_uid: uid,
-        athlete_no: _athleteNo.text.trim(),
-        report_type: 'Injury',
-        sport_event: _sportEvent.text.trim(),
-        round_heat_training: _rhtController.text,
-        injuryDateTime: _datetime,
-        injuredBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
-        injuryType: _selectedInjuryType,
-        injuryCause: _selectedInjuryCause,
-        no_day: _absenceDayController.text.trim(),
-      );
+        await FirebaseFirestore.instance
+            .collection('Report')
+            .doc()
+            .set(data)
+            .then((value) => print('Insert data to Firestore successfully'))
+            .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
+                '/staffPageChoosing', (route) => false));
+      } else if (bodyType == 3) {
+        InjuryReportData injuryReportModel = InjuryReportData(
+          staff_uid: uid,
+          athlete_no: _athleteNo.text.trim(),
+          report_type: 'Injury',
+          sport_event: _selectedSport,
+          round_heat_training: _rhtController.text,
+          injuryDateTime: _datetime,
+          injuredBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
+          injuryType: _selectedInjuryType,
+          injuryCause: _selectedInjuryCause,
+          no_day: _absenceDayController.text.trim(),
+        );
 
-      Map<String, dynamic> data = injuryReportModel.toMap();
+        Map<String, dynamic> data = injuryReportModel.toMap();
 
-      await FirebaseFirestore.instance
-          .collection('Report')
-          .doc()
-          .set(data)
-          .then((value) => print('Insert data to Firestore successfully'))
-          .then((value) => Navigator.of(context)
-              .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
+        await FirebaseFirestore.instance
+            .collection('Report')
+            .doc()
+            .set(data)
+            .then((value) => print('Insert data to Firestore successfully'))
+            .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
+                '/staffPageChoosing', (route) => false));
+      }
     }
   }
 }

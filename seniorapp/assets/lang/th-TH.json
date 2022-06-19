@@ -49,7 +49,7 @@
         "birthdate_required" : "โปรดเลือกวันเกิด",
         
         "department" : "ประเภทฝ่าย",
-        "departmet_required" : "โปรดเลือกฝ่ายของคุณ",
+        "department_required" : "โปรดเลือกฝ่ายของคุณ",
 
         "athlete" : "นักกีฬา",
         "staff" : "บุคลากร",

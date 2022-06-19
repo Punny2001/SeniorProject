@@ -49,7 +49,7 @@
         "birthdate_required" : "Birthdate is required",
 
         "department" : "Department Type",
-        "departmet_required" : "Please select your department",
+        "department_required" : "Please select your department",
 
         "athlete" : "Athlete",
         "staff" : "Staff",

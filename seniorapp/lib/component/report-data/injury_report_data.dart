@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 class InjuryReportData {
   final String staff_uid;
@@ -13,16 +14,16 @@ class InjuryReportData {
   final String no_day;
 
   InjuryReportData({
-    this.staff_uid,
-    this.athlete_no,
-    this.report_type,
-    this.sport_event,
-    this.round_heat_training,
-    this.injuryDateTime,
-    this.injuredBody,
-    this.injuryType,
-    this.injuryCause,
-    this.no_day,
+    @required this.staff_uid,
+    @required this.athlete_no,
+    @required this.report_type,
+    @required this.sport_event,
+    @required this.round_heat_training,
+    @required this.injuryDateTime,
+    @required this.injuredBody,
+    @required this.injuryType,
+    @required this.injuryCause,
+    @required this.no_day,
   });
 
   InjuryReportData copyWith({
