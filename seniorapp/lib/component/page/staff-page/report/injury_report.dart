@@ -23,7 +23,14 @@ class _InjuryReportState extends State<InjuryReport> {
   final _codeInjuryCause = TextEditingController();
   final _otherInjuryCause = TextEditingController();
   final _absenceDayController = TextEditingController();
-  final _searchController = TextEditingController();
+  final _sportSearch = TextEditingController();
+  final _bodyTypeSearch = TextEditingController();
+  final _headtrunkSearch = TextEditingController();
+  final _upperbodySearch = TextEditingController();
+  final _lowerbodySearch = TextEditingController();
+  final _injuryTypeSearch = TextEditingController();
+  final _injuryCauseSearch = TextEditingController();
+
   DateTime _datetime;
   String _selectedSport;
   String _selectedBodyType;
@@ -43,7 +50,7 @@ class _InjuryReportState extends State<InjuryReport> {
   String _selectedSideString;
 
   void dispose() {
-    _searchController.dispose();
+    _sportSearch.dispose();
     super.dispose();
   }
 
@@ -104,10 +111,10 @@ class _InjuryReportState extends State<InjuryReport> {
                   onChanged: (value) {
                     setState(() {
                       _selectedSport = value;
+                      _sportSearch.clear();
                     });
-                    _searchController.clear();
                   },
-                  searchController: _searchController,
+                  searchController: _sportSearch,
                   searchInnerWidget: Padding(
                     padding: const EdgeInsets.only(
                       left: 20,
@@ -116,7 +123,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       top: 10,
                     ),
                     child: TextFormField(
-                      controller: _searchController,
+                      controller: _sportSearch,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -124,7 +131,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           ),
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () => _searchController.clear(),
+                          onPressed: () => _sportSearch.clear(),
                           icon: const Icon(Icons.close),
                         ),
                         hintText: 'Search ...',
@@ -213,10 +220,11 @@ class _InjuryReportState extends State<InjuryReport> {
                     checkBodyType(value);
                     setState(() {
                       _selectedBodyType = value;
+                      hasSide = false;
+                      _bodyTypeSearch.clear();
                     });
-                    _searchController.clear();
                   },
-                  searchController: _searchController,
+                  searchController: _bodyTypeSearch,
                   searchInnerWidget: Padding(
                     padding: const EdgeInsets.only(
                       left: 20,
@@ -225,7 +233,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       top: 10,
                     ),
                     child: TextFormField(
-                      controller: _searchController,
+                      controller: _bodyTypeSearch,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -233,7 +241,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           ),
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () => _searchController.clear(),
+                          onPressed: () => _bodyTypeSearch.clear(),
                           icon: const Icon(Icons.close),
                         ),
                         hintText: 'Search ...',
@@ -280,11 +288,11 @@ class _InjuryReportState extends State<InjuryReport> {
                       onChangedMethodBodyPartValue(value);
                       setState(() {
                         _selectedBodyHTPart = value;
+                        hasSide = false;
+                        _headtrunkSearch.clear();
                       });
-                      hasSide = false;
-                      _searchController.clear();
                     },
-                    searchController: _searchController,
+                    searchController: _headtrunkSearch,
                     searchInnerWidget: Padding(
                       padding: const EdgeInsets.only(
                         left: 20,
@@ -293,7 +301,7 @@ class _InjuryReportState extends State<InjuryReport> {
                         top: 10,
                       ),
                       child: TextFormField(
-                        controller: _searchController,
+                        controller: _headtrunkSearch,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
@@ -301,7 +309,7 @@ class _InjuryReportState extends State<InjuryReport> {
                             ),
                           ),
                           suffixIcon: IconButton(
-                            onPressed: () => _searchController.clear(),
+                            onPressed: () => _headtrunkSearch.clear(),
                             icon: const Icon(Icons.close),
                           ),
                           hintText: 'Search ...',
@@ -346,11 +354,11 @@ class _InjuryReportState extends State<InjuryReport> {
                       onChangedMethodBodyPartValue(value);
                       setState(() {
                         _selectedBodyUpperPart = value;
+                        hasSide = true;
+                        _upperbodySearch.clear();
                       });
-                      hasSide = true;
-                      _searchController.clear();
                     },
-                    searchController: _searchController,
+                    searchController: _upperbodySearch,
                     searchInnerWidget: Padding(
                       padding: const EdgeInsets.only(
                         left: 20,
@@ -359,7 +367,7 @@ class _InjuryReportState extends State<InjuryReport> {
                         top: 10,
                       ),
                       child: TextFormField(
-                        controller: _searchController,
+                        controller: _upperbodySearch,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
@@ -367,7 +375,7 @@ class _InjuryReportState extends State<InjuryReport> {
                             ),
                           ),
                           suffixIcon: IconButton(
-                            onPressed: () => _searchController.clear(),
+                            onPressed: () => _upperbodySearch.clear(),
                             icon: const Icon(Icons.close),
                           ),
                           hintText: 'Search ...',
@@ -412,11 +420,11 @@ class _InjuryReportState extends State<InjuryReport> {
                       onChangedMethodBodyPartValue(value);
                       setState(() {
                         _selectedBodyLowerPart = value;
+                        hasSide = true;
+                        _lowerbodySearch.clear();
                       });
-                      hasSide = true;
-                      _searchController.clear();
                     },
-                    searchController: _searchController,
+                    searchController: _lowerbodySearch,
                     searchInnerWidget: Padding(
                       padding: const EdgeInsets.only(
                         left: 20,
@@ -425,7 +433,7 @@ class _InjuryReportState extends State<InjuryReport> {
                         top: 10,
                       ),
                       child: TextFormField(
-                        controller: _searchController,
+                        controller: _lowerbodySearch,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(
@@ -433,7 +441,7 @@ class _InjuryReportState extends State<InjuryReport> {
                             ),
                           ),
                           suffixIcon: IconButton(
-                            onPressed: () => _searchController.clear(),
+                            onPressed: () => _lowerbodySearch.clear(),
                             icon: const Icon(Icons.close),
                           ),
                           hintText: 'Search ...',
@@ -581,10 +589,10 @@ class _InjuryReportState extends State<InjuryReport> {
                     onChangedMethodTypeValue(value);
                     setState(() {
                       _selectedInjuryType = value;
+                      _injuryTypeSearch.clear();
                     });
-                    _searchController.clear();
                   },
-                  searchController: _searchController,
+                  searchController: _injuryTypeSearch,
                   searchInnerWidget: Padding(
                     padding: const EdgeInsets.only(
                       left: 20,
@@ -593,7 +601,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       top: 10,
                     ),
                     child: TextFormField(
-                      controller: _searchController,
+                      controller: _injuryTypeSearch,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -601,7 +609,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           ),
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () => _searchController.clear(),
+                          onPressed: () => _injuryTypeSearch.clear(),
                           icon: const Icon(Icons.close),
                         ),
                         hintText: 'Search ...',
@@ -712,10 +720,10 @@ class _InjuryReportState extends State<InjuryReport> {
                     onChangedMethodCauseValue(value);
                     setState(() {
                       _selectedInjuryCause = value;
+                      _injuryCauseSearch.clear();
                     });
-                    _searchController.clear();
                   },
-                  searchController: _searchController,
+                  searchController: _injuryCauseSearch,
                   searchInnerWidget: Padding(
                     padding: const EdgeInsets.only(
                       left: 20,
@@ -724,15 +732,15 @@ class _InjuryReportState extends State<InjuryReport> {
                       top: 10,
                     ),
                     child: TextFormField(
-                      controller: _searchController,
+                      controller: _injuryCauseSearch,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
                           ),
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () => _searchController.clear(),
+                          onPressed: () => _injuryCauseSearch.clear(),
                           icon: const Icon(Icons.close),
                         ),
                         hintText: 'Search ...',
@@ -1004,15 +1012,20 @@ class _InjuryReportState extends State<InjuryReport> {
 
     if (isValidate) {
       if (bodyType == 1) {
+        int bodyCode =
+            int.parse(onChangedMethodBodyPartKey(_selectedBodyHTPart));
         InjuryReportData injuryReportModel = InjuryReportData(
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
           report_type: 'Injury',
           sport_event: _selectedSport,
-          round_heat_training: _rhtController.text,
+          round_heat_training: _rhtController.text.trim(),
           injuryDateTime: _datetime,
+          injuredBodyCode: bodyCode,
           injuredBody: _selectedBodyHTPart,
+          injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,
+          injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
           injuryCause: _selectedInjuryCause,
           no_day: _absenceDayController.text.trim(),
         );
@@ -1027,15 +1040,20 @@ class _InjuryReportState extends State<InjuryReport> {
             .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
                 '/staffPageChoosing', (route) => false));
       } else if (bodyType == 2) {
+        int bodyCode =
+            int.parse(onChangedMethodBodyPartKey(_selectedBodyUpperPart));
         InjuryReportData injuryReportModel = InjuryReportData(
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
           report_type: 'Injury',
           sport_event: _selectedSport,
-          round_heat_training: _rhtController.text,
+          round_heat_training: _rhtController.text.trim(),
           injuryDateTime: _datetime,
+          injuredBodyCode: bodyCode,
           injuredBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
+          injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,
+          injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
           injuryCause: _selectedInjuryCause,
           no_day: _absenceDayController.text.trim(),
         );
@@ -1050,6 +1068,8 @@ class _InjuryReportState extends State<InjuryReport> {
             .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
                 '/staffPageChoosing', (route) => false));
       } else if (bodyType == 3) {
+        int bodyCode =
+            int.parse(onChangedMethodBodyPartKey(_selectedBodyLowerPart));
         InjuryReportData injuryReportModel = InjuryReportData(
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
@@ -1057,8 +1077,11 @@ class _InjuryReportState extends State<InjuryReport> {
           sport_event: _selectedSport,
           round_heat_training: _rhtController.text,
           injuryDateTime: _datetime,
+          injuredBodyCode: bodyCode,
           injuredBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
+          injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,
+          injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
           injuryCause: _selectedInjuryCause,
           no_day: _absenceDayController.text.trim(),
         );

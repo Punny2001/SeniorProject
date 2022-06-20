@@ -25,7 +25,10 @@ class _IllnessReportState extends State<IllnessReport> {
   final _codeIllnessCause = TextEditingController();
   final _absenceDayController = TextEditingController();
   final _otherIllnessCause = TextEditingController();
-  final _searchController = TextEditingController();
+  final _sportSearch = TextEditingController();
+  final _affectedSearch = TextEditingController();
+  final _mainSymptomSearch = TextEditingController();
+  final _illnessCauseSearch = TextEditingController();
   DateTime _occuredDate;
   String _selectedSport;
   String _selectedAffected;
@@ -97,10 +100,10 @@ class _IllnessReportState extends State<IllnessReport> {
                   onChanged: (value) {
                     setState(() {
                       _selectedSport = value;
+                      _sportSearch.clear();
                     });
-                    _searchController.clear();
                   },
-                  searchController: _searchController,
+                  searchController: _sportSearch,
                   searchInnerWidget: Padding(
                     padding: const EdgeInsets.only(
                       left: 20,
@@ -109,7 +112,7 @@ class _IllnessReportState extends State<IllnessReport> {
                       top: 10,
                     ),
                     child: TextFormField(
-                      controller: _searchController,
+                      controller: _sportSearch,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -117,7 +120,7 @@ class _IllnessReportState extends State<IllnessReport> {
                           ),
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () => _searchController.clear(),
+                          onPressed: () => _sportSearch.clear(),
                           icon: const Icon(Icons.close),
                         ),
                         hintText: 'Search ...',
@@ -243,10 +246,10 @@ class _IllnessReportState extends State<IllnessReport> {
                     onChangedMethodAffectedValue(value);
                     setState(() {
                       _selectedAffected = value;
+                      _affectedSearch.clear();
                     });
-                    _searchController.clear();
                   },
-                  searchController: _searchController,
+                  searchController: _affectedSearch,
                   searchInnerWidget: Padding(
                     padding: const EdgeInsets.only(
                       left: 20,
@@ -255,7 +258,7 @@ class _IllnessReportState extends State<IllnessReport> {
                       top: 10,
                     ),
                     child: TextFormField(
-                      controller: _searchController,
+                      controller: _affectedSearch,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -263,7 +266,7 @@ class _IllnessReportState extends State<IllnessReport> {
                           ),
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () => _searchController.clear(),
+                          onPressed: () => _affectedSearch.clear(),
                           icon: const Icon(Icons.close),
                         ),
                         hintText: 'Search ...',
@@ -383,10 +386,10 @@ class _IllnessReportState extends State<IllnessReport> {
                           onChangedMethodSymptomValue(value);
                           setState(() {
                             _selectedMainSymptom = value;
+                            _mainSymptomSearch.clear();
                           });
-                          _searchController.clear();
                         },
-                        searchController: _searchController,
+                        searchController: _mainSymptomSearch,
                         searchInnerWidget: Padding(
                           padding: const EdgeInsets.only(
                             left: 20,
@@ -395,7 +398,7 @@ class _IllnessReportState extends State<IllnessReport> {
                             top: 10,
                           ),
                           child: TextFormField(
-                            controller: _searchController,
+                            controller: _mainSymptomSearch,
                             decoration: InputDecoration(
                               border: const OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
@@ -403,7 +406,7 @@ class _IllnessReportState extends State<IllnessReport> {
                                 ),
                               ),
                               suffixIcon: IconButton(
-                                onPressed: () => _searchController.clear(),
+                                onPressed: () => _mainSymptomSearch.clear(),
                                 icon: const Icon(Icons.close),
                               ),
                               hintText: 'Search ...',
@@ -460,7 +463,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     onPressed: () {
                       addMainSymptomList();
                       setState(() {
-                        _selectedMainSymptom = 'Select main symptom(s)';
+                        _selectedMainSymptom = null;
                         _codeMainSymptom.clear();
                       });
                     },
@@ -567,10 +570,10 @@ class _IllnessReportState extends State<IllnessReport> {
                     onChangedMethodCauseValue(value);
                     setState(() {
                       _selectedIllnessCause = value;
+                      _illnessCauseSearch.clear();
                     });
-                    _searchController.clear();
                   },
-                  searchController: _searchController,
+                  searchController: _illnessCauseSearch,
                   searchInnerWidget: Padding(
                     padding: const EdgeInsets.only(
                       left: 20,
@@ -579,7 +582,7 @@ class _IllnessReportState extends State<IllnessReport> {
                       top: 10,
                     ),
                     child: TextFormField(
-                      controller: _searchController,
+                      controller: _illnessCauseSearch,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
@@ -587,7 +590,7 @@ class _IllnessReportState extends State<IllnessReport> {
                           ),
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () => _searchController.clear(),
+                          onPressed: () => _illnessCauseSearch.clear(),
                           icon: const Icon(Icons.close),
                         ),
                         hintText: 'Search ...',
@@ -771,8 +774,7 @@ class _IllnessReportState extends State<IllnessReport> {
         selectedMainSymptom: _selectedMainSymptom,
         selectedMainSymptomCode: _codeMainSymptom.text);
     if (addingValidator) {
-      if (_codeMainSymptom.text != '0' &&
-          _selectedMainSymptom != 'Select main symptom(s)') {
+      if (_codeMainSymptom.text != '0' && _selectedMainSymptom.isNotEmpty) {
         if (mainSymptoms.every((element) =>
             element.selectedMainSymptomCode !=
             newSymptom.selectedMainSymptomCode)) {
