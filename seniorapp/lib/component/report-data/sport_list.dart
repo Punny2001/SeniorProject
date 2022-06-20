@@ -1,4 +1,4 @@
-List<String> sport = [
+List<String> sportList = [
   'Ceremony',
   'Beach Volleyball',
   'Karate',
@@ -24,3 +24,8 @@ List<String> sport = [
   'Taekwondo',
   'Wushu',
 ];
+
+List<String> sortedSport(List<String> sport) {
+  sport.sort((a,b) => a.toString().toLowerCase().compareTo(b.toLowerCase().toString()));
+  return sport;
+}

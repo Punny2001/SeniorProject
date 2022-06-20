@@ -87,7 +87,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     border: OutlineInputBorder(),
                   ),
                   hint: const Text('Select sport and event'),
-                  items: sport
+                  items: sortedSport(sportList)
                       .map((sport) => DropdownMenuItem(
                             child: Text(sport),
                             value: sport,
