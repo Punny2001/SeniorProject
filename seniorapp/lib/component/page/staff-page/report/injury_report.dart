@@ -544,6 +544,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   onSaved: (value) {
                     setState(() {
                       _codeInjuryType.text = value;
+                      print(_codeInjuryType.text);
                     });
                   },
                   onChanged: (value) {
