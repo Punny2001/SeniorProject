@@ -38,7 +38,11 @@ class _IllnessReportState extends State<IllnessReport> {
   bool isVisibleOtherMainSymptom = false;
   bool isVisibleOtherIllnessCause = false;
   final List<MainSymptomList> mainSymptoms = [];
+  final List<String> getMainSymptomVal = [];
+  final List<int> getMainSymptomCode = [];
+
   bool isRepeat = false;
+  bool valueAdded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -350,10 +354,14 @@ class _IllnessReportState extends State<IllnessReport> {
                             } else if (int.parse(value) == 0 ||
                                 int.parse(value) > 12) {
                               return 'The input code is invalid';
+                            }
+                            if (valueAdded == false) {
+                              return 'Please add at least 1 main symptom';
                             } else {
                               return null;
                             }
-                          } else if (isRepeat) {
+                          }
+                          if (isRepeat) {
                             return 'This symptom is already selected';
                           } else {
                             return null;
@@ -421,55 +429,61 @@ class _IllnessReportState extends State<IllnessReport> {
                         validator: (value) {
                           if (value == null && mainSymptoms.isEmpty) {
                             return 'Please select the main symptom(s)';
-                          } else if (isRepeat) {
+                          }
+                          if (mainSymptoms.isEmpty && valueAdded == false) {
+                            return 'Please add at least 1 main symptom';
+                          }
+                          if (isRepeat) {
                             return 'This symptom is already selected';
                           } else {
                             return null;
                           }
                         },
                       ),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: isVisibleOtherMainSymptom,
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Your main symptom(s)',
+                      Visibility(
+                        visible: isVisibleOtherMainSymptom,
+                        child: Column(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(10),
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Your main symptom(s)',
+                              ),
+                              controller: _otherMainSymptom,
+                              autovalidateMode: isVisibleOtherMainSymptom
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please fill in your main symptom';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                        controller: _otherMainSymptom,
-                        autovalidateMode: isVisibleOtherMainSymptom
-                            ? AutovalidateMode.onUserInteraction
-                            : AutovalidateMode.disabled,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please fill in your main symptom';
-                          } else {
-                            return null;
-                          }
-                        },
+                      ),
+                      Container(
+                        child: IconButton(
+                          onPressed: () {
+                            if (_selectedMainSymptom.isNotEmpty) {
+                              addMainSymptomList();
+                              setState(() {
+                                _selectedMainSymptom = null;
+                                _codeMainSymptom.clear();
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.add_circle_outline),
+                        ),
+                        alignment: Alignment.centerRight,
                       ),
                     ],
                   ),
-                ),
-                Container(
-                  child: IconButton(
-                    onPressed: () {
-                      addMainSymptomList();
-                      setState(() {
-                        _selectedMainSymptom = null;
-                        _codeMainSymptom.clear();
-                      });
-                    },
-                    icon: const Icon(Icons.add_circle_outline),
-                  ),
-                  alignment: Alignment.centerRight,
                 ),
                 mainSymptoms.isNotEmpty
                     ? Column(
@@ -493,6 +507,7 @@ class _IllnessReportState extends State<IllnessReport> {
                                       onPressed: () {
                                         setState(() {
                                           mainSymptoms.remove(item);
+                                          isAdded();
                                         });
                                       },
                                     ),
@@ -656,7 +671,10 @@ class _IllnessReportState extends State<IllnessReport> {
                   width: w,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () => saveIllnessReport(),
+                    onPressed: () {
+                      saveIllnessReport();
+                      setState(() {});
+                    },
                     child: const Text('Save'),
                   ),
                 ),
@@ -769,6 +787,7 @@ class _IllnessReportState extends State<IllnessReport> {
 
   void addMainSymptomList() {
     isRepeat = false;
+    valueAdded = true;
     bool addingValidator = _mainSymptomListKey.currentState.validate();
     MainSymptomList newSymptom = MainSymptomList(
         selectedMainSymptom: _selectedMainSymptom,
@@ -789,14 +808,22 @@ class _IllnessReportState extends State<IllnessReport> {
     }
   }
 
+  void isAdded() {
+    if (mainSymptoms.isEmpty) {
+      valueAdded = false;
+    } else {
+      valueAdded = true;
+    }
+  }
+
   Future<void> saveIllnessReport() async {
     var uid = FirebaseAuth.instance.currentUser.uid;
     bool isValidate = _illnessKey.currentState.validate();
     bool addingValidator = _mainSymptomListKey.currentState.validate();
-    List<String> getMainSymptomVal = [];
 
     for (var item in mainSymptoms) {
       getMainSymptomVal.add(item.selectedMainSymptom);
+      getMainSymptomCode.add(int.parse(item.selectedMainSymptomCode));
     }
 
     if (isValidate && addingValidator) {
@@ -808,8 +835,11 @@ class _IllnessReportState extends State<IllnessReport> {
           diagnosis: _diagnosisController.text.trim(),
           occured_date: _occuredDate,
           affected_system: _selectedAffected,
+          affected_system_code: int.parse(_codeAffectedSystem.text.trim()),
           mainSymptoms: getMainSymptomVal,
+          mainSymptomsCode: getMainSymptomCode,
           illness_cause: _selectedIllnessCause,
+          illness_cause_code: int.parse(_codeIllnessCause.text.trim()),
           no_day: _absenceDayController.text.trim());
 
       Map<String, dynamic> data = illnessReportModel.toMap();

@@ -544,13 +544,13 @@ class _InjuryReportState extends State<InjuryReport> {
                   onSaved: (value) {
                     setState(() {
                       _codeInjuryType.text = value;
-                      print(_codeInjuryType.text);
                     });
                   },
                   onChanged: (value) {
                     checkOtherType(value);
                     setState(() {
                       _selectedInjuryType = onChangedMethodTypeKey(value);
+                      // print(_codeInjuryType.text);
                     });
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -1013,8 +1013,6 @@ class _InjuryReportState extends State<InjuryReport> {
 
     if (isValidate) {
       if (bodyType == 1) {
-        int bodyCode =
-            int.parse(onChangedMethodBodyPartKey(_selectedBodyHTPart));
         InjuryReportData injuryReportModel = InjuryReportData(
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
@@ -1022,7 +1020,7 @@ class _InjuryReportState extends State<InjuryReport> {
           sport_event: _selectedSport,
           round_heat_training: _rhtController.text.trim(),
           injuryDateTime: _datetime,
-          injuredBodyCode: bodyCode,
+          injuredBodyCode: int.parse(_codeBodyPart.text.trim()),
           injuredBody: _selectedBodyHTPart,
           injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,
@@ -1041,8 +1039,6 @@ class _InjuryReportState extends State<InjuryReport> {
             .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
                 '/staffPageChoosing', (route) => false));
       } else if (bodyType == 2) {
-        int bodyCode =
-            int.parse(onChangedMethodBodyPartKey(_selectedBodyUpperPart));
         InjuryReportData injuryReportModel = InjuryReportData(
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
@@ -1050,7 +1046,7 @@ class _InjuryReportState extends State<InjuryReport> {
           sport_event: _selectedSport,
           round_heat_training: _rhtController.text.trim(),
           injuryDateTime: _datetime,
-          injuredBodyCode: bodyCode,
+          injuredBodyCode: int.parse(_codeBodyPart.text.trim()),
           injuredBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
           injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,
@@ -1069,8 +1065,6 @@ class _InjuryReportState extends State<InjuryReport> {
             .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
                 '/staffPageChoosing', (route) => false));
       } else if (bodyType == 3) {
-        int bodyCode =
-            int.parse(onChangedMethodBodyPartKey(_selectedBodyLowerPart));
         InjuryReportData injuryReportModel = InjuryReportData(
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
@@ -1078,7 +1072,7 @@ class _InjuryReportState extends State<InjuryReport> {
           sport_event: _selectedSport,
           round_heat_training: _rhtController.text,
           injuryDateTime: _datetime,
-          injuredBodyCode: bodyCode,
+          injuredBodyCode: int.parse(_codeBodyPart.text.trim()),
           injuredBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
           injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,

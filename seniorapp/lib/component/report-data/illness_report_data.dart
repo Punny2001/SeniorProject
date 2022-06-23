@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 class IllnessReportData {
@@ -9,10 +10,12 @@ class IllnessReportData {
   final String diagnosis;
   final DateTime occured_date;
   final String affected_system;
+  final int affected_system_code;
   final List<String> mainSymptoms;
+  final List<int> mainSymptomsCode;
   final String illness_cause;
+  final int illness_cause_code;
   final String no_day;
-
   IllnessReportData({
     @required this.staff_uid,
     @required this.athlete_no,
@@ -21,8 +24,11 @@ class IllnessReportData {
     @required this.diagnosis,
     @required this.occured_date,
     @required this.affected_system,
+    @required this.affected_system_code,
     @required this.mainSymptoms,
+    @required this.mainSymptomsCode,
     @required this.illness_cause,
+    @required this.illness_cause_code,
     @required this.no_day,
   });
 
@@ -34,8 +40,11 @@ class IllnessReportData {
     String diagnosis,
     DateTime occured_date,
     String affected_system,
+    int affected_system_code,
     List<String> mainSymptoms,
+    List<int> mainSymptomsCode,
     String illness_cause,
+    int illness_cause_code,
     String no_day,
   }) {
     return IllnessReportData(
@@ -46,8 +55,11 @@ class IllnessReportData {
       diagnosis: diagnosis ?? this.diagnosis,
       occured_date: occured_date ?? this.occured_date,
       affected_system: affected_system ?? this.affected_system,
+      affected_system_code: affected_system_code ?? this.affected_system_code,
       mainSymptoms: mainSymptoms ?? this.mainSymptoms,
+      mainSymptomsCode: mainSymptomsCode ?? this.mainSymptomsCode,
       illness_cause: illness_cause ?? this.illness_cause,
+      illness_cause_code: illness_cause_code ?? this.illness_cause_code,
       no_day: no_day ?? this.no_day,
     );
   }
@@ -62,8 +74,11 @@ class IllnessReportData {
     result.addAll({'diagnosis': diagnosis});
     result.addAll({'occured_date': occured_date});
     result.addAll({'affected_system': affected_system});
+    result.addAll({'affected_system_code': affected_system_code});
     result.addAll({'mainSymptoms': mainSymptoms});
+    result.addAll({'mainSymptomsCode': mainSymptomsCode});
     result.addAll({'illness_cause': illness_cause});
+    result.addAll({'illness_cause_code': illness_cause_code});
     result.addAll({'no_day': no_day});
 
     return result;
@@ -78,8 +93,11 @@ class IllnessReportData {
       diagnosis: map['diagnosis'] ?? '',
       occured_date: DateTime.parse(map['occured_date'].toDate().toString()),
       affected_system: map['affected_system'] ?? '',
+      affected_system_code: map['affected_system_code']?.toInt() ?? 0,
       mainSymptoms: List<String>.from(map['mainSymptoms']),
+      mainSymptomsCode: List<int>.from(map['mainSymptomsCode']),
       illness_cause: map['illness_cause'] ?? '',
+      illness_cause_code: map['illness_cause_code']?.toInt() ?? 0,
       no_day: map['no_day'] ?? '',
     );
   }
@@ -91,7 +109,7 @@ class IllnessReportData {
 
   @override
   String toString() {
-    return 'IllnessReportData(staff_uid: $staff_uid, athlete_no: $athlete_no, report_type: $report_type, sport_event: $sport_event, diagnosis: $diagnosis, occured_date: $occured_date, affected_system: $affected_system, mainSymptoms: $mainSymptoms, illness_cause: $illness_cause, no_day: $no_day)';
+    return 'IllnessReportData(staff_uid: $staff_uid, athlete_no: $athlete_no, report_type: $report_type, sport_event: $sport_event, diagnosis: $diagnosis, occured_date: $occured_date, affected_system: $affected_system, affected_system_code: $affected_system_code, mainSymptoms: $mainSymptoms, mainSymptomsCode: $mainSymptomsCode, illness_cause: $illness_cause, illness_cause_code: $illness_cause_code, no_day: $no_day)';
   }
 
   @override
@@ -106,8 +124,11 @@ class IllnessReportData {
         other.diagnosis == diagnosis &&
         other.occured_date == occured_date &&
         other.affected_system == affected_system &&
+        other.affected_system_code == affected_system_code &&
         listEquals(other.mainSymptoms, mainSymptoms) &&
+        listEquals(other.mainSymptomsCode, mainSymptomsCode) &&
         other.illness_cause == illness_cause &&
+        other.illness_cause_code == illness_cause_code &&
         other.no_day == no_day;
   }
 
@@ -120,8 +141,11 @@ class IllnessReportData {
         diagnosis.hashCode ^
         occured_date.hashCode ^
         affected_system.hashCode ^
+        affected_system_code.hashCode ^
         mainSymptoms.hashCode ^
+        mainSymptomsCode.hashCode ^
         illness_cause.hashCode ^
+        illness_cause_code.hashCode ^
         no_day.hashCode;
   }
 }

@@ -16,7 +16,7 @@ class InjuryReportData {
   final int injuryCauseCode;
   final String injuryCause;
   final String no_day;
-  
+
   InjuryReportData({
     @required this.staff_uid,
     @required this.athlete_no,
@@ -74,9 +74,9 @@ class InjuryReportData {
     result.addAll({'sport_event': sport_event});
     result.addAll({'round_heat_training': round_heat_training});
     result.addAll({'injuryDateTime': injuryDateTime});
-    result.addAll({'injuredBodyCode': injuredBodyCode});
-    result.addAll({'injuredBody': injuredBody});
-    result.addAll({'injuredTypeCode': injuredTypeCode});
+    result.addAll({'injuryBodyCode': injuredBodyCode});
+    result.addAll({'injuryBody': injuredBody});
+    result.addAll({'injuryTypeCode': injuredTypeCode});
     result.addAll({'injuryType': injuryType});
     result.addAll({'injuryCauseCode': injuryCauseCode});
     result.addAll({'injuryCause': injuryCause});
