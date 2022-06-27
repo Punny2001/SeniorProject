@@ -3,6 +3,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 
@@ -73,6 +74,9 @@ class _InjuryReportState extends State<InjuryReport> {
               children: <Widget>[
                 TextFormField(
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   decoration: const InputDecoration(
                     label: Text('Athlete No.'),
                   ),
@@ -80,7 +84,8 @@ class _InjuryReportState extends State<InjuryReport> {
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Athlete No. is required';
-                    } else {
+                    }
+                    else {
                       return null;
                     }
                   },
@@ -303,7 +308,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       child: TextFormField(
                         controller: _headtrunkSearch,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(20),
                             ),
@@ -369,7 +374,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       child: TextFormField(
                         controller: _upperbodySearch,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(20),
                             ),
@@ -435,7 +440,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       child: TextFormField(
                         controller: _lowerbodySearch,
                         decoration: InputDecoration(
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                             borderRadius: BorderRadius.all(
                               Radius.circular(20),
                             ),
@@ -540,6 +545,9 @@ class _InjuryReportState extends State<InjuryReport> {
                     border: OutlineInputBorder(),
                     labelText: 'Code',
                   ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   controller: _codeInjuryType,
                   onSaved: (value) {
                     setState(() {
@@ -604,7 +612,7 @@ class _InjuryReportState extends State<InjuryReport> {
                     child: TextFormField(
                       controller: _injuryTypeSearch,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(20),
                           ),
@@ -669,6 +677,9 @@ class _InjuryReportState extends State<InjuryReport> {
                     border: OutlineInputBorder(),
                     labelText: 'Code',
                   ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   controller: _codeInjuryCause,
                   onSaved: (value) {
                     setState(() {
@@ -786,6 +797,9 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   decoration: const InputDecoration(
                     label: Text('Absence in days'),
                     hintText: 'Example: 10 days',

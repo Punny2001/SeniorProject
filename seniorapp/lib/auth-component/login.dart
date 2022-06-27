@@ -166,24 +166,6 @@ class _LoginState extends State<Login> {
           isEmailVerified = FirebaseAuth.instance.currentUser.emailVerified;
           if (isEmailVerified == true) {
             String uid = value.user.uid;
-            // await FirebaseFirestore.instance
-            //     .collection('User')
-            //     .doc(uid)
-            //     .snapshots()
-            //     .listen((event) {
-            //   UserData userModel = UserData.fromMap(event.data());
-            //   switch (userModel.department) {
-            //     case 'Athlete':
-            //       Navigator.of(context).pushNamedAndRemoveUntil(
-            //           '/athletePageChoosing', (route) => false);
-            //       break;
-            //     case 'Staff':
-            //       Navigator.of(context).pushNamedAndRemoveUntil(
-            //           '/staffPageChoosing', (route) => false);
-            //       break;
-            //     default:
-            //   }
-            // });
             await FirebaseFirestore.instance
                 .collection('User')
                 .doc(uid)

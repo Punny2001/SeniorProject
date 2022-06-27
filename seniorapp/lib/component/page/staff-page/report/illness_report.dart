@@ -3,6 +3,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 
@@ -63,6 +64,9 @@ class _IllnessReportState extends State<IllnessReport> {
               children: <Widget>[
                 TextFormField(
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   decoration: const InputDecoration(
                     label: Text('Athlete No.'),
                   ),
@@ -201,6 +205,9 @@ class _IllnessReportState extends State<IllnessReport> {
                     border: OutlineInputBorder(),
                     labelText: 'Code',
                   ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   controller: _codeAffectedSystem,
                   onSaved: (value) {
                     setState(() {
@@ -333,6 +340,9 @@ class _IllnessReportState extends State<IllnessReport> {
                           border: OutlineInputBorder(),
                           labelText: 'Code',
                         ),
+                        inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                         controller: _codeMainSymptom,
                         onSaved: (value) {
                           setState(() {
@@ -536,6 +546,9 @@ class _IllnessReportState extends State<IllnessReport> {
                     border: OutlineInputBorder(),
                     labelText: 'Code',
                   ),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   controller: _codeIllnessCause,
                   onSaved: (value) {
                     setState(() {
@@ -650,6 +663,9 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
                   decoration: const InputDecoration(
                     label: Text('Absence in days'),
                     hintText: 'Example: 10 days',
