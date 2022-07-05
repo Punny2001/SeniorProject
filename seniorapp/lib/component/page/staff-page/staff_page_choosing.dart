@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_profile.dart';
 
@@ -11,6 +13,7 @@ class StaffPageChoosing extends StatefulWidget {
 
 class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int _selected_idx = 0;
+  bool isRegister = false;
 
   static const List<Widget> _StaffPageList = <Widget>[
     StaffHomePage(),
@@ -24,9 +27,11 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    checkRegister();
+    return isRegister ? Scaffold(
       body: Container(
         child: _StaffPageList.elementAt(_selected_idx),
       ),
@@ -49,6 +54,16 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         onTap: _onPageTap,
         selectedItemColor: Colors.redAccent,
       ),
-    );
+    ) : Register();
+  }
+
+  void checkRegister() {
+    String username = FirebaseAuth.instance.currentUser.displayName;
+    if (username == null) {
+      isRegister = false;
+    }
+    else {
+      isRegister = true;
+    }
   }
 }

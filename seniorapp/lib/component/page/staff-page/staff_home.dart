@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/auth-component/register.dart';
 
 class StaffHomePage extends StatefulWidget {
   const StaffHomePage({Key key}) : super(key: key);
@@ -8,9 +10,7 @@ class StaffHomePage extends StatefulWidget {
 }
 
 class _StaffHomePageState extends State<StaffHomePage> {
-  // FirebaseAuth auth = FirebaseAuth.instance;
-  // final String uid = FirebaseAuth.instance.currentUser.uid;
-  // final String username = FirebaseAuth.instance.currentUser.displayName;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -47,4 +47,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
       ),
     );
   }
+
+  
 }

@@ -16,13 +16,7 @@
     },
 
     "register_page" : {
-        "email" : "Email",
-        "email_description" : "Email address",
-        "email_already_in_use" : "Email is already in use",
-        "invalid_email" : "The format of Email is invalid",
-        "email_required" : "Email is required",
-        
-        "password" : "Password",
+        "password" : "New Password",
         "password_description" : "Password must morethan 8 characters",
         "password_required" : "Password is required",
         "password_length_error" : "Please fill in password morethan 8 characters",

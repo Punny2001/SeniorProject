@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/language.dart';
 
 class Login extends StatefulWidget {
@@ -125,22 +126,22 @@ class _LoginState extends State<Login> {
                   height: 20,
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('login_page.login_description').tr(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/register');
-                      },
-                      child: Text(
-                        'login_page.signup_textbutton'.tr(),
-                        style: const TextStyle(
-                            decoration: TextDecoration.underline),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     const Text('login_page.login_description').tr(),
+                //     TextButton(
+                //       onPressed: () {
+                //         Navigator.of(context).pushNamed('/register');
+                //       },
+                //       child: Text(
+                //         'login_page.signup_textbutton'.tr(),
+                //         style: const TextStyle(
+                //             decoration: TextDecoration.underline),
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
           ),
@@ -163,8 +164,6 @@ class _LoginState extends State<Login> {
           password: _passwordController.text.trim(),
         )
             .then((value) async {
-          isEmailVerified = FirebaseAuth.instance.currentUser.emailVerified;
-          if (isEmailVerified == true) {
             String uid = value.user.uid;
             await FirebaseFirestore.instance
                 .collection('User')
@@ -183,11 +182,10 @@ class _LoginState extends State<Login> {
                       '/staffPageChoosing', (route) => false);
                   break;
                 default:
+                
+                break;
               }
             });
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(emailVerifiedSnack);
-          }
         });
       }
     } on FirebaseAuthException catch (error) {

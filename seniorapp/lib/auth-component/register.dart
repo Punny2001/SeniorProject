@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/component/language.dart';
@@ -8,6 +7,7 @@ import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -22,24 +22,21 @@ class _RegisterState extends State<Register> {
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
   String _selectedDepartment = '';
-  int selectedDepartmentValue = 0;
   String _selectedSport = 'Badminton';
   String _selectedStaff = 'Coach';
   bool _passwordhide = true;
   bool _confirmPasswordhide = true;
   DateTime _date;
   final _keyForm = GlobalKey<FormState>();
-  final _emailKey = GlobalKey<FormState>();
-  bool isVisibleAthlete = false;
-  bool isVisibleStaff = false;
+  bool isAthlete = false;
   double _selectedWeight = 60.0;
   double _selectedHeight = 170.0;
-  bool _emailInUse = false;
 
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
-    final h = MediaQuery.of(context).size.height;
+    final h = MediaQuery.of(context).size.height;  
+    isAthleteCheck();
 
     return Scaffold(
       appBar: AppBar(
@@ -56,49 +53,12 @@ class _RegisterState extends State<Register> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                /// Email registeration
-                Text(
-                  'register_page.email'.tr(),
-                  style: textCustom(),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-                TextFormField(
-                  key: _emailKey,
-                  keyboardType: TextInputType.emailAddress,
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintText: 'register_page.email_description'.tr(),
-                  ),
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (email) {
-                    if (email.isEmpty) {
-                      return 'register_page.email_required'.tr();
-                    } else if (email.isNotEmpty) {
-                      print(_emailInUse);
-                      print(_emailController.value.text);
-                      checkEmailInUse();
-                      if (_emailInUse == true) {
-                        return 'register_page.email_already_in_use'.tr();
-                      } else if (!EmailValidator.validate(email)) {
-                        return 'register_page.invalid_email'.tr();
-                      }
-                    }
-                    return null;
-                  },
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-
                 /// Password registration
                 Text(
                   'register_page.password'.tr(),
                   style: textCustom(),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
                 TextFormField(
@@ -122,14 +82,16 @@ class _RegisterState extends State<Register> {
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'register_page.password_required'.tr();
-                    } else if (value.length < 8) {
+                    }
+                    if (value.length < 8) {
                       return 'register_page.password_length_error'.tr();
-                    } else {
+                    } 
+                    else {
                       return null;
                     }
                   },
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
 
@@ -138,7 +100,7 @@ class _RegisterState extends State<Register> {
                   'register_page.confirm_password'.tr(),
                   style: textCustom(),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
                 TextFormField(
@@ -169,7 +131,7 @@ class _RegisterState extends State<Register> {
                     }
                   },
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
 
@@ -178,7 +140,7 @@ class _RegisterState extends State<Register> {
                   'register_page.username'.tr(),
                   style: textCustom(),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
                 TextFormField(
@@ -196,7 +158,7 @@ class _RegisterState extends State<Register> {
                     }
                   },
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
 
@@ -205,7 +167,7 @@ class _RegisterState extends State<Register> {
                   'register_page.firstname'.tr(),
                   style: textCustom(),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
                 TextFormField(
@@ -223,7 +185,7 @@ class _RegisterState extends State<Register> {
                     }
                   },
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
 
@@ -232,7 +194,7 @@ class _RegisterState extends State<Register> {
                   'register_page.lastname'.tr(),
                   style: textCustom(),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
                 TextFormField(
@@ -250,7 +212,7 @@ class _RegisterState extends State<Register> {
                     }
                   },
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
 
@@ -259,7 +221,7 @@ class _RegisterState extends State<Register> {
                   'register_page.birthdate'.tr(),
                   style: textCustom(),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
                 DateTimePicker(
@@ -286,49 +248,13 @@ class _RegisterState extends State<Register> {
                     }
                   },
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
 
-                /// Department choosing
-                Text(
-                  'register_page.department'.tr(),
-                  style: textCustom(),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 10),
-                ),
-                FormField(
-                  builder: (FormFieldState<bool> state) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        state.hasError
-                            ? Text(
-                                state.errorText,
-                                style: const TextStyle(color: Colors.red),
-                              )
-                            : Container(),
-
-                        /// Athlete
-                        RadioListTile(
-                          value: 1,
-                          groupValue: selectedDepartmentValue,
-                          title: Text(
-                            'register_page.athlete'.tr(),
-                          ),
-                          onChanged: (value) {
-                            state.setValue(true);
-                            setState(() {
-                              selectedDepartmentValue = value;
-                              getDepartmentText(value);
-                              isVisibleAthlete = true;
-                              isVisibleStaff = false;
-                            });
-                          },
-                        ),
-                        Visibility(
-                          visible: isVisibleAthlete,
+                        isAthlete ? 
+//Athlete
+                        Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -336,10 +262,10 @@ class _RegisterState extends State<Register> {
                                 'register_page.sportType'.tr(),
                                 style: textCustom(),
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.only(bottom: 10),
                               ),
-                              DropdownButtonFormField<String>(
+                              DropdownButtonFormField2<String>(
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                 ),
@@ -358,7 +284,7 @@ class _RegisterState extends State<Register> {
                                   });
                                 },
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.only(bottom: 20),
                               ),
 
@@ -378,7 +304,7 @@ class _RegisterState extends State<Register> {
                                   });
                                 },
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.only(bottom: 10),
                               ),
                               Text(
@@ -396,32 +322,17 @@ class _RegisterState extends State<Register> {
                                   });
                                 },
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.only(bottom: 10),
                               ),
                             ],
                           ),
-                        ),
+                        )
+
+                        :
 
                         /// Staff
-                        RadioListTile(
-                          value: 2,
-                          groupValue: selectedDepartmentValue,
-                          title: Text(
-                            'register_page.staff'.tr(),
-                          ),
-                          onChanged: (value) {
-                            state.setValue(true);
-                            setState(() {
-                              selectedDepartmentValue = value;
-                              getDepartmentText(value);
-                              isVisibleStaff = true;
-                              isVisibleAthlete = false;
-                            });
-                          },
-                        ),
-                        Visibility(
-                          visible: isVisibleStaff,
+                        Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -429,10 +340,10 @@ class _RegisterState extends State<Register> {
                                 'register_page.staffType'.tr(),
                                 style: textCustom(),
                               ),
-                              const Padding(
+                              Padding(
                                 padding: EdgeInsets.only(bottom: 10),
                               ),
-                              DropdownButtonFormField<String>(
+                              DropdownButtonFormField2<String>(
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                 ),
@@ -443,6 +354,7 @@ class _RegisterState extends State<Register> {
                                         ))
                                     .toList(),
                                 value: _selectedStaff,
+                                hint: const Text('Select type of staff'),
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 onChanged: (value) {
@@ -454,18 +366,7 @@ class _RegisterState extends State<Register> {
                             ],
                           ),
                         ),
-                      ],
-                    );
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value != true) {
-                      return 'register_page.department_required'.tr();
-                    }
-                    return null;
-                  },
-                ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
 
@@ -485,16 +386,6 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  void getDepartmentText(value) {
-    if (value == 1) {
-      _selectedDepartment = 'Athlete';
-    } else if (selectedDepartmentValue == 2) {
-      _selectedDepartment = 'Staff';
-    } else {
-      _selectedDepartment = '';
-    }
-  }
-
   TextStyle textCustom() {
     return const TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
   }
@@ -508,38 +399,30 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  Future<bool> checkEmailInUse() async {
-    try {
-      final emailList = await FirebaseAuth.instance
-          .fetchSignInMethodsForEmail(_emailController.value.text);
-
-      if (emailList.isNotEmpty) {
-        _emailInUse = true;
-      } else {
-        _emailInUse = false;
+  Future isAthleteCheck() async {
+    String uid = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance.collection('User').doc(uid).get().then((value) {
+      if (value['department'] == 'Athlete') {
+        isAthlete = true;
       }
-    } catch (error) {
-      print(error);
-    }
+      else {
+        isAthlete = false;
+      }
+    });
   }
 
   Future signup() async {
     try {
       bool validate = _keyForm.currentState.validate();
+      String uid = FirebaseAuth.instance.currentUser.uid;
+      print(uid);
       print(_selectedDepartment);
       if (validate &&
-          _selectedSport.isNotEmpty &&
-          _selectedDepartment.isNotEmpty) {
-        if (passwordConfirm() && selectedDepartmentValue == 1) {
-          await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                  email: _emailController.text.trim(),
-                  password: _passwordController.text.trim())
-              .then((value) async {
-            await value.user
-                .updateProfile(displayName: _usernameController.text.trim())
+          _selectedSport.isNotEmpty) {
+        if (passwordConfirm() && _selectedDepartment == 'Athlete') {
+            await FirebaseAuth.instance.currentUser.updateProfile(displayName: _usernameController.text.trim())
                 .then((value2) async {
-              String uid = value.user.uid;
+              String uid = FirebaseAuth.instance.currentUser.uid;
 
               Athlete athleteModel = Athlete(
                   username: _usernameController.text.trim(),
@@ -560,22 +443,15 @@ class _RegisterState extends State<Register> {
                   .then(
                     (value) => print('Insert data to Firestore successfully'),
                   );
-            });
-          }).then(
+            })
+          .then(
             (value) => Navigator.of(context)
-                .pushNamedAndRemoveUntil('/verifyEmail', (route) => false),
+                .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false),
           );
-        } else if (passwordConfirm() && selectedDepartmentValue == 2) {
-          await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                  email: _emailController.text.trim(),
-                  password: _passwordController.text.trim())
-              .then((value) async {
-            await value.user
+        } else if (passwordConfirm() && _selectedDepartment == 'Staff') {
+            await FirebaseAuth.instance.currentUser
                 .updateProfile(displayName: _usernameController.text.trim())
                 .then((value2) async {
-              String uid = value.user.uid;
-
               Staff staffModel = Staff(
                   username: _usernameController.text.trim(),
                   firstname: _firstnameController.text.trim(),
@@ -593,10 +469,9 @@ class _RegisterState extends State<Register> {
                   .then(
                     (value) => print('Insert data to Firestore successfully'),
                   );
-            });
-          }).then(
+            }).then(
             (value) => Navigator.of(context)
-                .pushNamedAndRemoveUntil('/verifyEmail', (route) => false),
+                .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false),
           );
         }
       }

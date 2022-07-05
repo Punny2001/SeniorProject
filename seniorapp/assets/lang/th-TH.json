@@ -16,13 +16,7 @@
     },
 
     "register_page" : {
-        "email" : "อีเมล",
-        "email_description" : "กรอกที่อยู่อีเมล",
-        "email_already_in_use" : "อีเมลนี้ถูกใช้แล้ว",
-        "invalid_email" : "รูปแบบอีเมลไม่ถูกต้อง",
-        "email_required" : "โปรดกรอกอีเมล",
-
-        "password" : "รหัสผ่าน",
+        "password" : "รหัสผ่านใหม่",
         "password_description" : "รหัสผ่านต้องมีความยาวมากกว่า 8 ตัวอักษร",
         "password_required" : "โปรดกรอกรหัสผ่าน",
         "password_length_error" : "โปรกหรอกรหัสผ่านให้มีความยาวมากกว่า 8 ตัวอักษร",
