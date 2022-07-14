@@ -10,8 +10,6 @@ class StaffHomePage extends StatefulWidget {
 }
 
 class _StaffHomePageState extends State<StaffHomePage> {
-  
-
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -47,6 +45,4 @@ class _StaffHomePageState extends State<StaffHomePage> {
       ),
     );
   }
-
-  
 }

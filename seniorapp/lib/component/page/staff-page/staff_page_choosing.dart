@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_profile.dart';
+import 'package:seniorapp/component/page/staff-page/staff_report_page/staff_report.dart';
 
 class StaffPageChoosing extends StatefulWidget {
   const StaffPageChoosing({Key key}) : super(key: key);
@@ -17,7 +18,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
 
   static const List<Widget> _StaffPageList = <Widget>[
     StaffHomePage(),
-    null,
+    StaffReport(),
     StaffProfile(),
   ];
 
@@ -27,11 +28,9 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    checkRegister();
-    return isRegister ? Scaffold(
+    return Scaffold(
       body: Container(
         child: _StaffPageList.elementAt(_selected_idx),
       ),
@@ -42,8 +41,8 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Favorite',
+            icon: Icon(Icons.paste),
+            label: 'Report',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.menu),
@@ -54,16 +53,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         onTap: _onPageTap,
         selectedItemColor: Colors.redAccent,
       ),
-    ) : Register();
-  }
-
-  void checkRegister() {
-    String username = FirebaseAuth.instance.currentUser.displayName;
-    if (username == null) {
-      isRegister = false;
-    }
-    else {
-      isRegister = true;
-    }
+    );
   }
 }
