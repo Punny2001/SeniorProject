@@ -16,6 +16,7 @@ class _LoginState extends State<Login> {
   bool _passwordhide = true;
   bool isEmailVerified;
   final _keyForm = GlobalKey<FormState>();
+  bool isRegister;
 
   @override
   Widget build(BuildContext context) {
@@ -164,7 +165,12 @@ class _LoginState extends State<Login> {
           password: _passwordController.text.trim(),
         )
             .then((value) async {
-            String uid = value.user.uid;
+          String uid = value.user.uid;
+          String username = FirebaseAuth.instance.currentUser.displayName;
+          if (isRegister == false) {
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/register', (route) => false);
+          } else {
             await FirebaseFirestore.instance
                 .collection('User')
                 .doc(uid)
@@ -182,10 +188,10 @@ class _LoginState extends State<Login> {
                       '/staffPageChoosing', (route) => false);
                   break;
                 default:
-                
-                break;
+                  break;
               }
             });
+          }
         });
       }
     } on FirebaseAuthException catch (error) {
@@ -252,6 +258,15 @@ class _LoginState extends State<Login> {
       }
     } catch (error) {
       print(error);
+    }
+  }
+
+  void checkRegister() {
+    String username = FirebaseAuth.instance.currentUser.displayName;
+    if (username == null) {
+      isRegister = false;
+    } else {
+      isRegister = true;
     }
   }
 }

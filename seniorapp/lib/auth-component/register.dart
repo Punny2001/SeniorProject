@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/component/language.dart';
+import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -15,15 +16,13 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _usernameController = TextEditingController();
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
-  String _selectedDepartment = '';
-  String _selectedSport = 'Badminton';
-  String _selectedStaff = 'Coach';
+  String _selectedSport;
+  String _selectedStaff;
   bool _passwordhide = true;
   bool _confirmPasswordhide = true;
   DateTime _date;
@@ -35,7 +34,7 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
-    final h = MediaQuery.of(context).size.height;  
+    final h = MediaQuery.of(context).size.height;
     isAthleteCheck();
 
     return Scaffold(
@@ -85,8 +84,7 @@ class _RegisterState extends State<Register> {
                     }
                     if (value.length < 8) {
                       return 'register_page.password_length_error'.tr();
-                    } 
-                    else {
+                    } else {
                       return null;
                     }
                   },
@@ -252,120 +250,133 @@ class _RegisterState extends State<Register> {
                   padding: EdgeInsets.only(bottom: 10),
                 ),
 
-                        isAthlete ? 
-//Athlete
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'register_page.sportType'.tr(),
-                                style: textCustom(),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10),
-                              ),
-                              DropdownButtonFormField2<String>(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                items: sportList
-                                    .map((sport) => DropdownMenuItem(
-                                          child: Text(sport),
-                                          value: sport,
-                                        ))
-                                    .toList(),
-                                value: _selectedSport,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedSport = value;
-                                  });
-                                },
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 20),
-                              ),
-
-                              /// Weight & Height
-                              Text(
-                                'register_page.weight'.tr(),
-                                style: textCustom(),
-                              ),
-                              DecimalNumberPicker(
-                                minValue: 30,
-                                maxValue: 200,
-                                decimalPlaces: 1,
-                                value: _selectedWeight,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedWeight = value;
-                                  });
-                                },
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10),
-                              ),
-                              Text(
-                                'register_page.height'.tr(),
-                                style: textCustom(),
-                              ),
-                              DecimalNumberPicker(
-                                minValue: 150,
-                                maxValue: 200,
-                                decimalPlaces: 1,
-                                value: _selectedHeight,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedHeight = value;
-                                  });
-                                },
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10),
-                              ),
-                            ],
+                isAthlete
+                    ?
+                    //Athlete
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'register_page.sportType'.tr(),
+                            style: textCustom(),
                           ),
-                        )
-
-                        :
-
-                        /// Staff
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'register_page.staffType'.tr(),
-                                style: textCustom(),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom: 10),
-                              ),
-                              DropdownButtonFormField2<String>(
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                                items: staffList
-                                    .map((staff) => DropdownMenuItem(
-                                          child: Text(staff),
-                                          value: staff,
-                                        ))
-                                    .toList(),
-                                value: _selectedStaff,
-                                hint: const Text('Select type of staff'),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedStaff = value;
-                                  });
-                                },
-                              ),
-                            ],
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10),
                           ),
+                          DropdownButtonFormField2<String>(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                            ),
+                            hint: const Text('Select type of sport'),
+                            items: sportList
+                                .map((sport) => DropdownMenuItem(
+                                      child: Text(sport),
+                                      value: sport,
+                                    ))
+                                .toList(),
+                            value: _selectedSport,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedSport = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Please select the sport';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                          ),
+
+                          /// Weight & Height
+                          Text(
+                            'register_page.weight'.tr(),
+                            style: textCustom(),
+                          ),
+                          DecimalNumberPicker(
+                            minValue: 30,
+                            maxValue: 200,
+                            decimalPlaces: 1,
+                            value: _selectedWeight,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedWeight = value;
+                              });
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10),
+                          ),
+                          Text(
+                            'register_page.height'.tr(),
+                            style: textCustom(),
+                          ),
+                          DecimalNumberPicker(
+                            minValue: 150,
+                            maxValue: 200,
+                            decimalPlaces: 1,
+                            value: _selectedHeight,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedHeight = value;
+                              });
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10),
+                          ),
+                        ],
+                      )
+                    :
+
+                    /// Staff
+                    Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'register_page.staffType'.tr(),
+                              style: textCustom(),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 10),
+                            ),
+                            DropdownButtonFormField2<String>(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                              hint: const Text('Select type of staff'),
+                              items: staffList
+                                  .map((staff) => DropdownMenuItem(
+                                        child: Text(staff),
+                                        value: staff,
+                                      ))
+                                  .toList(),
+                              value: _selectedStaff,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedStaff = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Please select the sport and event';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                          ],
                         ),
+                      ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10),
                 ),
@@ -404,8 +415,7 @@ class _RegisterState extends State<Register> {
     FirebaseFirestore.instance.collection('User').doc(uid).get().then((value) {
       if (value['department'] == 'Athlete') {
         isAthlete = true;
-      }
-      else {
+      } else {
         isAthlete = false;
       }
     });
@@ -416,62 +426,62 @@ class _RegisterState extends State<Register> {
       bool validate = _keyForm.currentState.validate();
       String uid = FirebaseAuth.instance.currentUser.uid;
       print(uid);
-      print(_selectedDepartment);
-      if (validate &&
-          _selectedSport.isNotEmpty) {
-        if (passwordConfirm() && _selectedDepartment == 'Athlete') {
-            await FirebaseAuth.instance.currentUser.updateProfile(displayName: _usernameController.text.trim())
-                .then((value2) async {
-              String uid = FirebaseAuth.instance.currentUser.uid;
+      if (validate) {
+        if (passwordConfirm() && isAthlete == true) {
+          await FirebaseAuth.instance.currentUser
+              .updatePassword(_passwordController.text.trim());
+          await FirebaseAuth.instance.currentUser
+              .updateProfile(displayName: _usernameController.text.trim())
+              .then((value2) async {
+            String uid = FirebaseAuth.instance.currentUser.uid;
 
-              Athlete athleteModel = Athlete(
-                  username: _usernameController.text.trim(),
-                  firstname: _firstnameController.text.trim(),
-                  lastname: _lastnameController.text.trim(),
-                  sportType: _selectedSport,
-                  date: _date,
-                  department: _selectedDepartment,
-                  weight: _selectedWeight,
-                  height: _selectedHeight);
+            Athlete athleteModel = Athlete(
+                username: _usernameController.text.trim(),
+                firstname: _firstnameController.text.trim(),
+                lastname: _lastnameController.text.trim(),
+                sportType: _selectedSport,
+                date: _date,
+                department: 'Athlete',
+                weight: _selectedWeight,
+                height: _selectedHeight);
 
-              Map<String, dynamic> data = athleteModel.toMap();
+            Map<String, dynamic> data = athleteModel.toMap();
 
-              await FirebaseFirestore.instance
-                  .collection('User')
-                  .doc(uid)
-                  .set(data)
-                  .then(
-                    (value) => print('Insert data to Firestore successfully'),
-                  );
-            })
-          .then(
-            (value) => Navigator.of(context)
-                .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false),
+            await FirebaseFirestore.instance
+                .collection('User')
+                .doc(uid)
+                .set(data)
+                .then(
+                  (value) => print('Insert data to Firestore successfully'),
+                );
+          }).then(
+            (value) => Navigator.of(context).pushNamedAndRemoveUntil(
+                '/staffPageChoosing', (route) => false),
           );
-        } else if (passwordConfirm() && _selectedDepartment == 'Staff') {
-            await FirebaseAuth.instance.currentUser
-                .updateProfile(displayName: _usernameController.text.trim())
-                .then((value2) async {
-              Staff staffModel = Staff(
-                  username: _usernameController.text.trim(),
-                  firstname: _firstnameController.text.trim(),
-                  lastname: _lastnameController.text.trim(),
-                  birthdate: _date,
-                  department: _selectedDepartment,
-                  staffType: _selectedStaff);
+        } else if (passwordConfirm() && isAthlete == false) {
+          await FirebaseAuth.instance.currentUser
+              .updateProfile(displayName: _usernameController.text.trim())
+              .then((value2) async {
+            Staff staffModel = Staff(
+                username: _usernameController.text.trim(),
+                firstname: _firstnameController.text.trim(),
+                lastname: _lastnameController.text.trim(),
+                birthdate: _date,
+                department: 'Staff',
+                staffType: _selectedStaff);
 
-              Map<String, dynamic> data = staffModel.toMap();
+            Map<String, dynamic> data = staffModel.toMap();
 
-              await FirebaseFirestore.instance
-                  .collection('User')
-                  .doc(uid)
-                  .set(data)
-                  .then(
-                    (value) => print('Insert data to Firestore successfully'),
-                  );
-            }).then(
-            (value) => Navigator.of(context)
-                .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false),
+            await FirebaseFirestore.instance
+                .collection('User')
+                .doc(uid)
+                .set(data)
+                .then(
+                  (value) => print('Insert data to Firestore successfully'),
+                );
+          }).then(
+            (value) => Navigator.of(context).pushNamedAndRemoveUntil(
+                '/staffPageChoosing', (route) => false),
           );
         }
       }

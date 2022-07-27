@@ -84,8 +84,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Athlete No. is required';
-                    }
-                    else {
+                    } else {
                       return null;
                     }
                   },
@@ -1024,7 +1023,12 @@ class _InjuryReportState extends State<InjuryReport> {
     var uid = FirebaseAuth.instance.currentUser.uid;
     changeBodySidetoString();
     bool isValidate = _injuryKey.currentState.validate();
-
+    if (isVisibleOtherInjuryCause == true) {
+      _selectedInjuryCause += ', ${_otherInjuryCause.text.trim()}';
+    }
+    if (isVisibleOtherInjuryType == true) {
+      _selectedInjuryType += ', ${_otherInjuryType.text.trim()}';
+    }
     if (isValidate) {
       if (bodyType == 1) {
         InjuryReportData injuryReportModel = InjuryReportData(
@@ -1034,9 +1038,9 @@ class _InjuryReportState extends State<InjuryReport> {
           sport_event: _selectedSport,
           round_heat_training: _rhtController.text.trim(),
           injuryDateTime: _datetime,
-          injuredBodyCode: int.parse(_codeBodyPart.text.trim()),
-          injuredBody: _selectedBodyHTPart,
-          injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
+          injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+          injuryBody: _selectedBodyHTPart,
+          injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,
           injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
           injuryCause: _selectedInjuryCause,
@@ -1060,9 +1064,9 @@ class _InjuryReportState extends State<InjuryReport> {
           sport_event: _selectedSport,
           round_heat_training: _rhtController.text.trim(),
           injuryDateTime: _datetime,
-          injuredBodyCode: int.parse(_codeBodyPart.text.trim()),
-          injuredBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
-          injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
+          injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+          injuryBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
+          injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,
           injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
           injuryCause: _selectedInjuryCause,
@@ -1086,9 +1090,9 @@ class _InjuryReportState extends State<InjuryReport> {
           sport_event: _selectedSport,
           round_heat_training: _rhtController.text,
           injuryDateTime: _datetime,
-          injuredBodyCode: int.parse(_codeBodyPart.text.trim()),
-          injuredBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
-          injuredTypeCode: int.parse(_codeInjuryType.text.trim()),
+          injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+          injuryBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
+          injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
           injuryType: _selectedInjuryType,
           injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
           injuryCause: _selectedInjuryCause,

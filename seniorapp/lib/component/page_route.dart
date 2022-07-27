@@ -8,6 +8,7 @@ import 'package:seniorapp/component/page/quiz-page/mental_quiz.dart';
 import 'package:seniorapp/component/page/staff-page/report/illness_report.dart';
 import 'package:seniorapp/component/page/staff-page/report/injury_report.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
+import 'package:seniorapp/component/page/staff-page/staff_report_page/illness_report_description.dart';
 
 final Map<String, WidgetBuilder> map = {
   '/login': (BuildContext context) => Login(),

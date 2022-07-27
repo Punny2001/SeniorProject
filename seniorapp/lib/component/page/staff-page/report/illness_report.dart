@@ -341,14 +341,9 @@ class _IllnessReportState extends State<IllnessReport> {
                           labelText: 'Code',
                         ),
                         inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        ],
                         controller: _codeMainSymptom,
-                        onSaved: (value) {
-                          setState(() {
-                            _codeMainSymptom.text = value;
-                          });
-                        },
                         onChanged: (value) {
                           checkOtherSymptom(value);
                           setState(() {
@@ -361,7 +356,8 @@ class _IllnessReportState extends State<IllnessReport> {
                           if (mainSymptoms.isEmpty) {
                             if (value.isEmpty) {
                               return 'Please fill in the code of main symptoms';
-                            } else if (int.parse(value) == 0 ||
+                            }
+                            if (int.parse(value) == 0 ||
                                 int.parse(value) > 12) {
                               return 'The input code is invalid';
                             }
@@ -805,11 +801,16 @@ class _IllnessReportState extends State<IllnessReport> {
     isRepeat = false;
     valueAdded = true;
     bool addingValidator = _mainSymptomListKey.currentState.validate();
+    if (isVisibleOtherMainSymptom == true) {
+      _selectedMainSymptom += ', ${_otherMainSymptom.text.trim()}';
+    }
     MainSymptomList newSymptom = MainSymptomList(
         selectedMainSymptom: _selectedMainSymptom,
         selectedMainSymptomCode: _codeMainSymptom.text);
     if (addingValidator) {
-      if (_codeMainSymptom.text != '0' && _selectedMainSymptom.isNotEmpty) {
+      if (int.parse(_codeMainSymptom.text) != 0 &&
+          int.parse(_codeMainSymptom.text) <= 12 &&
+          _selectedMainSymptom.isNotEmpty) {
         if (mainSymptoms.every((element) =>
             element.selectedMainSymptomCode !=
             newSymptom.selectedMainSymptomCode)) {
@@ -836,13 +837,19 @@ class _IllnessReportState extends State<IllnessReport> {
     var uid = FirebaseAuth.instance.currentUser.uid;
     bool isValidate = _illnessKey.currentState.validate();
     bool addingValidator = _mainSymptomListKey.currentState.validate();
+    if (isVisibleOtherAffectedSystem == true) {
+      _selectedAffected += _otherAffectedSystem.text.trim();
+    }
+    if (isVisibleOtherIllnessCause == true) {
+      _selectedIllnessCause += _otherIllnessCause.text.trim();
+    }
 
     for (var item in mainSymptoms) {
       getMainSymptomVal.add(item.selectedMainSymptom);
       getMainSymptomCode.add(int.parse(item.selectedMainSymptomCode));
     }
 
-    if (isValidate && addingValidator) {
+    if (isValidate && (addingValidator || valueAdded == true)) {
       IllnessReportData illnessReportModel = IllnessReportData(
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
