@@ -50,10 +50,10 @@ class _InjuryReportState extends State<InjuryReport> {
   int bodyType;
   String _selectedSideString;
 
-  void dispose() {
-    _sportSearch.dispose();
-    super.dispose();
-  }
+  // void dispose() {
+  //   _sportSearch.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -1130,13 +1130,30 @@ class _InjuryReportState extends State<InjuryReport> {
 
         Map<String, dynamic> data = injuryReportModel.toMap();
 
-        await FirebaseFirestore.instance
-            .collection('Report')
-            .doc()
-            .set(data)
-            .then((value) => print('Insert data to Firestore successfully'))
-            .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
-                '/staffPageChoosing', (route) => false));
+        final collectionReference =
+            FirebaseFirestore.instance.collection('Report');
+        DocumentReference docReference = collectionReference.doc();
+        docReference.set(data).then((value) {
+          print('Insert data to Firestore successfully');
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Insert data successfully'),
+                  content: Text(
+                      'Your report ID ${docReference.id} is successfullt inserted!!'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.of(context)
+                          .pushNamedAndRemoveUntil(
+                              '/staffPageChoosing', (route) => false),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              });
+        });
       }
     }
   }
