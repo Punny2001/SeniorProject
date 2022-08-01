@@ -60,7 +60,12 @@ class _InjuryReportState extends State<InjuryReport> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+      ),
       body: Container(
         margin: const EdgeInsets.all(30),
         width: w,
@@ -72,14 +77,25 @@ class _InjuryReportState extends State<InjuryReport> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                const Text(
+                  'Athlete No.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Padding(padding: EdgeInsets.all(10)),
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
                   decoration: const InputDecoration(
-                    label: Text('Athlete No.'),
-                  ),
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
+                      labelText: 'Athlete No.',
+                      border: InputBorder.none),
                   controller: _athleteNo,
                   validator: (value) {
                     if (value.isEmpty) {
@@ -102,7 +118,9 @@ class _InjuryReportState extends State<InjuryReport> {
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                   ),
                   hint: const Text('Select sport and event'),
                   items: sortedSport(sportList)
@@ -159,6 +177,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     label: Text('Round, Heat, or Training'),
                     hintText: 'Example: quater final / 1st heat',
@@ -184,6 +203,11 @@ class _InjuryReportState extends State<InjuryReport> {
                   lastDate: DateTime.now(),
                   firstDate: DateTime(1900),
                   initialDate: DateTime.now(),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
+                  ),
                   onChanged: (value) {
                     setState(() {
                       _datetime = DateTime.parse(value);
@@ -275,6 +299,7 @@ class _InjuryReportState extends State<InjuryReport> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
+                    dropdownMaxHeight: h / 2,
                     hint: const Text('Select head and trunk part'),
                     items: _bodyHeadPart
                         .map((key, value) {
@@ -341,6 +366,7 @@ class _InjuryReportState extends State<InjuryReport> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
+                    dropdownMaxHeight: h / 2,
                     hint: const Text('Select upper extremity part'),
                     items: _bodyUpperPart
                         .map((key, value) {
@@ -407,6 +433,7 @@ class _InjuryReportState extends State<InjuryReport> {
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                     ),
+                    dropdownMaxHeight: h / 2,
                     hint: const Text('Select lower extremity part'),
                     items: _bodyLowerPart
                         .map((key, value) {
@@ -717,11 +744,12 @@ class _InjuryReportState extends State<InjuryReport> {
                   items: _causeOfInjury
                       .map((key, value) {
                         return MapEntry(
-                            key,
-                            DropdownMenuItem(
-                              value: value,
-                              child: Text(value),
-                            ));
+                          key,
+                          DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          ),
+                        );
                       })
                       .values
                       .toList(),
@@ -795,6 +823,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   ),
                 ),
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),

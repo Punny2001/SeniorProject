@@ -63,6 +63,7 @@ class _IllnessReportState extends State<IllnessReport> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -71,6 +72,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     label: Text('Athlete No.'),
                   ),
                   controller: _athleteNo,
+                  onChanged: (value) {},
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Athlete No. is required';
@@ -152,11 +154,13 @@ class _IllnessReportState extends State<IllnessReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     label: Text('Diagnosis'),
                     hintText: 'Example: tonsillitis, cold',
                   ),
                   controller: _diagnosisController,
+                  onChanged: (value) {},
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Diagnosis is required';
@@ -345,7 +349,9 @@ class _IllnessReportState extends State<IllnessReport> {
                         ],
                         controller: _codeMainSymptom,
                         onChanged: (value) {
+                          print(int.parse(value));
                           checkOtherSymptom(value);
+                          chkRepeat();
                           setState(() {
                             _selectedMainSymptom =
                                 onChangedMethodSymptomKey(value);
@@ -355,23 +361,29 @@ class _IllnessReportState extends State<IllnessReport> {
                         validator: (value) {
                           if (mainSymptoms.isEmpty) {
                             if (value.isEmpty) {
-                              return 'Please fill in the code of main symptoms';
-                            }
-                            if (int.parse(value) == 0 ||
-                                int.parse(value) > 12) {
+                              if (valueAdded == false) {
+                                return 'Please add at least 1 main symptom';
+                              }
+                            } else if (value.isNotEmpty &&
+                                (int.parse(value) == 0 ||
+                                    int.parse(value) > 12)) {
                               return 'The input code is invalid';
-                            }
-                            if (valueAdded == false) {
-                              return 'Please add at least 1 main symptom';
                             } else {
                               return null;
                             }
                           }
-                          if (isRepeat) {
-                            return 'This symptom is already selected';
-                          } else {
-                            return null;
+                          if (mainSymptoms.isNotEmpty) {
+                            if (value.isEmpty || value == null) {
+                              return null;
+                            } else if (value.isNotEmpty &&
+                                (int.parse(value) == 0 ||
+                                    int.parse(value) > 12)) {
+                              return 'The input code is invalid';
+                            } else if (isRepeat) {
+                              return 'This symptom is already selected';
+                            }
                           }
+                          return null;
                         },
                       ),
                       const Padding(
@@ -398,6 +410,7 @@ class _IllnessReportState extends State<IllnessReport> {
                         onChanged: (value) {
                           checkOtherSymptom(value);
                           onChangedMethodSymptomValue(value);
+                          chkRepeat();
                           setState(() {
                             _selectedMainSymptom = value;
                             _mainSymptomSearch.clear();
@@ -433,9 +446,6 @@ class _IllnessReportState extends State<IllnessReport> {
                               ));
                         },
                         validator: (value) {
-                          if (value == null && mainSymptoms.isEmpty) {
-                            return 'Please select the main symptom(s)';
-                          }
                           if (mainSymptoms.isEmpty && valueAdded == false) {
                             return 'Please add at least 1 main symptom';
                           }
@@ -576,12 +586,12 @@ class _IllnessReportState extends State<IllnessReport> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
-                  hint: const Text('Select cause of illness'),
+                  hint: Text('Select cause of illness'),
                   items: _causeIllnessList
                       .map((key, value) {
                         return MapEntry(
                             key,
-                            DropdownMenuItem(
+                            DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
                             ));
@@ -597,6 +607,7 @@ class _IllnessReportState extends State<IllnessReport> {
                       _illnessCauseSearch.clear();
                     });
                   },
+                  dropdownMaxHeight: h / 3,
                   searchController: _illnessCauseSearch,
                   searchInnerWidget: Padding(
                     padding: const EdgeInsets.only(
@@ -658,6 +669,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   ),
                 ),
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -794,7 +806,7 @@ class _IllnessReportState extends State<IllnessReport> {
     '3': 'Exercise-induced',
     '4': 'Environmental',
     '5': 'Reaction to medication',
-    '6': 'Other',
+    '6': 'Other'
   };
 
   void addMainSymptomList() {
@@ -819,9 +831,22 @@ class _IllnessReportState extends State<IllnessReport> {
             selectedMainSymptomCode: _codeMainSymptom.text.toString(),
           ));
         } else {
-          isRepeat = true;
+          isRepeat = true; //ย้าย repear ไปเป็น function ใหม่
         }
       }
+    }
+  }
+
+  void chkRepeat() {
+    MainSymptomList newSymptom = MainSymptomList(
+        selectedMainSymptom: _selectedMainSymptom,
+        selectedMainSymptomCode: _codeMainSymptom.text);
+    if (mainSymptoms.every((element) =>
+        element.selectedMainSymptomCode ==
+        newSymptom.selectedMainSymptomCode)) {
+      isRepeat = true;
+    } else {
+      isRepeat = false;
     }
   }
 
