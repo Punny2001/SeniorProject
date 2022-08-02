@@ -866,10 +866,10 @@ class _IllnessReportState extends State<IllnessReport> {
     bool isValidate = _illnessKey.currentState.validate();
     bool addingValidator = _mainSymptomListKey.currentState.validate();
     if (isVisibleOtherAffectedSystem == true) {
-      _selectedAffected += _otherAffectedSystem.text.trim();
+      _selectedAffected += ', ${_otherAffectedSystem.text.trim()}';
     }
     if (isVisibleOtherIllnessCause == true) {
-      _selectedIllnessCause += _otherIllnessCause.text.trim();
+      _selectedIllnessCause += ', ${_otherIllnessCause.text.trim()}';
     }
 
     for (var item in mainSymptoms) {
@@ -899,7 +899,6 @@ class _IllnessReportState extends State<IllnessReport> {
           FirebaseFirestore.instance.collection('Report');
       DocumentReference docReference = collectionReference.doc();
       docReference.set(data).then((value) {
-        print('Insert data to Firestore successfully');
         showDialog<void>(
             context: context,
             builder: (BuildContext context) {
@@ -916,7 +915,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   ),
                 ],
               );
-            });
+            }).then((value) => print('Insert data to Firestore successfully'));
       });
     }
   }

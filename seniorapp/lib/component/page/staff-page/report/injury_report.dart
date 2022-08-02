@@ -1134,24 +1134,24 @@ class _InjuryReportState extends State<InjuryReport> {
             FirebaseFirestore.instance.collection('Report');
         DocumentReference docReference = collectionReference.doc();
         docReference.set(data).then((value) {
-          print('Insert data to Firestore successfully');
           showDialog<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Insert data successfully'),
-                  content: Text(
-                      'Your report ID ${docReference.id} is successfully inserted!!'),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () => Navigator.of(context)
-                          .pushNamedAndRemoveUntil(
-                              '/staffPageChoosing', (route) => false),
-                      child: const Text('OK'),
-                    ),
-                  ],
-                );
-              });
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Insert data successfully'),
+                      content: Text(
+                          'Your report ID ${docReference.id} is successfully inserted!!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context)
+                              .pushNamedAndRemoveUntil(
+                                  '/staffPageChoosing', (route) => false),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+                  })
+              .then((value) => print('Insert data to Firestore successfully'));
         });
       }
     }
