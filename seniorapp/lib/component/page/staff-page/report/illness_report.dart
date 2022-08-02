@@ -356,14 +356,13 @@ class _IllnessReportState extends State<IllnessReport> {
                                 onChangedMethodSymptomKey(value);
                           });
                           chkRepeat();
+                          _mainSymptomListKey.currentState.validate();
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (mainSymptoms.isEmpty) {
-                            if (value.isEmpty) {
-                              if (valueAdded == false) {
-                                return 'Please add at least 1 main symptom';
-                              }
+                            if (valueAdded == false) {
+                              return 'Please add at least 1 main symptom';
                             } else if (value.isNotEmpty &&
                                 (int.parse(value) == 0 ||
                                     int.parse(value) > 12)) {
@@ -415,6 +414,7 @@ class _IllnessReportState extends State<IllnessReport> {
                             _mainSymptomSearch.clear();
                           });
                           chkRepeat();
+                          _mainSymptomListKey.currentState.validate();
                         },
                         searchController: _mainSymptomSearch,
                         searchInnerWidget: Padding(
@@ -823,7 +823,7 @@ class _IllnessReportState extends State<IllnessReport> {
       if (int.parse(_codeMainSymptom.text) != 0 &&
           int.parse(_codeMainSymptom.text) <= 12 &&
           _selectedMainSymptom.isNotEmpty) {
-        if (mainSymptoms.any((element) =>
+        if (mainSymptoms.every((element) =>
             element.selectedMainSymptomCode !=
             newSymptom.selectedMainSymptomCode)) {
           mainSymptoms.add(MainSymptomList(
@@ -848,7 +848,6 @@ class _IllnessReportState extends State<IllnessReport> {
         chkSymptom.selectedMainSymptomCode == element.selectedMainSymptomCode ||
         chkSymptom.selectedMainSymptom == element.selectedMainSymptom)) {
       isRepeat = true;
-      _mainSymptomListKey.currentState.validate();
     } else {
       isRepeat = false;
     }
