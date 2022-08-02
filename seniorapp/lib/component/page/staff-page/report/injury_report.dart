@@ -1135,14 +1135,13 @@ class _InjuryReportState extends State<InjuryReport> {
         DocumentReference docReference = collectionReference.doc();
         docReference.set(data).then((value) {
           print('Insert data to Firestore successfully');
-          showDialog(
+          showDialog<void>(
               context: context,
-              barrierDismissible: false,
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text('Insert data successfully'),
                   content: Text(
-                      'Your report ID ${docReference.id} is successfullt inserted!!'),
+                      'Your report ID ${docReference.id} is successfully inserted!!'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.of(context)
