@@ -740,6 +740,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  dropdownMaxHeight: h / 2,
                   hint: const Text('Select cause of injury'),
                   items: _causeOfInjury
                       .map((key, value) {
@@ -1130,6 +1131,7 @@ class _InjuryReportState extends State<InjuryReport> {
 
         Map<String, dynamic> data = injuryReportModel.toMap();
 
+        // ต้องแก้
         final collectionReference =
             FirebaseFirestore.instance.collection('Report');
         DocumentReference docReference = collectionReference.doc();

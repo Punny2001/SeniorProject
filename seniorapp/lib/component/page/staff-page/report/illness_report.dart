@@ -256,6 +256,7 @@ class _IllnessReportState extends State<IllnessReport> {
                       .values
                       .toList(),
                   value: _selectedAffected,
+                  dropdownMaxHeight: h / 2,
                   onChanged: (value) {
                     checkOtherAffectedSystem(value);
                     onChangedMethodAffectedValue(value);
@@ -406,6 +407,7 @@ class _IllnessReportState extends State<IllnessReport> {
                             .values
                             .toList(),
                         value: _selectedMainSymptom,
+                        dropdownMaxHeight: h / 2,
                         onChanged: (value) {
                           checkOtherSymptom(value);
                           onChangedMethodSymptomValue(value);
