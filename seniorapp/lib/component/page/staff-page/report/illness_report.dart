@@ -306,6 +306,7 @@ class _IllnessReportState extends State<IllnessReport> {
                       .values
                       .toList(),
                   value: _selectedAffected,
+                  dropdownMaxHeight: h / 2,
                   onChanged: (value) {
                     checkOtherAffectedSystem(value);
                     onChangedMethodAffectedValue(value);
@@ -403,19 +404,18 @@ class _IllnessReportState extends State<IllnessReport> {
                         onChanged: (value) {
                           print(int.parse(value));
                           checkOtherSymptom(value);
-                          chkRepeat();
                           setState(() {
                             _selectedMainSymptom =
                                 onChangedMethodSymptomKey(value);
                           });
+                          chkRepeat();
+                          _mainSymptomListKey.currentState.validate();
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) {
                           if (mainSymptoms.isEmpty) {
-                            if (value.isEmpty) {
-                              if (valueAdded == false) {
-                                return 'Please add at least 1 main symptom';
-                              }
+                            if (valueAdded == false) {
+                              return 'Please add at least 1 main symptom';
                             } else if (value.isNotEmpty &&
                                 (int.parse(value) == 0 ||
                                     int.parse(value) > 12)) {
@@ -423,19 +423,19 @@ class _IllnessReportState extends State<IllnessReport> {
                             } else {
                               return null;
                             }
-                          }
-                          if (mainSymptoms.isNotEmpty) {
+                          } else if (mainSymptoms.isNotEmpty) {
                             if (value.isEmpty || value == null) {
                               return null;
                             } else if (value.isNotEmpty &&
                                 (int.parse(value) == 0 ||
                                     int.parse(value) > 12)) {
                               return 'The input code is invalid';
-                            } else if (isRepeat) {
+                            } else if (isRepeat == true) {
                               return 'This symptom is already selected';
                             }
+                          } else {
+                            return null;
                           }
-                          return null;
                         },
                       ),
                       const Padding(
@@ -461,14 +461,16 @@ class _IllnessReportState extends State<IllnessReport> {
                             .values
                             .toList(),
                         value: _selectedMainSymptom,
+                        dropdownMaxHeight: h / 2,
                         onChanged: (value) {
                           checkOtherSymptom(value);
                           onChangedMethodSymptomValue(value);
-                          chkRepeat();
                           setState(() {
                             _selectedMainSymptom = value;
                             _mainSymptomSearch.clear();
                           });
+                          chkRepeat();
+                          _mainSymptomListKey.currentState.validate();
                         },
                         searchController: _mainSymptomSearch,
                         searchInnerWidget: Padding(
@@ -503,7 +505,7 @@ class _IllnessReportState extends State<IllnessReport> {
                           if (mainSymptoms.isEmpty && valueAdded == false) {
                             return 'Please add at least 1 main symptom';
                           }
-                          if (isRepeat) {
+                          if (isRepeat == true && mainSymptoms.isNotEmpty) {
                             return 'This symptom is already selected';
                           } else {
                             return null;
@@ -901,20 +903,23 @@ class _IllnessReportState extends State<IllnessReport> {
             selectedMainSymptom: _selectedMainSymptom,
             selectedMainSymptomCode: _codeMainSymptom.text.toString(),
           ));
-        } else {
-          isRepeat = true; //ย้าย repear ไปเป็น function ใหม่
         }
       }
     }
   }
 
   void chkRepeat() {
-    MainSymptomList newSymptom = MainSymptomList(
+    print(isRepeat);
+    print(_selectedMainSymptom + ', ' + _codeMainSymptom.text);
+    if (isVisibleOtherMainSymptom == true) {
+      _selectedMainSymptom += ', ${_otherMainSymptom.text.trim()}';
+    }
+    MainSymptomList chkSymptom = MainSymptomList(
         selectedMainSymptom: _selectedMainSymptom,
         selectedMainSymptomCode: _codeMainSymptom.text);
-    if (mainSymptoms.every((element) =>
-        element.selectedMainSymptomCode ==
-        newSymptom.selectedMainSymptomCode)) {
+    if (mainSymptoms.any((element) =>
+        chkSymptom.selectedMainSymptomCode == element.selectedMainSymptomCode ||
+        chkSymptom.selectedMainSymptom == element.selectedMainSymptom)) {
       isRepeat = true;
     } else {
       isRepeat = false;
@@ -934,10 +939,10 @@ class _IllnessReportState extends State<IllnessReport> {
     bool isValidate = _illnessKey.currentState.validate();
     bool addingValidator = _mainSymptomListKey.currentState.validate();
     if (isVisibleOtherAffectedSystem == true) {
-      _selectedAffected += _otherAffectedSystem.text.trim();
+      _selectedAffected += ', ${_otherAffectedSystem.text.trim()}';
     }
     if (isVisibleOtherIllnessCause == true) {
-      _selectedIllnessCause += _otherIllnessCause.text.trim();
+      _selectedIllnessCause += ', ${_otherIllnessCause.text.trim()}';
     }
 
     for (var item in mainSymptoms) {
@@ -963,13 +968,28 @@ class _IllnessReportState extends State<IllnessReport> {
 
       Map<String, dynamic> data = illnessReportModel.toMap();
 
-      await FirebaseFirestore.instance
-          .collection('Report')
-          .doc()
-          .set(data)
-          .then((value) => print('Insert data to Firestore successfully'))
-          .then((value) => Navigator.of(context)
-              .pushNamedAndRemoveUntil('/staffPageChoosing', (route) => false));
+      final collectionReference =
+          FirebaseFirestore.instance.collection('Report');
+      DocumentReference docReference = collectionReference.doc();
+      docReference.set(data).then((value) {
+        showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Insert data successfully'),
+                content: Text(
+                    'Your report ID ${docReference.id} is successfully inserted!!'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context)
+                        .pushNamedAndRemoveUntil(
+                            '/staffPageChoosing', (route) => false),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            }).then((value) => print('Insert data to Firestore successfully'));
+      });
     }
   }
 }

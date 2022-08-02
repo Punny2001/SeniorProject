@@ -50,10 +50,10 @@ class _InjuryReportState extends State<InjuryReport> {
   int bodyType;
   String _selectedSideString;
 
-  void dispose() {
-    _sportSearch.dispose();
-    super.dispose();
-  }
+  // void dispose() {
+  //   _sportSearch.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -740,6 +740,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                   ),
+                  dropdownMaxHeight: h / 2,
                   hint: const Text('Select cause of injury'),
                   items: _causeOfInjury
                       .map((key, value) {
@@ -1130,13 +1131,30 @@ class _InjuryReportState extends State<InjuryReport> {
 
         Map<String, dynamic> data = injuryReportModel.toMap();
 
-        await FirebaseFirestore.instance
-            .collection('Report')
-            .doc()
-            .set(data)
-            .then((value) => print('Insert data to Firestore successfully'))
-            .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
-                '/staffPageChoosing', (route) => false));
+        // ต้องแก้
+        final collectionReference =
+            FirebaseFirestore.instance.collection('Report');
+        DocumentReference docReference = collectionReference.doc();
+        docReference.set(data).then((value) {
+          showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Insert data successfully'),
+                      content: Text(
+                          'Your report ID ${docReference.id} is successfully inserted!!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context)
+                              .pushNamedAndRemoveUntil(
+                                  '/staffPageChoosing', (route) => false),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    );
+                  })
+              .then((value) => print('Insert data to Firestore successfully'));
+        });
       }
     }
   }
