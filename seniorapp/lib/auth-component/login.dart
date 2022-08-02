@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seniorapp/auth-component/register.dart';
+import '../Frontend_login/page_title_bar.dart';
+import '../Frontend_login/components.dart';
 import 'package:seniorapp/component/language.dart';
 
 class Login extends StatefulWidget {
@@ -24,127 +26,136 @@ class _LoginState extends State<Login> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        actions: [LanguageSign()],
-      ),
-      body: Container(
-        margin: const EdgeInsets.all(30),
-        width: w,
-        height: h,
+      body: SizedBox(
+        width: 1440,
+        height: 2560,
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: _keyForm,
-            child: Column(
-              children: [
-                Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/mahidol_logo.png"),
-                    ),
-                  ),
-                  height: h / 3.5,
-                  width: w / 1.5,
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-
-                /// Email text insertion
-                TextFormField(
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'login_page.email_required'.tr();
-                    } else {
-                      return null;
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintText: 'login_page.email_hinttext'.tr(),
-                    prefixIcon: const Icon(Icons.email),
+          child: Stack(
+            children: [
+              Container(
+                width: 519,
+                height: 824/1.4,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/Background_login.PNG"),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                /// Password text insertion
-                TextFormField(
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'login_page.password_required'.tr();
-                    } else {
-                      return null;
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  controller: _passwordController,
-                  obscureText: _passwordhide,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    hintText: 'login_page.password_hinttext'.tr(),
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(_passwordhide
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _passwordhide = !_passwordhide;
-                        });
-                      },
-                    ),
+              ),
+              const PageTitleBar(imgUrl: "assets/images/mahidol_logo.png"),
+              Padding(
+                padding: const EdgeInsets.only(top: 390.0),
+                child: Container(
+                  margin: const EdgeInsets.all(42),
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Form(
+                        key: _keyForm,
+                        child: Column(
+                          children:  [
+                            //////Email container
+                            TextFormField(
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'login_page.email_required'.tr();
+                                } else {
+                                  return null;
+                                }
+                              },
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                  fillColor: const Color(0xFFCFD8DC),
+                                  filled: true,
+                                  prefixIcon: const Icon(
+                                    Icons.email,
+                                    color: Colors.black,
+                                  ),
+                                  hintText: 'login_page.email_hinttext'.tr(),
+                                  hintStyle: const TextStyle(fontFamily: 'OpenSans'),
+                                  border: InputBorder.none
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 15),
+                            ),
+                            //////Password container
+                            TextFormField(
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'login_page.password_required'.tr();
+                                } else {
+                                  return null;
+                                }
+                              },
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              controller: _passwordController,
+                              obscureText: _passwordhide,
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                fillColor: const Color(0xFFCFD8DC),
+                                filled: true,
+                                hintText: 'login_page.password_hinttext'.tr(),
+                                hintStyle: const TextStyle(fontFamily: 'OpenSans'),
+                                prefixIcon: const Icon(
+                                  Icons.lock,
+                                  color: Colors.black,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(_passwordhide
+                                      ? Icons.visibility
+                                      : Icons.visibility_off, color: Colors.black,),
+                                  onPressed: () {
+                                    setState(() {
+                                      _passwordhide = !_passwordhide;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                            Container(
+                              alignment: const Alignment(1.05, 0.2),
+                              child: TextButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pushNamed('/forgotPassword'),
+                                child: const Text(
+                                  'login_page.forgotpassword_textbutton',
+                                ).tr(),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => signin(),
+                              child: Text('login_page.login_button'.tr()),
+                              style: ElevatedButton.styleFrom(
+                                minimumSize: Size(w / 1.3, h / 15),
+                              ),
+                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     const Text('login_page.login_description').tr(),
+                            //     TextButton(
+                            //       onPressed: () {
+                            //         Navigator.of(context).pushNamed('/register');
+                            //       },
+                            //       child: Text(
+                            //         'login_page.signup_textbutton'.tr(),
+                            //         style: const TextStyle(
+                            //             decoration: TextDecoration.underline),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-
-                /// Forgot Password
-                Container(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed('/forgotPassword'),
-                    child: const Text(
-                      'login_page.forgotpassword_textbutton',
-                    ).tr(),
-                  ),
-                ),
-
-                /// Sign in button
-                ElevatedButton(
-                  onPressed: () => signin(),
-                  child: Text('login_page.login_button'.tr()),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(w / 1.1, h / 15),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     const Text('login_page.login_description').tr(),
-                //     TextButton(
-                //       onPressed: () {
-                //         Navigator.of(context).pushNamed('/register');
-                //       },
-                //       child: Text(
-                //         'login_page.signup_textbutton'.tr(),
-                //         style: const TextStyle(
-                //             decoration: TextDecoration.underline),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

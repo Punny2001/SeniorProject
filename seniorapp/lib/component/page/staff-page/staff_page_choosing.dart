@@ -34,25 +34,43 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       body: Container(
         child: _StaffPageList.elementAt(_selected_idx),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.paste),
-            label: 'Report',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selected_idx,
-        onTap: _onPageTap,
-        selectedItemColor: Colors.redAccent,
-      ),
+        bottomNavigationBar: Container(
+            decoration: const BoxDecoration(
+
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30), topLeft: Radius.circular(30)
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+              child: BottomNavigationBar(
+                backgroundColor: Colors.blue,
+                unselectedItemColor: Colors.black,
+                items: const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    label: 'Home',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.paste),
+                    label: 'Report',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.menu),
+                    label: 'Profile',
+                  ),
+                ],
+                currentIndex: _selected_idx,
+                onTap: _onPageTap,
+                selectedItemColor: Colors.redAccent,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+              ),
+            ),
+            ),
     );
   }
 }

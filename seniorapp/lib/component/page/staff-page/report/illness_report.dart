@@ -50,7 +50,12 @@ class _IllnessReportState extends State<IllnessReport> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+      ),
       body: Container(
         margin: const EdgeInsets.all(30),
         width: w,
@@ -62,6 +67,13 @@ class _IllnessReportState extends State<IllnessReport> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                const Text(
+                  'Athlete no.',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
@@ -70,6 +82,9 @@ class _IllnessReportState extends State<IllnessReport> {
                   ],
                   decoration: const InputDecoration(
                     label: Text('Athlete No.'),
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
+                      border: InputBorder.none
                   ),
                   controller: _athleteNo,
                   onChanged: (value) {},
@@ -97,7 +112,9 @@ class _IllnessReportState extends State<IllnessReport> {
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
+                      border: InputBorder.none
                   ),
                   hint: const Text('Select sport and event'),
                   items: sortedSport(sportList)
@@ -153,11 +170,24 @@ class _IllnessReportState extends State<IllnessReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                const Text(
+                  'Diagnosis',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
                     label: Text('Diagnosis'),
                     hintText: 'Example: tonsillitis, cold',
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
+                      border: InputBorder.none
                   ),
                   controller: _diagnosisController,
                   onChanged: (value) {},
@@ -172,10 +202,26 @@ class _IllnessReportState extends State<IllnessReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                const Text(
+                  'Occured Date',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
                 DateTimePicker(
                   dateLabelText: 'Occured Date',
                   dateMask: 'MMMM d, yyyy',
-                  icon: const Icon(Icons.event),
+                  decoration: const InputDecoration(
+                    labelText: 'Occured Date',
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
+                    suffixIcon: Icon(Icons.event),
+                  ),
                   type: DateTimePickerType.date,
                   lastDate: DateTime.now(),
                   firstDate: DateTime(1900),
@@ -206,7 +252,9 @@ class _IllnessReportState extends State<IllnessReport> {
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     labelText: 'Code',
                   ),
                   inputFormatters: <TextInputFormatter>[
@@ -241,7 +289,9 @@ class _IllnessReportState extends State<IllnessReport> {
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                   ),
                   hint: const Text('Select affected systems'),
                   items: _affectedList
@@ -341,7 +391,9 @@ class _IllnessReportState extends State<IllnessReport> {
                       TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: InputBorder.none,
+                          fillColor: Color.fromRGBO(217, 217, 217, 100),
+                          filled: true,
                           labelText: 'Code',
                         ),
                         inputFormatters: <TextInputFormatter>[
@@ -392,7 +444,9 @@ class _IllnessReportState extends State<IllnessReport> {
                       DropdownButtonFormField2<String>(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: InputBorder.none,
+                          fillColor: Color.fromRGBO(217, 217, 217, 100),
+                          filled: true,
                         ),
                         hint: const Text('Select main symptom(s)'),
                         items: _mainSymptomList
@@ -549,7 +603,9 @@ class _IllnessReportState extends State<IllnessReport> {
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     labelText: 'Code',
                   ),
                   inputFormatters: <TextInputFormatter>[
@@ -584,7 +640,9 @@ class _IllnessReportState extends State<IllnessReport> {
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                   ),
                   hint: Text('Select cause of illness'),
                   items: _causeIllnessList
@@ -668,6 +726,16 @@ class _IllnessReportState extends State<IllnessReport> {
                     },
                   ),
                 ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                const Text(
+                  'Absence in days',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
@@ -675,6 +743,9 @@ class _IllnessReportState extends State<IllnessReport> {
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
                   decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     label: Text('Absence in days'),
                     hintText: 'Example: 10 days',
                     suffixText: 'days',

@@ -26,18 +26,57 @@ class _StaffHomePageState extends State<StaffHomePage> {
           child: Column(
             children: [
               Center(
-                child: ElevatedButton(
-                  child: const Text('Injury Report'),
-                  onPressed: () =>
-                      Navigator.of(context).pushNamed('/injuryReport'),
+                child: GestureDetector(
+                  child: Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Image.network(
+                      'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
+                      fit: BoxFit.fill,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    elevation: 5,
+                    margin: const EdgeInsets.all(10),
+                  ),
+                  onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
                 ),
               ),
+              const Padding(
+                padding: EdgeInsets.all(4),
+              ),
+              const Text(
+                'Injury report',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(10),
+              ),
               Center(
-                child: ElevatedButton(
-                  child: const Text('Illness Report'),
-                  onPressed: () =>
-                      Navigator.of(context).pushNamed('/illnessReport'),
+                child: GestureDetector(
+                  child: Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Image.network(
+                      'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
+                      fit: BoxFit.fill,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    elevation: 5,
+                    margin: const EdgeInsets.all(10),
+                  ),
+                  onTap: () => Navigator.of(context).pushNamed('/illnessReport'),
                 ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(4),
+              ),
+              const Text(
+                'Illness report',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
             ],
           ),
