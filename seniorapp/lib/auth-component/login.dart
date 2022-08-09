@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
             children: [
               Container(
                 width: 519,
-                height: 824/1.4,
+                height: 824 / 1.4,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/images/Background_login.PNG"),
@@ -54,7 +54,7 @@ class _LoginState extends State<Login> {
                       Form(
                         key: _keyForm,
                         child: Column(
-                          children:  [
+                          children: [
                             //////Email container
                             TextFormField(
                               validator: (value) {
@@ -64,7 +64,8 @@ class _LoginState extends State<Login> {
                                   return null;
                                 }
                               },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               controller: _emailController,
                               decoration: InputDecoration(
                                   fillColor: const Color(0xFFCFD8DC),
@@ -74,9 +75,9 @@ class _LoginState extends State<Login> {
                                     color: Colors.black,
                                   ),
                                   hintText: 'login_page.email_hinttext'.tr(),
-                                  hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-                                  border: InputBorder.none
-                              ),
+                                  hintStyle:
+                                      const TextStyle(fontFamily: 'OpenSans'),
+                                  border: InputBorder.none),
                             ),
                             const Padding(
                               padding: EdgeInsets.only(bottom: 15),
@@ -90,7 +91,8 @@ class _LoginState extends State<Login> {
                                   return null;
                                 }
                               },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
                               controller: _passwordController,
                               obscureText: _passwordhide,
                               decoration: InputDecoration(
@@ -98,15 +100,19 @@ class _LoginState extends State<Login> {
                                 fillColor: const Color(0xFFCFD8DC),
                                 filled: true,
                                 hintText: 'login_page.password_hinttext'.tr(),
-                                hintStyle: const TextStyle(fontFamily: 'OpenSans'),
+                                hintStyle:
+                                    const TextStyle(fontFamily: 'OpenSans'),
                                 prefixIcon: const Icon(
                                   Icons.lock,
                                   color: Colors.black,
                                 ),
                                 suffixIcon: IconButton(
-                                  icon: Icon(_passwordhide
-                                      ? Icons.visibility
-                                      : Icons.visibility_off, color: Colors.black,),
+                                  icon: Icon(
+                                    _passwordhide
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                    color: Colors.black,
+                                  ),
                                   onPressed: () {
                                     setState(() {
                                       _passwordhide = !_passwordhide;
@@ -118,8 +124,8 @@ class _LoginState extends State<Login> {
                             Container(
                               alignment: const Alignment(1.05, 0.2),
                               child: TextButton(
-                                onPressed: () =>
-                                    Navigator.of(context).pushNamed('/forgotPassword'),
+                                onPressed: () => Navigator.of(context)
+                                    .pushNamed('/forgotPassword'),
                                 child: const Text(
                                   'login_page.forgotpassword_textbutton',
                                 ).tr(),
@@ -132,22 +138,6 @@ class _LoginState extends State<Login> {
                                 minimumSize: Size(w / 1.3, h / 15),
                               ),
                             ),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     const Text('login_page.login_description').tr(),
-                            //     TextButton(
-                            //       onPressed: () {
-                            //         Navigator.of(context).pushNamed('/register');
-                            //       },
-                            //       child: Text(
-                            //         'login_page.signup_textbutton'.tr(),
-                            //         style: const TextStyle(
-                            //             decoration: TextDecoration.underline),
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                           ],
                         ),
                       ),
