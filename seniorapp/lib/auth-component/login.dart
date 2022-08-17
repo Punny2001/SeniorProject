@@ -27,14 +27,14 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       body: SizedBox(
-        width: 1440,
-        height: 2560,
+        width: w,
+        height: h,
         child: SingleChildScrollView(
           child: Stack(
             children: [
               Container(
-                width: 519,
-                height: 824 / 1.4,
+                width: w,
+                height: h / 1.4,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/images/Background_login.PNG"),
@@ -167,7 +167,7 @@ class _LoginState extends State<Login> {
         )
             .then((value) async {
           String uid = value.user.uid;
-          String username = FirebaseAuth.instance.currentUser.displayName;
+          checkRegister();
           if (isRegister == false) {
             Navigator.of(context)
                 .pushNamedAndRemoveUntil('/register', (route) => false);

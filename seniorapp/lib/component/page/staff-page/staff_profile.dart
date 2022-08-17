@@ -22,18 +22,18 @@ class _StaffProfileState extends State<StaffProfile> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
-              onPressed: () {
-                FirebaseAuth.instance.currentUser.delete().then((value) => {
-                      FirebaseAuth.instance.signOut(),
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                        '/login',
-                        (route) => false,
-                      ),
-                    });
-              },
-              child: const Text('Delete account'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     FirebaseAuth.instance.currentUser.delete().then((value) => {
+            //           FirebaseAuth.instance.signOut(),
+            //           Navigator.of(context).pushNamedAndRemoveUntil(
+            //             '/login',
+            //             (route) => false,
+            //           ),
+            //         });
+            //   },
+            //   child: const Text('Delete account'),
+            // ),
             Padding(padding: EdgeInsets.all(10)),
             ElevatedButton(
               child: const Text('Log Out'),
