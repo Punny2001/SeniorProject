@@ -71,6 +71,16 @@ class _MentalQuiz extends State<MentalQuiz> {
         {'text': 'not good at all', 'score': 3}
       ]
     },
+    {
+      'questionText':
+          'How many percent of overall confidence? (answer in percentage from 0-100%)',
+      'answerText': [
+        {'text': 'Very good', 'score': 0},
+        {'text': 'Good', 'score': 1},
+        {'text': 'Not very good', 'score': 2},
+        {'text': 'not good at all', 'score': 3}
+      ]
+    }
   ];
 
   @override
