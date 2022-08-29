@@ -547,6 +547,7 @@ class _RegisterState extends State<Register> {
       bool validate = _keyForm.currentState.validate();
       String uid = FirebaseAuth.instance.currentUser.uid;
       print(uid);
+      isAthleteCheck();
       if (validate) {
         if (passwordConfirm() && isAthlete == true) {
           await FirebaseAuth.instance.currentUser
@@ -577,7 +578,7 @@ class _RegisterState extends State<Register> {
                 );
           }).then(
             (value) => Navigator.of(context).pushNamedAndRemoveUntil(
-                '/staffPageChoosing', (route) => false),
+                '/athletePageChoosing', (route) => false),
           );
         } else if (passwordConfirm() && isAthlete == false) {
           await FirebaseAuth.instance.currentUser
@@ -628,16 +629,6 @@ class _RegisterState extends State<Register> {
       print(error);
     }
   }
-
-  List<String> sportList = [
-    'Badminton',
-    'Basketball',
-    'Boxing',
-    'Football',
-    'Judo',
-    'Rugby',
-    'VolleyBall'
-  ];
 
   List<String> staffList = [
     'Coach',

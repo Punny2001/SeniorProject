@@ -152,10 +152,6 @@ class _LoginState extends State<Login> {
     );
   }
 
-  var emailVerifiedSnack = const SnackBar(
-    content: Text('This email has not verrify yet'),
-  );
-
   Future signin() async {
     bool validate = _keyForm.currentState.validate();
     try {

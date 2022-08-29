@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:seniorapp/component/page/quiz-page/mental_quiz.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 
 class AthleteHomePage extends StatefulWidget {
