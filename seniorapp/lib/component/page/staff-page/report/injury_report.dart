@@ -84,7 +84,7 @@ class _InjuryReportState extends State<InjuryReport> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Padding(padding: EdgeInsets.all(10)),
+                const Padding(padding: EdgeInsets.all(10)),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
@@ -106,7 +106,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   },
                 ),
                 const Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
                 ),
                 const Text(
                   'Sport and Event',
@@ -174,11 +174,21 @@ class _InjuryReportState extends State<InjuryReport> {
                   },
                 ),
                 const Padding(
+                  padding: EdgeInsets.all(20),
+                ),
+                const Text(
+                  'Round, Heat, or Training',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Padding(
                   padding: EdgeInsets.all(10),
                 ),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     label: Text('Round, Heat, or Training'),
                     hintText: 'Example: quater final / 1st heat',
                   ),
@@ -190,6 +200,13 @@ class _InjuryReportState extends State<InjuryReport> {
                       return null;
                     }
                   },
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                ),
+                const Text(
+                  'Date & Time',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const Padding(
                   padding: EdgeInsets.all(10),
@@ -234,7 +251,9 @@ class _InjuryReportState extends State<InjuryReport> {
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                   ),
                   hint: const Text('Select body type'),
                   items: _bodyType
@@ -297,7 +316,9 @@ class _InjuryReportState extends State<InjuryReport> {
                   child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     ),
                     dropdownMaxHeight: h / 2,
                     hint: const Text('Select head and trunk part'),
@@ -364,7 +385,9 @@ class _InjuryReportState extends State<InjuryReport> {
                   child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     ),
                     dropdownMaxHeight: h / 2,
                     hint: const Text('Select upper extremity part'),
@@ -431,7 +454,9 @@ class _InjuryReportState extends State<InjuryReport> {
                   child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     ),
                     dropdownMaxHeight: h / 2,
                     hint: const Text('Select lower extremity part'),
@@ -556,7 +581,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   },
                 ),
                 const Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
                 ),
                 const Text(
                   'Type of Injury',
@@ -568,7 +593,9 @@ class _InjuryReportState extends State<InjuryReport> {
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     labelText: 'Code',
                   ),
                   inputFormatters: <TextInputFormatter>[
@@ -604,7 +631,9 @@ class _InjuryReportState extends State<InjuryReport> {
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                   ),
                   hint: const Text('Select type of injury'),
                   items: _injuryType
@@ -671,7 +700,9 @@ class _InjuryReportState extends State<InjuryReport> {
                   visible: isVisibleOtherInjuryType,
                   child: TextFormField(
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                       labelText: 'Your type of injury',
                     ),
                     controller: _otherInjuryType,
@@ -688,7 +719,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
                 ),
                 const Text(
                   'Cause of injury',
@@ -700,7 +731,9 @@ class _InjuryReportState extends State<InjuryReport> {
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     labelText: 'Code',
                   ),
                   inputFormatters: <TextInputFormatter>[
@@ -738,7 +771,9 @@ class _InjuryReportState extends State<InjuryReport> {
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                   ),
                   dropdownMaxHeight: h / 2,
                   hint: const Text('Select cause of injury'),
@@ -807,7 +842,9 @@ class _InjuryReportState extends State<InjuryReport> {
                   visible: isVisibleOtherInjuryCause,
                   child: TextFormField(
                     decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                       labelText: 'Your cause of injury',
                     ),
                     controller: _otherInjuryCause,
@@ -823,6 +860,16 @@ class _InjuryReportState extends State<InjuryReport> {
                     },
                   ),
                 ),
+                const Padding(
+                  padding: EdgeInsets.all(20),
+                ),
+                const Text(
+                  'Absence in days',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
@@ -830,6 +877,9 @@ class _InjuryReportState extends State<InjuryReport> {
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
                   decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
                     label: Text('Absence in days'),
                     hintText: 'Example: 10 days',
                     suffixText: 'days',
