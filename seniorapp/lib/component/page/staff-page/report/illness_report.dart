@@ -81,11 +81,10 @@ class _IllnessReportState extends State<IllnessReport> {
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
                   decoration: const InputDecoration(
-                    label: Text('Athlete No.'),
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                      border: InputBorder.none
-                  ),
+                      label: Text('Athlete No.'),
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
+                      border: InputBorder.none),
                   controller: _athleteNo,
                   onChanged: (value) {},
                   validator: (value) {
@@ -114,8 +113,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   decoration: const InputDecoration(
                       fillColor: Color.fromRGBO(217, 217, 217, 100),
                       filled: true,
-                      border: InputBorder.none
-                  ),
+                      border: InputBorder.none),
                   hint: const Text('Select sport and event'),
                   items: sortedSport(sportList)
                       .map((sport) => DropdownMenuItem(
@@ -183,12 +181,11 @@ class _IllnessReportState extends State<IllnessReport> {
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: const InputDecoration(
-                    label: Text('Diagnosis'),
-                    hintText: 'Example: tonsillitis, cold',
+                      label: Text('Diagnosis'),
+                      hintText: 'Example: tonsillitis, cold',
                       fillColor: Color.fromRGBO(217, 217, 217, 100),
                       filled: true,
-                      border: InputBorder.none
-                  ),
+                      border: InputBorder.none),
                   controller: _diagnosisController,
                   onChanged: (value) {},
                   validator: (value) {
@@ -604,8 +601,8 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple)),
                     fillColor: Color.fromRGBO(217, 217, 217, 100),
                     filled: true,
                     labelText: 'Code',
@@ -628,7 +625,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Please fill in the code of cause of injury';
+                      return 'Please fill in the code of cause of illness';
                     } else if (int.parse(value) < 1 || int.parse(value) > 6) {
                       return 'The input code is invalid';
                     } else {

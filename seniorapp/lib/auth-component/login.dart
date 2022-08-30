@@ -26,6 +26,7 @@ class _LoginState extends State<Login> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SizedBox(
         width: w,
         height: h,
@@ -70,6 +71,20 @@ class _LoginState extends State<Login> {
                               decoration: InputDecoration(
                                   fillColor: const Color(0xFFCFD8DC),
                                   filled: true,
+                                  errorBorder: const OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.redAccent, width: 1),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(1),
+                                    ),
+                                  ),
+                                  focusedErrorBorder: const OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.redAccent, width: 1),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(1),
+                                    ),
+                                  ),
                                   prefixIcon: const Icon(
                                     Icons.email,
                                     color: Colors.black,

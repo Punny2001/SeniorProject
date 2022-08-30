@@ -13,8 +13,6 @@ class _MentalQuiz extends State<MentalQuiz> {
   var _questionIndex = 0;
   var _totalScore = 0;
 
-  var final_answer = Map<String, String>();
-
   void _resetQuiz() {
     setState(() {
       _questionIndex = 0;
@@ -24,6 +22,7 @@ class _MentalQuiz extends State<MentalQuiz> {
 
   void _answerQuestion(int score) {
     _totalScore += score;
+
     setState(() {
       _questionIndex += 1;
     });
@@ -72,6 +71,16 @@ class _MentalQuiz extends State<MentalQuiz> {
         {'text': 'not good at all', 'score': 3}
       ]
     },
+    {
+      'questionText':
+          'How many percent of overall confidence? (answer in percentage from 0-100%)',
+      'answerText': [
+        {'text': 'Very good', 'score': 0},
+        {'text': 'Good', 'score': 1},
+        {'text': 'Not very good', 'score': 2},
+        {'text': 'not good at all', 'score': 3}
+      ]
+    }
   ];
 
   @override
