@@ -69,30 +69,36 @@ class _LoginState extends State<Login> {
                                   AutovalidateMode.onUserInteraction,
                               controller: _emailController,
                               decoration: InputDecoration(
-                                  fillColor: const Color(0xFFCFD8DC),
-                                  filled: true,
-                                  errorBorder: const OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.redAccent, width: 1),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(1),
-                                    ),
+                                fillColor: const Color(0xFFCFD8DC),
+                                filled: true,
+                                prefixIcon: const Icon(
+                                  Icons.email,
+                                  color: Colors.black,
+                                ),
+                                hintText: 'login_page.email_hinttext'.tr(),
+                                hintStyle:
+                                    const TextStyle(fontFamily: 'OpenSans'),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.red,
                                   ),
-                                  focusedErrorBorder: const OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.redAccent, width: 1),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(1),
-                                    ),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.red,
                                   ),
-                                  prefixIcon: const Icon(
-                                    Icons.email,
-                                    color: Colors.black,
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFCFD8DC),
                                   ),
-                                  hintText: 'login_page.email_hinttext'.tr(),
-                                  hintStyle:
-                                      const TextStyle(fontFamily: 'OpenSans'),
-                                  border: InputBorder.none),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFFCFD8DC),
+                                  ),
+                                ),
+                              ),
                             ),
                             const Padding(
                               padding: EdgeInsets.only(bottom: 15),
