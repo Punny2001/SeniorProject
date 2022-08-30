@@ -12,11 +12,6 @@ class StaffHomePage extends StatefulWidget {
 
 class _StaffHomePageState extends State<StaffHomePage> {
   @override
-  final List<String> images = [
-    'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
-    'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
-
-  ];
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
@@ -31,6 +26,18 @@ class _StaffHomePageState extends State<StaffHomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              // PageView.builder(
+              //     itemCount: images.length,
+              //     physics: const ClampingScrollPhysics(),
+              //     itemBuilder: (context,index){
+              //       return Container(
+              //         margin: const EdgeInsets.symmetric(horizontal: 16.0),
+              //         decoration: BoxDecoration(
+              //           borderRadius: BorderRadius.circular(20.0),
+              //           image:
+              //         ),
+              //       );
+              //     }),
               CarouselSlider(
                 options:
                 CarouselOptions(
@@ -47,36 +54,92 @@ class _StaffHomePageState extends State<StaffHomePage> {
                     child: Card(
                       semanticContainer: true,
                       clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: Image.network(
-                        images[1],
-                        fit: BoxFit.fill,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage('https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        child:
+                        const Center(
+                          child: Text(
+                              "Coming soon",
+                              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
+                          ),
+                        ),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       elevation: 5,
                       margin: const EdgeInsets.all(10),
+
                     ),
 
-                    onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
+                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
                   ),
                   GestureDetector(
                     child: Card(
                       semanticContainer: true,
                       clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: Image.network(
-                        images[2],
-                        fit: BoxFit.fill,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage('https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        child:
+                        const Center(
+                          child: Text(
+                            "Coming soon",
+                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
+                          ),
+                        ),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       elevation: 5,
                       margin: const EdgeInsets.all(10),
-                    ),
-                    onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
-                  ),
 
+                    ),
+
+                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
+                  ),
+                  GestureDetector(
+                    child: Card(
+                      semanticContainer: true,
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: Container(
+                        width: double.infinity,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage('https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        child:
+                        const Center(
+                          child: Text(
+                            "Coming soon",
+                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
+                          ),
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      elevation: 5,
+                      margin: const EdgeInsets.all(10),
+
+                    ),
+
+                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
+                  ),
                 ],
               ),
               const Padding(
@@ -140,5 +203,9 @@ class _StaffHomePageState extends State<StaffHomePage> {
         ),
       ),
     );
+  }
+
+  Widget carouselView(int index) {
+    return Container();
   }
 }
