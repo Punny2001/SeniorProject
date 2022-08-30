@@ -50,6 +50,7 @@ dependencies:
   argon_buttons_flutter: ^1.1.0
   otp_timer_button: ^1.1.0
   dropdown_button2: ^1.6.2
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:

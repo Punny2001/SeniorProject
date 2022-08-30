@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/auth-component/register.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class StaffHomePage extends StatefulWidget {
   const StaffHomePage({Key key}) : super(key: key);
@@ -11,6 +12,11 @@ class StaffHomePage extends StatefulWidget {
 
 class _StaffHomePageState extends State<StaffHomePage> {
   @override
+  final List<String> images = [
+    'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
+    'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
+
+  ];
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
@@ -25,6 +31,57 @@ class _StaffHomePageState extends State<StaffHomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              CarouselSlider(
+                options:
+                CarouselOptions(
+                  height: 190,
+                  aspectRatio: 16/9,
+                  viewportFraction: 0.8,
+                  enableInfiniteScroll: false,
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                ),
+                items: [
+                  GestureDetector(
+                    child: Card(
+                      semanticContainer: true,
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: Image.network(
+                        images[1],
+                        fit: BoxFit.fill,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      elevation: 5,
+                      margin: const EdgeInsets.all(10),
+                    ),
+
+                    onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
+                  ),
+                  GestureDetector(
+                    child: Card(
+                      semanticContainer: true,
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      child: Image.network(
+                        images[2],
+                        fit: BoxFit.fill,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
+                      elevation: 5,
+                      margin: const EdgeInsets.all(10),
+                    ),
+                    onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
+                  ),
+
+                ],
+              ),
+              const Padding(
+                padding: EdgeInsets.all(10),
+              ),
               Center(
                 child: GestureDetector(
                   child: Card(
