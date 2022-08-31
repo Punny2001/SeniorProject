@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seniorapp/auth-component/register.dart';
-import '../Frontend_login/page_title_bar.dart';
-import '../Frontend_login/components.dart';
+import 'package:seniorapp/decoration/frontend_login/textfield_login.dart';
+import 'package:seniorapp/decoration/frontend_login/page_title_bar.dart';
+import 'package:seniorapp/decoration/frontend_login/components.dart';
 import 'package:seniorapp/component/language.dart';
 
 class Login extends StatefulWidget {
@@ -58,26 +59,35 @@ class _LoginState extends State<Login> {
                           children: [
                             //////Email container
                             TextFormField(
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'login_page.email_required'.tr();
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                controller: _emailController,
+                                decoration: textdecorate_login(Icons.email,
+                                    'login_page.email_hinttext'.tr())),
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 15),
+                            ),
+                            //////Password container
+                            TextFormField(
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'login_page.email_required'.tr();
+                                  return 'login_page.password_required'.tr();
                                 } else {
                                   return null;
                                 }
                               },
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
-                              controller: _emailController,
+                              controller: _passwordController,
+                              obscureText: _passwordhide,
                               decoration: InputDecoration(
-                                fillColor: const Color(0xFFCFD8DC),
-                                filled: true,
-                                prefixIcon: const Icon(
-                                  Icons.email,
-                                  color: Colors.black,
-                                ),
-                                hintText: 'login_page.email_hinttext'.tr(),
-                                hintStyle:
-                                    const TextStyle(fontFamily: 'OpenSans'),
                                 focusedErrorBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.red,
@@ -98,26 +108,6 @@ class _LoginState extends State<Login> {
                                     color: Color(0xFFCFD8DC),
                                   ),
                                 ),
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            //////Password container
-                            TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'login_page.password_required'.tr();
-                                } else {
-                                  return null;
-                                }
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              controller: _passwordController,
-                              obscureText: _passwordhide,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
                                 fillColor: const Color(0xFFCFD8DC),
                                 filled: true,
                                 hintText: 'login_page.password_hinttext'.tr(),

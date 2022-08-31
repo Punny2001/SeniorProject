@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
+import 'package:seniorapp/decoration/frontend_login/textfield_login.dart';
+import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class IllnessReport extends StatefulWidget {
   const IllnessReport({Key key}) : super(key: key);
@@ -80,11 +82,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  decoration: const InputDecoration(
-                      label: Text('Athlete No.'),
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                      border: InputBorder.none),
+                  decoration: textdecorate('Athlete No.'),
                   controller: _athleteNo,
                   onChanged: (value) {},
                   validator: (value) {
@@ -110,11 +108,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                      border: InputBorder.none),
-                  hint: const Text('Select sport and event'),
+                  decoration: textdecorate('Select sport and event'),
                   items: sortedSport(sportList)
                       .map((sport) => DropdownMenuItem(
                             child: Text(sport),
@@ -180,12 +174,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                      label: Text('Diagnosis'),
-                      hintText: 'Example: tonsillitis, cold',
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                      border: InputBorder.none),
+                  decoration: textdecorate('Diagnosis'),
                   controller: _diagnosisController,
                   onChanged: (value) {},
                   validator: (value) {
@@ -248,12 +237,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    labelText: 'Code',
-                  ),
+                  decoration: textdecorate('Code'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
@@ -285,12 +269,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                  ),
-                  hint: const Text('Select affected systems'),
+                  decoration: textdecorate('Select affected systems'),
                   items: _affectedList
                       .map((key, value) {
                         return MapEntry(
@@ -355,10 +334,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 Visibility(
                   visible: isVisibleOtherAffectedSystem,
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Your affected system',
-                    ),
+                    decoration: textdecorate('Your affected system'),
                     controller: _otherAffectedSystem,
                     autovalidateMode: isVisibleOtherAffectedSystem
                         ? AutovalidateMode.onUserInteraction
@@ -388,12 +364,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     children: [
                       TextFormField(
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          fillColor: Color.fromRGBO(217, 217, 217, 100),
-                          filled: true,
-                          labelText: 'Code',
-                        ),
+                        decoration: textdecorate('Code'),
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                         ],
@@ -440,12 +411,7 @@ class _IllnessReportState extends State<IllnessReport> {
                       ),
                       DropdownButtonFormField2<String>(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          fillColor: Color.fromRGBO(217, 217, 217, 100),
-                          filled: true,
-                        ),
-                        hint: const Text('Select main symptom(s)'),
+                        decoration: textdecorate('Select main symptom(s)'),
                         items: _mainSymptomList
                             .map((key, value) {
                               return MapEntry(
@@ -517,10 +483,7 @@ class _IllnessReportState extends State<IllnessReport> {
                               padding: EdgeInsets.all(10),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Your main symptom(s)',
-                              ),
+                              decoration: textdecorate('Your main symptom(s)'),
                               controller: _otherMainSymptom,
                               autovalidateMode: isVisibleOtherMainSymptom
                                   ? AutovalidateMode.onUserInteraction
@@ -601,12 +564,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.purple)),
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    labelText: 'Code',
-                  ),
+                  decoration: textdecorate('Code'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
@@ -638,12 +596,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                  ),
-                  hint: Text('Select cause of illness'),
+                  decoration: textdecorate('Select cause of illness'),
                   items: _causeIllnessList
                       .map((key, value) {
                         return MapEntry(
@@ -708,10 +661,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 Visibility(
                   visible: isVisibleOtherIllnessCause,
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Your cause of illness',
-                    ),
+                    decoration: textdecorate('Your cause of illness'),
                     controller: _otherIllnessCause,
                     autovalidateMode: isVisibleOtherIllnessCause
                         ? AutovalidateMode.onUserInteraction
@@ -741,14 +691,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    label: Text('Absence in days'),
-                    hintText: 'Example: 10 days',
-                    suffixText: 'days',
-                  ),
+                  decoration: textdecorate('Absence in days'),
                   controller: _absenceDayController,
                   validator: (value) {
                     if (value.isEmpty) {
