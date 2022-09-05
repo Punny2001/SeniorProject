@@ -101,7 +101,7 @@ class _MentalQuiz extends State<MentalQuiz> {
                 questionIndex: _questionIndex,
                 questions: _questions,
               )
-            : Result(_totalScore, _resetQuiz),
+            : null
       ),
     );
   }

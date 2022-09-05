@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/result-data/mental_result_data.dart';
 import './quiz.dart';
 import './result.dart';
 
@@ -12,8 +15,9 @@ class MentalQuiz extends StatefulWidget {
 class _MentalQuiz extends State<MentalQuiz> {
   var _questionIndex = 0;
   var _totalScore = 0;
-
-  var final_answer = Map<String, String>();
+  Map<String, int> answer_list = {
+    "Q1" : 0
+  };
 
   void _resetQuiz() {
     setState(() {
@@ -24,6 +28,7 @@ class _MentalQuiz extends State<MentalQuiz> {
 
   void _answerQuestion(int score) {
     _totalScore += score;
+    answer_list["Q${_questionIndex+1}"] = score;
     setState(() {
       _questionIndex += 1;
     });
@@ -35,6 +40,7 @@ class _MentalQuiz extends State<MentalQuiz> {
 
   final _questions = const [
     {
+      'questionNo' : 'Q1',
       'questionText': 'Insomnia after going to bed for morethan 30 minutes.',
       'answerText': [
         {'text': 'Never had symptoms', 'score': 0},
@@ -44,6 +50,7 @@ class _MentalQuiz extends State<MentalQuiz> {
       ]
     },
     {
+      'questionNo' : 'Q2',
       'questionText':
           'Do you wake up at midnight or wake up late than normally?',
       'answerText': [
@@ -54,6 +61,7 @@ class _MentalQuiz extends State<MentalQuiz> {
       ]
     },
     {
+      'questionNo' : 'Q3',
       'questionText': 'How often do you use sleeping pills?',
       'answerText': [
         {'text': 'Never used', 'score': 0},
@@ -63,6 +71,7 @@ class _MentalQuiz extends State<MentalQuiz> {
       ]
     },
     {
+      'questionNo' : 'Q4',
       'questionText':
           'In the past 1 month, how good was your overall sleeping?',
       'answerText': [
@@ -78,22 +87,54 @@ class _MentalQuiz extends State<MentalQuiz> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Mental Questionare'),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.arrow_back),
+          appBar: AppBar(
+            title: Text('Mental Questionare'),
+            centerTitle: true,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(Icons.arrow_back),
+            ),
           ),
-        ),
-        body: _questionIndex < _questions.length
-            ? Quiz(
-                answerQuestion: _answerQuestion,
-                questionIndex: _questionIndex,
-                questions: _questions,
-              )
-            : Result(_totalScore, _resetQuiz),
-      ),
+          body: _questionIndex < _questions.length
+              ? Quiz(
+                  answerQuestion: _answerQuestion,
+                  questionIndex: _questionIndex,
+                  questions: _questions,
+                )
+              : Result(_totalScore, _resetQuiz, saveMentalResult)),
     );
+  }
+
+  Future<void> saveMentalResult() async {
+    var uid = FirebaseAuth.instance.currentUser.uid;
+
+    MentalResultData mentalResultModel = MentalResultData(
+      athlete_no: uid,
+      DoDate: DateTime.now(),
+      Questionaire_type: 'Mental',
+      TotalPoint: _totalScore,
+      answer_list: answer_list,
+    );
+    Map<String, dynamic> data = mentalResultModel.toMap();
+
+    final collectionReference = FirebaseFirestore.instance.collection('Result');
+    DocumentReference docReference = collectionReference.doc();
+    docReference.set(data).then((value) {
+      showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Insert data successfully'),
+              content: Text(
+                  'Your result ID ${docReference.id} is successfully inserted!!'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          }).then((value) => print('Insert data to Firestore successfully'));
+    });
   }
 }

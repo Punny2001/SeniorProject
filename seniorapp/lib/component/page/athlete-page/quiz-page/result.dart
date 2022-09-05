@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class Result extends StatelessWidget {
   final int resultScore;
   final Function resetHandler;
+  final VoidCallback insertHandler;
 
-  Result(this.resultScore, this.resetHandler);
+  Result(this.resultScore, this.resetHandler, this.insertHandler);
 
   String get resultPhrase {
     var resultText = 'You did it!';
@@ -28,6 +29,14 @@ class Result extends StatelessWidget {
             resultPhrase,
             style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
+          ),
+          FlatButton(
+            child: Text(
+              'Save questionaire',
+              style: TextStyle(decoration: TextDecoration.underline),
+            ),
+            textColor: Color.fromARGB(255, 18, 92, 153),
+            onPressed: insertHandler,
           ),
           FlatButton(
             child: Text(
