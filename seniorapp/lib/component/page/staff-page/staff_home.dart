@@ -39,10 +39,9 @@ class _StaffHomePageState extends State<StaffHomePage> {
               //       );
               //     }),
               CarouselSlider(
-                options:
-                CarouselOptions(
+                options: CarouselOptions(
                   height: 190,
-                  aspectRatio: 16/9,
+                  aspectRatio: 16 / 9,
                   viewportFraction: 0.8,
                   enableInfiniteScroll: false,
                   autoPlayAnimationDuration: const Duration(milliseconds: 800),
@@ -58,15 +57,18 @@ class _StaffHomePageState extends State<StaffHomePage> {
                         width: double.infinity,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage('https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+                            image: NetworkImage(
+                                'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
-                        child:
-                        const Center(
+                        child: const Center(
                           child: Text(
-                              "Coming soon",
-                              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
+                            "Coming soon",
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
                           ),
                         ),
                       ),
@@ -75,7 +77,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       ),
                       elevation: 5,
                       margin: const EdgeInsets.all(10),
-
                     ),
 
                     // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
@@ -88,15 +89,18 @@ class _StaffHomePageState extends State<StaffHomePage> {
                         width: double.infinity,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage('https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+                            image: NetworkImage(
+                                'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
-                        child:
-                        const Center(
+                        child: const Center(
                           child: Text(
                             "Coming soon",
-                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
                           ),
                         ),
                       ),
@@ -105,7 +109,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       ),
                       elevation: 5,
                       margin: const EdgeInsets.all(10),
-
                     ),
 
                     // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
@@ -118,15 +121,18 @@ class _StaffHomePageState extends State<StaffHomePage> {
                         width: double.infinity,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage('https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+                            image: NetworkImage(
+                                'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
                             fit: BoxFit.fill,
                           ),
                         ),
-                        child:
-                        const Center(
+                        child: const Center(
                           child: Text(
                             "Coming soon",
-                            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.red),
+                            style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
                           ),
                         ),
                       ),
@@ -135,7 +141,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       ),
                       elevation: 5,
                       margin: const EdgeInsets.all(10),
-
                     ),
 
                     // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
@@ -188,7 +193,8 @@ class _StaffHomePageState extends State<StaffHomePage> {
                     elevation: 5,
                     margin: const EdgeInsets.all(10),
                   ),
-                  onTap: () => Navigator.of(context).pushNamed('/illnessReport'),
+                  onTap: () =>
+                      Navigator.of(context).pushNamed('/illnessReport'),
                 ),
               ),
               const Padding(

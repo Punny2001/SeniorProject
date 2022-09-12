@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_profile.dart';
-import 'package:seniorapp/component/page/staff-page/staff_report_page/staff_report.dart';
+import 'package:seniorapp/component/page/staff-page/staff_history.dart';
 
 class StaffPageChoosing extends StatefulWidget {
   const StaffPageChoosing({Key key}) : super(key: key);
@@ -56,7 +56,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.paste),
-                    label: 'Report',
+                    label: 'History',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.menu),

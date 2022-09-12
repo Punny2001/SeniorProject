@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:seniorapp/component/format_date.dart';
 import 'package:seniorapp/component/page/staff-page/report/illness_report.dart';
-import 'package:seniorapp/component/page/staff-page/staff_report_page/staff_report.dart';
+import 'package:seniorapp/component/page/staff-page/staff_history.dart';
 
 class ReportInjuryDescription extends StatefulWidget {
   const ReportInjuryDescription({

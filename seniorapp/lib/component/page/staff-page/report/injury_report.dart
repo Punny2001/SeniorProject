@@ -317,8 +317,8 @@ class _InjuryReportState extends State<InjuryReport> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
                     ),
                     dropdownMaxHeight: h / 2,
                     hint: const Text('Select head and trunk part'),
@@ -386,8 +386,8 @@ class _InjuryReportState extends State<InjuryReport> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
                     ),
                     dropdownMaxHeight: h / 2,
                     hint: const Text('Select upper extremity part'),
@@ -455,8 +455,8 @@ class _InjuryReportState extends State<InjuryReport> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
                     ),
                     dropdownMaxHeight: h / 2,
                     hint: const Text('Select lower extremity part'),
@@ -701,8 +701,8 @@ class _InjuryReportState extends State<InjuryReport> {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
                       labelText: 'Your type of injury',
                     ),
                     controller: _otherInjuryType,
@@ -843,8 +843,8 @@ class _InjuryReportState extends State<InjuryReport> {
                   child: TextFormField(
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
                       labelText: 'Your cause of injury',
                     ),
                     controller: _otherInjuryCause,
@@ -1172,7 +1172,7 @@ class _InjuryReportState extends State<InjuryReport> {
         Map<String, dynamic> data = injuryReportModel.toMap();
 
         final collectionReference =
-            FirebaseFirestore.instance.collection('Report');
+            FirebaseFirestore.instance.collection('InjuryReport');
         DocumentReference docReference = collectionReference.doc();
         docReference.set(data).then((value) {
           showDialog<void>(
@@ -1214,7 +1214,7 @@ class _InjuryReportState extends State<InjuryReport> {
         Map<String, dynamic> data = injuryReportModel.toMap();
 
         final collectionReference =
-            FirebaseFirestore.instance.collection('Report');
+            FirebaseFirestore.instance.collection('InjuryReport');
         DocumentReference docReference = collectionReference.doc();
         docReference.set(data).then((value) {
           showDialog<void>(
