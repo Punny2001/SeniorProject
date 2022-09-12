@@ -909,7 +909,7 @@ class _IllnessReportState extends State<IllnessReport> {
       Map<String, dynamic> data = illnessReportModel.toMap();
 
       final collectionReference =
-          FirebaseFirestore.instance.collection('Report');
+          FirebaseFirestore.instance.collection('IllnessReport');
       DocumentReference docReference = collectionReference.doc();
       docReference.set(data).then((value) {
         showDialog<void>(

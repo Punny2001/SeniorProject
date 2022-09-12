@@ -174,32 +174,21 @@ class _LoginState extends State<Login> {
         )
             .then((value) async {
           String uid = value.user.uid;
-          checkRegister();
-          if (isRegister == false) {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/register', (route) => false);
-          } else {
-            await FirebaseFirestore.instance
-                .collection('User')
-                .doc(uid)
-                .get()
-                .then((snapshot) {
-              Map<String, dynamic> data = snapshot.data();
-              print(data['department']);
-              switch (data['department']) {
-                case 'Athlete':
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/athletePageChoosing', (route) => false);
-                  break;
-                case 'Staff':
-                  Navigator.of(context).pushNamedAndRemoveUntil(
+          final db = FirebaseFirestore.instance;
+            DocumentReference athleteRef = db.collection('Athlete').doc(uid);
+            DocumentReference staffRef = db.collection('Staff').doc(uid);
+            DocumentSnapshot athleteDoc = await athleteRef.get();
+            DocumentSnapshot staffDoc = await staffRef.get();
+            if (athleteDoc.exists) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/athletePageChoosing', (route) => false); 
+            } else if (staffDoc.exists) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
                       '/staffPageChoosing', (route) => false);
-                  break;
-                default:
-                  break;
-              }
-            });
-          }
+            } else {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/register', (route) => false);
+            }
         });
       }
     } on FirebaseAuthException catch (error) {

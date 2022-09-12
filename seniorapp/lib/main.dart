@@ -15,31 +15,26 @@ Future<void> main() async {
     FirebaseAuth.instance.authStateChanges().listen((event) async {
       if (event != null) {
         String uid = event.uid;
-        await FirebaseFirestore.instance
-            .collection('User')
-            .doc(uid)
-            .get()
-            .then((snapshot) {
-          Map<String, dynamic> data = snapshot.data();
-          print(data['department']);
-          switch (data['department']) {
-            case 'Athlete':
-              initPage = '/athletePageChoosing';
-              break;
-            case 'Staff':
-              initPage = '/staffPageChoosing';
-              break;
-            default:
-          }
-          runApp(
-            EasyLocalization(
-              supportedLocales: const [Locale('en', 'US'), Locale('th', 'TH')],
-              path: 'assets/lang',
-              fallbackLocale: const Locale('th', 'TH'),
-              child: const MyApp(),
-            ),
-          );
-        });
+        final db = FirebaseFirestore.instance;
+        DocumentReference athleteRef = db.collection('Athlete').doc(uid);
+        DocumentReference staffRef = db.collection('Staff').doc(uid);
+        DocumentSnapshot athleteDoc = await athleteRef.get();
+        DocumentSnapshot staffDoc = await staffRef.get();
+        if (athleteDoc.exists) {
+          initPage = '/athletePageChoosing';
+        } else if (staffDoc.exists) {
+          initPage = '/staffPageChoosing';
+        } else {
+          initPage = '/register';
+        }
+        runApp(
+          EasyLocalization(
+            supportedLocales: const [Locale('en', 'US'), Locale('th', 'TH')],
+            path: 'assets/lang',
+            fallbackLocale: const Locale('th', 'TH'),
+            child: const MyApp(),
+          ),
+        );
       } else {
         initPage = '/login';
         runApp(

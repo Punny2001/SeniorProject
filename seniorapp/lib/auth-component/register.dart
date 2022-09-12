@@ -23,11 +23,14 @@ class _RegisterState extends State<Register> {
   final _lastnameController = TextEditingController();
   String _selectedSport;
   String _selectedStaff;
+  int _selectedDept;
   bool _passwordhide = true;
   bool _confirmPasswordhide = true;
   DateTime _date;
   final _keyForm = GlobalKey<FormState>();
   bool isAthlete = false;
+  bool isStaff = false;
+  String _selectedDepartment;
   double _selectedWeight = 60.0;
   double _selectedHeight = 170.0;
 
@@ -48,324 +51,401 @@ class _RegisterState extends State<Register> {
         elevation: 0,
         actions: [LanguageSign()],
       ),
-      body: SizedBox(
-        width: w,
-        height: h,
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Stack(
-            children: [
-              Container(
-                width: 650,
-                height: 286/1.2,
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Stack(
+          children: [
+            Container(
+              width: 650,
+              height: 286 / 1.2,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/Background_register.PNG"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 150.0),
+              child: Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 1.485,
                 decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/Background_register.PNG"),
-                    fit: BoxFit.cover,
+                  color: Colors.lightBlue,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 150.0),
-                child: Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height * 1.485,
-                  decoration: const BoxDecoration(
-                    color: Colors.lightBlue,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
-                    ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.only(top:300.0),
-                  ),
+                child: const Padding(
+                  padding: EdgeInsets.only(top: 300.0),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 170.0),
-                child: Container(
-                  margin: const EdgeInsets.all(42),
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.lightBlue,
-                  ),
-                  child: Column(
-                    children: [
-                      Form(
-                        key: _keyForm,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:  [
-                            /// Password registration
-                            Text(
-                              'register_page.password'.tr(),
-                              style: textCustom(),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'register_page.password_required'.tr();
-                                }
-                                if (value.length < 8) {
-                                  return 'register_page.password_length_error'.tr();
-                                } else {
-                                  return null;
-                                }
-                              },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              controller: _passwordController,
-                              obscureText: _passwordhide,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                fillColor: const Color(0xFFCFD8DC),
-                                filled: true,
-                                hintText: 'register_page.password_description'.tr(),
-                                hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-                                prefixIcon: const Icon(
-                                  Icons.lock,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 170.0),
+              child: Container(
+                margin: const EdgeInsets.all(42),
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.lightBlue,
+                ),
+                child: Column(
+                  children: [
+                    Form(
+                      key: _keyForm,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /// Password registration
+                          Text(
+                            'register_page.password'.tr(),
+                            style: textCustom(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'register_page.password_required'.tr();
+                              }
+                              if (value.length < 8) {
+                                return 'register_page.password_length_error'
+                                    .tr();
+                              } else {
+                                return null;
+                              }
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _passwordController,
+                            obscureText: _passwordhide,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              fillColor: const Color(0xFFCFD8DC),
+                              filled: true,
+                              hintText:
+                                  'register_page.password_description'.tr(),
+                              hintStyle:
+                                  const TextStyle(fontFamily: 'OpenSans'),
+                              prefixIcon: const Icon(
+                                Icons.lock,
+                                color: Colors.black,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _passwordhide
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                   color: Colors.black,
                                 ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(_passwordhide
-                                      ? Icons.visibility
-                                      : Icons.visibility_off, color: Colors.black,),
-                                  onPressed: () {
-                                    setState(() {
-                                      _passwordhide = !_passwordhide;
-                                    });
-                                  },
-                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordhide = !_passwordhide;
+                                  });
+                                },
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            Text(
-                              'register_page.confirm_password'.tr(),
-                              style: textCustom(),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'register_page.confirmpassword_required'.tr();
-                                } else if (!passwordConfirm()) {
-                                  return 'register_page.confirmpassword_notmatch'.tr();
-                                } else {
-                                  return null;
-                                }
-                              },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              controller: _confirmPasswordController,
-                              obscureText: _confirmPasswordhide,
-                              decoration: InputDecoration(
-                                fillColor: const Color(0xFFCFD8DC),
-                                filled: true,
-                                border: InputBorder.none,
-                                hintText: 'register_page.confirmpassword_description'.tr(),
-                                hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-                                prefixIcon: const Icon(
-                                  Icons.lock,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          Text(
+                            'register_page.confirm_password'.tr(),
+                            style: textCustom(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'register_page.confirmpassword_required'
+                                    .tr();
+                              } else if (!passwordConfirm()) {
+                                return 'register_page.confirmpassword_notmatch'
+                                    .tr();
+                              } else {
+                                return null;
+                              }
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _confirmPasswordController,
+                            obscureText: _confirmPasswordhide,
+                            decoration: InputDecoration(
+                              fillColor: const Color(0xFFCFD8DC),
+                              filled: true,
+                              border: InputBorder.none,
+                              hintText:
+                                  'register_page.confirmpassword_description'
+                                      .tr(),
+                              hintStyle:
+                                  const TextStyle(fontFamily: 'OpenSans'),
+                              prefixIcon: const Icon(
+                                Icons.lock,
+                                color: Colors.black,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _confirmPasswordhide
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
                                   color: Colors.black,
                                 ),
-                                suffixIcon: IconButton(
-                                  icon: Icon(_confirmPasswordhide
-                                      ? Icons.visibility
-                                      : Icons.visibility_off, color: Colors.black,),
-                                  onPressed: () {
-                                    setState(() {
-                                      _confirmPasswordhide = !_confirmPasswordhide;
-                                    });
-                                  },
-                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _confirmPasswordhide =
+                                        !_confirmPasswordhide;
+                                  });
+                                },
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            Text(
-                              'register_page.username'.tr(),
-                              style: textCustom(),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            //////Email container
-                            TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'register_page.username_required'.tr();
-                                } else {
-                                  return null;
-                                }
-                              },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              controller: _usernameController,
-                              decoration: InputDecoration(
-                                  fillColor: const Color(0xFFCFD8DC),
-                                  filled: true,
-                                  prefixIcon: const Icon(
-                                    Icons.account_circle,
-                                    color: Colors.black,
-                                  ),
-                                  hintText: 'register_page.username_description'.tr(),
-                                  hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-                                  border: InputBorder.none
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            Text(
-                              'register_page.firstname'.tr(),
-                              style: textCustom(),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'register_page.firstname_required'.tr();
-                                } else {
-                                  return null;
-                                }
-                              },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              controller: _firstnameController,
-                              decoration: InputDecoration(
-                                  fillColor: const Color(0xFFCFD8DC),
-                                  filled: true,
-                                  prefixIcon: const Icon(
-                                    Icons.perm_identity,
-                                    color: Colors.black,
-                                  ),
-                                  hintText: 'register_page.firstname_description'.tr(),
-                                  hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-                                  border: InputBorder.none
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            ////// Lastname textbox
-                            Text(
-                              'register_page.lastname'.tr(),
-                              style: textCustom(),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            TextFormField(
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'register_page.lastname_required'.tr();
-                                } else {
-                                  return null;
-                                }
-                              },
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              controller: _lastnameController,
-                              decoration: InputDecoration(
-                                  fillColor: const Color(0xFFCFD8DC),
-                                  filled: true,
-                                  prefixIcon: const Icon(
-                                    Icons.perm_identity,
-                                    color: Colors.black,
-                                  ),
-                                  hintText: 'register_page.lastname_description'.tr(),
-                                  hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-                                  border: InputBorder.none
-                              ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-
-                            /// BirthDate Picking
-                            Text(
-                              'register_page.birthdate'.tr(),
-                              style: textCustom(),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
-                            DateTimePicker(
-                              type: DateTimePickerType.date,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime.now(),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          Text(
+                            'register_page.username'.tr(),
+                            style: textCustom(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          //////Email container
+                          TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'register_page.username_required'.tr();
+                              } else {
+                                return null;
+                              }
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _usernameController,
+                            decoration: InputDecoration(
                                 fillColor: const Color(0xFFCFD8DC),
                                 filled: true,
-                                hintText: 'register_page.birthdate_description'.tr(),
-                                suffixIcon: const Icon(Icons.calendar_month),
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  _date = DateTime.parse(value);
-                                });
-                              },
-                              dateMask: 'MMMM d, yyyy',
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'register_page.birthdate_required'.tr();
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                            // TextFieldContainer(
-                            //   child: TextFormField(
-                            //     controller: dateCtl,
-                            //     decoration: InputDecoration(
-                            //         border: InputBorder.none,
-                            //         fillColor: const Color(0xFFCFD8DC),
-                            //         filled: true,
-                            //         hintText: 'register_page.birthdate_description'.tr(),
-                            //         suffixIcon: const Icon(Icons.calendar_month),
-                            //       ),
-                            //       onChanged: (value) {
-                            //         setState(() {
-                            //           _date = DateTime.parse(value);
-                            //         });
-                            //       },
-                            //       validator: (value) {
-                            //         if (value.isEmpty) {
-                            //           return 'register_page.birthdate_required'.tr();
-                            //         } else {
-                            //           return null;
-                            //         }
-                            //       },
-                            //   onTap: () async{
-                            //     DateTime date = DateTime(1900);
-                            //     FocusScope.of(context).requestFocus(FocusNode());
-                            //
-                            //     date = await showDatePicker(
-                            //         context: context,
-                            //         initialDate:DateTime.now(),
-                            //         firstDate:DateTime(1900),
-                            //         lastDate: DateTime(2100));
-                            //
-                            //     dateCtl.text = date.toString();
-                            //     },
-                            //   ),
-                            // ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 15),
-                            ),
+                                prefixIcon: const Icon(
+                                  Icons.account_circle,
+                                  color: Colors.black,
+                                ),
+                                hintText:
+                                    'register_page.username_description'.tr(),
+                                hintStyle:
+                                    const TextStyle(fontFamily: 'OpenSans'),
+                                border: InputBorder.none),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          Text(
+                            'register_page.firstname'.tr(),
+                            style: textCustom(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'register_page.firstname_required'
+                                    .tr();
+                              } else {
+                                return null;
+                              }
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _firstnameController,
+                            decoration: InputDecoration(
+                                fillColor: const Color(0xFFCFD8DC),
+                                filled: true,
+                                prefixIcon: const Icon(
+                                  Icons.perm_identity,
+                                  color: Colors.black,
+                                ),
+                                hintText:
+                                    'register_page.firstname_description'
+                                        .tr(),
+                                hintStyle:
+                                    const TextStyle(fontFamily: 'OpenSans'),
+                                border: InputBorder.none),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          ////// Lastname textbox
+                          Text(
+                            'register_page.lastname'.tr(),
+                            style: textCustom(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'register_page.lastname_required'.tr();
+                              } else {
+                                return null;
+                              }
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _lastnameController,
+                            decoration: InputDecoration(
+                                fillColor: const Color(0xFFCFD8DC),
+                                filled: true,
+                                prefixIcon: const Icon(
+                                  Icons.perm_identity,
+                                  color: Colors.black,
+                                ),
+                                hintText:
+                                    'register_page.lastname_description'.tr(),
+                                hintStyle:
+                                    const TextStyle(fontFamily: 'OpenSans'),
+                                border: InputBorder.none),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
 
-                            isAthlete
-                                ?
-                            //Athlete
-                            Column(
+                          /// BirthDate Picking
+                          Text(
+                            'register_page.birthdate'.tr(),
+                            style: textCustom(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          DateTimePicker(
+                            type: DateTimePickerType.date,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              fillColor: const Color(0xFFCFD8DC),
+                              filled: true,
+                              hintText:
+                                  'register_page.birthdate_description'.tr(),
+                              suffixIcon: const Icon(Icons.calendar_month),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                _date = DateTime.parse(value);
+                              });
+                            },
+                            dateMask: 'MMMM d, yyyy',
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'register_page.birthdate_required'
+                                    .tr();
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                          // TextFieldContainer(
+                          //   child: TextFormField(
+                          //     controller: dateCtl,
+                          //     decoration: InputDecoration(
+                          //         border: InputBorder.none,
+                          //         fillColor: const Color(0xFFCFD8DC),
+                          //         filled: true,
+                          //         hintText: 'register_page.birthdate_description'.tr(),
+                          //         suffixIcon: const Icon(Icons.calendar_month),
+                          //       ),
+                          //       onChanged: (value) {
+                          //         setState(() {
+                          //           _date = DateTime.parse(value);
+                          //         });
+                          //       },
+                          //       validator: (value) {
+                          //         if (value.isEmpty) {
+                          //           return 'register_page.birthdate_required'.tr();
+                          //         } else {
+                          //           return null;
+                          //         }
+                          //       },
+                          //   onTap: () async{
+                          //     DateTime date = DateTime(1900);
+                          //     FocusScope.of(context).requestFocus(FocusNode());
+                          //
+                          //     date = await showDatePicker(
+                          //         context: context,
+                          //         initialDate:DateTime.now(),
+                          //         firstDate:DateTime(1900),
+                          //         lastDate: DateTime(2100));
+                          //
+                          //     dateCtl.text = date.toString();
+                          //     },
+                          //   ),
+                          // ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+
+                          FormField(
+                            builder: (FormFieldState<bool> state) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  state.hasError
+                                      ? Text(
+                                          state.errorText,
+                                          style: const TextStyle(
+                                              color: Colors.red),
+                                        )
+                                      : Container(),
+                                  RadioListTile(
+                                    activeColor: Colors.white,
+                                    value: 1,
+                                    title: const Text('Athlete'),
+                                    groupValue: _selectedDept,
+                                    onChanged: (value) {
+                                      state.setValue(true);
+                                      setState(() {
+                                        _selectedDept = value;
+                                        isAthlete = true;
+                                        isStaff = false;
+                                      });
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    value: 2,
+                                    title: const Text('Staff'),
+                                    groupValue: _selectedDept,
+                                    onChanged: (value) {
+                                      state.setValue(true);
+                                      setState(() {
+                                        _selectedDept = value;
+                                        isAthlete = false;
+                                        isStaff = true;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value != true) {
+                                return 'Please select the side of body part';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+
+                          Visibility(
+                            visible: isAthlete,
+                            child: //Athlete
+                                Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -377,7 +457,7 @@ class _RegisterState extends State<Register> {
                                 ),
                                 DropdownButtonFormField2<String>(
                                   autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
+                                      AutovalidateMode.onUserInteraction,
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     fillColor: Color(0xFFCFD8DC),
@@ -386,9 +466,9 @@ class _RegisterState extends State<Register> {
                                   hint: const Text('Select type of sport'),
                                   items: sportList
                                       .map((sport) => DropdownMenuItem(
-                                    child: Text(sport),
-                                    value: sport,
-                                  ))
+                                            child: Text(sport),
+                                            value: sport,
+                                          ))
                                       .toList(),
                                   value: _selectedSport,
                                   onChanged: (value) {
@@ -446,11 +526,14 @@ class _RegisterState extends State<Register> {
                                   padding: EdgeInsets.only(bottom: 15),
                                 ),
                               ],
-                            )
-                                :
+                            ),
+                          ),
 
-                            /// Staff
-                            Column(
+                          Visibility(
+                            visible: isStaff,
+                            child:
+                                /// Staff
+                                Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
@@ -462,7 +545,7 @@ class _RegisterState extends State<Register> {
                                 ),
                                 DropdownButtonFormField2<String>(
                                   autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
+                                      AutovalidateMode.onUserInteraction,
                                   decoration: const InputDecoration(
                                     border: InputBorder.none,
                                     fillColor: Color(0xFFCFD8DC),
@@ -471,9 +554,9 @@ class _RegisterState extends State<Register> {
                                   hint: const Text('Select type of staff'),
                                   items: staffList
                                       .map((staff) => DropdownMenuItem(
-                                    child: Text(staff),
-                                    value: staff,
-                                  ))
+                                            child: Text(staff),
+                                            value: staff,
+                                          ))
                                       .toList(),
                                   value: _selectedStaff,
                                   onChanged: (value) {
@@ -491,28 +574,27 @@ class _RegisterState extends State<Register> {
                                 ),
                               ],
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 17),
-                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 17),
+                          ),
 
-                            /// Sign Up button
-                            ElevatedButton(
-                              onPressed: () => signup(),
-                              child: Text('register_page.signup_button'.tr()),
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(w / 1.1, h / 15),
-                              ),
+                          /// Sign Up button
+                          ElevatedButton(
+                            onPressed: () => signup(),
+                            child: Text('register_page.signup_button'.tr()),
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(w / 1.1, h / 15),
                             ),
-
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -532,14 +614,12 @@ class _RegisterState extends State<Register> {
   }
 
   Future isAthleteCheck() async {
-    String uid = FirebaseAuth.instance.currentUser.uid;
-    FirebaseFirestore.instance.collection('User').doc(uid).get().then((value) {
-      if (value['department'] == 'Athlete') {
-        isAthlete = true;
-      } else {
-        isAthlete = false;
-      }
-    });
+    if(_selectedDept == 1) {
+      _selectedDepartment = 'Athlete';
+    }
+    else {
+      _selectedDepartment = 'Staff';
+    }
   }
 
   Future signup() async {
@@ -549,7 +629,7 @@ class _RegisterState extends State<Register> {
       print(uid);
       isAthleteCheck();
       if (validate) {
-        if (passwordConfirm() && isAthlete == true) {
+        if (passwordConfirm() && _selectedDepartment == 'Athlete') {
           await FirebaseAuth.instance.currentUser
               .updatePassword(_passwordController.text.trim());
           await FirebaseAuth.instance.currentUser
@@ -570,7 +650,7 @@ class _RegisterState extends State<Register> {
             Map<String, dynamic> data = athleteModel.toMap();
 
             await FirebaseFirestore.instance
-                .collection('User')
+                .collection('Athlete')
                 .doc(uid)
                 .set(data)
                 .then(
@@ -580,7 +660,7 @@ class _RegisterState extends State<Register> {
             (value) => Navigator.of(context).pushNamedAndRemoveUntil(
                 '/athletePageChoosing', (route) => false),
           );
-        } else if (passwordConfirm() && isAthlete == false) {
+        } else if (passwordConfirm() && _selectedDepartment == 'Staff') {
           await FirebaseAuth.instance.currentUser
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
@@ -595,7 +675,7 @@ class _RegisterState extends State<Register> {
             Map<String, dynamic> data = staffModel.toMap();
 
             await FirebaseFirestore.instance
-                .collection('User')
+                .collection('Staff')
                 .doc(uid)
                 .set(data)
                 .then(
