@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
+import 'package:seniorapp/decoration/padding.dart';
+import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class InjuryReport extends StatefulWidget {
   const InjuryReport({Key key}) : super(key: key);
@@ -91,11 +93,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  decoration: const InputDecoration(
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                      labelText: 'Athlete No.',
-                      border: InputBorder.none),
+                  decoration: textdecorate('Athlete No.'),
                   controller: _athleteNo,
                   validator: (value) {
                     if (value.isEmpty) {
@@ -117,12 +115,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                  ),
-                  hint: const Text('Select sport and event'),
+                  decoration: textdecorate('Select sport and event'),
                   items: sortedSport(sportList)
                       .map((sport) => DropdownMenuItem(
                             child: Text(sport),
@@ -185,13 +178,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    label: Text('Round, Heat, or Training'),
-                    hintText: 'Example: quater final / 1st heat',
-                  ),
+                  decoration: textdecorate('Round, Heat, or Training'),
                   controller: _rhtController,
                   validator: (value) {
                     if (value.isEmpty) {
@@ -214,17 +201,13 @@ class _InjuryReportState extends State<InjuryReport> {
                 DateTimePicker(
                   dateLabelText: 'Date',
                   timeLabelText: 'Time',
-                  dateMask: 'MMMM d, yyyy',
+                  dateMask: 'MMMM d, yyyy hh:mm',
                   icon: const Icon(Icons.event),
-                  type: DateTimePickerType.dateTimeSeparate,
+                  type: DateTimePickerType.dateTime,
                   lastDate: DateTime.now(),
                   firstDate: DateTime(1900),
                   initialDate: DateTime.now(),
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                  ),
+                  decoration: textdecorate('Occured date & time'),
                   onChanged: (value) {
                     setState(() {
                       _datetime = DateTime.parse(value);
@@ -250,12 +233,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                  ),
-                  hint: const Text('Select body type'),
+                  decoration: textdecorate('Select body type'),
                   items: _bodyType
                       .map((bodyType) => DropdownMenuItem(
                             child: Text(bodyType),
@@ -315,13 +293,8 @@ class _InjuryReportState extends State<InjuryReport> {
                   visible: isHeadTrunkPart,
                   child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                    ),
+                    decoration: textdecorate('Select head and trunk part'),
                     dropdownMaxHeight: h / 2,
-                    hint: const Text('Select head and trunk part'),
                     items: _bodyHeadPart
                         .map((key, value) {
                           return MapEntry(
@@ -384,13 +357,8 @@ class _InjuryReportState extends State<InjuryReport> {
                   visible: isUpperPart,
                   child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                    ),
+                    decoration: textdecorate('Select upper extremity part'),
                     dropdownMaxHeight: h / 2,
-                    hint: const Text('Select upper extremity part'),
                     items: _bodyUpperPart
                         .map((key, value) {
                           return MapEntry(
@@ -453,13 +421,8 @@ class _InjuryReportState extends State<InjuryReport> {
                   visible: isLowerPart,
                   child: DropdownButtonFormField2<String>(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                    ),
+                    decoration: textdecorate('Select lower extremity part'),
                     dropdownMaxHeight: h / 2,
-                    hint: const Text('Select lower extremity part'),
                     items: _bodyLowerPart
                         .map((key, value) {
                           return MapEntry(
@@ -580,9 +543,7 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                ),
+                PaddingDecorate(10),
                 const Text(
                   'Type of Injury',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -592,12 +553,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    labelText: 'Code',
-                  ),
+                  decoration: textdecorate('Code'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
@@ -630,12 +586,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                  ),
-                  hint: const Text('Select type of injury'),
+                  decoration: textdecorate('Select type of injury'),
                   items: _injuryType
                       .map((key, value) {
                         return MapEntry(
@@ -699,12 +650,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 Visibility(
                   visible: isVisibleOtherInjuryType,
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                      labelText: 'Your type of injury',
-                    ),
+                    decoration: textdecorate('Your type of injury'),
                     controller: _otherInjuryType,
                     autovalidateMode: isVisibleOtherInjuryType
                         ? AutovalidateMode.onUserInteraction
@@ -730,12 +676,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    labelText: 'Code',
-                  ),
+                  decoration: textdecorate('Code'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
@@ -770,13 +711,8 @@ class _InjuryReportState extends State<InjuryReport> {
                 ),
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                  ),
+                  decoration: textdecorate('Select cause of injury'),
                   dropdownMaxHeight: h / 2,
-                  hint: const Text('Select cause of injury'),
                   items: _causeOfInjury
                       .map((key, value) {
                         return MapEntry(
@@ -841,12 +777,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 Visibility(
                   visible: isVisibleOtherInjuryCause,
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      fillColor: Color.fromRGBO(217, 217, 217, 100),
-                      filled: true,
-                      labelText: 'Your cause of injury',
-                    ),
+                    decoration: textdecorate('Your cause of injury'),
                     controller: _otherInjuryCause,
                     autovalidateMode: isVisibleOtherInjuryCause
                         ? AutovalidateMode.onUserInteraction
@@ -876,14 +807,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    label: Text('Absence in days'),
-                    hintText: 'Example: 10 days',
-                    suffixText: 'days',
-                  ),
+                  decoration: textdecorateinday('Absence in days'),
                   controller: _absenceDayController,
                   validator: (value) {
                     if (value.isEmpty) {
@@ -1112,20 +1036,20 @@ class _InjuryReportState extends State<InjuryReport> {
     if (isValidate) {
       if (bodyType == 1) {
         InjuryReportData injuryReportModel = InjuryReportData(
-          staff_uid: uid,
-          athlete_no: _athleteNo.text.trim(),
-          report_type: 'Injury',
-          sport_event: _selectedSport,
-          round_heat_training: _rhtController.text.trim(),
-          injuryDateTime: _datetime,
-          injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
-          injuryBody: _selectedBodyHTPart,
-          injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
-          injuryType: _selectedInjuryType,
-          injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
-          injuryCause: _selectedInjuryCause,
-          no_day: _absenceDayController.text.trim(),
-        );
+            staff_uid: uid,
+            athlete_no: _athleteNo.text.trim(),
+            report_type: 'Injury',
+            sport_event: _selectedSport,
+            round_heat_training: _rhtController.text.trim(),
+            injuryDateTime: _datetime,
+            injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+            injuryBody: _selectedBodyHTPart,
+            injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
+            injuryType: _selectedInjuryType,
+            injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
+            injuryCause: _selectedInjuryCause,
+            no_day: _absenceDayController.text.trim(),
+            doDate: DateTime.now());
 
         Map<String, dynamic> data = injuryReportModel.toMap();
 
@@ -1154,20 +1078,20 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       } else if (bodyType == 2) {
         InjuryReportData injuryReportModel = InjuryReportData(
-          staff_uid: uid,
-          athlete_no: _athleteNo.text.trim(),
-          report_type: 'Injury',
-          sport_event: _selectedSport,
-          round_heat_training: _rhtController.text.trim(),
-          injuryDateTime: _datetime,
-          injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
-          injuryBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
-          injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
-          injuryType: _selectedInjuryType,
-          injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
-          injuryCause: _selectedInjuryCause,
-          no_day: _absenceDayController.text.trim(),
-        );
+            staff_uid: uid,
+            athlete_no: _athleteNo.text.trim(),
+            report_type: 'Injury',
+            sport_event: _selectedSport,
+            round_heat_training: _rhtController.text.trim(),
+            injuryDateTime: _datetime,
+            injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+            injuryBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
+            injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
+            injuryType: _selectedInjuryType,
+            injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
+            injuryCause: _selectedInjuryCause,
+            no_day: _absenceDayController.text.trim(),
+            doDate: DateTime.now());
 
         Map<String, dynamic> data = injuryReportModel.toMap();
 
@@ -1196,20 +1120,20 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       } else if (bodyType == 3) {
         InjuryReportData injuryReportModel = InjuryReportData(
-          staff_uid: uid,
-          athlete_no: _athleteNo.text.trim(),
-          report_type: 'Injury',
-          sport_event: _selectedSport,
-          round_heat_training: _rhtController.text,
-          injuryDateTime: _datetime,
-          injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
-          injuryBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
-          injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
-          injuryType: _selectedInjuryType,
-          injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
-          injuryCause: _selectedInjuryCause,
-          no_day: _absenceDayController.text.trim(),
-        );
+            staff_uid: uid,
+            athlete_no: _athleteNo.text.trim(),
+            report_type: 'Injury',
+            sport_event: _selectedSport,
+            round_heat_training: _rhtController.text,
+            injuryDateTime: _datetime,
+            injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+            injuryBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
+            injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
+            injuryType: _selectedInjuryType,
+            injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
+            injuryCause: _selectedInjuryCause,
+            no_day: _absenceDayController.text.trim(),
+            doDate: DateTime.now());
 
         Map<String, dynamic> data = injuryReportModel.toMap();
 

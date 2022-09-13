@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/decoration/frontend_login/textfield_login.dart';
+import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class IllnessReport extends StatefulWidget {
@@ -73,9 +74,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   'Athlete no.',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
+                PaddingDecorate(10),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   keyboardType: TextInputType.number,
@@ -93,12 +92,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     }
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
+                PaddingDecorate(20),
                 const Text(
                   'Sport and Event',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -159,19 +153,12 @@ class _IllnessReportState extends State<IllnessReport> {
                     }
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
+                PaddingDecorate(20),
                 const Text(
                   'Diagnosis',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
+                PaddingDecorate(10),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: textdecorate('Diagnosis'),
@@ -185,12 +172,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     }
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
+                PaddingDecorate(20),
                 const Text(
                   'Occured Date',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -225,16 +207,12 @@ class _IllnessReportState extends State<IllnessReport> {
                     }
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                ),
+                PaddingDecorate(20),
                 const Text(
                   'Affected System',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
+                PaddingDecorate(20),
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: textdecorate('Code'),
@@ -264,9 +242,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     }
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
+                PaddingDecorate(10),
                 DropdownButtonFormField2<String>(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: textdecorate('Select affected systems'),
@@ -691,7 +667,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                   ],
-                  decoration: textdecorate('Absence in days'),
+                  decoration: textdecorateinday('Absence in days'),
                   controller: _absenceDayController,
                   validator: (value) {
                     if (value.isEmpty) {
@@ -904,7 +880,8 @@ class _IllnessReportState extends State<IllnessReport> {
           mainSymptomsCode: getMainSymptomCode,
           illness_cause: _selectedIllnessCause,
           illness_cause_code: int.parse(_codeIllnessCause.text.trim()),
-          no_day: _absenceDayController.text.trim());
+          no_day: _absenceDayController.text.trim(),
+          doDate: DateTime.now());
 
       Map<String, dynamic> data = illnessReportModel.toMap();
 

@@ -48,16 +48,15 @@ class _StaffReportState extends State<StaffReport> {
             builder: (BuildContext context, snapshot) {
               if (snapshot.hasData) {
                 List<QuerySnapshot> querySnapshot = snapshot.data.toList();
-                List<String> docID = snapshot.data.docs.id;
-                List<QueryDocumentSnapshot> documentSnapshot = [];
 
+                List<QueryDocumentSnapshot> documentSnapshot = [];
                 querySnapshot.forEach((query) {
                   documentSnapshot.addAll(query.docs);
                 });
 
                 List<Map<String, dynamic>> mappedData = [];
                 for (QueryDocumentSnapshot doc in documentSnapshot) {
-                    mappedData.add(doc.data());
+                  mappedData.add(doc.data());
                 }
 
                 return ListView.builder(
@@ -66,24 +65,20 @@ class _StaffReportState extends State<StaffReport> {
                       Map<String, dynamic> data = mappedData[index];
                       return GestureDetector(
                         child: Card(
-                                margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                                child: Column(
-                                  children: <Widget>[
-                                    Column(
-                                      children: <Widget>[
-                                        Text(data.)
-                                        Text(data['report_type']),
-                                        Text(data['sport_event']),
-                                        // data['report_type'] == 'Illness'
-                                        //     ? Text(formatDate(
-                                        //         data["occured_date"].toDate()))
-                                        //     : Text(formatDate(
-                                        //         data["injuryDateTime"].toDate()))
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                          margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                          child: Column(
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text('Report type: ' + data['report_type']),
+                                  Text('Sport: ' + data['sport_event']),
+                                  Text('Done on: ' +
+                                      formatDate(data['doDate'].toDate())),
+                                ],
                               ),
+                            ],
+                          ),
+                        ),
                       );
                     });
               } else {

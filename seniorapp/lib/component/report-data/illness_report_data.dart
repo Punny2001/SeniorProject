@@ -16,6 +16,7 @@ class IllnessReportData {
   final String illness_cause;
   final int illness_cause_code;
   final String no_day;
+  final DateTime doDate;
   IllnessReportData({
     @required this.staff_uid,
     @required this.athlete_no,
@@ -30,6 +31,7 @@ class IllnessReportData {
     @required this.illness_cause,
     @required this.illness_cause_code,
     @required this.no_day,
+    @required this.doDate,
   });
 
   IllnessReportData copyWith({
@@ -46,6 +48,7 @@ class IllnessReportData {
     String illness_cause,
     int illness_cause_code,
     String no_day,
+    DateTime doDate,
   }) {
     return IllnessReportData(
       staff_uid: staff_uid ?? this.staff_uid,
@@ -61,6 +64,7 @@ class IllnessReportData {
       illness_cause: illness_cause ?? this.illness_cause,
       illness_cause_code: illness_cause_code ?? this.illness_cause_code,
       no_day: no_day ?? this.no_day,
+      doDate: doDate ?? this.doDate,
     );
   }
 
@@ -80,6 +84,7 @@ class IllnessReportData {
     result.addAll({'illness_cause': illness_cause});
     result.addAll({'illness_cause_code': illness_cause_code});
     result.addAll({'no_day': no_day});
+    result.addAll({'doDate': doDate});
 
     return result;
   }
@@ -99,6 +104,7 @@ class IllnessReportData {
       illness_cause: map['illness_cause'] ?? '',
       illness_cause_code: map['illness_cause_code']?.toInt() ?? 0,
       no_day: map['no_day'] ?? '',
+      doDate: DateTime.parse(map['doDate'].toDate().toString()),
     );
   }
 
@@ -109,7 +115,7 @@ class IllnessReportData {
 
   @override
   String toString() {
-    return 'IllnessReportData(staff_uid: $staff_uid, athlete_no: $athlete_no, report_type: $report_type, sport_event: $sport_event, diagnosis: $diagnosis, occured_date: $occured_date, affected_system: $affected_system, affected_system_code: $affected_system_code, mainSymptoms: $mainSymptoms, mainSymptomsCode: $mainSymptomsCode, illness_cause: $illness_cause, illness_cause_code: $illness_cause_code, no_day: $no_day)';
+    return 'IllnessReportData(staff_uid: $staff_uid, athlete_no: $athlete_no, report_type: $report_type, sport_event: $sport_event, diagnosis: $diagnosis, occured_date: $occured_date, affected_system: $affected_system, affected_system_code: $affected_system_code, mainSymptoms: $mainSymptoms, mainSymptomsCode: $mainSymptomsCode, illness_cause: $illness_cause, illness_cause_code: $illness_cause_code, no_day: $no_day, doDate: $doDate)';
   }
 
   @override
@@ -129,7 +135,8 @@ class IllnessReportData {
         listEquals(other.mainSymptomsCode, mainSymptomsCode) &&
         other.illness_cause == illness_cause &&
         other.illness_cause_code == illness_cause_code &&
-        other.no_day == no_day;
+        other.no_day == no_day &&
+        other.doDate == doDate;
   }
 
   @override
@@ -146,6 +153,7 @@ class IllnessReportData {
         mainSymptomsCode.hashCode ^
         illness_cause.hashCode ^
         illness_cause_code.hashCode ^
-        no_day.hashCode;
+        no_day.hashCode ^
+        doDate.hashCode;
   }
 }
