@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
-import 'package:seniorapp/decoration/frontend_login/textfield_login.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
@@ -77,10 +76,6 @@ class _IllnessReportState extends State<IllnessReport> {
                 PaddingDecorate(10),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
                   decoration: textdecorate('Athlete No.'),
                   controller: _athleteNo,
                   onChanged: (value) {},

@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seniorapp/auth-component/register.dart';
-import 'package:seniorapp/decoration/frontend_login/textfield_login.dart';
-import 'package:seniorapp/decoration/frontend_login/page_title_bar.dart';
-import 'package:seniorapp/decoration/frontend_login/components.dart';
+import 'package:seniorapp/decoration/authentication/textfield_login.dart';
+import 'package:seniorapp/decoration/authentication/page_title_bar.dart';
 import 'package:seniorapp/component/language.dart';
 
 class Login extends StatefulWidget {

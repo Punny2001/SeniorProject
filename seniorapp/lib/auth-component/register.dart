@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -251,8 +253,7 @@ class _RegisterState extends State<Register> {
                           TextFormField(
                             validator: (value) {
                               if (value.isEmpty) {
-                                return 'register_page.firstname_required'
-                                    .tr();
+                                return 'register_page.firstname_required'.tr();
                               } else {
                                 return null;
                               }
@@ -268,8 +269,7 @@ class _RegisterState extends State<Register> {
                                   color: Colors.black,
                                 ),
                                 hintText:
-                                    'register_page.firstname_description'
-                                        .tr(),
+                                    'register_page.firstname_description'.tr(),
                                 hintStyle:
                                     const TextStyle(fontFamily: 'OpenSans'),
                                 border: InputBorder.none),
@@ -342,8 +342,7 @@ class _RegisterState extends State<Register> {
                             dateMask: 'MMMM d, yyyy',
                             validator: (value) {
                               if (value.isEmpty) {
-                                return 'register_page.birthdate_required'
-                                    .tr();
+                                return 'register_page.birthdate_required'.tr();
                               } else {
                                 return null;
                               }
@@ -532,6 +531,7 @@ class _RegisterState extends State<Register> {
                           Visibility(
                             visible: isStaff,
                             child:
+
                                 /// Staff
                                 Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -614,10 +614,9 @@ class _RegisterState extends State<Register> {
   }
 
   Future isAthleteCheck() async {
-    if(_selectedDept == 1) {
+    if (_selectedDept == 1) {
       _selectedDepartment = 'Athlete';
-    }
-    else {
+    } else {
       _selectedDepartment = 'Staff';
     }
   }
@@ -626,6 +625,8 @@ class _RegisterState extends State<Register> {
     try {
       bool validate = _keyForm.currentState.validate();
       String uid = FirebaseAuth.instance.currentUser.uid;
+      String email = FirebaseAuth.instance.currentUser.email.toString();
+
       print(uid);
       isAthleteCheck();
       if (validate) {
@@ -636,16 +637,22 @@ class _RegisterState extends State<Register> {
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
             String uid = FirebaseAuth.instance.currentUser.uid;
+            String athlete_no = 'A';
+            for (int i = 0; i < 10; i++) {
+              athlete_no += Random().nextInt(10).toString();
+            }
 
             Athlete athleteModel = Athlete(
+                athlete_no: athlete_no,
                 username: _usernameController.text.trim(),
                 firstname: _firstnameController.text.trim(),
                 lastname: _lastnameController.text.trim(),
                 sportType: _selectedSport,
-                date: _date,
+                birthdate: _date,
                 department: 'Athlete',
                 weight: _selectedWeight,
-                height: _selectedHeight);
+                height: _selectedHeight,
+                email: email);
 
             Map<String, dynamic> data = athleteModel.toMap();
 
@@ -664,13 +671,19 @@ class _RegisterState extends State<Register> {
           await FirebaseAuth.instance.currentUser
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
+            String staff_no = 'S';
+            for (int i = 0; i < 10; i++) {
+              staff_no += Random().nextInt(10).toString();
+            }
             Staff staffModel = Staff(
+                staff_no: staff_no,
                 username: _usernameController.text.trim(),
                 firstname: _firstnameController.text.trim(),
                 lastname: _lastnameController.text.trim(),
                 birthdate: _date,
                 department: 'Staff',
-                staffType: _selectedStaff);
+                staffType: _selectedStaff,
+                email: email);
 
             Map<String, dynamic> data = staffModel.toMap();
 

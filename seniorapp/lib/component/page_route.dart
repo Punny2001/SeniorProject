@@ -5,10 +5,10 @@ import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_page_choosing.dart';
 import 'package:seniorapp/component/page/athlete-page/quiz-page/mental_quiz.dart';
-import 'package:seniorapp/component/page/staff-page/report/illness_report.dart';
-import 'package:seniorapp/component/page/staff-page/report/injury_report.dart';
+import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
+import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
-import 'package:seniorapp/component/page/staff-page/staff_report_page/illness_report_description.dart';
+import 'package:seniorapp/component/page/staff-page/history_details/illness_report_description.dart';
 
 final Map<String, WidgetBuilder> map = {
   '/login': (BuildContext context) => Login(),

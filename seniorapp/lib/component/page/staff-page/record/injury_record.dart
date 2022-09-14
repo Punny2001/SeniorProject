@@ -89,10 +89,6 @@ class _InjuryReportState extends State<InjuryReport> {
                 const Padding(padding: EdgeInsets.all(10)),
                 TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
                   decoration: textdecorate('Athlete No.'),
                   controller: _athleteNo,
                   validator: (value) {
