@@ -57,7 +57,9 @@ class _RegisterState extends State<Register> {
         elevation: 0,
         actions: [
           LanguageSign(),
-          IconButton(onPressed: () => Navigator.of(context).pushNamed('/login'), icon: Icon(Icons.arrow_back))
+          IconButton(
+              onPressed: () => Navigator.of(context).pushNamed('/login'),
+              icon: Icon(Icons.arrow_back))
         ],
       ),
       backgroundColor: Colors.lightBlue,
@@ -573,13 +575,10 @@ class _RegisterState extends State<Register> {
                                     });
                                   },
                                 ),
-<<<<<<< Updated upstream
                                 const Padding(
                                   padding: EdgeInsets.only(bottom: 40),
                                 ),
-=======
                                 PaddingDecorate(10),
->>>>>>> Stashed changes
                                 Text(
                                   'register_page.height'.tr(),
                                   style: textCustom(),
