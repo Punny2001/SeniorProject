@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/staff-page/history_details/injury_report_description.dart';
+import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/decoration/format_date.dart';
 import 'package:seniorapp/component/page/staff-page/history_details/illness_report_description.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
@@ -21,9 +23,6 @@ class _StaffReportState extends State<StaffReport> {
   @override
   Widget build(BuildContext context) {
     String uid = FirebaseAuth.instance.currentUser.uid;
-    StreamController<QuerySnapshot> controller =
-        StreamController<QuerySnapshot>.broadcast();
-
     Stream<List<QuerySnapshot>> getData() {
       Stream illnessStream = FirebaseFirestore.instance
           .collection('IllnessReport')
@@ -89,7 +88,7 @@ class _StaffReportState extends State<StaffReport> {
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       ReportIllnessDescription(
-                                    report_id: 'ILR'+id,
+                                    report_id: 'ILR' + id,
                                     affected_system: illness.affected_system,
                                     affected_system_code:
                                         illness.affected_system_code,
@@ -109,28 +108,26 @@ class _StaffReportState extends State<StaffReport> {
                                 ),
                               );
                             } else {
-                              IllnessReportData illness =
-                                  IllnessReportData.fromMap(data);
+                              InjuryReportData injury =
+                                  InjuryReportData.fromMap(data);
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      ReportIllnessDescription(
-                                    report_id: 'IJR'+id,
-                                    affected_system: illness.affected_system,
-                                    affected_system_code:
-                                        illness.affected_system_code,
-                                    athlete_no: illness.athlete_no,
-                                    diagnosis: illness.diagnosis,
-                                    illness_cause: illness.illness_cause,
-                                    illness_cause_code:
-                                        illness.illness_cause_code,
-                                    mainSymptoms: illness.mainSymptoms,
-                                    mainSymptomsCode: illness.mainSymptomsCode,
-                                    no_day: illness.no_day,
-                                    occured_date: illness.occured_date,
-                                    report_type: illness.report_type,
-                                    sport_event: illness.sport_event,
-                                    staff_uid: illness.staff_uid,
+                                  builder: (context) => ReportInjuryDescription(
+                                    report_id: 'IJR' + id,
+                                    injuryBody: injury.injuryBody,
+                                    injuryBodyCode: injury.injuryBodyCode,
+                                    injuryCause: injury.injuryCause,
+                                    injuryCauseCode: injury.injuryCauseCode,
+                                    injuryType: injury.injuryType,
+                                    injuryTypeCode: injury.injuryTypeCode,
+                                    round_heat_training:
+                                        injury.round_heat_training,
+                                    athlete_no: injury.athlete_no,
+                                    no_day: injury.no_day,
+                                    injuryDateTime: injury.injuryDateTime,
+                                    report_type: injury.report_type,
+                                    sport_event: injury.sport_event,
+                                    staff_uid: injury.staff_uid,
                                   ),
                                 ),
                               );

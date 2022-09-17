@@ -1,16 +1,19 @@
 import 'dart:math';
 
+import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/component/user-data/id_list.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:seniorapp/decoration/padding.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -28,13 +31,15 @@ class _RegisterState extends State<Register> {
   int _selectedDept;
   bool _passwordhide = true;
   bool _confirmPasswordhide = true;
-  DateTime _date;
+  DateTime _birthdate;
   final _keyForm = GlobalKey<FormState>();
   bool isAthlete = false;
   bool isStaff = false;
   String _selectedDepartment;
   double _selectedWeight = 60.0;
   double _selectedHeight = 170.0;
+  String _selectedGender;
+  int age;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +52,6 @@ class _RegisterState extends State<Register> {
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.black,
-          //change your color here
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -338,7 +342,7 @@ class _RegisterState extends State<Register> {
                             ),
                             onChanged: (value) {
                               setState(() {
-                                _date = DateTime.parse(value);
+                                _birthdate = DateTime.parse(value);
                               });
                             },
                             dateMask: 'MMMM d, yyyy',
@@ -362,7 +366,7 @@ class _RegisterState extends State<Register> {
                           //       ),
                           //       onChanged: (value) {
                           //         setState(() {
-                          //           _date = DateTime.parse(value);
+                          //           _birthdate = DateTime.parse(value);
                           //         });
                           //       },
                           //       validator: (value) {
@@ -390,6 +394,72 @@ class _RegisterState extends State<Register> {
                             padding: EdgeInsets.only(bottom: 15),
                           ),
 
+                          Text(
+                            'Gender',
+                            style: textCustom(),
+                          ),
+                          FormField(
+                            builder: (FormFieldState<bool> state) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  state.hasError
+                                      ? Text(
+                                          state.errorText,
+                                          style: const TextStyle(
+                                              color: Colors.red),
+                                        )
+                                      : Container(),
+                                  RadioListTile(
+                                    value: 'Male',
+                                    title: const Text('Male'),
+                                    groupValue: _selectedGender,
+                                    onChanged: (value) {
+                                      state.setValue(true);
+                                      setState(() {
+                                        _selectedGender = value;
+                                      });
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    value: 'Female',
+                                    title: const Text('Female'),
+                                    groupValue: _selectedGender,
+                                    onChanged: (value) {
+                                      state.setValue(true);
+                                      setState(() {
+                                        _selectedGender = value;
+                                      });
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    value: 'LGBTQ+',
+                                    title: const Text('LGBTQ+'),
+                                    groupValue: _selectedGender,
+                                    onChanged: (value) {
+                                      state.setValue(true);
+                                      setState(() {
+                                        _selectedGender = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            validator: (value) {
+                              if (value != true) {
+                                return 'Please select a gender';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                          Text(
+                            'Department',
+                            style: textCustom(),
+                          ),
                           FormField(
                             builder: (FormFieldState<bool> state) {
                               return Column(
@@ -436,7 +506,7 @@ class _RegisterState extends State<Register> {
                                 AutovalidateMode.onUserInteraction,
                             validator: (value) {
                               if (value != true) {
-                                return 'Please select the side of body part';
+                                return 'Please select the department';
                               } else {
                                 return null;
                               }
@@ -485,9 +555,7 @@ class _RegisterState extends State<Register> {
                                     }
                                   },
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 20),
-                                ),
+                                PaddingDecorate(20),
 
                                 /// Weight & Height
                                 Text(
@@ -505,9 +573,13 @@ class _RegisterState extends State<Register> {
                                     });
                                   },
                                 ),
+<<<<<<< Updated upstream
                                 const Padding(
                                   padding: EdgeInsets.only(bottom: 40),
                                 ),
+=======
+                                PaddingDecorate(10),
+>>>>>>> Stashed changes
                                 Text(
                                   'register_page.height'.tr(),
                                   style: textCustom(),
@@ -522,9 +594,6 @@ class _RegisterState extends State<Register> {
                                       _selectedHeight = value;
                                     });
                                   },
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 15),
                                 ),
                               ],
                             ),
@@ -628,6 +697,7 @@ class _RegisterState extends State<Register> {
       bool validate = _keyForm.currentState.validate();
       String uid = FirebaseAuth.instance.currentUser.uid;
       String email = FirebaseAuth.instance.currentUser.email.toString();
+      age = AgeCalculator.age(_birthdate).years;
 
       print(uid);
       isAthleteCheck();
@@ -639,10 +709,9 @@ class _RegisterState extends State<Register> {
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
             String uid = FirebaseAuth.instance.currentUser.uid;
+
             String athlete_no = 'A';
-            for (int i = 0; i < 10; i++) {
-              athlete_no += Random().nextInt(10).toString();
-            }
+            athlete_no += get_athleteID();
 
             Athlete athleteModel = Athlete(
                 athlete_no: athlete_no,
@@ -650,11 +719,13 @@ class _RegisterState extends State<Register> {
                 firstname: _firstnameController.text.trim(),
                 lastname: _lastnameController.text.trim(),
                 sportType: _selectedSport,
-                birthdate: _date,
+                birthdate: _birthdate,
                 department: 'Athlete',
                 weight: _selectedWeight,
                 height: _selectedHeight,
-                email: email);
+                email: email,
+                gender: _selectedGender,
+                age: age);
 
             Map<String, dynamic> data = athleteModel.toMap();
 
@@ -674,18 +745,19 @@ class _RegisterState extends State<Register> {
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
             String staff_no = 'S';
-            for (int i = 0; i < 10; i++) {
-              staff_no += Random().nextInt(10).toString();
-            }
+            staff_no += get_staffID();
+
             Staff staffModel = Staff(
                 staff_no: staff_no,
                 username: _usernameController.text.trim(),
                 firstname: _firstnameController.text.trim(),
                 lastname: _lastnameController.text.trim(),
-                birthdate: _date,
+                birthdate: _birthdate,
                 department: 'Staff',
                 staffType: _selectedStaff,
-                email: email);
+                email: email,
+                gender: _selectedGender,
+                age: age);
 
             Map<String, dynamic> data = staffModel.toMap();
 

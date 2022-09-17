@@ -12,6 +12,8 @@ class Staff {
   final DateTime birthdate;
   final String department;
   final String email;
+  final String gender;
+  final int age;
   Staff({
     @required this.staff_no,
     @required this.username,
@@ -21,6 +23,8 @@ class Staff {
     @required this.birthdate,
     @required this.department,
     @required this.email,
+    @required this.gender,
+    @required this.age,
   });
 
   Staff copyWith({
@@ -32,6 +36,8 @@ class Staff {
     DateTime birthdate,
     String department,
     String email,
+    String gender,
+    int age,
   }) {
     return Staff(
       staff_no: staff_no ?? this.staff_no,
@@ -42,12 +48,14 @@ class Staff {
       birthdate: birthdate ?? this.birthdate,
       department: department ?? this.department,
       email: email ?? this.email,
+      gender: gender ?? this.gender,
+      age: age ?? this.age,
     );
   }
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
     result.addAll({'staff_no': staff_no});
     result.addAll({'username': username});
     result.addAll({'firstname': firstname});
@@ -56,7 +64,9 @@ class Staff {
     result.addAll({'birthdate': birthdate});
     result.addAll({'department': department});
     result.addAll({'email': email});
-  
+    result.addAll({'gender': gender});
+    result.addAll({'age': age});
+
     return result;
   }
 
@@ -70,6 +80,8 @@ class Staff {
       birthdate: DateTime.parse(map['birthdate'].toDate().toString()),
       department: map['department'] ?? '',
       email: map['email'] ?? '',
+      gender: map['gender'] ?? '',
+      age: map['age']?.toInt() ?? 0,
     );
   }
 
@@ -79,33 +91,37 @@ class Staff {
 
   @override
   String toString() {
-    return 'Staff(staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, department: $department, email: $email)';
+    return 'Staff(staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, department: $department, email: $email, gender: $gender, age: $age)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Staff &&
-      other.staff_no == staff_no &&
-      other.username == username &&
-      other.firstname == firstname &&
-      other.lastname == lastname &&
-      other.staffType == staffType &&
-      other.birthdate == birthdate &&
-      other.department == department &&
-      other.email == email;
+        other.staff_no == staff_no &&
+        other.username == username &&
+        other.firstname == firstname &&
+        other.lastname == lastname &&
+        other.staffType == staffType &&
+        other.birthdate == birthdate &&
+        other.department == department &&
+        other.email == email &&
+        other.gender == gender &&
+        other.age == age;
   }
 
   @override
   int get hashCode {
     return staff_no.hashCode ^
-      username.hashCode ^
-      firstname.hashCode ^
-      lastname.hashCode ^
-      staffType.hashCode ^
-      birthdate.hashCode ^
-      department.hashCode ^
-      email.hashCode;
+        username.hashCode ^
+        firstname.hashCode ^
+        lastname.hashCode ^
+        staffType.hashCode ^
+        birthdate.hashCode ^
+        department.hashCode ^
+        email.hashCode ^
+        gender.hashCode ^
+        age.hashCode;
   }
 }

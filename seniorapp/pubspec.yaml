@@ -54,6 +54,7 @@ dependencies:
   rxdart: ^0.27.5
   flutter_rx_stream_builder: ^2.0.1
   multiple_stream_builder: ^2.0.0
+  age_calculator: ^1.0.0
 
 dev_dependencies:
   flutter_test:
