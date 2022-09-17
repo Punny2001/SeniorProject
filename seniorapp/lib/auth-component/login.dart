@@ -148,22 +148,6 @@ class _LoginState extends State<Login> {
                                 minimumSize: Size(w / 1.3, h / 15),
                               ),
                             ),
-                            Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('login_page.login_description').tr(),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/register');
-                      },
-                      child: Text(
-                        'login_page.signup_textbutton'.tr(),
-                        style: const TextStyle(
-                            decoration: TextDecoration.underline),
-                      ),
-                    ),
-                  ],
-                ),
                           ],
                         ),
                       ),
@@ -190,20 +174,20 @@ class _LoginState extends State<Login> {
             .then((value) async {
           String uid = value.user.uid;
           final db = FirebaseFirestore.instance;
-            DocumentReference athleteRef = db.collection('Athlete').doc(uid);
-            DocumentReference staffRef = db.collection('Staff').doc(uid);
-            DocumentSnapshot athleteDoc = await athleteRef.get();
-            DocumentSnapshot staffDoc = await staffRef.get();
-            if (athleteDoc.exists) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/athletePageChoosing', (route) => false); 
-            } else if (staffDoc.exists) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/staffPageChoosing', (route) => false);
-            } else {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                      '/register', (route) => false);
-            }
+          DocumentReference athleteRef = db.collection('Athlete').doc(uid);
+          DocumentReference staffRef = db.collection('Staff').doc(uid);
+          DocumentSnapshot athleteDoc = await athleteRef.get();
+          DocumentSnapshot staffDoc = await staffRef.get();
+          if (athleteDoc.exists) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/athletePageChoosing', (route) => false);
+          } else if (staffDoc.exists) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/staffPageChoosing', (route) => false);
+          } else {
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/register', (route) => false);
+          }
         });
       }
     } on FirebaseAuthException catch (error) {
