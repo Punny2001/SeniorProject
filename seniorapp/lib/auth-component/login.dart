@@ -148,6 +148,22 @@ class _LoginState extends State<Login> {
                                 minimumSize: Size(w / 1.3, h / 15),
                               ),
                             ),
+                            Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('login_page.login_description').tr(),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/register');
+                      },
+                      child: Text(
+                        'login_page.signup_textbutton'.tr(),
+                        style: const TextStyle(
+                            decoration: TextDecoration.underline),
+                      ),
+                    ),
+                  ],
+                ),
                           ],
                         ),
                       ),

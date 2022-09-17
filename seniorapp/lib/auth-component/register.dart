@@ -51,15 +51,19 @@ class _RegisterState extends State<Register> {
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        actions: [LanguageSign()],
+        actions: [
+          LanguageSign(),
+          IconButton(onPressed: () => Navigator.of(context).pushNamed('/login'), icon: Icon(Icons.arrow_back))
+        ],
       ),
+      backgroundColor: Colors.lightBlue,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Stack(
           children: [
             Container(
-              width: 650,
-              height: 286 / 1.2,
+              width: w,
+              height: h / 1.55,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/Background_register.PNG"),
@@ -71,7 +75,6 @@ class _RegisterState extends State<Register> {
               padding: const EdgeInsets.only(top: 150.0),
               child: Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 1.485,
                 decoration: const BoxDecoration(
                   color: Colors.lightBlue,
                   borderRadius: BorderRadius.only(
@@ -88,7 +91,6 @@ class _RegisterState extends State<Register> {
               padding: const EdgeInsets.only(top: 170.0),
               child: Container(
                 margin: const EdgeInsets.all(42),
-                width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Colors.lightBlue,
                 ),
@@ -504,7 +506,7 @@ class _RegisterState extends State<Register> {
                                   },
                                 ),
                                 const Padding(
-                                  padding: EdgeInsets.only(bottom: 155),
+                                  padding: EdgeInsets.only(bottom: 40),
                                 ),
                                 Text(
                                   'register_page.height'.tr(),
