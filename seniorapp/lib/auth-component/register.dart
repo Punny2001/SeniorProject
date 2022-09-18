@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
-import 'package:seniorapp/component/user-data/id_list.dart';
+import 'package:seniorapp/component/user-data/id_generator.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -708,9 +708,10 @@ class _RegisterState extends State<Register> {
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
             String uid = FirebaseAuth.instance.currentUser.uid;
-
             String athlete_no = 'A';
             athlete_no += get_athleteID();
+
+            
 
             Athlete athleteModel = Athlete(
                 athlete_no: athlete_no,
