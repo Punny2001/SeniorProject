@@ -4,22 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 
-String latestAthNo;
 String latestStfNo;
 int latestAthId;
-String latestAthSplt;
-
-Athlete athleteData;
 
 String get_athleteID() {
-  getLatestAthNo().then((value) {
-    NumberFormat format = NumberFormat('0000000000');
-
-    print(latestAthNo);
-    latestAthSplt = latestAthNo.split('A')[1];
-    latestAthId = int.parse(latestAthSplt) + 1;
-    return format.format(latestAthId);
-  });
+  NumberFormat format = NumberFormat('0000000000');
 }
 
 String get_staffID() {
@@ -32,20 +21,28 @@ String get_staffID() {
 }
 
 Future<void> getLatestAthNo() async {
-  FirebaseFirestore.instance
+  String latestAthNo;
+  await FirebaseFirestore.instance
       .collection('Athlete')
-      .orderBy('athlete_no')
+      .orderBy('athlete_no', descending: true)
       .limit(1)
       .get()
       .then((doc) {
+    print('doc: ' + doc.size.toString());
     if (doc.size == 0) {
       latestAthNo = 'A0000000000';
     } else {
-      doc.docs.map((snapshot) {
+      doc.docs.forEach((snapshot) {
         Map data = snapshot.data();
-        athleteData = Athlete.fromMap(data);
+        Athlete athleteData = Athlete.fromMap(data);
+        print(athleteData.athlete_no);
+        latestAthNo = athleteData.athlete_no;
       });
     }
+    String latestAthSplt;
+    latestAthSplt = latestAthNo.split('A')[1];
+    latestAthId = int.parse(latestAthSplt) + 1;
+    print(latestAthId);
   });
 }
 
