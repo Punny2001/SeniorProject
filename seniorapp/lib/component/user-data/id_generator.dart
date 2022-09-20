@@ -9,13 +9,17 @@ String latestStfNo;
 int latestAthId;
 String latestAthSplt;
 
-String get_athleteID() {
-  NumberFormat format = NumberFormat('0000000000');
+Athlete athleteData;
 
-  print(latestAthNo);
-  latestAthSplt = latestAthNo.split('A')[1];
-  latestAthId = int.parse(latestAthSplt) + 1;
-  return format.format(latestAthId);
+String get_athleteID() {
+  getLatestAthNo().then((value) {
+    NumberFormat format = NumberFormat('0000000000');
+
+    print(latestAthNo);
+    latestAthSplt = latestAthNo.split('A')[1];
+    latestAthId = int.parse(latestAthSplt) + 1;
+    return format.format(latestAthId);
+  });
 }
 
 String get_staffID() {
@@ -27,17 +31,34 @@ String get_staffID() {
   return format.format(latestStfId);
 }
 
-Future<String> getLatestAthNo() async {
-  CollectionReference athleteCollection =
-      FirebaseFirestore.instance.collection('Athlete');
-  String athleteNo;
-  await athleteCollection.get().then((snapshot) {
-    if (snapshot.size == 0) {
-      athleteNo = 'A0000000000';
+Future<void> getLatestAthNo() async {
+  FirebaseFirestore.instance
+      .collection('Athlete')
+      .orderBy('athlete_no')
+      .limit(1)
+      .get()
+      .then((doc) {
+    if (doc.size == 0) {
+      latestAthNo = 'A0000000000';
     } else {
-      Map data = snapshot.docs.last.data();
-      athleteNo = data['athlete_no'];
+      doc.docs.map((snapshot) {
+        Map data = snapshot.data();
+        athleteData = Athlete.fromMap(data);
+      });
     }
   });
-  return athleteNo;
 }
+
+// CollectionReference athleteCollection =
+//       FirebaseFirestore.instance.collection('Athlete');
+//   String athleteNo;
+//   athleteCollection.get().then((snapshot) {
+//     if (snapshot.size == 0) {
+//       athleteNo = 'A0000000000';
+//       latestAthNo = athleteNo;
+//     } else {
+//       Map data = snapshot.docs.last.data();
+//       athleteNo = data['athlete_no'];
+//       latestAthNo = athleteNo;
+//     }
+//   });

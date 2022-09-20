@@ -708,10 +708,8 @@ class _RegisterState extends State<Register> {
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
             String uid = FirebaseAuth.instance.currentUser.uid;
-            String athlete_no = 'A';
-            athlete_no += get_athleteID();
-
-            
+            String athlete_no;
+            athlete_no = get_athleteID();
 
             Athlete athleteModel = Athlete(
                 athlete_no: athlete_no,

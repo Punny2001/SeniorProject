@@ -94,7 +94,7 @@ class _StaffProfileState extends State<StaffProfile> {
   }
 
   void getStfData() {
-    FirebaseFirestore.instance.collection('stflete').doc(uid).get().then(
+    FirebaseFirestore.instance.collection('Staff').doc(uid).get().then(
       (snapshot) {
         Map data = snapshot.data();
         stfData = Staff.fromMap(data);
