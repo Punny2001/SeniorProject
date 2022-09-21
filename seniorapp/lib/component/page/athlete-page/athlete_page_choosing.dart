@@ -30,8 +30,22 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
       body: Container(
         child: _athletePageList.elementAt(_selected_idx),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+      bottomNavigationBar: Container(
+            decoration: const BoxDecoration(
+
+              borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(30), topLeft: Radius.circular(30)
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+              child: BottomNavigationBar(
+                backgroundColor: Colors.greenAccent,
+                unselectedItemColor: Colors.black,
+                items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -46,9 +60,13 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
           ),
         ],
         currentIndex: _selected_idx,
-        onTap: _onPageTap,
-        selectedItemColor: Colors.redAccent,
-      ),
+                onTap: _onPageTap,
+                selectedItemColor: Colors.redAccent,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+              ),
+            ),
+            ),
     );
   }
 }

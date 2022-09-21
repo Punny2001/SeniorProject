@@ -69,7 +69,7 @@ class _RegisterState extends State<Register> {
           children: [
             Container(
               width: w,
-              height: h / 3,
+              height: h / 3.5,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/Background_register.PNG"),
