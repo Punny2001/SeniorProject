@@ -59,7 +59,7 @@ class _RegisterState extends State<Register> {
           LanguageSign(),
           IconButton(
               onPressed: () => Navigator.of(context).pushNamed('/login'),
-              icon: Icon(Icons.arrow_back))
+              icon: const Icon(Icons.arrow_back))
         ],
       ),
       backgroundColor: Colors.lightBlue,
@@ -69,7 +69,7 @@ class _RegisterState extends State<Register> {
           children: [
             Container(
               width: w,
-              height: h / 1.55,
+              height: h / 3,
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/images/Background_register.PNG"),
