@@ -9,6 +9,8 @@ int latestAthId;
 
 String get_athleteID() {
   NumberFormat format = NumberFormat('0000000000');
+  getLatestAthNo();
+  return format.format(latestAthId);
 }
 
 String get_staffID() {
@@ -27,13 +29,13 @@ Future<void> getLatestAthNo() async {
       .orderBy('athlete_no', descending: true)
       .limit(1)
       .get()
-      .then((doc) {
-    print('doc: ' + doc.size.toString());
-    if (doc.size == 0) {
+      .then((QuerySnapshot querySnapshot) {
+    print('doc: ' + querySnapshot.size.toString());
+    if (querySnapshot.size == 0 || querySnapshot == null) {
       latestAthNo = 'A0000000000';
     } else {
-      doc.docs.forEach((snapshot) {
-        Map data = snapshot.data();
+      querySnapshot.docs.forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+        Map data = queryDocumentSnapshot.data();
         Athlete athleteData = Athlete.fromMap(data);
         print(athleteData.athlete_no);
         latestAthNo = athleteData.athlete_no;
