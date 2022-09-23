@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
-import 'package:seniorapp/component/user-data/id_generator.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -58,7 +57,11 @@ class _RegisterState extends State<Register> {
         actions: [
           LanguageSign(),
           IconButton(
-              onPressed: () => Navigator.of(context).pushNamed('/login'),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/login', (route) => false);
+              },
               icon: const Icon(Icons.arrow_back))
         ],
       ),
@@ -708,8 +711,29 @@ class _RegisterState extends State<Register> {
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
             String uid = FirebaseAuth.instance.currentUser.uid;
+
             String athlete_no = 'A';
-            athlete_no += get_athleteID();
+            String split;
+            int latestID;
+            NumberFormat format = NumberFormat('0000000000');
+            await FirebaseFirestore.instance
+                .collection('Athlete')
+                .orderBy('athlete_no', descending: true)
+                .limit(1)
+                .get()
+                .then((QuerySnapshot querySnapshot) {
+              if (querySnapshot.size == 0) {
+                athlete_no += format.format(1);
+              } else {
+                querySnapshot.docs
+                    .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+                  Map data = queryDocumentSnapshot.data();
+                  split = data['athlete_no'].toString().split('A')[1];
+                  latestID = int.parse(split) + 1;
+                  athlete_no += format.format(latestID);
+                });
+              }
+            });
 
             Athlete athleteModel = Athlete(
                 athlete_no: athlete_no,
@@ -743,7 +767,27 @@ class _RegisterState extends State<Register> {
               .updateProfile(displayName: _usernameController.text.trim())
               .then((value2) async {
             String staff_no = 'S';
-            staff_no += get_staffID();
+            String split;
+            int latestID;
+            NumberFormat format = NumberFormat('0000000000');
+            await FirebaseFirestore.instance
+                .collection('Staff')
+                .orderBy('staff_no', descending: true)
+                .limit(1)
+                .get()
+                .then((QuerySnapshot querySnapshot) {
+              if (querySnapshot.size == 0) {
+                staff_no += format.format(1);
+              } else {
+                querySnapshot.docs
+                    .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+                  Map data = queryDocumentSnapshot.data();
+                  split = data['staff_no'].toString().split('S')[1];
+                  latestID = int.parse(split) + 1;
+                  staff_no += format.format(latestID);
+                });
+              }
+            });
 
             Staff staffModel = Staff(
                 staff_no: staff_no,
