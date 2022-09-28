@@ -59,8 +59,6 @@ class _StaffProfileState extends State<StaffProfile> {
             ),
             ElevatedButton(
               onPressed: () {
-                int id = int.parse(stfData.staff_no.split('S')[1]);
-
                 FirebaseAuth.instance.currentUser.delete().then((value) {
                   FirebaseAuth.instance.signOut();
                   FirebaseFirestore.instance

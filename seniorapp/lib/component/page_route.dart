@@ -4,7 +4,7 @@ import 'package:seniorapp/auth-component/login.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_page_choosing.dart';
-import 'package:seniorapp/component/page/athlete-page/quiz-page/mental_quiz.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/mental_questionnaire.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
