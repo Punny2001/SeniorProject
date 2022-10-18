@@ -26,7 +26,7 @@ class Result extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            resultPhrase,
+            'Your Score: $resultScore',
             style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
@@ -38,14 +38,14 @@ class Result extends StatelessWidget {
             textColor: Color.fromARGB(255, 18, 92, 153),
             onPressed: insertHandler,
           ),
-          FlatButton(
-            child: Text(
-              'Restart Quiz!!!',
-              style: TextStyle(decoration: TextDecoration.underline),
-            ),
-            textColor: Color.fromARGB(255, 18, 92, 153),
-            onPressed: resetHandler,
-          )
+          // FlatButton(
+          //   child: Text(
+          //     'Restart Quiz!!!',
+          //     style: TextStyle(decoration: TextDecoration.underline),
+          //   ),
+          //   textColor: Color.fromARGB(255, 18, 92, 153),
+          //   onPressed: resetHandler,
+          // )
         ],
       ),
     );

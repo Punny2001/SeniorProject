@@ -5,14 +5,14 @@ import 'package:seniorapp/component/result-data/mental_result_data.dart';
 import 'questionnaire.dart';
 import './result.dart';
 
-class MentalQuiz extends StatefulWidget {
+class MentalQuestionnaire extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _MentalQuiz();
+    return _MentalQuestionnaire();
   }
 }
 
-class _MentalQuiz extends State<MentalQuiz> {
+class _MentalQuestionnaire extends State<MentalQuestionnaire> {
   var _questionIndex = 0;
   var _totalScore = 0;
   Map<String, int> answer_list = {
@@ -41,44 +41,47 @@ class _MentalQuiz extends State<MentalQuiz> {
   final _questions = const [
     {
       'questionNo' : 'Q1',
-      'questionText': 'Insomnia after going to bed for morethan 30 minutes.',
+      'questionText': 'ใน 7 วันที่ผ่านมา ปัญหาจิตใจของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
       'answerText': [
-        {'text': 'Never had symptoms', 'score': 0},
-        {'text': 'Less than 1 time/week', 'score': 1},
-        {'text': 'Have problems 1-2 times/week', 'score': 2},
-        {'text': 'More trouble 3 times/week or more', 'score': 3}
+        {'text': 'เข้าร่วมการฝึกซ้อมหรือแข่งขันกีฬาได้เต็มที่ โดยไม่มีปัญหาจิตใจ', 'score': 0},
+        {'text': 'เข้าร่วมการฝึกซ้อมหรือแข่งขันกีฬาได้เต็มที่ แต่มีปัญหาจิตใจ', 'score': 8},
+        {'text': 'เข้าร่วมการฝึกซ้อมหรือแข่งขันกีฬาได้ไม่เต็มที่ เพราะมีปัญหาจิตใจ', 'score': 17},
+        {'text': 'ไม่สามารถเข้าร่วมการฝึกซ้อมหรือแข่งขันกีฬาได้เลย เพราะมีปัญหาจิตใจ', 'score': 25}
       ]
     },
     {
       'questionNo' : 'Q2',
       'questionText':
-          'Do you wake up at midnight or wake up late than normally?',
+          'ใน 7 วันที่ผ่านมา ปัญหาจิตใจของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
       'answerText': [
-        {'text': 'Never had symptoms', 'score': 0},
-        {'text': 'Less than 1 time/week', 'score': 1},
-        {'text': 'Have problems 1-2 times/week', 'score': 2},
-        {'text': 'More trouble 3 times/week or more', 'score': 3}
+        {'text': 'ไม่ส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันเลย', 'score': 0},
+        {'text': 'การฝึกซ้อมหรือแข่งขันลดลงเล็กน้อย', 'score': 6},
+        {'text': 'การฝึกซ้อมหรือแข่งขันลดลงปานกลาง', 'score': 13},
+        {'text': 'การฝึกซ้อมหรือแข่งขันลดลงอย่างมาก', 'score': 19},
+        {'text': 'ไม่สามารถเข้าร่วมการฝึกซ้อมหรือแข่งขันได้เลย', 'score': 25}
       ]
     },
     {
       'questionNo' : 'Q3',
-      'questionText': 'How often do you use sleeping pills?',
+      'questionText': 'ใน 7 วันที่ผ่านมา ปัญหาจิตใจของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
       'answerText': [
-        {'text': 'Never used', 'score': 0},
-        {'text': 'Use less than 1 time/week', 'score': 1},
-        {'text': 'Use 1-2 times/week', 'score': 2},
-        {'text': 'Use more than 3 times/week or more', 'score': 3}
+        {'text': 'ไม่ส่งผลกระทบต่อความสามารถในการเล่นกีฬาเลย', 'score': 0},
+        {'text': 'ความสามารถในการเล่นกีฬาลดลงเล็กน้อย', 'score': 6},
+        {'text': 'ความสามารถในการเล่นกีฬาลดลงปานกลาง', 'score': 13},
+        {'text': 'ความสามารถในการเล่นกีฬาลดลงอย่างมาก', 'score': 19},
+        {'text': 'ไม่สามารถเข้าร่วมการฝึกซ้อมหรือแข่งขันได้เลย', 'score': 25}
       ]
     },
     {
       'questionNo' : 'Q4',
       'questionText':
-          'In the past 1 month, how good was your overall sleeping?',
+          'ใน 7 วันที่ผ่านมา อาการเจ็บปวดของจิตใจของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
       'answerText': [
-        {'text': 'Very good', 'score': 0},
-        {'text': 'Good', 'score': 1},
-        {'text': 'Not very good', 'score': 2},
-        {'text': 'not good at all', 'score': 3}
+        {'text': 'ไม่เจ็บเลย', 'score': 0},
+        {'text': 'เจ็บเล็กน้อย', 'score': 6},
+        {'text': 'เจ็บพอประมาณ', 'score': 13},
+        {'text': 'เจ็บมาก', 'score': 19},
+        {'text': 'ไม่สามารถเข้าร่วมการฝึกซ้อมหรือแข่งขันได้เลย', 'score': 25}
       ]
     },
   ];
@@ -96,7 +99,7 @@ class _MentalQuiz extends State<MentalQuiz> {
             ),
           ),
           body: _questionIndex < _questions.length
-              ? Quiz(
+              ? Questionnaire(
                   answerQuestion: _answerQuestion,
                   questionIndex: _questionIndex,
                   questions: _questions,

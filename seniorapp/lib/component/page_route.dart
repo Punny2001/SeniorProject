@@ -4,7 +4,11 @@ import 'package:seniorapp/auth-component/login.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_page_choosing.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checking_questionnaire.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/mental_questionnaire.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/physical_complain.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
@@ -17,7 +21,9 @@ final Map<String, WidgetBuilder> map = {
   '/staffPageChoosing': (BuildContext context) => StaffPageChoosing(),
   '/language': (BuildContext context) => LanguageSign(),
   '/forgotPassword': (BuildContext context) => ForgotPassword(),
-  '/mentalQuiz': (BuildContext context) => MentalQuiz(),
+  '/mentalQuestionnaire': (BuildContext context) => MentalQuestionnaire(),
+  '/healthQuestionnaire': (BuildContext context) => HealthQuestionnaire(),
+  '/physicalQuestionnaire': (BuildContext context) => PhysicalQuestionnaire(),
   '/injuryReport': (BuildContext context) => InjuryReport(),
   '/illnessReport': (BuildContext context) => IllnessReport(),
 };

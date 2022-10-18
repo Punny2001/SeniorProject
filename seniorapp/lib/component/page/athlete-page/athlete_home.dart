@@ -2,7 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checking_questionnaire.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/mental_questionnaire.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/physical_complain.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteHomePage extends StatefulWidget {
   const AthleteHomePage({Key key}) : super(key: key);
@@ -154,14 +159,19 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
               const Padding(
                 padding: EdgeInsets.all(10),
               ),
+              Text('รายงานปัญหา'),
+              PaddingDecorate(10),
               Center(
                 child: GestureDetector(
                   child: Card(
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image.network(
-                      'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
-                      fit: BoxFit.fill,
+                    child: Text(
+                      'Physical',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
@@ -169,27 +179,36 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                     elevation: 5,
                     margin: const EdgeInsets.all(10),
                   ),
-                  onTap: () => Navigator.of(context).pushNamed('/mentalQuiz'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          PhysicalQuestionnaire(),
+                    ),
+                  ),
                 ),
               ),
               const Padding(
                 padding: EdgeInsets.all(4),
               ),
               const Text(
-                'Mental Questionnaire',
+                'อาการบาดเจ็บทางร่างกาย (Physical)',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
               ),
               const Padding(
                 padding: EdgeInsets.all(10),
               ),
+
               Center(
                 child: GestureDetector(
                   child: Card(
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image.network(
-                      'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
-                      fit: BoxFit.fill,
+                    child: Text(
+                      'Health',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
@@ -197,16 +216,57 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                     elevation: 5,
                     margin: const EdgeInsets.all(10),
                   ),
-                  onTap: () =>
-                      Navigator.of(context).pushNamed('/physicalQuiz'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          HealthQuestionnaire(),
+                    ),
+                  ),
                 ),
               ),
               const Padding(
                 padding: EdgeInsets.all(4),
               ),
               const Text(
-                'Physical Questionnaire',
+                'ปัญหาสุขภาพ (Health)',
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(10),
+              ),
+
+              Center(
+                child: GestureDetector(
+                  child: Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Text(
+                      'Mental',
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    elevation: 5,
+                    margin: const EdgeInsets.all(10),
+                  ),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          MentalQuestionnaire(),
+                    ),
+                  ),
+                ),
+              ),
+              const Text(
+                'สุขภาพจิต (Mental)',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(10),
               ),
             ],
           ),
