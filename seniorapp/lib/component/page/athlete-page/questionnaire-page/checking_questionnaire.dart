@@ -28,7 +28,7 @@ class CheckingQuestionnaire extends StatelessWidget {
 
   String checkType() {
     if (questionnaireType == 'health') {
-      return 'คุณมีปัญหาการบาดเจ็บ การเจ็บป่วย หรือปัญหาสุขภาพหรือไม่';
+      return 'คุณมีอาการเจ็บป่วยหรือปัญหาสุขภาพหรือไม่';
     } else if (questionnaireType == 'physical') {
       return 'คุณมีปัญหาการบาดเจ็บตามส่วนต่างๆของร่างกายหรือไม่';
     } else {

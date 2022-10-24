@@ -194,7 +194,7 @@ class Questionnaire extends StatelessWidget {
     switch (type) {
       case 'physical':
         if (questions[0]['questionText'] !=
-            'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บ') {
+            'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด') {
           isQuestionnaire = true;
         } else {
           isQuestionnaire = false;
@@ -202,7 +202,8 @@ class Questionnaire extends StatelessWidget {
         break;
 
       case 'health':
-        if (questions[0]['questionText'] != 'โปรดเลือกปัญหาสุขภาพของคุณ') {
+        if (questions[0]['questionText'] != 'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด') {
+          // โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด
           isQuestionnaire = true;
         } else {
           isQuestionnaire = false;

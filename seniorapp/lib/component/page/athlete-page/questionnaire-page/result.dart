@@ -4,8 +4,17 @@ class Result extends StatelessWidget {
   final int resultScore;
   final Function resetHandler;
   final VoidCallback insertHandler;
+  final String questionType;
+  final String bodyPart;
+  final String healthPart;
 
-  Result(this.resultScore, this.resetHandler, this.insertHandler);
+  Result(
+      {this.resultScore,
+      this.resetHandler,
+      this.insertHandler,
+      this.questionType,
+      this.bodyPart,
+      this.healthPart});
 
   String get resultPhrase {
     var resultText = 'You did it!';
@@ -26,13 +35,13 @@ class Result extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Your Score: $resultScore',
+            checkQuestionType(questionType),
             style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           FlatButton(
             child: Text(
-              'Save questionaire',
+              'ถัดไป',
               style: TextStyle(decoration: TextDecoration.underline),
             ),
             textColor: Color.fromARGB(255, 18, 92, 153),
@@ -49,5 +58,23 @@ class Result extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String checkQuestionType(String questionType) {
+    switch (questionType) {
+      case 'physical':
+        if (resultScore == 0) {
+          return 'ท่านไม่มีอาการเจ็บป่วยทางกาย';
+        } else {
+          return 'ท่านมีอาการทางกาย ณ บริเวณ ${bodyPart} อยู่ที่ระดับ ${resultScore} คะแนน';
+        }
+        break;
+      case 'health':
+        if (resultScore == 0) {
+          return 'ท่านไม่มีปัญหาสุขภาพ';
+        }else {return 'ท่านมีปัญหาสุขภาพ ${healthPart} อยู่ที่ระดับ ${resultScore} คะแนน';}
+        break;
+      default:
+    }
   }
 }

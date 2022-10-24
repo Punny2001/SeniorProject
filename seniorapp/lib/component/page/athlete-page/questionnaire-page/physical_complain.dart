@@ -36,7 +36,6 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       _totalScore = 0;
       _bodyPartRound = 0;
       isResult = true;
-      hasQuestion = false;
       hasProblem = true;
     });
   }
@@ -66,7 +65,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
 
   final body_part = const [
     {
-      'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บ',
+      'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด',
       'answerText': [
         {
           'text': 'ส่วนหัวและลำตัว',
@@ -83,7 +82,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
 
   final body_injured = [
     {
-      'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บ',
+      'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด',
       'ส่วนหัวและลำตัว': [
         'ใบหน้า',
         'ศีรษะ',
@@ -220,14 +219,13 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                         questionType: 'physical',
                       )
                     : isResult
-                        ? Result(_totalScore, _resetQuestionnaire,
-                            savePhysicalResult)
+                        ? Result(resultScore: _totalScore, resetHandler: _resetQuestionnaire, insertHandler: savePhysicalResult, questionType: 'physical', bodyPart: _bodyChoosing,)
                         : MoreQuestionnaire(_resetQuestionnaire, 'physical')
             : hasProblem
                 ? CheckingQuestionnaire(
                     'physical', _checkingQuestion, _hasProblem)
                 : isResult
-                    ? Result(0, _resetQuestionnaire, savePhysicalResult)
+                    ? Result(resultScore: 0, resetHandler: _resetQuestionnaire, insertHandler: savePhysicalResult, questionType: 'physical')
                     : MoreQuestionnaire(_resetQuestionnaire, 'physical'),
       ),
       // : Result(_totalScore, _resetQuiz, savePhysicalResult)),
@@ -292,9 +290,9 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('กรอกข้อมูลเสร็จสิ้น'),
+              title: const Text('รายงานผลเสร็จสิ้น'),
               content: Text(
-                  'ผลลัพธ์ของคุณ ${questionnaireNo} ถูกจัดเก็บเรียบร้อยแล้ว!!'),
+                  'บันทึกข้อมูลอาการ${_bodyChoosing}เรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {

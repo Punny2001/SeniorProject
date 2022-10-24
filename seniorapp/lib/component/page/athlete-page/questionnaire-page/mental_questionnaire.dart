@@ -104,7 +104,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
                   questionIndex: _questionIndex,
                   questions: _questions,
                 )
-              : Result(_totalScore, _resetQuiz, saveMentalResult)),
+              : Result(resultScore: _totalScore, resetHandler: _resetQuiz, insertHandler: saveMentalResult)),
     );
   }
 

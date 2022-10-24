@@ -34,7 +34,6 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       _questionIndex = 0;
       _totalScore = 0;
       isResult = true;
-      hasQuestion = false;
       hasProblem = true;
     });
   }
@@ -60,13 +59,13 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
   final health_symp = [
     {
-      'questionText': 'โปรดเลือกปัญหาสุขภาพของคุณ',
+      'questionText': 'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด',
       'answerText': [
         'ไข้',
         'อ่อนล้า',
         'ต่อมอักเสบ',
         'เจ็บคอ',
-        'ทีน้ำมูก จาม ขัดจมูก',
+        'มีน้ำมูก จาม ขัดจมูก',
         'ไอ',
         'หายใจลำบาก',
         'ปวดหัว',
@@ -97,7 +96,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       {
         'questionNo': 'Q1',
         'questionText':
-            'ใน 7 วันที่ผ่านมา ปัญหา${_healthChoosing}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
+            'ใน 7 วันที่ผ่านมา อาการ${_healthChoosing}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
         'answerText': [
           {
             'text':
@@ -124,7 +123,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       {
         'questionNo': 'Q2',
         'questionText':
-            'ใน 7 วันที่ผ่านมา ปัญหา${_healthChoosing}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ${_healthChoosing}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันเลย', 'score': 0},
           {'text': 'การฝึกซ้อมหรือแข่งขันลดลงเล็กน้อย', 'score': 6},
@@ -136,7 +135,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       {
         'questionNo': 'Q3',
         'questionText':
-            'ใน 7 วันที่ผ่านมา ปัญหา${_healthChoosing}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ${_healthChoosing}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อความสามารถในการเล่นกีฬาเลย', 'score': 0},
           {'text': 'ความสามารถในการเล่นกีฬาลดลงเล็กน้อย', 'score': 6},
@@ -148,7 +147,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       {
         'questionNo': 'Q4',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการเจ็บปวดของ${_healthChoosing}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
+            'ใน 7 วันที่ผ่านมา อาการ${_healthChoosing}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
         'answerText': [
           {'text': 'ไม่เจ็บเลย', 'score': 0},
           {'text': 'เจ็บเล็กน้อย', 'score': 6},
@@ -194,7 +193,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                       )
                     : isResult
                         ? Result(
-                            _totalScore, _resetQuestionnaire, saveHealthResult)
+                            resultScore: _totalScore, resetHandler: _resetQuestionnaire, insertHandler: saveHealthResult, questionType: 'health', healthPart: _healthChoosing,)
                         : MoreQuestionnaire(_resetQuestionnaire, 'health')
                 : Questionnaire(
                     questions: health_symp,
@@ -205,7 +204,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                 ? CheckingQuestionnaire(
                     'health', _checkingQuestion, _hasProblem)
                 : isResult
-                    ? Result(0, _resetQuestionnaire, saveHealthResult)
+                    ? Result(resultScore: 0, resetHandler: _resetQuestionnaire, insertHandler: saveHealthResult, questionType: 'health',)
                     : MoreQuestionnaire(_resetQuestionnaire, 'health'),
       ),
       // : Result(_totalScore, _resetQuiz, saveHealthResult)),
@@ -271,9 +270,9 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('กรอกข้อมูลเสร็จสิ้น'),
+              title: const Text('รายงานผลเสร็จสิ้น'),
               content: Text(
-                  'ผลลัพธ์ของคุณ ${questionnaireNo} ถูกจัดเก็บเรียบร้อยแล้ว!!'),
+                  'บันทึกข้อมูลอาการ${_healthChoosing}เรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {

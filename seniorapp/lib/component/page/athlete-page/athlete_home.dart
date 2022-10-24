@@ -167,7 +167,7 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Text(
-                      'Physical',
+                      'อาการบาดเจ็บ',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -204,7 +204,7 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Text(
-                      'Health',
+                      'ปัญหาสุขภาพ',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -241,7 +241,7 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                     semanticContainer: true,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: Text(
-                      'Mental',
+                      'ปัญหาการนอนหลับและจิตใจ',
                       style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
