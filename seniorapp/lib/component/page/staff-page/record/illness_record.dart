@@ -571,11 +571,12 @@ class _IllnessReportState extends State<IllnessReport> {
                   items: _causeIllnessList
                       .map((key, value) {
                         return MapEntry(
-                            key,
-                            DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            ));
+                          key,
+                          DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          ),
+                        );
                       })
                       .values
                       .toList(),

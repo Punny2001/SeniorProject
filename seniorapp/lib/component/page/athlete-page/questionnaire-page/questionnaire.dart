@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import './question.dart';
 import './answer.dart';
@@ -63,6 +64,7 @@ class Questionnaire extends StatelessWidget {
                 : bodyType(bodyChoosing);
         break;
       case 'health':
+        var _healthSearch;
         return isQuestionnaire
             ? Column(
                 children: [
@@ -81,21 +83,68 @@ class Questionnaire extends StatelessWidget {
                 ],
               )
             : SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
+                physics: BouncingScrollPhysics(),
+                child: Column(
                   children: [
                     Question(
                       questions[0]['questionText'] as String,
                     ),
+                    Container(
+                      margin: const EdgeInsets.all(50),
+                      child: DropdownButtonFormField2(
+                        items: (questions[0]['answerText'] as List<String>)
+                            .map(
+                              (health) => DropdownMenuItem(
+                                child: Text(
+                                  health,
+                                ),
+                                value: health,
+                              ),
+                            )
+                            .toList(),
+                        isDense: true,
+                        onChanged: (health) => answerQuestion(health),
+                        searchController: _healthSearch,
+                        searchInnerWidget: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 20,
+                            right: 20,
+                            bottom: 10,
+                            top: 10,
+                          ),
+                          child: TextFormField(
+                            controller: _healthSearch,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () => _healthSearch.clear(),
+                                icon: const Icon(Icons.close),
+                              ),
+                              hintText: 'Search ...',
+                            ),
+                          ),
+                        ),
+                        searchMatchFn: (item, searchValue) {
+                          return (item.value.toString().toLowerCase().contains(
+                                searchValue.toLowerCase(),
+                              ));
+                        },
+                      ),
+                    ),
                     // ... makes separating list into a value of a list, then take it into child list.
-                    ...(questions[0]['answerText'] as List<String>).map((health) {
-                      print(health);
-                      return Answer(() => answerQuestion(health), health);
-                    }).toList()
+                    // ...(questions[0]['answerText'] as List<String>)
+                    //     .map((health) {
+                    //   print(health);
+                    //   return Answer(() => answerQuestion(health), health);
+                    // }).toList()
                     // : Text(questions[0].keys.last)
                   ],
                 ),
-            );
+              );
         break;
       case 'mental':
         return isQuestionnaire
@@ -202,7 +251,8 @@ class Questionnaire extends StatelessWidget {
         break;
 
       case 'health':
-        if (questions[0]['questionText'] != 'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด') {
+        if (questions[0]['questionText'] !=
+            'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด') {
           // โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด
           isQuestionnaire = true;
         } else {
