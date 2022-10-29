@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +23,11 @@ class _StaffReportState extends State<StaffReport> {
     String uid = FirebaseAuth.instance.currentUser.uid;
     Stream<List<QuerySnapshot>> getData() {
       Stream illnessStream = FirebaseFirestore.instance
-          .collection('IllnessReport')
+          .collection('IllnessRecord')
           .where('staff_uid', isEqualTo: uid)
           .snapshots();
       Stream injuryStream = FirebaseFirestore.instance
-          .collection('InjuryReport')
+          .collection('InjuryRecord')
           .where('staff_uid', isEqualTo: uid)
           .snapshots();
       print(StreamZip([injuryStream, illnessStream]));
@@ -37,12 +35,15 @@ class _StaffReportState extends State<StaffReport> {
       return StreamZip([injuryStream, illnessStream]);
     }
 
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Column(
-        children: [
-          
-          Container(
-            child: StreamBuilder(
+      body: Container(
+        height: h,
+        width: w,
+        child: getData().length == 0
+            ? StreamBuilder(
                 stream: getData(),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.hasData) {
@@ -58,93 +59,99 @@ class _StaffReportState extends State<StaffReport> {
                       mappedData.add(doc.data());
                     }
 
-                    String id = '';
-                    for (int i = 0; i < 10; i++) {
-                      id += Random().nextInt(10).toString();
-                    }
-
                     return ListView.builder(
-                        itemCount: mappedData.length,
-                        itemBuilder: (context, index) {
-                          Map<String, dynamic> data = mappedData[index];
-                          return GestureDetector(
-                              child: Card(
-                                margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                                child: Column(
+                      itemCount: mappedData.length,
+                      itemBuilder: (context, index) {
+                        Map<String, dynamic> data = mappedData[index];
+                        return GestureDetector(
+                          child: Card(
+                            margin: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                            child: Column(
+                              children: <Widget>[
+                                Column(
                                   children: <Widget>[
-                                    Column(
-                                      children: <Widget>[
-                                        Text('Report type: ' + data['report_type']),
-                                        Text('Sport: ' + data['sport_event']),
-                                        Text('Done on: ' +
-                                            formatDate(data['doDate'].toDate())),
-                                      ],
-                                    ),
+                                    Text('Report type: ' + data['report_type']),
+                                    Text('Sport: ' + data['sport_event']),
+                                    Text('Done on: ' +
+                                        formatDate(data['doDate'].toDate())),
                                   ],
                                 ),
-                              ),
-                              onTap: () {
-                                if (data['report_type'] == 'Illness') {
-                                  IllnessReportData illness =
-                                      IllnessReportData.fromMap(data);
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ReportIllnessDescription(
-                                        report_id: 'ILR' + id,
-                                        affected_system: illness.affected_system,
-                                        affected_system_code:
-                                            illness.affected_system_code,
-                                        athlete_no: illness.athlete_no,
-                                        diagnosis: illness.diagnosis,
-                                        illness_cause: illness.illness_cause,
-                                        illness_cause_code:
-                                            illness.illness_cause_code,
-                                        mainSymptoms: illness.mainSymptoms,
-                                        mainSymptomsCode: illness.mainSymptomsCode,
-                                        no_day: illness.no_day,
-                                        occured_date: illness.occured_date,
-                                        report_type: illness.report_type,
-                                        sport_event: illness.sport_event,
-                                        staff_uid: illness.staff_uid,
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  InjuryReportData injury =
-                                      InjuryReportData.fromMap(data);
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => ReportInjuryDescription(
-                                        report_id: 'IJR' + id,
-                                        injuryBody: injury.injuryBody,
-                                        injuryBodyCode: injury.injuryBodyCode,
-                                        injuryCause: injury.injuryCause,
-                                        injuryCauseCode: injury.injuryCauseCode,
-                                        injuryType: injury.injuryType,
-                                        injuryTypeCode: injury.injuryTypeCode,
-                                        round_heat_training:
-                                            injury.round_heat_training,
-                                        athlete_no: injury.athlete_no,
-                                        no_day: injury.no_day,
-                                        injuryDateTime: injury.injuryDateTime,
-                                        report_type: injury.report_type,
-                                        sport_event: injury.sport_event,
-                                        staff_uid: injury.staff_uid,
-                                      ),
-                                    ),
-                                  );
-                                }
-                              });
-                        });
+                              ],
+                            ),
+                          ),
+                          onTap: () {
+                            if (data['report_type'] == 'Illness') {
+                              IllnessReportData illness =
+                                  IllnessReportData.fromMap(data);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ReportIllnessDescription(
+                                    report_id: illness.report_no,
+                                    affected_system: illness.affected_system,
+                                    affected_system_code:
+                                        illness.affected_system_code,
+                                    athlete_no: illness.athlete_no,
+                                    diagnosis: illness.diagnosis,
+                                    illness_cause: illness.illness_cause,
+                                    illness_cause_code:
+                                        illness.illness_cause_code,
+                                    mainSymptoms: illness.mainSymptoms,
+                                    mainSymptomsCode: illness.mainSymptomsCode,
+                                    no_day: illness.no_day,
+                                    occured_date: illness.occured_date,
+                                    report_type: illness.report_type,
+                                    sport_event: illness.sport_event,
+                                    staff_uid: illness.staff_uid,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              InjuryReportData injury =
+                                  InjuryReportData.fromMap(data);
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ReportInjuryDescription(
+                                    report_id: injury.report_no,
+                                    injuryBody: injury.injuryBody,
+                                    injuryBodyCode: injury.injuryBodyCode,
+                                    injuryCause: injury.injuryCause,
+                                    injuryCauseCode: injury.injuryCauseCode,
+                                    injuryType: injury.injuryType,
+                                    injuryTypeCode: injury.injuryTypeCode,
+                                    round_heat_training:
+                                        injury.round_heat_training,
+                                    athlete_no: injury.athlete_no,
+                                    no_day: injury.no_day,
+                                    injuryDateTime: injury.injuryDateTime,
+                                    report_type: injury.report_type,
+                                    sport_event: injury.sport_event,
+                                    staff_uid: injury.staff_uid,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      },
+                    );
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   }
-                }),
-          ),
-        ],
+                },
+              )
+            : Center(
+                child: Text(
+                  'Empty medical record',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 50,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
       ),
     );
   }

@@ -20,6 +20,8 @@ class _StaffProfileState extends State<StaffProfile> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
+    getStfData();
+
     return Scaffold(
       body: Container(
         height: h,

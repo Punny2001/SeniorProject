@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_profile.dart';
+import 'package:seniorapp/component/page/staff-page/staff_case.dart';
 import 'package:seniorapp/component/page/staff-page/staff_history.dart';
 import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
 
@@ -20,6 +21,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   static const List<Widget> _StaffPageList = <Widget>[
     StaffHomePage(),
     StaffReport(),
+    StaffCase(),
     StaffNotify(),
     StaffProfile(),
   ];
@@ -47,24 +49,33 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            backgroundColor: Colors.blue,
+            elevation: 0,
             unselectedItemColor: Colors.black,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
                 label: 'Home',
+                backgroundColor: Colors.blue,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.paste),
                 label: 'History',
+                backgroundColor: Colors.green
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.cases_outlined),
+                label: 'Case',
+                backgroundColor: Colors.orange,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.notifications),
                 label: 'Notification',
+                backgroundColor: Colors.yellow
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.menu),
                 label: 'Profile',
+                backgroundColor: Colors.purple
               ),
             ],
             currentIndex: _selected_idx,

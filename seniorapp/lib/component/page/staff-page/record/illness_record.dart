@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -862,8 +863,32 @@ class _IllnessReportState extends State<IllnessReport> {
       getMainSymptomCode.add(int.parse(item.selectedMainSymptomCode));
     }
 
+    String report_no = 'ILR';
+    String split;
+    int latestID;
+    NumberFormat format = NumberFormat('0000000000');
+    await FirebaseFirestore.instance
+        .collection('IllnessRecord')
+        .orderBy('report_no', descending: true)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.size == 0) {
+        report_no += format.format(1);
+      } else {
+        querySnapshot.docs
+            .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+          Map data = queryDocumentSnapshot.data();
+          split = data['report_no'].toString().split('ILR')[1];
+          latestID = int.parse(split) + 1;
+          report_no += format.format(latestID);
+        });
+      }
+    });
+
     if (isValidate && (addingValidator || valueAdded == true)) {
       IllnessReportData illnessReportModel = IllnessReportData(
+          report_no: report_no,
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
           report_type: 'Illness',
@@ -882,7 +907,7 @@ class _IllnessReportState extends State<IllnessReport> {
       Map<String, dynamic> data = illnessReportModel.toMap();
 
       final collectionReference =
-          FirebaseFirestore.instance.collection('IllnessReport');
+          FirebaseFirestore.instance.collection('IllnessRecord');
       DocumentReference docReference = collectionReference.doc();
       docReference.set(data).then((value) {
         showDialog<void>(

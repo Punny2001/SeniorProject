@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1030,8 +1031,31 @@ class _InjuryReportState extends State<InjuryReport> {
       _selectedInjuryType += ', ${_otherInjuryType.text.trim()}';
     }
     if (isValidate) {
+      String report_no = 'IJR';
+      String split;
+      int latestID;
+      NumberFormat format = NumberFormat('0000000000');
+      await FirebaseFirestore.instance
+          .collection('InjuryRecord')
+          .orderBy('report_no', descending: true)
+          .limit(1)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        if (querySnapshot.size == 0) {
+          report_no += format.format(1);
+        } else {
+          querySnapshot.docs
+              .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+            Map data = queryDocumentSnapshot.data();
+            split = data['report_no'].toString().split('IJR')[1];
+            latestID = int.parse(split) + 1;
+            report_no += format.format(latestID);
+          });
+        }
+      });
       if (bodyType == 1) {
         InjuryReportData injuryReportModel = InjuryReportData(
+            report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),
             report_type: 'Injury',
@@ -1074,6 +1098,7 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       } else if (bodyType == 2) {
         InjuryReportData injuryReportModel = InjuryReportData(
+            report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),
             report_type: 'Injury',
@@ -1116,6 +1141,7 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       } else if (bodyType == 3) {
         InjuryReportData injuryReportModel = InjuryReportData(
+            report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),
             report_type: 'Injury',
