@@ -40,7 +40,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
   void _answerHealthPart(String health) {
     setState(() {
-      _healthChoosing = health;
+      _healthChoosing = health.trimRight();
       answer_health = true;
     });
   }
@@ -61,7 +61,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     {
       'questionText': 'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด',
       'answerText': [
-        'ไข้',
+        'ไข้ ',
         'อ่อนล้า',
         'ต่อมอักเสบ',
         'เจ็บคอ',
@@ -69,7 +69,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
         'ไอ',
         'หายใจลำบาก',
         'ปวดหัว',
-        'คลื่นไส้',
+        'คลื่นไส้ ',
         'อาเจียน',
         'ท้องเสีย',
         'ท้องผูก',
@@ -193,7 +193,12 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                       )
                     : isResult
                         ? Result(
-                            resultScore: _totalScore, resetHandler: _resetQuestionnaire, insertHandler: saveHealthResult, questionType: 'health', healthPart: _healthChoosing,)
+                            resultScore: _totalScore,
+                            resetHandler: _resetQuestionnaire,
+                            insertHandler: saveHealthResult,
+                            questionType: 'health',
+                            healthPart: _healthChoosing,
+                          )
                         : MoreQuestionnaire(_resetQuestionnaire, 'health')
                 : Questionnaire(
                     questions: health_symp,
@@ -204,7 +209,12 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                 ? CheckingQuestionnaire(
                     'health', _checkingQuestion, _hasProblem)
                 : isResult
-                    ? Result(resultScore: 0, resetHandler: _resetQuestionnaire, insertHandler: saveHealthResult, questionType: 'health',)
+                    ? Result(
+                        resultScore: 0,
+                        resetHandler: _resetQuestionnaire,
+                        insertHandler: saveHealthResult,
+                        questionType: 'health',
+                      )
                     : MoreQuestionnaire(_resetQuestionnaire, 'health'),
       ),
       // : Result(_totalScore, _resetQuiz, saveHealthResult)),
@@ -271,8 +281,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รายงานผลเสร็จสิ้น'),
-              content: Text(
-                  'บันทึกข้อมูลอาการ${_healthChoosing}เรียบร้อย'),
+              content: Text('บันทึกข้อมูลอาการ${_healthChoosing}เรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {

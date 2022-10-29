@@ -4,6 +4,7 @@ import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_profile.dart';
 import 'package:seniorapp/component/page/staff-page/staff_history.dart';
+import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
 
 class StaffPageChoosing extends StatefulWidget {
   const StaffPageChoosing({Key key}) : super(key: key);
@@ -19,6 +20,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   static const List<Widget> _StaffPageList = <Widget>[
     StaffHomePage(),
     StaffReport(),
+    StaffNotify(),
     StaffProfile(),
   ];
 
@@ -34,43 +36,45 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       body: Container(
         child: _StaffPageList.elementAt(_selected_idx),
       ),
-        bottomNavigationBar: Container(
-            decoration: const BoxDecoration(
-
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30), topLeft: Radius.circular(30)
+      bottomNavigationBar: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.blue,
+            unselectedItemColor: Colors.black,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
               ),
-            ),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.paste),
+                label: 'History',
               ),
-              child: BottomNavigationBar(
-                backgroundColor: Colors.blue,
-                unselectedItemColor: Colors.black,
-                items: const <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.paste),
-                    label: 'History',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.menu),
-                    label: 'Profile',
-                  ),
-                ],
-                currentIndex: _selected_idx,
-                onTap: _onPageTap,
-                selectedItemColor: Colors.redAccent,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: 'Notification',
               ),
-            ),
-            ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.menu),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _selected_idx,
+            onTap: _onPageTap,
+            selectedItemColor: Colors.redAccent,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+          ),
+        ),
+      ),
     );
   }
 }

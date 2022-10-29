@@ -25,6 +25,7 @@ class Questionnaire extends StatelessWidget {
   }
 
   Widget _questionType(String type) {
+    TextEditingController _healthSearch = TextEditingController();
     switch (type) {
       case 'physical':
         return isQuestionnaire
@@ -64,7 +65,6 @@ class Questionnaire extends StatelessWidget {
                 : bodyType(bodyChoosing);
         break;
       case 'health':
-        var _healthSearch;
         return isQuestionnaire
             ? Column(
                 children: [
@@ -129,8 +129,8 @@ class Questionnaire extends StatelessWidget {
                           ),
                         ),
                         searchMatchFn: (item, searchValue) {
-                          return (item.value.toString().toLowerCase().contains(
-                                searchValue.toLowerCase(),
+                          return (item.value.toString().contains(
+                                searchValue,
                               ));
                         },
                       ),
