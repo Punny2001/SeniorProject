@@ -256,7 +256,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           questionnaireType: 'Health',
           totalPoint: _totalScore,
           answerList: answer_list,
-          healthSymptom: _healthChoosing);
+          healthSymptom: _healthChoosing,
+          caseReceived: false);
     } else {
       for (int i = 0; i < questionSize; i++) {
         answer_list["Q${i + 1}"] = 0;
@@ -268,7 +269,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           questionnaireType: 'Health',
           totalPoint: _totalScore,
           answerList: answer_list,
-          healthSymptom: 'None');
+          healthSymptom: 'None',
+          caseReceived: false);
     }
     Map<String, dynamic> data = healthResultModel.toMap();
 

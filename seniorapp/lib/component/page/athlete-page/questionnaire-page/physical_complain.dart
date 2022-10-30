@@ -276,7 +276,8 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           questionnaireType: 'Physical',
           totalPoint: _totalScore,
           answerList: answer_list,
-          bodyPart: insertedBody);
+          bodyPart: insertedBody,
+          caseReceived: false);
     } else {
       for (int i = 0; i < questionSize; i++) {
         answer_list["Q${i + 1}"] = 0;
@@ -288,7 +289,8 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           questionnaireType: 'Physical',
           totalPoint: _totalScore,
           answerList: answer_list,
-          bodyPart: 'None');
+          bodyPart: 'None',
+          caseReceived: false);
     }
     Map<String, dynamic> data = physicalResultModel.toMap();
 

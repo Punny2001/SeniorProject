@@ -10,16 +10,19 @@ class PhysicalResultData {
   int totalPoint;
   Map<String, int> answerList;
   String bodyPart;
+  bool caseReceived;
+  String staff_no_received;
 
-  PhysicalResultData({
-    @required this.questionnaireNo,
-    @required this.athleteNo,
-    @required this.questionnaireType,
-    @required this.doDate,
-    @required this.totalPoint,
-    @required this.answerList,
-    @required this.bodyPart,
-  });
+  PhysicalResultData(
+      {@required this.questionnaireNo,
+      @required this.athleteNo,
+      @required this.questionnaireType,
+      @required this.doDate,
+      @required this.totalPoint,
+      @required this.answerList,
+      @required this.bodyPart,
+      @required this.caseReceived,
+      this.staff_no_received});
 
   PhysicalResultData copyWith({
     String questionnaireNo,
@@ -29,6 +32,8 @@ class PhysicalResultData {
     int totalPoint,
     Map<String, int> answerList,
     String bodyPart,
+    bool caseReceived,
+    String staff_no_received,
   }) {
     return PhysicalResultData(
       questionnaireNo: questionnaireNo ?? this.questionnaireNo,
@@ -38,6 +43,8 @@ class PhysicalResultData {
       totalPoint: totalPoint ?? this.totalPoint,
       answerList: answerList ?? this.answerList,
       bodyPart: bodyPart ?? this.bodyPart,
+      caseReceived: caseReceived ?? this.caseReceived,
+      staff_no_received: staff_no_received ?? this.staff_no_received
     );
   }
 
@@ -51,6 +58,8 @@ class PhysicalResultData {
     result.addAll({'totalPoint': totalPoint});
     result.addAll({'answerList': answerList});
     result.addAll({'bodyPart': bodyPart});
+    result.addAll({'caseReceived': caseReceived});
+    result.addAll({'staff_no_received': staff_no_received});
 
     return result;
   }
@@ -64,6 +73,8 @@ class PhysicalResultData {
       totalPoint: map['totalPoint']?.toInt() ?? 0,
       answerList: Map<String, int>.from(map['answerList']),
       bodyPart: map['bodyPart'] ?? '',
+      caseReceived: map['caseReceived'] ?? false,
+      staff_no_received: map['staff_no_received'] ?? ''
     );
   }
 
@@ -74,7 +85,7 @@ class PhysicalResultData {
 
   @override
   String toString() {
-    return 'PhysicalResultData(athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, bodyPart: $bodyPart)';
+    return 'PhysicalResultData(athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, bodyPart: $bodyPart, caseReceived: $caseReceived, staff_no_received: $staff_no_received)';
   }
 
   @override
@@ -88,7 +99,9 @@ class PhysicalResultData {
         other.doDate == doDate &&
         other.totalPoint == totalPoint &&
         mapEquals(other.answerList, answerList) &&
-        other.bodyPart == bodyPart;
+        other.bodyPart == bodyPart &&
+        other.caseReceived == caseReceived &&
+        other.staff_no_received == staff_no_received;
   }
 
   @override
@@ -99,6 +112,8 @@ class PhysicalResultData {
         doDate.hashCode ^
         totalPoint.hashCode ^
         answerList.hashCode ^
-        bodyPart.hashCode;
+        bodyPart.hashCode ^
+        caseReceived.hashCode ^
+        staff_no_received.hashCode;
   }
 }

@@ -21,18 +21,15 @@ class StaffCase extends StatefulWidget {
 
 class _StaffCaseState extends State<StaffCase> {
   String uid = FirebaseAuth.instance.currentUser.uid;
+  bool notNull;
 
   HealthResultData healthData;
   PhysicalResultData physicalData;
-
-  void getStfData() {}
 
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-
-    getStfData();
 
     Stream<List<QuerySnapshot>> getData() {
       String staff_no;
@@ -51,14 +48,16 @@ class _StaffCaseState extends State<StaffCase> {
           .collection('PhysicalQuestionnaireResult')
           .where('staff_no_received', isEqualTo: staff_no, isNull: false)
           .snapshots();
+      
       return StreamZip([healthQuestionnaire, physicalQuestionnaire]);
     }
+    
 
     return Scaffold(
       body: Container(
         height: h,
         width: w,
-        child: getData().length != 0
+        child: notNull == true
             ? Container(
                 child: StreamBuilder(
                   stream: getData(),
