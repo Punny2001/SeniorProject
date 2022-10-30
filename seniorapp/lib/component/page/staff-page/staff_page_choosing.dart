@@ -58,25 +58,22 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                 backgroundColor: Colors.blue,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.paste),
-                label: 'History',
-                backgroundColor: Colors.green
-              ),
+                  icon: Icon(Icons.paste),
+                  label: 'History',
+                  backgroundColor: Colors.green),
               BottomNavigationBarItem(
                 icon: Icon(Icons.cases_outlined),
                 label: 'Case',
                 backgroundColor: Colors.orange,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                label: 'Notification',
-                backgroundColor: Colors.yellow
-              ),
+                  icon: Icon(Icons.notifications),
+                  label: 'Notification',
+                  backgroundColor: Colors.yellow),
               BottomNavigationBarItem(
-                icon: Icon(Icons.menu),
-                label: 'Profile',
-                backgroundColor: Colors.purple
-              ),
+                  icon: Icon(Icons.menu),
+                  label: 'Profile',
+                  backgroundColor: Colors.purple),
             ],
             currentIndex: _selected_idx,
             onTap: _onPageTap,

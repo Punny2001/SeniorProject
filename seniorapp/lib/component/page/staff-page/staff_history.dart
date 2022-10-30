@@ -42,7 +42,7 @@ class _StaffReportState extends State<StaffReport> {
       body: Container(
         height: h,
         width: w,
-        child: getData().length == 0
+        child: getData().length != 0
             ? StreamBuilder(
                 stream: getData(),
                 builder: (BuildContext context, snapshot) {
@@ -72,8 +72,12 @@ class _StaffReportState extends State<StaffReport> {
                                   children: <Widget>[
                                     Text('Report type: ' + data['report_type']),
                                     Text('Sport: ' + data['sport_event']),
-                                    Text('Done on: ' +
-                                        formatDate(data['doDate'].toDate())),
+                                    Text(
+                                      'Done on: ' +
+                                          formatDate(
+                                            data['doDate'].toDate(),
+                                          ),
+                                    ),
                                   ],
                                 ),
                               ],

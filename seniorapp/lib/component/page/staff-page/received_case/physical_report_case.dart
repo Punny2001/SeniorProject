@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-class HealthReportCase extends StatelessWidget {
+class PhysicalReportCase extends StatelessWidget {
   String questionnaireNo;
   String athleteNo;
   String questionnaireType;
   DateTime doDate;
   int totalPoint;
   Map<String, int> answerList;
-  String healthSymptom;
+  String bodyPart;
 
-  HealthReportCase(
+  PhysicalReportCase(
       {@required this.questionnaireNo,
       @required this.answerList,
       @required this.athleteNo,
       @required this.doDate,
-      @required this.healthSymptom,
+      @required this.bodyPart,
       @required this.questionnaireType,
       @required this.totalPoint});
 

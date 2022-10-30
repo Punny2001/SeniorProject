@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class HealthResultData {
   String questionnaireNo;
   String athleteNo;
-  String questionaireType;
+  String questionnaireType;
   DateTime doDate;
   int totalPoint;
   Map<String, int> answerList;
@@ -14,7 +14,7 @@ class HealthResultData {
   HealthResultData({
     @required this.questionnaireNo,
     @required this.athleteNo,
-    @required this.questionaireType,
+    @required this.questionnaireType,
     @required this.doDate,
     @required this.totalPoint,
     @required this.answerList,
@@ -24,7 +24,7 @@ class HealthResultData {
   HealthResultData copyWith({
     String questionnaireNo,
     String athleteNo,
-    String questionaireType,
+    String questionnaireType,
     DateTime doDate,
     int totalPoint,
     Map<String, int> answerList,
@@ -33,7 +33,7 @@ class HealthResultData {
     return HealthResultData(
       questionnaireNo: questionnaireNo ?? this.questionnaireNo,
       athleteNo: athleteNo ?? this.athleteNo,
-      questionaireType: questionaireType ?? this.questionaireType,
+      questionnaireType: questionnaireType ?? this.questionnaireType,
       doDate: doDate ?? this.doDate,
       totalPoint: totalPoint ?? this.totalPoint,
       answerList: answerList ?? this.answerList,
@@ -46,7 +46,7 @@ class HealthResultData {
 
     result.addAll({'questionnaireNo': questionnaireNo});
     result.addAll({'athleteNo': athleteNo});
-    result.addAll({'questionaireType': questionaireType});
+    result.addAll({'questionnaireType': questionnaireType});
     result.addAll({'doDate': doDate});
     result.addAll({'totalPoint': totalPoint});
     result.addAll({'answerList': answerList});
@@ -59,7 +59,7 @@ class HealthResultData {
     return HealthResultData(
       questionnaireNo: map['questionnaireNo'] ?? '',
       athleteNo: map['athleteNo'] ?? '',
-      questionaireType: map['questionaireType'] ?? '',
+      questionnaireType: map['questionnaireType'] ?? '',
       doDate: DateTime.parse(map['doDate'].toDate().toString()),
       totalPoint: map['totalPoint']?.toInt() ?? 0,
       answerList: Map<String, int>.from(map['answerList']),
@@ -74,7 +74,7 @@ class HealthResultData {
 
   @override
   String toString() {
-    return 'HealthResultData(athleteNo: $athleteNo, questionaireType: $questionaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, healthSymptom: $healthSymptom)';
+    return 'HealthResultData(athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, healthSymptom: $healthSymptom)';
   }
 
   @override
@@ -84,7 +84,7 @@ class HealthResultData {
     return other is HealthResultData &&
         other.questionnaireNo == questionnaireNo &&
         other.athleteNo == athleteNo &&
-        other.questionaireType == questionaireType &&
+        other.questionnaireType == questionnaireType &&
         other.doDate == doDate &&
         other.totalPoint == totalPoint &&
         mapEquals(other.answerList, answerList) &&
@@ -95,7 +95,7 @@ class HealthResultData {
   int get hashCode {
     return questionnaireNo.hashCode ^
         athleteNo.hashCode ^
-        questionaireType.hashCode ^
+        questionnaireType.hashCode ^
         doDate.hashCode ^
         totalPoint.hashCode ^
         answerList.hashCode ^

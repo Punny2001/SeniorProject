@@ -219,13 +219,23 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                         questionType: 'physical',
                       )
                     : isResult
-                        ? Result(resultScore: _totalScore, resetHandler: _resetQuestionnaire, insertHandler: savePhysicalResult, questionType: 'physical', bodyPart: _bodyChoosing,)
+                        ? Result(
+                            resultScore: _totalScore,
+                            resetHandler: _resetQuestionnaire,
+                            insertHandler: savePhysicalResult,
+                            questionType: 'physical',
+                            bodyPart: _bodyChoosing,
+                          )
                         : MoreQuestionnaire(_resetQuestionnaire, 'physical')
             : hasProblem
                 ? CheckingQuestionnaire(
                     'physical', _checkingQuestion, _hasProblem)
                 : isResult
-                    ? Result(resultScore: 0, resetHandler: _resetQuestionnaire, insertHandler: savePhysicalResult, questionType: 'physical')
+                    ? Result(
+                        resultScore: 0,
+                        resetHandler: _resetQuestionnaire,
+                        insertHandler: savePhysicalResult,
+                        questionType: 'physical')
                     : MoreQuestionnaire(_resetQuestionnaire, 'physical'),
       ),
       // : Result(_totalScore, _resetQuiz, savePhysicalResult)),
@@ -263,7 +273,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           questionnaireNo: questionnaireNo,
           athleteNo: uid,
           doDate: DateTime.now(),
-          questionaireType: 'Physical',
+          questionnaireType: 'Physical',
           totalPoint: _totalScore,
           answerList: answer_list,
           bodyPart: insertedBody);
@@ -275,7 +285,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           questionnaireNo: questionnaireNo,
           athleteNo: uid,
           doDate: DateTime.now(),
-          questionaireType: 'Physical',
+          questionnaireType: 'Physical',
           totalPoint: _totalScore,
           answerList: answer_list,
           bodyPart: 'None');
@@ -291,8 +301,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รายงานผลเสร็จสิ้น'),
-              content: Text(
-                  'บันทึกข้อมูลอาการ${_bodyChoosing}เรียบร้อย'),
+              content: Text('บันทึกข้อมูลอาการ${_bodyChoosing}เรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {

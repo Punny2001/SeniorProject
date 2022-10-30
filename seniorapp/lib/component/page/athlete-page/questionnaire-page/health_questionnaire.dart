@@ -253,7 +253,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           questionnaireNo: questionnaireNo,
           athleteNo: uid,
           doDate: DateTime.now(),
-          questionaireType: 'Health',
+          questionnaireType: 'Health',
           totalPoint: _totalScore,
           answerList: answer_list,
           healthSymptom: _healthChoosing);
@@ -265,7 +265,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           questionnaireNo: questionnaireNo,
           athleteNo: uid,
           doDate: DateTime.now(),
-          questionaireType: 'Health',
+          questionnaireType: 'Health',
           totalPoint: _totalScore,
           answerList: answer_list,
           healthSymptom: 'None');
