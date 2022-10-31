@@ -52,11 +52,12 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
       appBar: AppBar(
         title: Text(widget.report_id),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(30),
-          height: h,
-          width: w,
+      body: Container(
+        padding: const EdgeInsets.all(30),
+        height: h,
+        width: w,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Text(

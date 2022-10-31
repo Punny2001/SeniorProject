@@ -21,6 +21,7 @@ class StaffCase extends StatefulWidget {
 }
 
 class _StaffCaseState extends State<StaffCase> {
+  Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
   String staff_no;
   int healthSize;
@@ -90,11 +91,17 @@ class _StaffCaseState extends State<StaffCase> {
     );
     getPhysicalSize();
     getHealthSize();
-    Timer(Duration(seconds: 1), () {
+    _timer = Timer(Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   HealthResultData healthData;
