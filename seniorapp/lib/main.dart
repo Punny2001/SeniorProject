@@ -4,16 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:seniorapp/component/page_route.dart';
+import 'package:seniorapp/firebase/firebase_options.dart';
 
 String initPage = '/login';
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  print("Handling a background message: ${message.messageId}");
+
+  FlutterLocalNotificationsPlugin().show(
+    message.hashCode,
+    message.data['title'],
+    message.data['body'],
+    NotificationDetails(),
+  );
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp().then((value) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
+      .then((value) async {
     FirebaseAuth.instance.authStateChanges().listen((event) async {
       if (event != null) {
         String uid = event.uid;
@@ -29,30 +43,9 @@ Future<void> main() async {
         } else {
           initPage = '/register';
         }
-        FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-        NotificationSettings settings =
-            await firebaseMessaging.requestPermission(
-          alert: true,
-          announcement: false,
-          badge: true,
-          carPlay: false,
-          criticalAlert: false,
-          provisional: false,
-          sound: true,
-        );
-        print('User granted permission: ${settings.authorizationStatus}');
-
-        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          print('Got a message while it in the foreground!');
-          print('Message data: ${message.data}');
-
-          if (message.notification != null) {
-            print(
-                'Message also contained a notification: ${message.notification}');
-          }
-        });
-
-        firebaseMessaging.getToken();
+        FirebaseMessaging.onBackgroundMessage(
+            _firebaseMessagingBackgroundHandler);
+            
 
         runApp(
           EasyLocalization(
