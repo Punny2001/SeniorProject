@@ -25,6 +25,7 @@ class _StaffCaseState extends State<StaffNotify> {
   String staff_no;
   int healthSize;
   int physicalSize;
+  Timer _timer;
 
   HealthResultData healthData;
   PhysicalResultData physicalData;
@@ -42,7 +43,7 @@ class _StaffCaseState extends State<StaffNotify> {
   }
 
   getHealthSize() {
-    final healthQuery = FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
         .where('caseReceived', isEqualTo: false, isNull: false)
         .get()
@@ -56,7 +57,7 @@ class _StaffCaseState extends State<StaffNotify> {
   }
 
   getPhysicalSize() {
-    final physicalQuery = FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
         .where('caseReceived', isEqualTo: false, isNull: false)
         .get()
@@ -77,11 +78,17 @@ class _StaffCaseState extends State<StaffNotify> {
     });
     getPhysicalSize();
     getHealthSize();
-    Timer(Duration(seconds: 1), () {
+    _timer = Timer(Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
     });
+  }
+
+  @override
+  void dispose(){
+    _timer.cancel();
+    super.dispose();
   }
 
   @override

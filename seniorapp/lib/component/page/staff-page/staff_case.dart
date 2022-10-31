@@ -27,6 +27,7 @@ class _StaffCaseState extends State<StaffCase> {
   int healthSize;
   int physicalSize;
   bool isLoading = false;
+  Timer _timer;
 
   Stream<List<QuerySnapshot>> getData() {
     String staffNo;
@@ -50,7 +51,7 @@ class _StaffCaseState extends State<StaffCase> {
   }
 
   getHealthSize() {
-    final healthQuery = FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
         .where('staff_no_received', isEqualTo: staff_no, isNull: false)
         .get()
@@ -64,7 +65,7 @@ class _StaffCaseState extends State<StaffCase> {
   }
 
   getPhysicalSize() {
-    final physicalQuery = FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
         .where('staff_no_received', isEqualTo: staff_no, isNull: false)
         .get()
