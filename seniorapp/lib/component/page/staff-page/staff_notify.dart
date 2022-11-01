@@ -265,7 +265,7 @@ class _StaffCaseState extends State<StaffNotify> {
                   )
                 : Center(
                     child: Text(
-                      'Empty notofication',
+                      'Empty notification',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 50,

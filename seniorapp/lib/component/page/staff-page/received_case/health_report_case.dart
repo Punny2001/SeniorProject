@@ -26,11 +26,12 @@ class HealthReportCase extends StatelessWidget {
       appBar: AppBar(
         title: Text(questionnaireNo),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(30),
-          height: h,
-          width: w,
+      body: Container(
+        padding: const EdgeInsets.all(30),
+        height: h,
+        width: w,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               Text('Total Score: $totalPoint'),

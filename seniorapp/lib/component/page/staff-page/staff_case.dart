@@ -21,6 +21,7 @@ class StaffCase extends StatefulWidget {
 }
 
 class _StaffCaseState extends State<StaffCase> {
+  Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
   String staff_no;
   int healthSize;
