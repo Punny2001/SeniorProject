@@ -9,22 +9,21 @@ import 'package:seniorapp/component/page_route.dart';
 import 'package:seniorapp/firebase/firebase_options.dart';
 
 String initPage = '/login';
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print("Handling a background message: ${message.messageId}");
 
-  FlutterLocalNotificationsPlugin().show(
-    message.hashCode,
-    message.data['title'],
-    message.data['body'],
-    NotificationDetails(),
-  );
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
+}
+
+Future<void> _requestAndRegisterNotification() async {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   // WidgetsFlutterBinding.ensureInitialized();
+  
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) async {
@@ -43,10 +42,6 @@ Future<void> main() async {
         } else {
           initPage = '/register';
         }
-        FirebaseMessaging.onBackgroundMessage(
-            _firebaseMessagingBackgroundHandler);
-            
-
         runApp(
           EasyLocalization(
             supportedLocales: const [Locale('en', 'US'), Locale('th', 'TH')],

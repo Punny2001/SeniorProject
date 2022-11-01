@@ -86,7 +86,7 @@ class _StaffCaseState extends State<StaffNotify> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _timer.cancel();
     super.dispose();
   }
@@ -133,6 +133,7 @@ class _StaffCaseState extends State<StaffNotify> {
                               Map<String, dynamic> data = mappedData[index];
                               healthData = HealthResultData.fromMap(data);
                               physicalData = PhysicalResultData.fromMap(data);
+                              int totalCaseReceived = 0;
                               return Card(
                                 child: Column(
                                   children: [
@@ -228,10 +229,15 @@ class _StaffCaseState extends State<StaffNotify> {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         IconButton(
-                                          onPressed: () => updateData(
-                                            data['questionnaireType'],
-                                            data['docID'],
-                                          ),
+                                          onPressed: () {
+                                            updateData(
+                                              data['questionnaireType'],
+                                              data['docID'],
+                                            );
+                                            setState(() {
+                                              totalCaseReceived += 1;
+                                            });
+                                          },
                                           icon: Icon(Icons.add),
                                         ),
                                         IconButton(
@@ -281,9 +287,6 @@ class _StaffCaseState extends State<StaffNotify> {
               .update({'caseReceived': true, 'staff_no_received': uid}).then(
                   (value) {
             print('Updated data successfully');
-            setState(() {
-              initState();
-            });
           });
         }
         break;
@@ -295,9 +298,6 @@ class _StaffCaseState extends State<StaffNotify> {
               .update({'caseReceived': true, 'staff_no_received': uid}).then(
                   (value) {
             print('Updated data successfully');
-            setState(() {
-              initState();
-            });
           });
         }
         break;
