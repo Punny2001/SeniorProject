@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_profile.dart';
 
@@ -14,7 +15,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
-    AthleteHomePage(),
+    AthleteHistory(),
     AthleteProfile(),
   ];
 
@@ -51,7 +52,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
+            icon: Icon(Icons.history),
             label: 'Favorite',
           ),
           BottomNavigationBarItem(

@@ -33,7 +33,7 @@ class _StaffCaseState extends State<StaffNotify> {
   Stream<List<QuerySnapshot>> getData() {
     Stream healthQuestionnaire = FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('caseReceived', isEqualTo: false, isNull: false)
+        .where('caseReceived', isEqualTo: false, isNull: false).where('')
         .snapshots();
     Stream physicalQuestionnaire = FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')

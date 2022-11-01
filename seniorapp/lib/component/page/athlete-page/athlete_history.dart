@@ -2,48 +2,48 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/athlete-page/history-details/health_report_detail.dart';
+import 'package:seniorapp/component/page/athlete-page/history-details/physical_report_detail.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
-import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
-import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
-import 'package:seniorapp/component/user-data/staff_data.dart';
+import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/decoration/format_date.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
 
-class StaffCase extends StatefulWidget {
-  const StaffCase({Key key}) : super(key: key);
+class AthleteHistory extends StatefulWidget {
+  const AthleteHistory({Key key}) : super(key: key);
 
   @override
-  _StaffCaseState createState() => _StaffCaseState();
+  _AthleteHistoryState createState() => _AthleteHistoryState();
 }
 
-class _StaffCaseState extends State<StaffCase> {
+class _AthleteHistoryState extends State<AthleteHistory> {
   Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
-  String staff_no;
+  String athlete_no;
   int healthSize;
   int physicalSize;
   bool isLoading = false;
 
   Stream<List<QuerySnapshot>> getData() {
-    String staffNo;
-    FirebaseFirestore.instance.collection('Staff').doc(uid).get().then(
+    String athleteNo;
+    FirebaseFirestore.instance.collection('Athlete').doc(uid).get().then(
       (snapshot) {
         Map data = snapshot.data();
-        staff_no = data['staff_no'];
-        // print('Staff No: $staff_no');
+        athleteNo = data['athlete_no'];
+        // print('Athlete No: $athlete_no');
       },
     );
     Stream healthQuestionnaire = FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('staff_no_received', isEqualTo: staffNo, isNull: false)
+        .where('athleteNo', isEqualTo: athleteNo, isNull: false)
         .snapshots();
     Stream physicalQuestionnaire = FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('staff_no_received', isEqualTo: staffNo, isNull: false)
+        .where('athleteNo', isEqualTo: athleteNo, isNull: false)
         .snapshots();
 
     return StreamZip([healthQuestionnaire, physicalQuestionnaire]);
@@ -52,7 +52,7 @@ class _StaffCaseState extends State<StaffCase> {
   getHealthSize() {
     FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('staff_no_received', isEqualTo: staff_no, isNull: false)
+        .where('athleteNo', isEqualTo: athlete_no, isNull: false)
         .get()
         .then(
       (snapshot) {
@@ -66,7 +66,7 @@ class _StaffCaseState extends State<StaffCase> {
   getPhysicalSize() {
     FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('staff_no_received', isEqualTo: staff_no, isNull: false)
+        .where('athleteNo', isEqualTo: athlete_no, isNull: false)
         .get()
         .then(
       (snapshot) {
@@ -83,10 +83,10 @@ class _StaffCaseState extends State<StaffCase> {
     setState(() {
       isLoading = true;
     });
-    FirebaseFirestore.instance.collection('Staff').doc(uid).get().then(
+    FirebaseFirestore.instance.collection('Athlete').doc(uid).get().then(
       (snapshot) {
         Map data = snapshot.data();
-        staff_no = data['staff_no'];
+        athlete_no = data['athlete_no'];
       },
     );
     getPhysicalSize();
@@ -186,7 +186,7 @@ class _StaffCaseState extends State<StaffCase> {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              HealthReportCase(
+                                              HealthReportDetail(
                                             answerList: health.answerList,
                                             athleteNo: health.athleteNo,
                                             doDate: health.doDate,
@@ -206,7 +206,7 @@ class _StaffCaseState extends State<StaffCase> {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              PhysicalReportCase(
+                                              PhysicalReportDetail(
                                             answerList: physical.answerList,
                                             athleteNo: physical.athleteNo,
                                             doDate: physical.doDate,
@@ -236,7 +236,7 @@ class _StaffCaseState extends State<StaffCase> {
                   )
                 : Center(
                     child: Text(
-                      'Empty athlete case received',
+                      'ไม่มีบันทึกที่คุณสร้างไว้',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 50,

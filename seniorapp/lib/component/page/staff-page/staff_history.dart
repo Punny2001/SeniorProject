@@ -24,7 +24,6 @@ class _StaffReportState extends State<StaffReport> {
   int illnessSize;
   int injurySize;
   bool isLoading = false;
-  Timer _timer;
 
   Stream<List<QuerySnapshot>> getData() {
     Stream illnessStream = FirebaseFirestore.instance
@@ -79,12 +78,6 @@ class _StaffReportState extends State<StaffReport> {
       });
     });
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
   }
 
   @override

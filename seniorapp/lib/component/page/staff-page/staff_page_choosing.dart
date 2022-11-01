@@ -58,7 +58,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                 backgroundColor: Colors.blue,
               ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.paste),
+                  icon: Icon(Icons.history_edu),
                   label: 'History',
                   backgroundColor: Colors.green),
               BottomNavigationBarItem(
