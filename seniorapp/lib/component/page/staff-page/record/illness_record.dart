@@ -682,8 +682,9 @@ class _IllnessReportState extends State<IllnessReport> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      saveIllnessReport();
-                      setState(() {});
+                      setState(() {
+                        saveIllnessReport();
+                      });
                     },
                     child: const Text('Save'),
                   ),
