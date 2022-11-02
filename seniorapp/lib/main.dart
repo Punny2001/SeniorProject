@@ -10,15 +10,6 @@ import 'package:seniorapp/firebase/firebase_options.dart';
 
 String initPage = '/login';
 
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-}
-
-Future<void> _requestAndRegisterNotification() async {
-    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
