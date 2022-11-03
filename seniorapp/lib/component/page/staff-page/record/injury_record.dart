@@ -533,7 +533,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
-                    if (value != true) {
+                    if (value != true && hasSide == true) {
                       return 'Please select the side of body part';
                     } else {
                       return null;
@@ -821,7 +821,11 @@ class _InjuryReportState extends State<InjuryReport> {
                   width: w,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () => saveInjuryReport(),
+                    onPressed: () {
+                      setState(() {
+                        saveInjuryReport();
+                      });
+                    },
                     child: const Text('Save'),
                   ),
                 ),
@@ -1021,6 +1025,7 @@ class _InjuryReportState extends State<InjuryReport> {
   }
 
   Future<void> saveInjuryReport() async {
+    print('to save file');
     var uid = FirebaseAuth.instance.currentUser.uid;
     changeBodySidetoString();
     bool isValidate = _injuryKey.currentState.validate();
@@ -1030,6 +1035,7 @@ class _InjuryReportState extends State<InjuryReport> {
     if (isVisibleOtherInjuryType == true) {
       _selectedInjuryType += ', ${_otherInjuryType.text.trim()}';
     }
+    print(isValidate);
     if (isValidate) {
       String report_no = 'IJR';
       String split;
@@ -1053,7 +1059,9 @@ class _InjuryReportState extends State<InjuryReport> {
           });
         }
       });
+      print(bodyType);
       if (bodyType == 1) {
+        print(bodyType);
         InjuryReportData injuryReportModel = InjuryReportData(
             report_no: report_no,
             staff_uid: uid,
@@ -1074,7 +1082,7 @@ class _InjuryReportState extends State<InjuryReport> {
         Map<String, dynamic> data = injuryReportModel.toMap();
 
         final collectionReference =
-            FirebaseFirestore.instance.collection('InjuryReport');
+            FirebaseFirestore.instance.collection('InjuryRecord');
         DocumentReference docReference = collectionReference.doc();
         docReference.set(data).then((value) {
           showDialog<void>(
@@ -1117,7 +1125,7 @@ class _InjuryReportState extends State<InjuryReport> {
         Map<String, dynamic> data = injuryReportModel.toMap();
 
         final collectionReference =
-            FirebaseFirestore.instance.collection('InjuryReport');
+            FirebaseFirestore.instance.collection('InjuryRecord');
         DocumentReference docReference = collectionReference.doc();
         docReference.set(data).then((value) {
           showDialog<void>(
@@ -1160,7 +1168,7 @@ class _InjuryReportState extends State<InjuryReport> {
         Map<String, dynamic> data = injuryReportModel.toMap();
 
         final collectionReference =
-            FirebaseFirestore.instance.collection('InjuryReport');
+            FirebaseFirestore.instance.collection('InjuryRecord');
         DocumentReference docReference = collectionReference.doc();
         docReference.set(data).then((value) {
           showDialog<void>(

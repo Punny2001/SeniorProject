@@ -33,7 +33,8 @@ class _StaffCaseState extends State<StaffNotify> {
   Stream<List<QuerySnapshot>> getData() {
     Stream healthQuestionnaire = FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('caseReceived', isEqualTo: false, isNull: false).where('')
+        .where('caseReceived', isEqualTo: false, isNull: false)
+        .where('')
         .snapshots();
     Stream physicalQuestionnaire = FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
@@ -127,6 +128,7 @@ class _StaffCaseState extends State<StaffNotify> {
                             mappedData[index]['docID'] = doc.reference.id;
                             index += 1;
                           }
+
                           return ListView.builder(
                             itemCount: mappedData.length,
                             itemBuilder: (context, index) {
@@ -240,14 +242,6 @@ class _StaffCaseState extends State<StaffNotify> {
                                           },
                                           icon: Icon(Icons.add),
                                         ),
-                                        IconButton(
-                                          onPressed: () {
-                                            // print(mappedData[index]);
-                                            mappedData[index].clear();
-                                            setState(() {});
-                                          },
-                                          icon: Icon(Icons.delete),
-                                        )
                                       ],
                                     )
                                   ],
