@@ -4,6 +4,7 @@ import 'package:seniorapp/auth-component/login.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_page_choosing.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_profile.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checking_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/mental_questionnaire.dart';
@@ -30,4 +31,5 @@ final Map<String, WidgetBuilder> map = {
   '/illnessReport': (BuildContext context) => IllnessReport(),
   '/staffProfile': (BuildContext context) => StaffProfile(),
   '/staffNotification': (BuildContext context) => StaffNotify(),
+  '/athleteProfile': (BuildContext context) => AthleteProfile(),
 };

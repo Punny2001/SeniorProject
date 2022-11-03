@@ -90,7 +90,8 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
               child: IconButton(
                 onPressed: () {
                   setState(() {
-                    Navigator.of(context).pushNamed('/staffProfile');
+                    Navigator.of(context)
+                        .pushNamed('/staffProfile', arguments: '');
                   });
                 },
                 icon: Icon(Icons.menu),
@@ -150,7 +151,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.history_edu),
+                icon: Icon(Icons.history),
                 label: 'History',
               ),
               BottomNavigationBarItem(

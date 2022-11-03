@@ -20,13 +20,18 @@ class Questionnaire extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
     checkQuestionnaire(questionType);
     return Container(
-      padding: EdgeInsets.only(left: 22, right: 22),
+      padding: EdgeInsets.only(
+        left: w * 0.03,
+        right: w * 0.03,
+      ),
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration: BoxDecoration(
+        color: Colors.green.shade300,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(50),
           topRight: Radius.circular(50),
@@ -102,7 +107,6 @@ class Questionnaire extends StatelessWidget {
                       questions[0]['questionText'] as String,
                     ),
                     Container(
-                      margin: const EdgeInsets.all(30),
                       child: DropdownButtonFormField2(
                         items: (questions[0]['answerText'] as List<String>)
                             .map(
@@ -120,11 +124,14 @@ class Questionnaire extends StatelessWidget {
                               color: Colors.black,
                               width: 50.0,
                             ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(50),
+                            ),
                           ),
-                          fillColor: Color(0xFFCFD8DC),
-                          filled: false,
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: 'โปรดเลือกปัญหาสุขภาพ',
                         ),
-                        isDense: true,
                         onChanged: (health) => answerQuestion(health),
                         searchController: _healthSearch,
                         searchInnerWidget: Padding(
@@ -157,13 +164,6 @@ class Questionnaire extends StatelessWidget {
                         },
                       ),
                     ),
-                    // ... makes separating list into a value of a list, then take it into child list.
-                    // ...(questions[0]['answerText'] as List<String>)
-                    //     .map((health) {
-                    //   print(health);
-                    //   return Answer(() => answerQuestion(health), health);
-                    // }).toList()
-                    // : Text(questions[0].keys.last)
                   ],
                 ),
               );

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delayed_display/delayed_display.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/history_details/injury_report_description.dart';
@@ -125,22 +126,84 @@ class _StaffReportState extends State<StaffReport> {
                                 child: Card(
                                   margin:
                                       const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                                  child: Column(
-                                    children: <Widget>[
-                                      Column(
-                                        children: <Widget>[
-                                          Text('Report type: ' +
-                                              data['report_type']),
-                                          Text('Sport: ' + data['sport_event']),
-                                          Text(
-                                            'Done on: ' +
-                                                formatDate(
+                                  child: Container(
+                                    height: h / 10,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text.rich(
+                                          TextSpan(
+                                            text: 'Report type: ',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: data['report_type'],
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            text: 'Sport: ',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: data['sport_event'],
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            text: 'Done on: ',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: formatDate(
                                                   data['doDate'].toDate(),
                                                 ),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ],
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            text: 'Time: ',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: DateFormat.Hms().format(
+                                                  data['doDate'].toDate(),
+                                                ),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.normal),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 onTap: () {

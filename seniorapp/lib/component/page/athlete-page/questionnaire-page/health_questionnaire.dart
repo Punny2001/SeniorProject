@@ -172,63 +172,69 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       }
     }
 
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
     return MaterialApp(
       home: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          toolbarHeight: h / 10,
           elevation: 0,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.arrow_back),
+          scrolledUnderElevation: 1,
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
+          title: Container(
+            child: Ink(
+              decoration: ShapeDecoration(
+                shape: CircleBorder(),
+                color: Colors.green.shade300,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                alignment: Alignment.centerRight,
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
           ),
         ),
         backgroundColor: Colors.white,
-        body: SizedBox(
-          child: Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height/3,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/Background_question.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 150.0),
-                child: hasQuestion
-                    ? answer_health
-                    ? _questionIndex < _questions.length
-                    ? Questionnaire(
-                  answerQuestion: _answerQuestion,
-                  questionIndex: _questionIndex,
-                  questions: _questions,
-                  questionType: 'health',
-                )
-                    : isResult
-                    ? Result(
-                  resultScore: _totalScore, resetHandler: _resetQuestionnaire, insertHandler: saveHealthResult, questionType: 'health', healthPart: _healthChoosing,)
-                    : MoreQuestionnaire(_resetQuestionnaire, 'health')
-                    : Questionnaire(
-                  questions: health_symp,
-                  answerQuestion: _answerHealthPart,
-                  questionType: 'health',
-                )
-                    : hasProblem
-                    ? CheckingQuestionnaire(
-                    'health', _checkingQuestion, _hasProblem)
-                    : isResult
-                    ? Result(resultScore: 0, resetHandler: _resetQuestionnaire, insertHandler: saveHealthResult, questionType: 'health',)
-                    : MoreQuestionnaire(_resetQuestionnaire, 'health'),
-              ),
-            ],
-          ),
+        body: Container(
+          padding: EdgeInsets.only(top: h / 3),
+          child: hasQuestion
+              ? answer_health
+                  ? _questionIndex < _questions.length
+                      ? Questionnaire(
+                          answerQuestion: _answerQuestion,
+                          questionIndex: _questionIndex,
+                          questions: _questions,
+                          questionType: 'health',
+                        )
+                      : isResult
+                          ? Result(
+                              resultScore: _totalScore,
+                              resetHandler: _resetQuestionnaire,
+                              insertHandler: saveHealthResult,
+                              questionType: 'health',
+                              healthPart: _healthChoosing,
+                            )
+                          : MoreQuestionnaire(_resetQuestionnaire, 'health')
+                  : Questionnaire(
+                      questions: health_symp,
+                      answerQuestion: _answerHealthPart,
+                      questionType: 'health',
+                    )
+              : hasProblem
+                  ? CheckingQuestionnaire(
+                      'health', _checkingQuestion, _hasProblem)
+                  : isResult
+                      ? Result(
+                          resultScore: 0,
+                          resetHandler: _resetQuestionnaire,
+                          insertHandler: saveHealthResult,
+                          questionType: 'health',
+                        )
+                      : MoreQuestionnaire(_resetQuestionnaire, 'health'),
         ),
       ),
       // : Result(_totalScore, _resetQuiz, saveHealthResult)),

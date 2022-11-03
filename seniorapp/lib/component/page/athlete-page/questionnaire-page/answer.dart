@@ -11,29 +11,25 @@ class Answer extends StatelessWidget {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.width;
     return Container(
-      padding: EdgeInsets.only(top: 5),
+      padding: EdgeInsets.only(bottom: 10),
       width: w,
       child: RaisedButton(
         onPressed: selectHandler,
         padding: EdgeInsets.zero,
-        color: Colors.teal[600],
-        shape: const RoundedRectangleBorder(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(15),
           ),
         ),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 80),
-          decoration: ShapeDecoration(
-            color: Colors.teal[600],
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15))),
+        child: Text(
+          answerText,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            overflow: TextOverflow.clip,
           ),
-          child: Text(
-            answerText,
-            style: TextStyle(color: Colors.white, fontSize: 16),
-            textAlign: TextAlign.center,
-          ),
+          textAlign: TextAlign.center,
         ),
       ),
     );

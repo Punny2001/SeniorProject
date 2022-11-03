@@ -28,25 +28,12 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: const EdgeInsets.only(top: 50),
-        margin: const EdgeInsets.all(30),
+        padding: EdgeInsets.only(bottom: h * 0.01),
         width: w,
         height: h,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // PageView.builder(
-              //     itemCount: images.length,
-              //     physics: const ClampingScrollPhysics(),
-              //     itemBuilder: (context,index){
-              //       return Container(
-              //         margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              //         decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.circular(20.0),
-              //           image:
-              //         ),
-              //       );
-              //     }),
               CarouselSlider(
                 options: CarouselOptions(
                   height: 190,
@@ -159,114 +146,139 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
               const Padding(
                 padding: EdgeInsets.all(10),
               ),
-              Text('รายงานปัญหา'),
+              Text(
+                'รายงานปัญหา',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
               PaddingDecorate(10),
-              Center(
-                child: GestureDetector(
-                  child: Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Text(
-                      'อาการบาดเจ็บ',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      right: 20,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    elevation: 5,
-                    margin: const EdgeInsets.all(10),
-                  ),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          PhysicalQuestionnaire(),
-                    ),
-                  ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(4),
-              ),
-              const Text(
-                'อาการบาดเจ็บทางร่างกาย (Physical)',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(10),
-              ),
-
-              Center(
-                child: GestureDetector(
-                  child: Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Text(
-                      'ปัญหาสุขภาพ',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    elevation: 5,
-                    margin: const EdgeInsets.all(10),
-                  ),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          HealthQuestionnaire(),
+                    child: GestureDetector(
+                      child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: Text(
+                          'อาการบาดเจ็บ',
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        elevation: 5,
+                        margin: const EdgeInsets.all(10),
+                      ),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              PhysicalQuestionnaire(),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(4),
-              ),
-              const Text(
-                'ปัญหาสุขภาพ (Health)',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  const Padding(
+                    padding: EdgeInsets.all(4),
+                  ),
+                  const Text(
+                    'อาการบาดเจ็บทางร่างกาย (Physical)',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
               const Padding(
                 padding: EdgeInsets.all(10),
               ),
-
-              Center(
-                child: GestureDetector(
-                  child: Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Text(
-                      'ปัญหาการนอนหลับและจิตใจ',
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      right: 20,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                    child: GestureDetector(
+                      child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: Text(
+                          'ปัญหาสุขภาพ',
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        elevation: 5,
+                        margin: const EdgeInsets.all(10),
+                      ),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              HealthQuestionnaire(),
+                        ),
+                      ),
                     ),
-                    elevation: 5,
-                    margin: const EdgeInsets.all(10),
                   ),
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          MentalQuestionnaire(),
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.all(4),
                   ),
-                ),
-              ),
-              const Text(
-                'สุขภาพจิต (Mental)',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  const Text(
+                    'ปัญหาสุขภาพ (Health)',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
               const Padding(
                 padding: EdgeInsets.all(10),
+              ),
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                    ),
+                    child: GestureDetector(
+                      child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: Text(
+                          'ปัญหาการนอนหลับและจิตใจ',
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        elevation: 5,
+                        margin: const EdgeInsets.all(10),
+                      ),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              MentalQuestionnaire(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    'สุขภาพจิต (Mental)',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ],
           ),

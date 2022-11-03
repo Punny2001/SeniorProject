@@ -17,7 +17,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Container(
         padding: EdgeInsets.only(bottom: h * 0.01),
         width: w,
@@ -26,18 +25,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
           physics: BouncingScrollPhysics(),
           child: Column(
             children: [
-              // PageView.builder(
-              //     itemCount: images.length,
-              //     physics: const ClampingScrollPhysics(),
-              //     itemBuilder: (context,index){
-              //       return Container(
-              //         margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              //         decoration: BoxDecoration(
-              //           borderRadius: BorderRadius.circular(20.0),
-              //           image:
-              //         ),
-              //       );
-              //     }),
               CarouselSlider(
                 options: CarouselOptions(
                   height: 190,
@@ -78,8 +65,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       elevation: 5,
                       margin: const EdgeInsets.all(10),
                     ),
-
-                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
                   ),
                   GestureDetector(
                     child: Card(
@@ -110,8 +95,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       elevation: 5,
                       margin: const EdgeInsets.all(10),
                     ),
-
-                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
                   ),
                   GestureDetector(
                     child: Card(
@@ -142,8 +125,6 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       elevation: 5,
                       margin: const EdgeInsets.all(10),
                     ),
-
-                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
                   ),
                 ],
               ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -116,6 +117,7 @@ class _StaffCaseState extends State<StaffCase> {
     print('physical size: $physicalSize');
 
     return Scaffold(
+      
       body: Container(
         height: h,
         width: w,
@@ -148,35 +150,170 @@ class _StaffCaseState extends State<StaffCase> {
                               healthData = HealthResultData.fromMap(data);
                               physicalData = PhysicalResultData.fromMap(data);
                               return GestureDetector(
-                                child: Card(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                                  child: data['questionnaireType'] == 'Health'
-                                      ? Column(
-                                          children: <Widget>[
-                                            Text('Problem type: ' +
-                                                healthData.questionnaireType),
-                                            Text('Health Symptom: ' +
-                                                healthData.healthSymptom),
-                                            Text(
-                                              'Done on: ' +
-                                                  formatDate(healthData.doDate),
-                                            ),
-                                          ],
-                                        )
-                                      : Column(
-                                          children: <Widget>[
-                                            Text('Problem type: ' +
-                                                physicalData.questionnaireType),
-                                            Text('Injured body: ' +
-                                                physicalData.bodyPart),
-                                            Text(
-                                              'Done on: ' +
-                                                  formatDate(
-                                                      physicalData.doDate),
-                                            ),
-                                          ],
-                                        ),
+                                child: Container(
+                                  height: h / 8,
+                                  child: Card(
+                                    margin:
+                                        const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                                    child: data['questionnaireType'] == 'Health'
+                                        ? Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Problem type: ',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: healthData
+                                                          .questionnaireType,
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Health Symptom: ',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: healthData
+                                                          .healthSymptom,
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Done on: ',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatDate(
+                                                          healthData.doDate),
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Time: ',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: DateFormat.Hms()
+                                                          .format(
+                                                        healthData.doDate,
+                                                      ),
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: <Widget>[
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Problem type: ',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: physicalData
+                                                          .questionnaireType,
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Injured body: ',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          physicalData.bodyPart,
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Done on: ',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatDate(
+                                                        physicalData.doDate,
+                                                      ),
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Time: ',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: DateFormat.Hms()
+                                                          .format(
+                                                        physicalData.doDate,
+                                                      ),
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                  ),
                                 ),
                                 onTap: () {
                                   switch (data['questionnaireType']) {
