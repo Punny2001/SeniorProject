@@ -197,112 +197,46 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         print('We have more question');
       }
     }
-    return MaterialApp(
-      home: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.black,
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.arrow_back),
-          ),
-        ),
-        backgroundColor: Colors.white,
-        body: SizedBox(
-          child: Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height/3,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/Background_question.jpg"),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 150.0),
-                child: hasQuestion
-                    ? _bodyPartRound < 2
-                    ? _questionnaireDisplay(_bodyPartRound)
-                    : _questionIndex < _questions.length
-                    ? Questionnaire(
-                  answerQuestion: _answerQuestion,
-                  questionIndex: _questionIndex,
-                  questions: _questions,
-                  questionType: 'physical',
-                )
-                    : isResult
-                    ? Result(
-                  resultScore: _totalScore,
-                  resetHandler: _resetQuestionnaire,
-                  insertHandler: savePhysicalResult,
-                  questionType: 'physical',
-                  bodyPart: _bodyChoosing,
-                )
-                    : MoreQuestionnaire(_resetQuestionnaire, 'physical')
-                    : hasProblem
-                    ? CheckingQuestionnaire(
-                    'physical', _checkingQuestion, _hasProblem)
-                    : isResult
-                    ? Result(
-                    resultScore: 0,
-                    resetHandler: _resetQuestionnaire,
-                    insertHandler: savePhysicalResult,
-                    questionType: 'physical')
-                    : MoreQuestionnaire(_resetQuestionnaire, 'physical'),
-              ),
-            ],
-          ),
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('รายงานอาการบาดเจ็บ'),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back),
         ),
       ),
-      // : Result(_totalScore, _resetQuiz, saveHealthResult)),
-    );
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('รายงานอาการบาดเจ็บ'),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(Icons.arrow_back),
-          ),
-        ),
-        body: hasQuestion
-            ? _bodyPartRound < 2
-                ? _questionnaireDisplay(_bodyPartRound)
-                : _questionIndex < _questions.length
-                    ? Questionnaire(
-                        answerQuestion: _answerQuestion,
-                        questionIndex: _questionIndex,
-                        questions: _questions,
-                        questionType: 'physical',
-                      )
-                    : isResult
-                        ? Result(
-                            resultScore: _totalScore,
-                            resetHandler: _resetQuestionnaire,
-                            insertHandler: savePhysicalResult,
-                            questionType: 'physical',
-                            bodyPart: _bodyChoosing,
-                          )
-                        : MoreQuestionnaire(_resetQuestionnaire, 'physical')
-            : hasProblem
-                ? CheckingQuestionnaire(
-                    'physical', _checkingQuestion, _hasProblem)
-                : isResult
-                    ? Result(
-                        resultScore: 0,
-                        resetHandler: _resetQuestionnaire,
-                        insertHandler: savePhysicalResult,
-                        questionType: 'physical')
-                    : MoreQuestionnaire(_resetQuestionnaire, 'physical'),
-      ),
+      body: hasQuestion
+          ? _bodyPartRound < 2
+              ? _questionnaireDisplay(_bodyPartRound)
+              : _questionIndex < _questions.length
+                  ? Questionnaire(
+                      answerQuestion: _answerQuestion,
+                      questionIndex: _questionIndex,
+                      questions: _questions,
+                      questionType: 'physical',
+                    )
+                  : isResult
+                      ? Result(
+                          resultScore: _totalScore,
+                          resetHandler: _resetQuestionnaire,
+                          insertHandler: savePhysicalResult,
+                          questionType: 'physical',
+                          bodyPart: _bodyChoosing,
+                        )
+                      : MoreQuestionnaire(_resetQuestionnaire, 'physical')
+          : hasProblem
+              ? CheckingQuestionnaire(
+                  'physical', _checkingQuestion, _hasProblem)
+              : isResult
+                  ? Result(
+                      resultScore: 0,
+                      resetHandler: _resetQuestionnaire,
+                      insertHandler: savePhysicalResult,
+                      questionType: 'physical')
+                  : MoreQuestionnaire(_resetQuestionnaire, 'physical'),
+
       // : Result(_totalScore, _resetQuiz, savePhysicalResult)),
     );
   }

@@ -8,15 +8,20 @@ class Answer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.width;
     return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(top: 5),
+      width: w,
       child: RaisedButton(
         onPressed: selectHandler,
         padding: EdgeInsets.zero,
         color: Colors.teal[600],
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+        ),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 5, horizontal: 80),
           decoration: ShapeDecoration(

@@ -23,9 +23,31 @@ class _StaffProfileState extends State<StaffProfile> {
     getStfData();
 
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: h / 10,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        title: Container(
+          child: Ink(
+            decoration: ShapeDecoration(
+              shape: CircleBorder(),
+              color: Colors.blue.shade200,
+            ),
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              alignment: Alignment.centerRight,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
+      ),
       body: Container(
         height: h,
         width: w,
+        alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

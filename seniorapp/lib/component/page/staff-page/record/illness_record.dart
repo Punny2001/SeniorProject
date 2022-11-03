@@ -55,12 +55,29 @@ class _IllnessReportState extends State<IllnessReport> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        toolbarHeight: h / 10,
         elevation: 0,
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        title: Container(
+          child: Ink(
+            decoration: ShapeDecoration(
+              shape: CircleBorder(),
+              color: Colors.blue.shade200,
+            ),
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              alignment: Alignment.centerRight,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
       ),
       body: Container(
-        margin: const EdgeInsets.all(30),
+        padding:
+            EdgeInsets.only(left: w * 0.1, right: w * 0.1, bottom: h * 0.015),
         width: w,
         height: h,
         child: SingleChildScrollView(
@@ -494,6 +511,13 @@ class _IllnessReportState extends State<IllnessReport> {
                         children: <Widget>[
                           for (var item in mainSymptoms)
                             Card(
+                              elevation: 0,
+                              color: Colors.green.shade100,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(30),
+                                ),
+                              ),
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: 10,
@@ -677,19 +701,30 @@ class _IllnessReportState extends State<IllnessReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
-                SizedBox(
-                  width: w,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        saveIllnessReport();
-                      });
-                    },
-                    child: const Text('Save'),
-                  ),
-                ),
               ],
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding:
+            EdgeInsets.only(left: w * 0.2, right: w * 0.2, bottom: h * 0.03),
+        child: Container(
+          width: w,
+          height: h * 0.06,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                elevation: 0,
+                shape: StadiumBorder(),
+                primary: Colors.blue.shade200),
+            onPressed: () {
+              setState(() {
+                saveIllnessReport();
+              });
+            },
+            child: const Text(
+              'Save',
+              style: TextStyle(color: Colors.black),
             ),
           ),
         ),

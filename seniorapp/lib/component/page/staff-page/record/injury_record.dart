@@ -65,12 +65,29 @@ class _InjuryReportState extends State<InjuryReport> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        toolbarHeight: h / 10,
         elevation: 0,
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
         foregroundColor: Colors.black,
+        title: Container(
+          child: Ink(
+            decoration: ShapeDecoration(
+              shape: CircleBorder(),
+              color: Colors.blue.shade200,
+            ),
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              alignment: Alignment.centerRight,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
       ),
       body: Container(
-        margin: const EdgeInsets.all(30),
+        padding:
+            EdgeInsets.only(left: w * 0.1, right: w * 0.1, bottom: h * 0.015),
         width: w,
         height: h,
         child: SingleChildScrollView(
@@ -80,6 +97,7 @@ class _InjuryReportState extends State<InjuryReport> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                // Athlete No.
                 const Text(
                   'Athlete No.',
                   style: TextStyle(
@@ -100,9 +118,11 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
+                //
                 const Padding(
                   padding: EdgeInsets.all(20),
                 ),
+                // Sport and Event
                 const Text(
                   'Sport and Event',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -163,9 +183,11 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
+                //
                 const Padding(
                   padding: EdgeInsets.all(20),
                 ),
+                // Round, Heat, or Training
                 const Text(
                   'Round, Heat, or Training',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -185,9 +207,11 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
+                //
                 const Padding(
                   padding: EdgeInsets.all(20),
                 ),
+                // Date & Time
                 const Text(
                   'Date & Time',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -218,9 +242,11 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
+                //
                 const Padding(
                   padding: EdgeInsets.all(20),
                 ),
+                // Injured Body Part
                 const Text(
                   'Injured body part',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -540,7 +566,9 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                PaddingDecorate(10),
+                //
+                PaddingDecorate(5),
+                // Type of Injury
                 const Text(
                   'Type of Injury',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -661,9 +689,11 @@ class _InjuryReportState extends State<InjuryReport> {
                     },
                   ),
                 ),
+                //
                 const Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(10),
                 ),
+                // Cause of Injury
                 const Text(
                   'Cause of injury',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -788,9 +818,11 @@ class _InjuryReportState extends State<InjuryReport> {
                     },
                   ),
                 ),
+                //
                 const Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(10),
                 ),
+                // Absence in days
                 const Text(
                   'Absence in days',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -814,22 +846,31 @@ class _InjuryReportState extends State<InjuryReport> {
                     }
                   },
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                SizedBox(
-                  width: w,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        saveInjuryReport();
-                      });
-                    },
-                    child: const Text('Save'),
-                  ),
-                ),
+                //
               ],
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding:
+            EdgeInsets.only(left: w * 0.2, right: w * 0.2, bottom: h * 0.03),
+        child: Container(
+          width: w,
+          height: h * 0.06,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                elevation: 0,
+                shape: StadiumBorder(),
+                primary: Colors.blue.shade200),
+            onPressed: () {
+              setState(() {
+                saveInjuryReport();
+              });
+            },
+            child: const Text(
+              'Save',
+              style: TextStyle(color: Colors.black),
             ),
           ),
         ),

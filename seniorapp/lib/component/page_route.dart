@@ -11,8 +11,10 @@ import 'package:seniorapp/component/page/athlete-page/questionnaire-page/physica
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
+import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/page/staff-page/history_details/illness_report_description.dart';
+import 'package:seniorapp/component/page/staff-page/staff_profile.dart';
 
 final Map<String, WidgetBuilder> map = {
   '/login': (BuildContext context) => Login(),
@@ -26,4 +28,6 @@ final Map<String, WidgetBuilder> map = {
   '/physicalQuestionnaire': (BuildContext context) => PhysicalQuestionnaire(),
   '/injuryReport': (BuildContext context) => InjuryReport(),
   '/illnessReport': (BuildContext context) => IllnessReport(),
+  '/staffProfile': (BuildContext context) => StaffProfile(),
+  '/staffNotification': (BuildContext context) => StaffNotify(),
 };

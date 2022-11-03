@@ -98,7 +98,31 @@ class _StaffCaseState extends State<StaffNotify> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: h / 10,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        title: Container(
+          child: Ink(
+            decoration: ShapeDecoration(
+              shape: CircleBorder(),
+              color: Colors.blue.shade200,
+            ),
+            child: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              alignment: Alignment.centerRight,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ),
+      ),
       body: Container(
+        padding:
+            EdgeInsets.only(top: h * 0.02, left: w * 0.05, right: w * 0.05),
         height: h,
         width: w,
         child: isLoading
@@ -137,10 +161,13 @@ class _StaffCaseState extends State<StaffNotify> {
                               physicalData = PhysicalResultData.fromMap(data);
                               int totalCaseReceived = 0;
                               return Card(
+                                color: Colors.blue.shade200,
+                                margin: EdgeInsets.only(bottom: w*0.05),
                                 child: Column(
                                   children: [
                                     GestureDetector(
                                       child: Card(
+                                        color: Colors.blue.shade200,
                                         elevation: 0,
                                         shadowColor: Colors.grey,
                                         margin: const EdgeInsets.fromLTRB(

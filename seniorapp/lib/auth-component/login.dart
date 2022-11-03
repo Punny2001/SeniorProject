@@ -143,10 +143,18 @@ class _LoginState extends State<Login> {
                             ),
                             ElevatedButton(
                               onPressed: () => signin(),
-                              child: Text('login_page.login_button'.tr()),
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: Size(w / 1.3, h / 15),
+                              child: Text(
+                                'login_page.login_button'.tr(),
+                                style: TextStyle(
+                                  fontSize: h * 0.025,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(w, h * 0.07),
+                                  elevation: 0,
+                                  primary: Color.fromARGB(255, 113, 157, 242),
+                                  shape: StadiumBorder()),
                             ),
                           ],
                         ),

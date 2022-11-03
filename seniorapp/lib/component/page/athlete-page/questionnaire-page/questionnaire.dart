@@ -22,21 +22,18 @@ class Questionnaire extends StatelessWidget {
   Widget build(BuildContext context) {
     checkQuestionnaire(questionType);
     return Container(
-        padding: EdgeInsets.only(left: 22, right :22),
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(50),
-            topRight: Radius.circular(50),
-          ),
+      padding: EdgeInsets.only(left: 22, right: 22),
+      width: double.infinity,
+      height: MediaQuery.of(context).size.height,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(50),
+          topRight: Radius.circular(50),
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(top:15.0),
-          child: _questionType(questionType),
-        ),
-      );
+      ),
+      child: _questionType(questionType),
+    );
   }
 
   Widget _questionType(String type) {

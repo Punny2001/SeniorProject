@@ -69,118 +69,118 @@ class Result extends StatelessWidget {
     final String ucepUrl =
         'https://www.nhso.go.th/page/coverage_rights_emergency_patients';
 
-    return Padding(
-        padding: const EdgeInsets.only(top: 20.0),
-        child: Container(
+    return Container(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Container(
         height: MediaQuery.of(context).size.height,
-    decoration: const BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.only(
-    topLeft: Radius.circular(50),
-    topRight: Radius.circular(50),
-    ),
-    ),
-    child:Center(
-    child: Column(
-    children: [
-    const Padding(padding: EdgeInsets.only(top: 20.0)),
-          Text(
-            checkQuestionType(questionType),
-            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(50),
+            topRight: Radius.circular(50),
           ),
-          Container(
-            padding: EdgeInsets.all(30),
-            alignment: Alignment.center,
-            child: RichText(
-              text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                children: questionType == 'health'
-                    ? resultScore > 75
-                        ? [
-                            TextSpan(
-                              text: resultPhrase(questionType),
-                            ),
-                            TextSpan(
-                              text: 'คลิกที่นี่',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  launch(ucepUrl);
-                                },
-                            ),
-                          ]
-                        : [
-                            TextSpan(
-                              text: resultPhrase(questionType),
-                            ),
-                          ]
-                    : resultScore > 75
-                        ? [
-                            TextSpan(
-                              text: resultPhrase(questionType),
-                            ),
-                            TextSpan(
-                              text: 'คลิกที่นี่',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  launch(ucepUrl);
-                                },
-                            ),
-                          ]
-                        : [
-                            TextSpan(
-                              text: resultPhrase(questionType),
-                            ),
-                          ],
+        ),
+        child: Center(
+          child: Column(
+            children: [
+              const Padding(padding: EdgeInsets.only(top: 20.0)),
+              Text(
+                checkQuestionType(questionType),
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
               ),
-            ),
-          ),
-          const Padding(padding: EdgeInsets.only(top: 20.0)),
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            alignment: Alignment.center,
-            child: RaisedButton(
-              onPressed: insertHandler,
-              padding: EdgeInsets.zero,
-              color: Colors.teal[600],
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
-                decoration: ShapeDecoration(
+              Container(
+                padding: EdgeInsets.all(30),
+                alignment: Alignment.center,
+                child: RichText(
+                  text: TextSpan(
+                    style: DefaultTextStyle.of(context).style,
+                    children: questionType == 'health'
+                        ? resultScore > 75
+                            ? [
+                                TextSpan(
+                                  text: resultPhrase(questionType),
+                                ),
+                                TextSpan(
+                                  text: 'คลิกที่นี่',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launch(ucepUrl);
+                                    },
+                                ),
+                              ]
+                            : [
+                                TextSpan(
+                                  text: resultPhrase(questionType),
+                                ),
+                              ]
+                        : resultScore > 75
+                            ? [
+                                TextSpan(
+                                  text: resultPhrase(questionType),
+                                ),
+                                TextSpan(
+                                  text: 'คลิกที่นี่',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launch(ucepUrl);
+                                    },
+                                ),
+                              ]
+                            : [
+                                TextSpan(
+                                  text: resultPhrase(questionType),
+                                ),
+                              ],
+                  ),
+                ),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 20.0)),
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                alignment: Alignment.center,
+                child: RaisedButton(
+                  onPressed: insertHandler,
+                  padding: EdgeInsets.zero,
                   color: Colors.teal[600],
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15))),
-                ),
-                child: const Text(
-                  'ถัดไป',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                  textAlign: TextAlign.center,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
+                    decoration: ShapeDecoration(
+                      color: Colors.teal[600],
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(15))),
+                    ),
+                    child: const Text(
+                      'ถัดไป',
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
               ),
-            ),
+              // FlatButton(
+              //   child: Text(
+              //     'Restart Quiz!!!',
+              //     style: TextStyle(decoration: TextDecoration.underline),
+              //   ),
+              //   textColor: Color.fromARGB(255, 18, 92, 153),
+              //   onPressed: resetHandler,
+              // )
+            ],
           ),
-          // FlatButton(
-          //   child: Text(
-          //     'Restart Quiz!!!',
-          //     style: TextStyle(decoration: TextDecoration.underline),
-          //   ),
-          //   textColor: Color.fromARGB(255, 18, 92, 153),
-          //   onPressed: resetHandler,
-          // )
-        ],
-      ),
-    ),
         ),
+      ),
     );
   }
 

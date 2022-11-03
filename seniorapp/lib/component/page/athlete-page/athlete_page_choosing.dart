@@ -32,42 +32,40 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
         child: _athletePageList.elementAt(_selected_idx),
       ),
       bottomNavigationBar: Container(
-            decoration: const BoxDecoration(
-
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30), topLeft: Radius.circular(30)
-              ),
-            ),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
-              child: BottomNavigationBar(
-                backgroundColor: Colors.greenAccent,
-                unselectedItemColor: Colors.black,
-                items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            label: 'Favorite',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selected_idx,
-                onTap: _onPageTap,
-                selectedItemColor: Colors.redAccent,
-                showSelectedLabels: false,
-                showUnselectedLabels: false,
+          child: BottomNavigationBar(
+            backgroundColor: Colors.green.shade300,
+            unselectedItemColor: Colors.black,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
               ),
-            ),
-            ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.history),
+                label: 'Favorite',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.menu),
+                label: 'Profile',
+              ),
+            ],
+            currentIndex: _selected_idx,
+            onTap: _onPageTap,
+            selectedItemColor: Colors.redAccent,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+          ),
+        ),
+      ),
     );
   }
 }

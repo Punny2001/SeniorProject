@@ -19,11 +19,11 @@ class _StaffHomePageState extends State<StaffHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        padding: const EdgeInsets.only(top: 50),
-        margin: const EdgeInsets.all(30),
+        padding: EdgeInsets.only(bottom: h * 0.01),
         width: w,
         height: h,
         child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Column(
             children: [
               // PageView.builder(
@@ -150,59 +150,73 @@ class _StaffHomePageState extends State<StaffHomePage> {
               const Padding(
                 padding: EdgeInsets.all(10),
               ),
-              Center(
-                child: GestureDetector(
-                  child: Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image.network(
-                      'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
-                      fit: BoxFit.fill,
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      right: 20,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                    child: GestureDetector(
+                      child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: Image.network(
+                          'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
+                          fit: BoxFit.fill,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        elevation: 5,
+                        margin: const EdgeInsets.all(10),
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/injuryReport'),
                     ),
-                    elevation: 5,
-                    margin: const EdgeInsets.all(10),
                   ),
-                  onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(4),
-              ),
-              const Text(
-                'Injury report',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  Text(
+                    'Injury report',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
               const Padding(
                 padding: EdgeInsets.all(10),
               ),
-              Center(
-                child: GestureDetector(
-                  child: Card(
-                    semanticContainer: true,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: Image.network(
-                      'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
-                      fit: BoxFit.fill,
+              Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      left: 20,
+                      right: 20,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
+                    child: GestureDetector(
+                      child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: Image.network(
+                          'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
+                          fit: BoxFit.fill,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        elevation: 5,
+                        margin: const EdgeInsets.all(10),
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/illnessReport'),
                     ),
-                    elevation: 5,
-                    margin: const EdgeInsets.all(10),
                   ),
-                  onTap: () =>
-                      Navigator.of(context).pushNamed('/illnessReport'),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(4),
-              ),
-              const Text(
-                'Illness report',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                  const Text(
+                    'Illness report',
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ],
           ),

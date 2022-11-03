@@ -38,7 +38,7 @@ class _StaffReportState extends State<StaffReport> {
   }
 
   getIllnessSize() {
-    final illnessQuery = FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('IllnessRecord')
         .where('staff_uid', isEqualTo: uid)
         .get()
@@ -52,7 +52,7 @@ class _StaffReportState extends State<StaffReport> {
   }
 
   getInjurySize() {
-    final injuryQuery = FirebaseFirestore.instance
+    FirebaseFirestore.instance
         .collection('InjuryRecord')
         .where('staff_uid', isEqualTo: uid)
         .get()
