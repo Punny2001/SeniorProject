@@ -21,7 +21,22 @@ class Questionnaire extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     checkQuestionnaire(questionType);
-    return Scaffold(body: _questionType(questionType));
+    return Container(
+        padding: EdgeInsets.only(left: 22, right :22),
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(50),
+            topRight: Radius.circular(50),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top:15.0),
+          child: _questionType(questionType),
+        ),
+      );
   }
 
   Widget _questionType(String type) {
@@ -90,7 +105,7 @@ class Questionnaire extends StatelessWidget {
                       questions[0]['questionText'] as String,
                     ),
                     Container(
-                      margin: const EdgeInsets.all(50),
+                      margin: const EdgeInsets.all(30),
                       child: DropdownButtonFormField2(
                         items: (questions[0]['answerText'] as List<String>)
                             .map(
@@ -102,6 +117,16 @@ class Questionnaire extends StatelessWidget {
                               ),
                             )
                             .toList(),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                              width: 50.0,
+                            ),
+                          ),
+                          fillColor: Color(0xFFCFD8DC),
+                          filled: false,
+                        ),
                         isDense: true,
                         onChanged: (health) => answerQuestion(health),
                         searchController: _healthSearch,
