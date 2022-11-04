@@ -79,7 +79,20 @@ class Questionnaire extends StatelessWidget {
                       // : Text(questions[0].keys.last)
                     ],
                   )
-                : bodyType(bodyChoosing);
+                : Column(
+                    children: <Widget>[
+                      Question(
+                        questions[0]['questionText'] as String,
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Container(
+                            child: bodyType(bodyChoosing),
+                          ),
+                        ),
+                      )
+                    ],
+                  );
         break;
       case 'health':
         return isQuestionnaire
@@ -99,73 +112,70 @@ class Questionnaire extends StatelessWidget {
                   // : Text(questions[0].keys.last)
                 ],
               )
-            : SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    Question(
-                      questions[0]['questionText'] as String,
-                    ),
-                    Container(
-                      child: DropdownButtonFormField2(
-                        items: (questions[0]['answerText'] as List<String>)
-                            .map(
-                              (health) => DropdownMenuItem(
-                                child: Text(
-                                  health,
-                                ),
-                                value: health,
+            : Column(
+                children: [
+                  Question(
+                    questions[0]['questionText'] as String,
+                  ),
+                  Container(
+                    child: DropdownButtonFormField2(
+                      items: (questions[0]['answerText'] as List<String>)
+                          .map(
+                            (health) => DropdownMenuItem(
+                              child: Text(
+                                health,
                               ),
-                            )
-                            .toList(),
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 50.0,
+                              value: health,
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(50),
-                            ),
+                          )
+                          .toList(),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.black,
+                            width: 50.0,
                           ),
-                          fillColor: Colors.white,
-                          filled: true,
-                          hintText: 'โปรดเลือกปัญหาสุขภาพ',
-                        ),
-                        onChanged: (health) => answerQuestion(health),
-                        searchController: _healthSearch,
-                        searchInnerWidget: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                            bottom: 10,
-                            top: 10,
-                          ),
-                          child: TextFormField(
-                            controller: _healthSearch,
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () => _healthSearch.clear(),
-                                icon: const Icon(Icons.close),
-                              ),
-                              hintText: 'Search ...',
-                            ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(50),
                           ),
                         ),
-                        searchMatchFn: (item, searchValue) {
-                          return (item.value.toString().contains(
-                                searchValue,
-                              ));
-                        },
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintText: 'โปรดเลือกปัญหาสุขภาพ',
                       ),
+                      onChanged: (health) => answerQuestion(health),
+                      searchController: _healthSearch,
+                      searchInnerWidget: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          bottom: 10,
+                          top: 10,
+                        ),
+                        child: TextFormField(
+                          controller: _healthSearch,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () => _healthSearch.clear(),
+                              icon: const Icon(Icons.close),
+                            ),
+                            hintText: 'Search ...',
+                          ),
+                        ),
+                      ),
+                      searchMatchFn: (item, searchValue) {
+                        return (item.value.toString().contains(
+                              searchValue,
+                            ));
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               );
         break;
       case 'mental':
@@ -210,17 +220,12 @@ class Questionnaire extends StatelessWidget {
   }
 
   Widget bodyType(String _bodyChoosing) {
-    print('body: $bodyChoosing');
     switch (_bodyChoosing) {
       case 'ส่วนหัวและลำตัว':
         return Column(
           children: [
-            Question(
-              questions[0]['questionText'] as String,
-            ),
             // ... makes separating list into a value of a list, then take it into child list.
             ...(questions[0]['ส่วนหัวและลำตัว'] as List<String>).map((body) {
-              print(body);
               return Answer(() => answerQuestion(body), body);
             }).toList()
           ],
@@ -230,9 +235,7 @@ class Questionnaire extends StatelessWidget {
       case 'ร่างกายส่วนบน':
         return Column(
           children: [
-            Question(
-              questions[0]['questionText'] as String,
-            ),
+            
             // ... makes separating list into a value of a list, then take it into child list.
             ...(questions[0]['ร่างกายส่วนบน'] as List<String>).map((body) {
               print(body);
@@ -245,9 +248,7 @@ class Questionnaire extends StatelessWidget {
       case 'ร่างกายส่วนล่าง':
         return Column(
           children: [
-            Question(
-              questions[0]['questionText'] as String,
-            ),
+            
             // ... makes separating list into a value of a list, then take it into child list.
             ...(questions[0]['ร่างกายส่วนล่าง'] as List<String>).map((body) {
               print(body);

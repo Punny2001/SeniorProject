@@ -31,19 +31,25 @@ class _StaffProfileState extends State<StaffProfile> {
         scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
-        title: Container(
-          child: Ink(
-            decoration: ShapeDecoration(
-              shape: CircleBorder(),
-              color: Colors.blue.shade200,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              child: Ink(
+                decoration: ShapeDecoration(
+                  shape: CircleBorder(),
+                  color: Colors.blue.shade200,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  alignment: Alignment.centerRight,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
             ),
-            child: IconButton(
-              icon: Icon(Icons.arrow_back_ios),
-              alignment: Alignment.centerRight,
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ),
+          ],
         ),
+
       ),
       body: Column(
         children: <Widget>[

@@ -184,18 +184,23 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           scrolledUnderElevation: 1,
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.black,
-          title: Container(
-            child: Ink(
-              decoration: ShapeDecoration(
-                shape: CircleBorder(),
-                color: Colors.green.shade300,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                child: Ink(
+                  decoration: ShapeDecoration(
+                    shape: CircleBorder(),
+                    color: Colors.green.shade300,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    alignment: Alignment.centerRight,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
               ),
-              child: IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                alignment: Alignment.centerRight,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
+            ],
           ),
         ),
         backgroundColor: Colors.white,

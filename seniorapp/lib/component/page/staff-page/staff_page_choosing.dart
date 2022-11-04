@@ -74,7 +74,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: h / 10,
+        primary: true,
         elevation: 0,
         scrolledUnderElevation: 1,
         backgroundColor: Colors.white,

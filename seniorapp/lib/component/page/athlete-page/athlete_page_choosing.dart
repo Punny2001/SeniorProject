@@ -32,7 +32,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: h / 10,
+        primary: true,
         elevation: 0,
         scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
@@ -72,6 +72,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
+            
             backgroundColor: Colors.green.shade300,
             unselectedItemColor: Colors.black,
             items: const <BottomNavigationBarItem>[
