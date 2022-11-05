@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:seniorapp/component/page_route.dart';
 import 'package:seniorapp/firebase/firebase_options.dart';
 
@@ -17,20 +18,39 @@ Future<void> main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    print('User granted permission: ${settings.authorizationStatus}');
     FirebaseAuth.instance.authStateChanges().listen((event) async {
+      final FirebaseMessaging fbm = FirebaseMessaging.instance;
+      fbm.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        print('Message data: ${message.data}');
+
+        if (message.notification != null) {
+          print(
+              'Message also contained a notification: ${message.notification}');
+        }
+      }).onData((data) {
+        print('Got a message whilst in the foreground!');
+        print('Message data: ${data.data}');
+      });
+
+      fbm.getInitialMessage().then((RemoteMessage message) {
+        if (message != null) {
+          print("Initial data: ${message.data}");
+        } else {
+          print("Initial data is Null");
+        }
+      });
+      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+        if (message != null) {
+          print('onMessageOpenedApp data: ${message.data}');
+        } else {
+          print('onMessageOpenedApp data');
+        }
+      });
       if (event != null) {
         String uid = event.uid;
         final db = FirebaseFirestore.instance;

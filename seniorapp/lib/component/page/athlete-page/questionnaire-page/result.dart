@@ -114,17 +114,6 @@ class Result extends StatelessWidget {
                             TextSpan(
                               text: resultPhrase(questionType),
                             ),
-                            TextSpan(
-                              text: 'คลิกที่นี่',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  launch(ucepUrl);
-                                },
-                            ),
                           ]
                         : [
                             TextSpan(

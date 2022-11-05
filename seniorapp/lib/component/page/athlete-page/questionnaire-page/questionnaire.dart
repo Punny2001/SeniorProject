@@ -37,11 +37,11 @@ class Questionnaire extends StatelessWidget {
           topRight: Radius.circular(50),
         ),
       ),
-      child: _questionType(questionType),
+      child: _questionType(questionType, h),
     );
   }
 
-  Widget _questionType(String type) {
+  Widget _questionType(String type, double h) {
     TextEditingController _healthSearch = TextEditingController();
     switch (type) {
       case 'physical':
@@ -84,13 +84,7 @@ class Questionnaire extends StatelessWidget {
                       Question(
                         questions[0]['questionText'] as String,
                       ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Container(
-                            child: bodyType(bodyChoosing),
-                          ),
-                        ),
-                      )
+                      bodyType(bodyChoosing, h)
                     ],
                   );
         break;
@@ -219,23 +213,87 @@ class Questionnaire extends StatelessWidget {
     }
   }
 
-  Widget bodyType(String _bodyChoosing) {
+  Widget bodyType(String _bodyChoosing, double h) {
+    TextEditingController _bodyHeadSearch = TextEditingController();
     switch (_bodyChoosing) {
       case 'ส่วนหัวและลำตัว':
-        return Column(
-          children: [
-            // ... makes separating list into a value of a list, then take it into child list.
-            ...(questions[0]['ส่วนหัวและลำตัว'] as List<String>).map((body) {
-              return Answer(() => answerQuestion(body), body);
-            }).toList()
-          ],
+        return Container(
+          child: DropdownButtonFormField2(
+            isExpanded: true,
+            items: (questions[0]['ส่วนหัวและลำตัว'] as List<String>)
+                .map(
+                  (body) => DropdownMenuItem(
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Text(
+                        body,
+                      ),
+                    ),
+                    value: body,
+                  ),
+                )
+                .toList(),
+            dropdownMaxHeight: h / 3,
+            dropdownFullScreen: true,
+            dropdownElevation: 1,
+            dropdownDecoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(50),
+              ),
+              border: Border(),
+            ),
+            
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Colors.black,
+                    width: double.infinity,
+                    style: BorderStyle.solid),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(50),
+                ),
+              ),
+              fillColor: Colors.white,
+              filled: true,
+              hintText: '',
+            ),
+            onChanged: (body) => answerQuestion(body),
+            searchController: _bodyHeadSearch,
+            searchInnerWidget: Padding(
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                bottom: 10,
+                top: 10,
+              ),
+              child: TextFormField(
+                controller: _bodyHeadSearch,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () => _bodyHeadSearch.clear(),
+                    icon: const Icon(Icons.close),
+                  ),
+                  hintText: 'ค้นหา ...',
+                ),
+              ),
+            ),
+            searchMatchFn: (item, searchValue) {
+              return (item.value.toString().contains(
+                    searchValue,
+                  ));
+            },
+          ),
         );
         break;
 
       case 'ร่างกายส่วนบน':
         return Column(
           children: [
-            
             // ... makes separating list into a value of a list, then take it into child list.
             ...(questions[0]['ร่างกายส่วนบน'] as List<String>).map((body) {
               print(body);
@@ -248,7 +306,6 @@ class Questionnaire extends StatelessWidget {
       case 'ร่างกายส่วนล่าง':
         return Column(
           children: [
-            
             // ... makes separating list into a value of a list, then take it into child list.
             ...(questions[0]['ร่างกายส่วนล่าง'] as List<String>).map((body) {
               print(body);

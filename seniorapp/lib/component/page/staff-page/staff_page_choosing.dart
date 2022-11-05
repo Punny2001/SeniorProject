@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/staff-page/staff_case.dart';
@@ -60,9 +61,11 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     });
   }
 
+  @override
   void initState() {
     getHealthSize();
     getPhysicalSize();
+    
     super.initState();
   }
 
@@ -90,8 +93,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
               child: IconButton(
                 onPressed: () {
                   setState(() {
-                    Navigator.of(context)
-                        .pushNamed('/staffProfile', arguments: '');
+                    Navigator.of(context).pushNamed('/staffProfile');
                   });
                 },
                 icon: Icon(Icons.menu),
