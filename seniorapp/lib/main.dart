@@ -19,38 +19,6 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) async {
     FirebaseAuth.instance.authStateChanges().listen((event) async {
-      final FirebaseMessaging fbm = FirebaseMessaging.instance;
-      fbm.requestPermission(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-        print('Message data: ${message.data}');
-
-        if (message.notification != null) {
-          print(
-              'Message also contained a notification: ${message.notification}');
-        }
-      }).onData((data) {
-        print('Got a message whilst in the foreground!');
-        print('Message data: ${data.data}');
-      });
-
-      fbm.getInitialMessage().then((RemoteMessage message) {
-        if (message != null) {
-          print("Initial data: ${message.data}");
-        } else {
-          print("Initial data is Null");
-        }
-      });
-      FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-        if (message != null) {
-          print('onMessageOpenedApp data: ${message.data}');
-        } else {
-          print('onMessageOpenedApp data');
-        }
-      });
       if (event != null) {
         String uid = event.uid;
         final db = FirebaseFirestore.instance;
