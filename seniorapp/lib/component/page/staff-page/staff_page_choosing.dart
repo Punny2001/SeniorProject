@@ -20,6 +20,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   bool isRegister = false;
   int healthSize = 0;
   int physicalSize = 0;
+  int notificationCount;
 
   getHealthSize() {
     FirebaseFirestore.instance
@@ -28,8 +29,14 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         .get()
         .then(
       (snapshot) {
+        int size = 0;
+        snapshot.docs.forEach((data) {
+          if (data['totalPoint'] > 25) {
+            size += 1;
+          }
+        });
         setState(() {
-          healthSize = snapshot.docs.length;
+          healthSize = size;
         });
       },
     );
@@ -42,8 +49,14 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         .get()
         .then(
       (snapshot) {
+        int size = 0;
+        snapshot.docs.forEach((data) {
+          if (data['totalPoint'] > 25) {
+            size += 1;
+          }
+        });
         setState(() {
-          physicalSize = snapshot.docs.length;
+          physicalSize = size;
         });
       },
     );
@@ -61,32 +74,18 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     });
   }
 
-  Future<void> setupInteractedMessage() async {
-    // Get any messages which caused the application to open from
-    // a terminated state.
-    RemoteMessage initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    // If the message also contains a data property with a "type" of "chat",
-    // navigate to a chat screen
-    if (initialMessage != null) {
-      _handleMessage(initialMessage);
-    }
-
-    // Also handle any interaction when the app is in the background via a
-    // Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-  }
-
-  void _handleMessage(RemoteMessage message) {
-    print('data: ${message.data}');
+  void _getNotificationCount() {
+    getHealthSize();
+    getPhysicalSize();
+    setState(() {
+      notificationCount = healthSize + physicalSize;
+    });
   }
 
   @override
   void initState() {
     getHealthSize();
     getPhysicalSize();
-    setupInteractedMessage();
 
     super.initState();
   }
@@ -95,7 +94,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
-    final notificationCount = healthSize + physicalSize;
+    _getNotificationCount();
 
     return Scaffold(
       appBar: AppBar(
@@ -132,7 +131,8 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        Navigator.of(context).pushNamed('/staffNotification');
+                        Navigator.of(context).pushNamed('/staffNotification',
+                            arguments: _getNotificationCount);
                       });
                     },
                     icon: Icon(Icons.notifications_none),

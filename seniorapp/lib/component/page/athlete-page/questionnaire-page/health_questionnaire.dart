@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checking_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/more_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
+import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
+import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'questionnaire.dart';
 
@@ -314,7 +316,9 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                   onPressed: () {
                     Navigator.pop(context);
                     setState(() {
+                      
                       isResult = false;
+                      
                     });
                   },
                   child: const Text('โอเค'),

@@ -65,6 +65,7 @@ class _LoginState extends State<Login> {
                                     return null;
                                   }
                                 },
+                                keyboardType: TextInputType.emailAddress,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 controller: _emailController,
