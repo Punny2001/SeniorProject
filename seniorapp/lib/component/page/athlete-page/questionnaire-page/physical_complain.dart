@@ -205,7 +205,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: h / 10,
+        primary: true,
         elevation: 0,
         scrolledUnderElevation: 1,
         backgroundColor: Colors.transparent,

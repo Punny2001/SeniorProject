@@ -27,6 +27,7 @@ class StaffNotify extends StatefulWidget {
 
 class _StaffCaseState extends State<StaffNotify> {
   String uid = FirebaseAuth.instance.currentUser.uid;
+  User user;
   bool isLoading = false;
   String staff_no;
   int healthSize = 0;
@@ -36,6 +37,13 @@ class _StaffCaseState extends State<StaffNotify> {
       GlobalKey<RefreshIndicatorState>();
   HealthResultData healthData;
   PhysicalResultData physicalData;
+
+  void getUser() async {
+    User userTemp = await FirebaseAuth.instance.currentUser;
+    setState(() {
+      user = userTemp;
+    });
+  }
 
   Stream<List<QuerySnapshot>> getData() {
     Stream healthQuestionnaire = FirebaseFirestore.instance
@@ -92,7 +100,7 @@ class _StaffCaseState extends State<StaffNotify> {
   @override
   void initState() {
     super.initState();
-
+    getUser();
     setState(() {
       isLoading = true;
     });
@@ -453,7 +461,6 @@ class _StaffCaseState extends State<StaffNotify> {
                                               data['docID'],
                                             );
                                             setState(() {
-                                              FirebaseAuth.instance.currentUser.reload();
                                               widget.refreshNotification;
                                             });
                                           },

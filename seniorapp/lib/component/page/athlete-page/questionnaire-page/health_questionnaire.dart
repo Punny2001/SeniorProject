@@ -316,9 +316,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                   onPressed: () {
                     Navigator.pop(context);
                     setState(() {
-                      
                       isResult = false;
-                      
                     });
                   },
                   child: const Text('โอเค'),

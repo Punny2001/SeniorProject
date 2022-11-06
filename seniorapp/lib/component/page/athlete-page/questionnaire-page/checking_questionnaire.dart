@@ -51,19 +51,27 @@ class CheckingQuestionnaire extends StatelessWidget {
 
   Widget answerDecorate(
       String answerText, String questionnaireType, BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
     return Container(
-      width: double.infinity,
-      color: Colors.green.shade300,
-      padding: EdgeInsets.all(20),
+      padding: EdgeInsets.only(bottom: 10),
+      width: w * 0.9,
       child: RaisedButton(
-        color: Colors.white,
         onPressed: answerText == 'ใช่' ? checkingHandler : problemHandler,
         padding: EdgeInsets.zero,
-        child: Container(
-          child: Text(
-            answerText,
-            style: TextStyle(color: Colors.black, fontSize: 16),
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
           ),
+        ),
+        child: Text(
+          answerText,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            overflow: TextOverflow.clip,
+          ),
+          textAlign: TextAlign.center,
         ),
       ),
     );

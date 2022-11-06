@@ -68,6 +68,7 @@ class MyApp extends StatelessWidget {
       title: 'SIAT2022',
       initialRoute: initPage,
       routes: map,
+      
     );
   }
 }
