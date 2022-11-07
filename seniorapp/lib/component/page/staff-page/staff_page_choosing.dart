@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/staff-page/staff_case.dart';
@@ -97,6 +98,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     _getNotificationCount();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         primary: true,
         elevation: 0,
@@ -139,10 +141,11 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                   ),
                   Badge(
                     badgeContent: Text(
-                      '$notificationCount',
+                      ' ',
                       style: TextStyle(color: Colors.white),
                     ),
                     elevation: 0,
+                    
                     showBadge: notificationCount > 0 ? true : false,
                   ),
                 ],
@@ -152,10 +155,13 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         ),
       ),
       body: Container(
+        color: Colors.white,
         child: _StaffPageList.elementAt(_selected_idx),
       ),
       bottomNavigationBar: Container(
+        
         decoration: const BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(30), topLeft: Radius.circular(30)),
         ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checking_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/more_questionnaire.dart';
@@ -18,6 +19,7 @@ class HealthQuestionnaire extends StatefulWidget {
 }
 
 class _HealthQuestionnaire extends State<HealthQuestionnaire> {
+  GlobalKey updateState = GlobalKey();
   var _questionIndex = 0;
   var _totalScore = 0;
   Map<String, int> answer_list = {"Q1": 0};
@@ -315,6 +317,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
+                    StaffPageChoosing().createState();
                     setState(() {
                       isResult = false;
                     });
