@@ -31,10 +31,10 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
+      // backgroundColor: Colors.transparent,
       appBar: AppBar(
         primary: true,
         elevation: 0,
-        scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         title: Row(
@@ -58,42 +58,43 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.only(bottom: h * 0.01),
         child: _athletePageList.elementAt(_selected_idx),
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-        ),
+        // padding: EdgeInsets.only(top: h * 0.01),
+
         child: ClipRRect(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            
             backgroundColor: Colors.green.shade300,
             unselectedItemColor: Colors.black,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.search),
+                icon: Icon(Icons.search_off),
+                activeIcon: Icon(Icons.search),
                 label: 'Search',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.history),
+                icon: Icon(Icons.history_toggle_off),
+                activeIcon: Icon(Icons.history),
                 label: 'History',
               ),
             ],
             currentIndex: _selected_idx,
             onTap: _onPageTap,
-            selectedItemColor: Colors.redAccent,
-            showSelectedLabels: false,
+            selectedItemColor: Colors.black,
             showUnselectedLabels: false,
+
+            // selectedLabelStyle: TextStyle(color: Colors.black),
           ),
         ),
       ),

@@ -32,4 +32,5 @@ final Map<String, WidgetBuilder> map = {
   '/staffProfile': (BuildContext context) => StaffProfile(),
   '/staffNotification': (BuildContext context) => StaffNotify(),
   '/athleteProfile': (BuildContext context) => AthleteProfile(),
+  '/resultPage': (BuildContext context) => Result(),
 };

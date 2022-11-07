@@ -135,6 +135,12 @@ class _LoginState extends State<Login> {
                             Container(
                               alignment: const Alignment(1.05, 0.2),
                               child: TextButton(
+                                style: TextButton.styleFrom(
+                                  textStyle: TextStyle(
+                                    color: Color.fromARGB(255, 113, 157, 242),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 onPressed: () => Navigator.of(context)
                                     .pushNamed('/forgotPassword'),
                                 child: const Text(

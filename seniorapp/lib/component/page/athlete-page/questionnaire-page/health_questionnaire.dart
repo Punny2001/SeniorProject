@@ -220,12 +220,16 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                           questionType: 'health',
                         )
                       : isResult
-                          ? Result(
-                              resultScore: _totalScore,
-                              resetHandler: _resetQuestionnaire,
-                              insertHandler: saveHealthResult,
-                              questionType: 'health',
-                              healthPart: _healthChoosing,
+                          ? Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Result(
+                                  resultScore: _totalScore,
+                                  resetHandler: _resetQuestionnaire,
+                                  insertHandler: saveHealthResult,
+                                  questionType: 'health',
+                                  healthPart: _healthChoosing,
+                                ),
+                              ),
                             )
                           : MoreQuestionnaire(_resetQuestionnaire, 'health')
                   : Questionnaire(
@@ -237,11 +241,15 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                   ? CheckingQuestionnaire(
                       'health', _checkingQuestion, _hasProblem)
                   : isResult
-                      ? Result(
-                          resultScore: 0,
-                          resetHandler: _resetQuestionnaire,
-                          insertHandler: saveHealthResult,
-                          questionType: 'health',
+                      ? Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => Result(
+                              resultScore: 0,
+                              resetHandler: _resetQuestionnaire,
+                              insertHandler: saveHealthResult,
+                              questionType: 'health',
+                            ),
+                          ),
                         )
                       : MoreQuestionnaire(_resetQuestionnaire, 'health'),
         ),

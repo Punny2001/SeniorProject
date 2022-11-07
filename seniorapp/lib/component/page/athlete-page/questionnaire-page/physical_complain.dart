@@ -242,12 +242,16 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                         questionType: 'physical',
                       )
                     : isResult
-                        ? Result(
-                            resultScore: _totalScore,
-                            resetHandler: _resetQuestionnaire,
-                            insertHandler: savePhysicalResult,
-                            questionType: 'physical',
-                            bodyPart: _bodyChoosing,
+                        ? Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => Result(
+                                resultScore: _totalScore,
+                                resetHandler: _resetQuestionnaire,
+                                insertHandler: savePhysicalResult,
+                                questionType: 'physical',
+                                bodyPart: _bodyChoosing,
+                              ),
+                            ),
                           )
                         : MoreQuestionnaire(
                             _resetQuestionnaire,
@@ -260,11 +264,15 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                     _hasProblem,
                   )
                 : isResult
-                    ? Result(
-                        resultScore: 0,
-                        resetHandler: _resetQuestionnaire,
-                        insertHandler: savePhysicalResult,
-                        questionType: 'physical',
+                    ? Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Result(
+                            resultScore: 0,
+                            resetHandler: _resetQuestionnaire,
+                            insertHandler: savePhysicalResult,
+                            questionType: 'physical',
+                          ),
+                        ),
                       )
                     : MoreQuestionnaire(
                         _resetQuestionnaire,

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import './question.dart';
@@ -188,6 +190,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                     height: h * 0.3,
                   ),
                   Container(
+                    color: Colors.white,
                     width: w * 0.7,
                     child: RaisedButton(
                       child: Text('ถัดไป'),
@@ -343,8 +346,15 @@ class _QuestionnaireState extends State<Questionnaire> {
               ),
               Container(
                 width: w * 0.7,
+                height: h * 0.1,
                 child: RaisedButton(
-                  child: Text('ถัดไป'),
+                  color: Colors.white,
+                  child: Text(
+                    'ถัดไป',
+                    style: TextStyle(
+                      fontSize: h * 0.025,
+                    ),
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
                       Radius.circular(50),
@@ -448,6 +458,7 @@ class _QuestionnaireState extends State<Questionnaire> {
             Container(
               width: w * 0.7,
               child: RaisedButton(
+                color: Colors.white,
                 child: Text('ถัดไป'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
@@ -551,6 +562,7 @@ class _QuestionnaireState extends State<Questionnaire> {
             Container(
               width: w * 0.7,
               child: RaisedButton(
+                color: Colors.white,
                 child: Text('ถัดไป'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(

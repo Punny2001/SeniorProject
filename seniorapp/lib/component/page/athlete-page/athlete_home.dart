@@ -26,151 +26,166 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Container(
-        padding: EdgeInsets.only(bottom: h * 0.01),
+        color: Colors.white,
+        // padding: EdgeInsets.only(bottom: h * 0.01),
         width: w,
         height: h,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              CarouselSlider(
-                options: CarouselOptions(
-                  height: 190,
-                  aspectRatio: 16 / 9,
-                  viewportFraction: 0.8,
-                  enableInfiniteScroll: false,
-                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enlargeCenterPage: true,
+              // CarouselSlider(
+              //   options: CarouselOptions(
+              //     height: 190,
+              //     aspectRatio: 16 / 9,
+              //     viewportFraction: 0.8,
+              //     enableInfiniteScroll: false,
+              //     autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              //     autoPlayCurve: Curves.fastOutSlowIn,
+              //     enlargeCenterPage: true,
+              //   ),
+              //   items: [
+              //     GestureDetector(
+              //       child: Card(
+              //         semanticContainer: true,
+              //         clipBehavior: Clip.antiAliasWithSaveLayer,
+              //         child: Container(
+              //           width: double.infinity,
+              //           decoration: const BoxDecoration(
+              //             image: DecorationImage(
+              //               image: NetworkImage(
+              //                   'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+              //               fit: BoxFit.fill,
+              //             ),
+              //           ),
+              //           child: const Center(
+              //             child: Text(
+              //               "Coming soon",
+              //               style: TextStyle(
+              //                   fontSize: 30,
+              //                   fontWeight: FontWeight.bold,
+              //                   color: Colors.red),
+              //             ),
+              //           ),
+              //         ),
+              //         shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(30.0),
+              //         ),
+              //         elevation: 5,
+              //         margin: const EdgeInsets.all(10),
+              //       ),
+
+              //       // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
+              //     ),
+              //     GestureDetector(
+              //       child: Card(
+              //         semanticContainer: true,
+              //         clipBehavior: Clip.antiAliasWithSaveLayer,
+              //         child: Container(
+              //           width: double.infinity,
+              //           decoration: const BoxDecoration(
+              //             image: DecorationImage(
+              //               image: NetworkImage(
+              //                   'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+              //               fit: BoxFit.fill,
+              //             ),
+              //           ),
+              //           child: const Center(
+              //             child: Text(
+              //               "Coming soon",
+              //               style: TextStyle(
+              //                   fontSize: 30,
+              //                   fontWeight: FontWeight.bold,
+              //                   color: Colors.red),
+              //             ),
+              //           ),
+              //         ),
+              //         shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(30.0),
+              //         ),
+              //         elevation: 5,
+              //         margin: const EdgeInsets.all(10),
+              //       ),
+
+              //       // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
+              //     ),
+              //     GestureDetector(
+              //       child: Card(
+              //         semanticContainer: true,
+              //         clipBehavior: Clip.antiAliasWithSaveLayer,
+              //         child: Container(
+              //           width: double.infinity,
+              //           decoration: const BoxDecoration(
+              //             image: DecorationImage(
+              //               image: NetworkImage(
+              //                   'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
+              //               fit: BoxFit.fill,
+              //             ),
+              //           ),
+              //           child: const Center(
+              //             child: Text(
+              //               "Coming soon",
+              //               style: TextStyle(
+              //                   fontSize: 30,
+              //                   fontWeight: FontWeight.bold,
+              //                   color: Colors.red),
+              //             ),
+              //           ),
+              //         ),
+              //         shape: RoundedRectangleBorder(
+              //           borderRadius: BorderRadius.circular(30.0),
+              //         ),
+              //         elevation: 5,
+              //         margin: const EdgeInsets.all(10),
+              //       ),
+
+              //       // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
+              //     ),
+              //   ],
+              // ),
+              // const Padding(
+              //   padding: EdgeInsets.all(10),
+              // ),
+              Container(
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.only(left: w * 0.05),
+                child: Text(
+                  'รายงานปัญหา',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: h * 0.05,
+                  ),
                 ),
-                items: [
-                  GestureDetector(
-                    child: Card(
-                      semanticContainer: true,
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: Container(
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Coming soon",
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red),
-                          ),
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      elevation: 5,
-                      margin: const EdgeInsets.all(10),
-                    ),
-
-                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
-                  ),
-                  GestureDetector(
-                    child: Card(
-                      semanticContainer: true,
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: Container(
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Coming soon",
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red),
-                          ),
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      elevation: 5,
-                      margin: const EdgeInsets.all(10),
-                    ),
-
-                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
-                  ),
-                  GestureDetector(
-                    child: Card(
-                      semanticContainer: true,
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      child: Container(
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png'),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "Coming soon",
-                            style: TextStyle(
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red),
-                          ),
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      elevation: 5,
-                      margin: const EdgeInsets.all(10),
-                    ),
-
-                    // onTap: () => Navigator.of(context).pushNamed('/injuryReport'),
-                  ),
-                ],
               ),
-              const Padding(
-                padding: EdgeInsets.all(10),
-              ),
-              Text(
-                'รายงานปัญหา',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              PaddingDecorate(10),
               Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                    ),
+                    width: w,
                     child: GestureDetector(
                       child: Card(
                         semanticContainer: true,
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Text(
-                          'อาการบาดเจ็บ',
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Image.asset(
+                              'assets/images/athlete_badge.jpg',
+                              height: h / 4,
+                              fit: BoxFit.fitWidth,
+                            ),
+                            Container(
+                              height: h * 0.05,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'อาการบาดเจ็บทางร่างกาย (Physical)',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: h * 0.02,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
@@ -186,35 +201,37 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(4),
-                  ),
-                  const Text(
-                    'อาการบาดเจ็บทางร่างกาย (Physical)',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
                 ],
-              ),
-              const Padding(
-                padding: EdgeInsets.all(10),
               ),
               Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                    ),
+                    width: w,
                     child: GestureDetector(
                       child: Card(
                         semanticContainer: true,
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Text(
-                          'ปัญหาสุขภาพ',
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Image.asset(
+                              'assets/images/athlete_badge.jpg',
+                              height: h / 4,
+                              fit: BoxFit.fitWidth,
+                            ),
+                            Container(
+                              height: h * 0.05,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'ปัญหาสุขภาพ (Health)',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: h * 0.02,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
@@ -230,35 +247,37 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(4),
-                  ),
-                  const Text(
-                    'ปัญหาสุขภาพ (Health)',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  ),
                 ],
-              ),
-              const Padding(
-                padding: EdgeInsets.all(10),
               ),
               Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                    ),
+                    width: w,
                     child: GestureDetector(
                       child: Card(
                         semanticContainer: true,
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Text(
-                          'ปัญหาการนอนหลับและจิตใจ',
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Image.asset(
+                              'assets/images/athlete_badge.jpg',
+                              height: h / 4,
+                              fit: BoxFit.fitWidth,
+                            ),
+                            Container(
+                              height: h * 0.05,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'ปัญหาการนอนหลับและจิตใจ (Mental)',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: h * 0.02,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
@@ -273,10 +292,6 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                         ),
                       ),
                     ),
-                  ),
-                  const Text(
-                    'สุขภาพจิต (Mental)',
-                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
