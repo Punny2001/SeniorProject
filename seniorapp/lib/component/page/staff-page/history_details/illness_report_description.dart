@@ -50,9 +50,8 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: false,
-          toolbarHeight: MediaQuery.of(context).size.height / 10,
+          primary: true,
           elevation: 0,
-          scrolledUnderElevation: 1,
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.black,
           title: Row(
@@ -81,7 +80,7 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(

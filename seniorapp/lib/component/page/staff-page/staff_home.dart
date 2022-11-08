@@ -135,7 +135,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.only(left: w * 0.05),
                     child: Text(
-                      'รายงานปัญหา',
+                      'Record athlete\'s problem',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: h * 0.05,
@@ -160,7 +160,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                               height: h * 0.05,
                               alignment: Alignment.center,
                               child: Text(
-                                'Injury report',
+                                'Injury record',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: h * 0.02,
@@ -198,7 +198,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                               height: h * 0.05,
                               alignment: Alignment.center,
                               child: Text(
-                                'Illness report',
+                                'Illness record',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: h * 0.02,

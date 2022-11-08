@@ -287,7 +287,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           totalPoint: _totalScore,
           answerList: answer_list,
           healthSymptom: _healthChoosing,
-          caseReceived: false);
+          caseReceived: false,
+          caseFinished: false);
     } else {
       for (int i = 0; i < questionSize; i++) {
         answer_list["Q${i + 1}"] = 0;

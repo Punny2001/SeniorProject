@@ -17,10 +17,6 @@ import 'package:async/async.dart' show StreamZip;
 class StaffCase extends StatefulWidget {
   const StaffCase({Key key}) : super(key: key);
 
-  void refreshPage() {
-    StaffCase().createState();
-  }
-
   @override
   _StaffCaseState createState() => _StaffCaseState();
 }
@@ -80,6 +76,13 @@ class _StaffCaseState extends State<StaffCase> {
         });
       },
     );
+  }
+
+  void _finishCase() {
+    setState(() {
+      getPhysicalSize();
+      getHealthSize();
+    });
   }
 
   @override
@@ -142,9 +145,12 @@ class _StaffCaseState extends State<StaffCase> {
                             documentSnapshot.addAll(query.docs);
                           });
 
+                          int index = 0;
                           List<Map<String, dynamic>> mappedData = [];
                           for (QueryDocumentSnapshot doc in documentSnapshot) {
                             mappedData.add(doc.data());
+                            mappedData[index]['docID'] = doc.reference.id;
+                            index += 1;
                           }
                           return ListView.builder(
                             itemCount: mappedData.length,
@@ -162,6 +168,7 @@ class _StaffCaseState extends State<StaffCase> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               HealthReportCase(
+                                            docID: data['docID'],
                                             answerList: health.answerList,
                                             athleteNo: health.athleteNo,
                                             doDate: health.doDate,
@@ -171,6 +178,8 @@ class _StaffCaseState extends State<StaffCase> {
                                             questionnaireNo:
                                                 health.questionnaireNo,
                                             totalPoint: health.totalPoint,
+                                            caseFinished: health.caseFinished,
+                                            finishCaseHandler: _finishCase,
                                           ),
                                         ),
                                       );
@@ -182,6 +191,7 @@ class _StaffCaseState extends State<StaffCase> {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               PhysicalReportCase(
+                                            docID: data['docID'],
                                             answerList: physical.answerList,
                                             athleteNo: physical.athleteNo,
                                             doDate: physical.doDate,
@@ -191,6 +201,8 @@ class _StaffCaseState extends State<StaffCase> {
                                             questionnaireNo:
                                                 physical.questionnaireNo,
                                             totalPoint: physical.totalPoint,
+                                            finishCaseHandler: _finishCase,
+                                            caseFinished: physical.caseFinished,
                                           ),
                                         ),
                                       );

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
+import 'package:seniorapp/component/page/staff-page/staff_case.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
@@ -110,7 +111,6 @@ class _StaffCaseState extends State<StaffNotify> {
     _timer.cancel();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -534,7 +534,10 @@ class _StaffCaseState extends State<StaffNotify> {
                                                     data['docID'],
                                                   );
                                                   widget.refreshNotification;
-                                                  setState(() {});
+                                                  setState(() {
+                                                    getHealthSize();
+                                                    getPhysicalSize();
+                                                  });
                                                 },
                                                 icon: Icon(
                                                     Icons.add_circle_rounded,

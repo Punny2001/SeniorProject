@@ -52,31 +52,30 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
     final w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: MediaQuery.of(context).size.height / 10,
-          elevation: 0,
-          scrolledUnderElevation: 1,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                child: Ink(
-                  decoration: ShapeDecoration(
-                    shape: CircleBorder(),
-                    color: Colors.blue.shade200,
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    alignment: Alignment.centerRight,
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
+        automaticallyImplyLeading: false,
+        primary: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              child: Ink(
+                decoration: ShapeDecoration(
+                  shape: CircleBorder(),
+                  color: Colors.blue.shade200,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  alignment: Alignment.centerRight,
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
       body: Container(
         padding: const EdgeInsets.all(10),
         height: h,
@@ -89,39 +88,40 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset('assets/images/success.png', width: 70, height: 70),
+                  Image.asset('assets/images/success.png',
+                      width: 70, height: 70),
                   const Text(
                     'Record Successfully',
                     style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Nunito',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      color: Colors.black,
+                      fontFamily: 'Nunito',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
               SizedBox(height: 30),
-               Text(
-                    widget.report_id,
-                    style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Nunito',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  ),
+              Text(
+                widget.report_id,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Nunito',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               SizedBox(height: 15),
               Text(
-                    'Summary',
-                    style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Nunito',
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
+                'Summary',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Nunito',
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
                 ),
+              ),
               SizedBox(height: 10),
               RichText(
                 text: TextSpan(
@@ -132,8 +132,12 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-                    TextSpan(text: 'Injury Type: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: '${widget.injuryTypeCode} | ${widget.injuryType}'),
+                    TextSpan(
+                        text: 'Injury Type: ',
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                        text:
+                            '${widget.injuryTypeCode} | ${widget.injuryType}'),
                   ],
                 ),
               ),
@@ -147,8 +151,12 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-                    TextSpan(text: 'Injury Body Part: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: '${widget.injuryBodyCode} | ${widget.injuryBody}'),
+                    TextSpan(
+                        text: 'Injury Body Part: ',
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                        text:
+                            '${widget.injuryBodyCode} | ${widget.injuryBody}'),
                   ],
                 ),
               ),
@@ -162,7 +170,9 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-                    TextSpan(text: 'Date of injury: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                        text: 'Date of injury: ',
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
                     TextSpan(text: formatDate((widget.injuryDateTime))),
                   ],
                 ),
@@ -177,8 +187,11 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
                     color: Colors.black,
                   ),
                   children: <TextSpan>[
-                    TextSpan(text: 'Time of injury: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: DateFormat.Hm().format(widget.injuryDateTime)),
+                    TextSpan(
+                        text: 'Time of injury: ',
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                        text: DateFormat.Hm().format(widget.injuryDateTime)),
                   ],
                 ),
               ),
