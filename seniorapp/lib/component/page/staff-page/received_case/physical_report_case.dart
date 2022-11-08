@@ -244,7 +244,6 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                     child: Container(
                       height: h * 0.1,
                       child: RaisedButton(
-                        
                         color: Colors.green[300],
                         child: Text(
                           'Finish this case',
@@ -254,8 +253,8 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                         ),
                         onPressed: () {
                           updateData(widget.docID);
+                          widget.finishCaseHandler;
                           setState(() {
-                            widget.finishCaseHandler;
                             widget.caseFinished = true;
                           });
                         },

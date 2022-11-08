@@ -252,8 +252,8 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                         ),
                         onPressed: () {
                           updateData(widget.docID);
+                          widget.finishCaseHandler;
                           setState(() {
-                            widget.finishCaseHandler;
                             widget.caseFinished = true;
                           });
                         },

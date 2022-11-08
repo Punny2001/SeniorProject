@@ -58,19 +58,22 @@ class _LoginState extends State<Login> {
                           children: [
                             //////Email container
                             TextFormField(
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'login_page.email_required'.tr();
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                keyboardType: TextInputType.emailAddress,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                controller: _emailController,
-                                decoration: textdecorate_login(Icons.email,
-                                    'login_page.email_hinttext'.tr())),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'login_page.email_required'.tr();
+                                } else {
+                                  return null;
+                                }
+                              },
+                              keyboardType: TextInputType.emailAddress,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              controller: _emailController,
+                              decoration: textdecorate_login(
+                                Icons.email,
+                                'Email',
+                              ),
+                            ),
                             const Padding(
                               padding: EdgeInsets.only(bottom: 15),
                             ),
@@ -110,7 +113,7 @@ class _LoginState extends State<Login> {
                                 ),
                                 fillColor: const Color(0xFFCFD8DC),
                                 filled: true,
-                                hintText: 'login_page.password_hinttext'.tr(),
+                                hintText: 'Password',
                                 hintStyle:
                                     const TextStyle(fontFamily: 'OpenSans'),
                                 prefixIcon: const Icon(
@@ -135,23 +138,22 @@ class _LoginState extends State<Login> {
                             Container(
                               alignment: const Alignment(1.05, 0.2),
                               child: TextButton(
-                                style: TextButton.styleFrom(
-                                  textStyle: TextStyle(
-                                    color: Color.fromARGB(255, 113, 157, 242),
-                                    fontWeight: FontWeight.bold,
+                                  style: TextButton.styleFrom(
+                                    textStyle: TextStyle(
+                                      color: Color.fromARGB(255, 113, 157, 242),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                onPressed: () => Navigator.of(context)
-                                    .pushNamed('/forgotPassword'),
-                                child: const Text(
-                                  'login_page.forgotpassword_textbutton',
-                                ).tr(),
-                              ),
+                                  onPressed: () => Navigator.of(context)
+                                      .pushNamed('/forgotPassword'),
+                                  child: const Text(
+                                    'Forgot password',
+                                  )),
                             ),
                             ElevatedButton(
                               onPressed: () => signin(),
                               child: Text(
-                                'login_page.login_button'.tr(),
+                                'Log In',
                                 style: TextStyle(
                                   fontSize: h * 0.025,
                                   fontWeight: FontWeight.bold,

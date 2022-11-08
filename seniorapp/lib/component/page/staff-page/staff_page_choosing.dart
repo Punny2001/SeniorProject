@@ -80,8 +80,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     getHealthSize();
     getPhysicalSize();
     setState(() {
-      index = 2;
-
+      index = 0;
       notificationCount = healthSize + physicalSize;
     });
   }

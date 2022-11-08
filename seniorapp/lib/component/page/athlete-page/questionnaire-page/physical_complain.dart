@@ -203,7 +203,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: (hasProblem == false) && (isResult == true) ? null : AppBar(
+      appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
@@ -229,7 +229,9 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         ),
       ),
       body: Container(
-        padding: (hasProblem == false) && (isResult == true) ? null : EdgeInsets.only(top: h / 3),
+        padding: (hasProblem == false) && (isResult == true)
+            ? EdgeInsets.only(top: h * 0.3)
+            : EdgeInsets.only(top: h / 3),
         child: hasQuestion
             ? _bodyPartRound < 2
                 ? _questionnaireDisplay(_bodyPartRound)
@@ -338,7 +340,9 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รายงานผลเสร็จสิ้น'),
-              content: Text('บันทึกข้อมูลอาการ${_bodyChoosing}เรียบร้อย'),
+              content: _bodyChoosing != null
+                  ? Text('บันทึกข้อมูลอาการ${_bodyChoosing}เรียบร้อย')
+                  : Text('บันทึกข้อมูลอาการเรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {

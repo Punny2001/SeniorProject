@@ -28,6 +28,7 @@ class _StaffCaseState extends State<StaffCase> {
   int healthSize;
   int physicalSize;
   bool isLoading = false;
+  bool caseFinished = false;
 
   Stream<List<QuerySnapshot>> getData() {
     String staffNo;
@@ -80,8 +81,7 @@ class _StaffCaseState extends State<StaffCase> {
 
   void _finishCase() {
     setState(() {
-      getPhysicalSize();
-      getHealthSize();
+      widget.createState();
     });
   }
 
@@ -178,8 +178,8 @@ class _StaffCaseState extends State<StaffCase> {
                                             questionnaireNo:
                                                 health.questionnaireNo,
                                             totalPoint: health.totalPoint,
-                                            caseFinished: health.caseFinished,
                                             finishCaseHandler: _finishCase,
+                                            caseFinished: health.caseFinished,
                                           ),
                                         ),
                                       );

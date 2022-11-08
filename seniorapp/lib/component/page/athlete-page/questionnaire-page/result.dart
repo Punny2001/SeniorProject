@@ -71,7 +71,6 @@ class Result extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.only(left: w * 0.03, right: w * 0.03),
-      
       child: Column(
         children: [
           Text(
@@ -132,7 +131,10 @@ class Result extends StatelessWidget {
             padding: EdgeInsets.zero,
             color: Colors.green.shade300,
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(15))),
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
+              ),
+            ),
             child: Container(
               alignment: Alignment.center,
               width: w,

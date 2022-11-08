@@ -137,7 +137,8 @@ class _StaffCaseState extends State<StaffNotify> {
                   child: IconButton(
                     icon: Icon(Icons.arrow_back_ios),
                     alignment: Alignment.centerRight,
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () =>
+                        Navigator.of(context, rootNavigator: true).pop(context),
                   ),
                 ),
               ),

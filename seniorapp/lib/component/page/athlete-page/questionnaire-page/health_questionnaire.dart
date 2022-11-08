@@ -34,6 +34,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
   void _resetQuestionnaire() {
     setState(() {
+      hasQuestion = true;
       answer_health = false;
       _questionIndex = 0;
       _totalScore = 0;
@@ -180,37 +181,35 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: (hasProblem == false) && (isResult == true)
-          ? null
-          : AppBar(
-              automaticallyImplyLeading: false,
-              primary: true,
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.black,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    child: Ink(
-                      decoration: ShapeDecoration(
-                        shape: CircleBorder(),
-                        color: Colors.green.shade300,
-                      ),
-                      child: IconButton(
-                        icon: Icon(Icons.arrow_back_ios),
-                        alignment: Alignment.centerRight,
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ),
-                  ),
-                ],
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        primary: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              child: Ink(
+                decoration: ShapeDecoration(
+                  shape: CircleBorder(),
+                  color: Colors.green.shade300,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  alignment: Alignment.centerRight,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
               ),
             ),
+          ],
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Container(
         padding: (hasProblem == false) && (isResult == true)
-            ? null
+            ? EdgeInsets.only(top: h * 0.3)
             : EdgeInsets.only(top: h / 3),
         child: hasQuestion
             ? answer_health
@@ -315,7 +314,9 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รายงานผลเสร็จสิ้น'),
-              content: Text('บันทึกข้อมูลอาการ${_healthChoosing}เรียบร้อย'),
+              content: _healthChoosing != null
+                  ? Text('บันทึกข้อมูลอาการ${_healthChoosing}เรียบร้อย')
+                  : Text('บันทึกข้อมูลอาการเรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
