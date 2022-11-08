@@ -111,6 +111,7 @@ class _StaffCaseState extends State<StaffNotify> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -147,7 +148,8 @@ class _StaffCaseState extends State<StaffNotify> {
                   ),
                   onPressed: () {
                     setState(() {
-                      getData();
+                      getHealthSize();
+                      getPhysicalSize();
                     });
                   },
                 ),
@@ -525,16 +527,14 @@ class _StaffCaseState extends State<StaffNotify> {
                                               ),
                                             ),
                                             Container(
-                                              
                                               child: IconButton(
                                                 onPressed: () {
                                                   updateData(
                                                     data['questionnaireType'],
                                                     data['docID'],
                                                   );
-                                                  setState(() {
-                                                    widget.refreshNotification;
-                                                  });
+                                                  widget.refreshNotification;
+                                                  setState(() {});
                                                 },
                                                 icon: Icon(
                                                     Icons.add_circle_rounded,

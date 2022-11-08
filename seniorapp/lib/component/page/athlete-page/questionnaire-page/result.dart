@@ -71,6 +71,7 @@ class Result extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.only(left: w * 0.03, right: w * 0.03),
+      
       child: Column(
         children: [
           Text(

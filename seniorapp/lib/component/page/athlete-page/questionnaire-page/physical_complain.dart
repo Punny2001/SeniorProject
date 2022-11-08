@@ -203,11 +203,10 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
+      appBar: (hasProblem == false) && (isResult == true) ? null : AppBar(
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
-        scrolledUnderElevation: 1,
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         title: Row(
@@ -230,7 +229,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.only(top: h / 3),
+        padding: (hasProblem == false) && (isResult == true) ? null : EdgeInsets.only(top: h / 3),
         child: hasQuestion
             ? _bodyPartRound < 2
                 ? _questionnaireDisplay(_bodyPartRound)
@@ -242,16 +241,12 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                         questionType: 'physical',
                       )
                     : isResult
-                        ? Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => Result(
-                                resultScore: _totalScore,
-                                resetHandler: _resetQuestionnaire,
-                                insertHandler: savePhysicalResult,
-                                questionType: 'physical',
-                                bodyPart: _bodyChoosing,
-                              ),
-                            ),
+                        ? Result(
+                            resultScore: _totalScore,
+                            resetHandler: _resetQuestionnaire,
+                            insertHandler: savePhysicalResult,
+                            questionType: 'physical',
+                            bodyPart: _bodyChoosing,
                           )
                         : MoreQuestionnaire(
                             _resetQuestionnaire,
@@ -264,15 +259,11 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                     _hasProblem,
                   )
                 : isResult
-                    ? Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Result(
-                            resultScore: 0,
-                            resetHandler: _resetQuestionnaire,
-                            insertHandler: savePhysicalResult,
-                            questionType: 'physical',
-                          ),
-                        ),
+                    ? Result(
+                        resultScore: 0,
+                        resetHandler: _resetQuestionnaire,
+                        insertHandler: savePhysicalResult,
+                        questionType: 'physical',
                       )
                     : MoreQuestionnaire(
                         _resetQuestionnaire,
@@ -319,7 +310,8 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           totalPoint: _totalScore,
           answerList: answer_list,
           bodyPart: insertedBody,
-          caseReceived: false);
+          caseReceived: false,
+          caseFinished: false);
     } else {
       for (int i = 0; i < questionSize; i++) {
         answer_list["Q${i + 1}"] = 0;
@@ -332,7 +324,8 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           totalPoint: _totalScore,
           answerList: answer_list,
           bodyPart: 'None',
-          caseReceived: false);
+          caseReceived: false,
+          caseFinished: false);
     }
     Map<String, dynamic> data = physicalResultModel.toMap();
 

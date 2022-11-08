@@ -178,84 +178,77 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    return MaterialApp(
-      home: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: h / 10,
-          elevation: 0,
-          scrolledUnderElevation: 1,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                child: Ink(
-                  decoration: ShapeDecoration(
-                    shape: CircleBorder(),
-                    color: Colors.green.shade300,
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: (hasProblem == false) && (isResult == true)
+          ? null
+          : AppBar(
+              automaticallyImplyLeading: false,
+              primary: true,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.black,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    child: Ink(
+                      decoration: ShapeDecoration(
+                        shape: CircleBorder(),
+                        color: Colors.green.shade300,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.arrow_back_ios),
+                        alignment: Alignment.centerRight,
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ),
                   ),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    alignment: Alignment.centerRight,
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
-        backgroundColor: Colors.white,
-        body: Container(
-          padding: EdgeInsets.only(top: h / 3),
-          child: hasQuestion
-              ? answer_health
-                  ? _questionIndex < _questions.length
-                      ? Questionnaire(
-                          answerQuestion: _answerQuestion,
-                          questionIndex: _questionIndex,
-                          questions: _questions,
-                          questionType: 'health',
-                        )
-                      : isResult
-                          ? Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Result(
-                                  resultScore: _totalScore,
-                                  resetHandler: _resetQuestionnaire,
-                                  insertHandler: saveHealthResult,
-                                  questionType: 'health',
-                                  healthPart: _healthChoosing,
-                                ),
-                              ),
-                            )
-                          : MoreQuestionnaire(_resetQuestionnaire, 'health')
-                  : Questionnaire(
-                      questions: health_symp,
-                      answerQuestion: _answerHealthPart,
-                      questionType: 'health',
-                    )
-              : hasProblem
-                  ? CheckingQuestionnaire(
-                      'health', _checkingQuestion, _hasProblem)
-                  : isResult
-                      ? Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => Result(
-                              resultScore: 0,
-                              resetHandler: _resetQuestionnaire,
-                              insertHandler: saveHealthResult,
-                              questionType: 'health',
-                            ),
-                          ),
-                        )
-                      : MoreQuestionnaire(_resetQuestionnaire, 'health'),
-        ),
+            ),
+      backgroundColor: Colors.white,
+      body: Container(
+        padding: (hasProblem == false) && (isResult == true)
+            ? null
+            : EdgeInsets.only(top: h / 3),
+        child: hasQuestion
+            ? answer_health
+                ? _questionIndex < _questions.length
+                    ? Questionnaire(
+                        answerQuestion: _answerQuestion,
+                        questionIndex: _questionIndex,
+                        questions: _questions,
+                        questionType: 'health',
+                      )
+                    : isResult
+                        ? Result(
+                            resultScore: _totalScore,
+                            resetHandler: _resetQuestionnaire,
+                            insertHandler: saveHealthResult,
+                            questionType: 'health',
+                            healthPart: _healthChoosing,
+                          )
+                        : MoreQuestionnaire(_resetQuestionnaire, 'health')
+                : Questionnaire(
+                    questions: health_symp,
+                    answerQuestion: _answerHealthPart,
+                    questionType: 'health',
+                  )
+            : hasProblem
+                ? CheckingQuestionnaire(
+                    'health', _checkingQuestion, _hasProblem)
+                : isResult
+                    ? Result(
+                        resultScore: 0,
+                        resetHandler: _resetQuestionnaire,
+                        insertHandler: saveHealthResult,
+                        questionType: 'health',
+                      )
+                    : MoreQuestionnaire(_resetQuestionnaire, 'health'),
       ),
-      // : Result(_totalScore, _resetQuiz, saveHealthResult)),
     );
+    // : Result(_totalScore, _resetQuiz, saveHealthResult)),
   }
 
   Future<void> saveHealthResult() async {
@@ -307,7 +300,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           totalPoint: _totalScore,
           answerList: answer_list,
           healthSymptom: 'None',
-          caseReceived: false);
+          caseReceived: false,
+          caseFinished: false);
     }
     Map<String, dynamic> data = healthResultModel.toMap();
 

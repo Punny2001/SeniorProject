@@ -17,6 +17,10 @@ import 'package:async/async.dart' show StreamZip;
 class StaffCase extends StatefulWidget {
   const StaffCase({Key key}) : super(key: key);
 
+  void refreshPage() {
+    StaffCase().createState();
+  }
+
   @override
   _StaffCaseState createState() => _StaffCaseState();
 }
@@ -208,7 +212,11 @@ class _StaffCaseState extends State<StaffCase> {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  color: Colors.red,
+                                                  color:
+                                                      healthData.caseFinished ==
+                                                              true
+                                                          ? Colors.green
+                                                          : Colors.red,
                                                   width: w * 0.01,
                                                 ),
                                                 Container(
@@ -335,7 +343,11 @@ class _StaffCaseState extends State<StaffCase> {
                                           : Row(
                                               children: [
                                                 Container(
-                                                  color: Colors.red,
+                                                  color:
+                                                      healthData.caseFinished ==
+                                                              true
+                                                          ? Colors.green
+                                                          : Colors.red,
                                                   width: w * 0.01,
                                                 ),
                                                 Container(

@@ -190,24 +190,30 @@ class _QuestionnaireState extends State<Questionnaire> {
                     height: h * 0.3,
                   ),
                   Container(
-                    color: Colors.white,
-                    width: w * 0.7,
-                    child: RaisedButton(
-                      child: Text('ถัดไป'),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(50),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (canNext) {
-                          widget.answerQuestion(healthChoosing);
-                        } else {
-                          return null;
-                        }
-                      },
+                width: w * 0.7,
+                height: h * 0.1,
+                child: RaisedButton(
+                  color: Colors.white,
+                  child: Text(
+                    'ถัดไป',
+                    style: TextStyle(
+                      fontSize: h * 0.025,
                     ),
                   ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(50),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (canNext) {
+                      widget.answerQuestion(healthChoosing);
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+              ),
                 ],
               );
         break;

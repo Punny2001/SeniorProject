@@ -12,6 +12,7 @@ class HealthResultData {
   String healthSymptom;
   bool caseReceived;
   String staff_no_received;
+  bool caseFinished;
 
   HealthResultData(
       {@required this.questionnaireNo,
@@ -22,7 +23,8 @@ class HealthResultData {
       @required this.answerList,
       @required this.healthSymptom,
       @required this.caseReceived,
-      this.staff_no_received});
+      this.staff_no_received,
+      @required this.caseFinished});
 
   HealthResultData copyWith({
     String questionnaireNo,
@@ -34,6 +36,7 @@ class HealthResultData {
     String healthSymptom,
     bool caseReceived,
     String staff_no_received,
+    bool caseFinished,
   }) {
     return HealthResultData(
       questionnaireNo: questionnaireNo ?? this.questionnaireNo,
@@ -45,6 +48,7 @@ class HealthResultData {
       healthSymptom: healthSymptom ?? this.healthSymptom,
       caseReceived: caseReceived ?? this.caseReceived,
       staff_no_received: staff_no_received ?? this.staff_no_received,
+      caseFinished: caseFinished ?? this.caseFinished,
     );
   }
 
@@ -60,6 +64,7 @@ class HealthResultData {
     result.addAll({'healthSymptom': healthSymptom});
     result.addAll({'caseReceived': caseReceived});
     result.addAll({'staff_no_received': staff_no_received});
+    result.addAll({'caseFinished': caseFinished});
 
     return result;
   }
@@ -75,6 +80,7 @@ class HealthResultData {
       healthSymptom: map['healthSymptom'] ?? '',
       caseReceived: map['caseReceived'] ?? false,
       staff_no_received: map['staff_no_received'] ?? '',
+      caseFinished: map['caseFinished'] ?? false,
     );
   }
 
@@ -101,7 +107,8 @@ class HealthResultData {
         mapEquals(other.answerList, answerList) &&
         other.healthSymptom == healthSymptom &&
         other.caseReceived == caseReceived &&
-        other.staff_no_received == staff_no_received;
+        other.staff_no_received == staff_no_received &&
+        other.caseFinished == caseFinished;
   }
 
   @override
@@ -114,6 +121,7 @@ class HealthResultData {
         answerList.hashCode ^
         healthSymptom.hashCode ^
         caseReceived.hashCode ^
-        staff_no_received.hashCode;
+        staff_no_received.hashCode ^
+        caseFinished.hashCode;
   }
 }

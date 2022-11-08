@@ -22,6 +22,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int healthSize = 0;
   int physicalSize = 0;
   int notificationCount;
+  int index;
 
   getHealthSize() {
     FirebaseFirestore.instance
@@ -69,7 +70,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     StaffCase(),
   ];
 
-  void _onPageTap(int index) {
+  void _onPageTap(index) {
     setState(() {
       _selected_idx = index;
     });
@@ -79,6 +80,8 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     getHealthSize();
     getPhysicalSize();
     setState(() {
+      index = 2;
+
       notificationCount = healthSize + physicalSize;
     });
   }
@@ -133,8 +136,10 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        Navigator.of(context).pushNamed('/staffNotification',
-                            arguments: _getNotificationCount);
+                        Navigator.of(context).pushNamed(
+                          '/staffNotification',
+                          arguments: _getNotificationCount,
+                        );
                       });
                     },
                     icon: Icon(Icons.notifications_none),

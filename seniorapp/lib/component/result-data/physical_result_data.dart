@@ -12,6 +12,7 @@ class PhysicalResultData {
   String bodyPart;
   bool caseReceived;
   String staff_no_received;
+  bool caseFinished;
 
   PhysicalResultData(
       {@required this.questionnaireNo,
@@ -22,30 +23,31 @@ class PhysicalResultData {
       @required this.answerList,
       @required this.bodyPart,
       @required this.caseReceived,
-      this.staff_no_received});
+      this.staff_no_received,
+      @required this.caseFinished});
 
-  PhysicalResultData copyWith({
-    String questionnaireNo,
-    String athleteNo,
-    String questionnaireType,
-    DateTime doDate,
-    int totalPoint,
-    Map<String, int> answerList,
-    String bodyPart,
-    bool caseReceived,
-    String staff_no_received,
-  }) {
+  PhysicalResultData copyWith(
+      {String questionnaireNo,
+      String athleteNo,
+      String questionnaireType,
+      DateTime doDate,
+      int totalPoint,
+      Map<String, int> answerList,
+      String bodyPart,
+      bool caseReceived,
+      String staff_no_received,
+      bool caseFinished}) {
     return PhysicalResultData(
-      questionnaireNo: questionnaireNo ?? this.questionnaireNo,
-      athleteNo: athleteNo ?? this.athleteNo,
-      questionnaireType: questionnaireType ?? this.questionnaireType,
-      doDate: doDate ?? this.doDate,
-      totalPoint: totalPoint ?? this.totalPoint,
-      answerList: answerList ?? this.answerList,
-      bodyPart: bodyPart ?? this.bodyPart,
-      caseReceived: caseReceived ?? this.caseReceived,
-      staff_no_received: staff_no_received ?? this.staff_no_received
-    );
+        questionnaireNo: questionnaireNo ?? this.questionnaireNo,
+        athleteNo: athleteNo ?? this.athleteNo,
+        questionnaireType: questionnaireType ?? this.questionnaireType,
+        doDate: doDate ?? this.doDate,
+        totalPoint: totalPoint ?? this.totalPoint,
+        answerList: answerList ?? this.answerList,
+        bodyPart: bodyPart ?? this.bodyPart,
+        caseReceived: caseReceived ?? this.caseReceived,
+        staff_no_received: staff_no_received ?? this.staff_no_received,
+        caseFinished: caseFinished ?? this.caseFinished);
   }
 
   Map<String, dynamic> toMap() {
@@ -60,6 +62,7 @@ class PhysicalResultData {
     result.addAll({'bodyPart': bodyPart});
     result.addAll({'caseReceived': caseReceived});
     result.addAll({'staff_no_received': staff_no_received});
+    result.addAll({'caseFinished': caseFinished});
 
     return result;
   }
@@ -74,7 +77,8 @@ class PhysicalResultData {
       answerList: Map<String, int>.from(map['answerList']),
       bodyPart: map['bodyPart'] ?? '',
       caseReceived: map['caseReceived'] ?? false,
-      staff_no_received: map['staff_no_received'] ?? ''
+      staff_no_received: map['staff_no_received'] ?? '',
+      caseFinished: map['caseFinished'] ?? false,
     );
   }
 
@@ -101,7 +105,8 @@ class PhysicalResultData {
         mapEquals(other.answerList, answerList) &&
         other.bodyPart == bodyPart &&
         other.caseReceived == caseReceived &&
-        other.staff_no_received == staff_no_received;
+        other.staff_no_received == staff_no_received &&
+        other.caseFinished == caseFinished;
   }
 
   @override
@@ -114,6 +119,7 @@ class PhysicalResultData {
         answerList.hashCode ^
         bodyPart.hashCode ^
         caseReceived.hashCode ^
-        staff_no_received.hashCode;
+        staff_no_received.hashCode ^
+        caseFinished.hashCode;
   }
 }
