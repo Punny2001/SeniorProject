@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_personal.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteProfile extends StatefulWidget {
@@ -69,32 +70,11 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 ),
               ),
             ),
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Personal Information'),
-                      content: Container(
-                        height: h / 5,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(athData.athlete_no),
-                            Text(athData.email),
-                            Text(athData.firstname + ' ' + athData.lastname)
-                          ],
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: Navigator.of(context).pop,
-                          child: Text('Close window'),
-                        ),
-                      ],
-                    );
-                  });
-            },
+            onTap: () =>Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+            AthletePersonal(email: athData.email, firstname: athData.firstname, lastname: athData.lastname, ath_no: athData.athlete_no,
+            ),
+            )
+            ),
           ),
           GestureDetector(
             child: Card(
