@@ -145,7 +145,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                       style: TextStyle(color: Colors.white),
                     ),
                     elevation: 0,
-                    
                     showBadge: notificationCount > 0 ? true : false,
                   ),
                 ],
@@ -159,7 +158,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         child: _StaffPageList.elementAt(_selected_idx),
       ),
       bottomNavigationBar: Container(
-        
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -177,22 +175,24 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             backgroundColor: Colors.blue.shade200,
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.history),
+                icon: Icon(Icons.history_toggle_off),
+                activeIcon: Icon(Icons.history),
                 label: 'History',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.cases_outlined),
-                label: 'Case',
+                activeIcon: Icon(Icons.cases_rounded),
+                label: 'Cases',
               ),
             ],
             currentIndex: _selected_idx,
             onTap: _onPageTap,
-            selectedItemColor: Colors.redAccent,
-            showSelectedLabels: false,
+            selectedItemColor: Colors.black,
             showUnselectedLabels: false,
           ),
         ),

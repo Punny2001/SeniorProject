@@ -127,85 +127,98 @@ class _StaffHomePageState extends State<StaffHomePage> {
             //     ),
             //   ],
             // ),
-            const Padding(
-              padding: EdgeInsets.all(10),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                          ),
-                          child: GestureDetector(
-                            child: Card(
-                              semanticContainer: true,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              child: Image.network(
-                                'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
-                                fit: BoxFit.fill,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              elevation: 5,
-                              margin: const EdgeInsets.all(10),
+            SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: EdgeInsets.only(left: w * 0.05),
+                    child: Text(
+                      'รายงานปัญหา',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: h * 0.05,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: w,
+                    child: GestureDetector(
+                      child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Image.asset(
+                              'assets/images/staff_badge.jpg',
+                              height: h / 4,
+                              fit: BoxFit.fitWidth,
                             ),
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/injuryReport'),
-                          ),
-                        ),
-                        Text(
-                          'Injury report',
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.all(10),
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                          ),
-                          child: GestureDetector(
-                            child: Card(
-                              semanticContainer: true,
-                              clipBehavior: Clip.antiAliasWithSaveLayer,
-                              child: Image.network(
-                                'https://www.qusoft.com/wp-content/uploads/2020/05/quick-reportsa.png',
-                                fit: BoxFit.fill,
+                            Container(
+                              height: h * 0.05,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Injury report',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: h * 0.02,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              elevation: 5,
-                              margin: const EdgeInsets.all(10),
                             ),
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/illnessReport'),
-                          ),
+                          ],
                         ),
-                        const Text(
-                          'Illness report',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
                         ),
-                      ],
+                        elevation: 5,
+                        margin: const EdgeInsets.all(10),
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/injuryReport'),
                     ),
-                  ],
-                ),
+                  ),
+                  Container(
+                    width: w,
+                    child: GestureDetector(
+                      child: Card(
+                        semanticContainer: true,
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Image.asset(
+                              'assets/images/staff_badge.jpg',
+                              height: h / 4,
+                              fit: BoxFit.fitWidth,
+                            ),
+                            Container(
+                              height: h * 0.05,
+                              alignment: Alignment.center,
+                              child: Text(
+                                'Illness report',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: h * 0.02,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        elevation: 5,
+                        margin: const EdgeInsets.all(10),
+                      ),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/illnessReport'),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

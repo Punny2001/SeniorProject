@@ -38,13 +38,6 @@ class _StaffCaseState extends State<StaffNotify> {
   HealthResultData healthData;
   PhysicalResultData physicalData;
 
-  void getUser() async {
-    User userTemp = await FirebaseAuth.instance.currentUser;
-    setState(() {
-      user = userTemp;
-    });
-  }
-
   Stream<List<QuerySnapshot>> getData() {
     Stream healthQuestionnaire = FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
@@ -100,7 +93,6 @@ class _StaffCaseState extends State<StaffNotify> {
   @override
   void initState() {
     super.initState();
-    getUser();
     setState(() {
       isLoading = true;
     });
@@ -128,13 +120,12 @@ class _StaffCaseState extends State<StaffNotify> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          toolbarHeight: h / 10,
+          primary: true,
           elevation: 0,
-          scrolledUnderElevation: 1,
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 child: Ink(
@@ -149,285 +140,80 @@ class _StaffCaseState extends State<StaffNotify> {
                   ),
                 ),
               ),
+              Container(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.refresh,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      getData();
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         ),
-        body: RefreshIndicator(
-          key: _refreshIndicatorKey,
-          onRefresh: () async {
-            return Future<void>.delayed(const Duration(seconds: 1), () async {
-              await _refreshIndicatorKey.currentState.show();
-            });
-          },
-          child: Container(
-            padding:
-                EdgeInsets.only(top: h * 0.02, left: w * 0.05, right: w * 0.05),
-            height: h,
-            width: w,
-            child: isLoading
-                ? Center(
-                    child: Text(
-                      'Laoding...',
-                    ),
-                  )
-                : healthSize + physicalSize != 0
-                    ? Container(
-                        child: StreamBuilder(
-                          stream: getData(),
-                          builder: (BuildContext context, snapshot) {
-                            if (snapshot.hasData) {
-                              List<QuerySnapshot> querySnapshot =
-                                  snapshot.data.toList();
+        body: Container(
+          height: h,
+          width: w,
+          child: isLoading
+              ? Center(
+                  child: Text(
+                    'Laoding...',
+                  ),
+                )
+              : healthSize + physicalSize != 0
+                  ? Container(
+                      child: StreamBuilder(
+                        stream: getData(),
+                        builder: (BuildContext context, snapshot) {
+                          if (snapshot.hasData) {
+                            List<QuerySnapshot> querySnapshot =
+                                snapshot.data.toList();
 
-                              List<QueryDocumentSnapshot> documentSnapshot = [];
-                              querySnapshot.forEach((query) {
-                                documentSnapshot.addAll(query.docs);
-                              });
+                            List<QueryDocumentSnapshot> documentSnapshot = [];
+                            querySnapshot.forEach((query) {
+                              documentSnapshot.addAll(query.docs);
+                            });
 
-                              int index = 0;
-                              List<Map<String, dynamic>> mappedData = [];
-                              for (QueryDocumentSnapshot doc
-                                  in documentSnapshot) {
-                                mappedData.add(doc.data());
-                                mappedData[index]['docID'] = doc.reference.id;
-                                index += 1;
-                              }
+                            int index = 0;
+                            List<Map<String, dynamic>> mappedData = [];
+                            for (QueryDocumentSnapshot doc
+                                in documentSnapshot) {
+                              mappedData.add(doc.data());
+                              mappedData[index]['docID'] = doc.reference.id;
+                              index += 1;
+                            }
 
-                              mappedData.removeWhere(
-                                  (data) => data['totalPoint'] < 26);
-                              switch (snapshot.connectionState) {
-                                case (ConnectionState.waiting):
-                                  {
-                                    return Center(
-                                      child: Text('Loading...'),
-                                    );
-                                  }
-                                  break;
-                                default:
-                                  {
-                                    return ListView.builder(
-                                      itemCount: mappedData.length,
-                                      itemBuilder: (context, index) {
-                                        Map<String, dynamic> data =
-                                            mappedData[index];
-                                        healthData =
-                                            HealthResultData.fromMap(data);
-                                        physicalData =
-                                            PhysicalResultData.fromMap(data);
+                            mappedData
+                                .removeWhere((data) => data['totalPoint'] < 26);
+                            switch (snapshot.connectionState) {
+                              case (ConnectionState.waiting):
+                                {
+                                  return Center(
+                                    child: Text('Loading...'),
+                                  );
+                                }
+                                break;
+                              default:
+                                {
+                                  return ListView.builder(
+                                    itemCount: mappedData.length,
+                                    itemBuilder: (context, index) {
+                                      Map<String, dynamic> data =
+                                          mappedData[index];
+                                      healthData =
+                                          HealthResultData.fromMap(data);
+                                      physicalData =
+                                          PhysicalResultData.fromMap(data);
 
-                                        return Card(
-                                          elevation: 5,
-                                          color: Colors.blue.shade200,
-                                          shape: StadiumBorder(),
-                                          margin:
-                                              EdgeInsets.only(bottom: w * 0.05),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              GestureDetector(
-                                                child: Card(
-                                                  color: Colors.blue.shade200,
-                                                  elevation: 0,
-                                                  child:
-                                                      data['questionnaireType'] ==
-                                                              'Health'
-                                                          ? Column(
-                                                              children: <
-                                                                  Widget>[
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Problem type: ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: healthData
-                                                                            .questionnaireType,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            fontWeight:
-                                                                                FontWeight.normal),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Health Symptom: ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: healthData
-                                                                            .healthSymptom,
-                                                                        style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.normal),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Done on: ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: formatDate(
-                                                                            healthData.doDate),
-                                                                        style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.normal),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Time: ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: DateFormat.Hms()
-                                                                            .format(
-                                                                          healthData
-                                                                              .doDate,
-                                                                        ),
-                                                                        style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.normal),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            )
-                                                          : Column(
-                                                              children: <
-                                                                  Widget>[
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Problem type: ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          18,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: physicalData
-                                                                            .questionnaireType,
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                18,
-                                                                            fontWeight:
-                                                                                FontWeight.normal),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Injured body: ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: physicalData
-                                                                            .bodyPart,
-                                                                        style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.normal),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Done on: ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text:
-                                                                            formatDate(
-                                                                          physicalData
-                                                                              .doDate,
-                                                                        ),
-                                                                        style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.normal),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Text.rich(
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Time: ',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: DateFormat.Hms()
-                                                                            .format(
-                                                                          physicalData
-                                                                              .doDate,
-                                                                        ),
-                                                                        style: TextStyle(
-                                                                            fontWeight:
-                                                                                FontWeight.normal),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                ),
+                                      return Card(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              child: GestureDetector(
                                                 onTap: () {
                                                   switch (data[
                                                       'questionnaireType']) {
@@ -492,8 +278,255 @@ class _StaffCaseState extends State<StaffNotify> {
                                                     default:
                                                   }
                                                 },
+                                                child: Container(
+                                                  height: h * 0.2,
+                                                  padding: EdgeInsets.only(
+                                                    left: w * 0.05,
+                                                  ),
+                                                  child:
+                                                      data['questionnaireType'] ==
+                                                              'Health'
+                                                          ? Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Container(
+                                                                  padding: EdgeInsets.only(
+                                                                      left: w *
+                                                                          0.03),
+                                                                  width:
+                                                                      w * 0.7,
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .stretch,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Text.rich(
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Problem type: ',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                18,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: healthData.questionnaireType,
+                                                                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Text.rich(
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Health Symptom: ',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: healthData.healthSymptom,
+                                                                              style: TextStyle(
+                                                                                fontWeight: FontWeight.normal,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Text.rich(
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Done on: ',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: formatDate(healthData.doDate),
+                                                                              style: TextStyle(fontWeight: FontWeight.normal),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Text.rich(
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Time: ',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: DateFormat.Hms().format(
+                                                                                healthData.doDate,
+                                                                              ),
+                                                                              style: TextStyle(fontWeight: FontWeight.normal),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  width:
+                                                                      w * 0.2,
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Text(
+                                                                        '${healthData.totalPoint}',
+                                                                        style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontSize: h * 0.05),
+                                                                      ),
+                                                                      Text(
+                                                                          'score'),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            )
+                                                          : Row(
+                                                              children: [
+                                                                Container(
+                                                                  width:
+                                                                      w * 0.7,
+                                                                  padding: EdgeInsets.only(
+                                                                      left: w *
+                                                                          0.03),
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .stretch,
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Text.rich(
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Problem type: ',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                18,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: physicalData.questionnaireType,
+                                                                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Text.rich(
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Injured body: ',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: physicalData.bodyPart,
+                                                                              style: TextStyle(fontWeight: FontWeight.normal),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Text.rich(
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Done on: ',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: formatDate(
+                                                                                physicalData.doDate,
+                                                                              ),
+                                                                              style: TextStyle(fontWeight: FontWeight.normal),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Text.rich(
+                                                                        TextSpan(
+                                                                          text:
+                                                                              'Time: ',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                          children: [
+                                                                            TextSpan(
+                                                                              text: DateFormat.Hms().format(
+                                                                                physicalData.doDate,
+                                                                              ),
+                                                                              style: TextStyle(fontWeight: FontWeight.normal),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                  width:
+                                                                      w * 0.2,
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Text(
+                                                                        '${healthData.totalPoint}',
+                                                                        style: TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontSize: h * 0.05),
+                                                                      ),
+                                                                      Text(
+                                                                          'score'),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                ),
                                               ),
-                                              IconButton(
+                                            ),
+                                            Container(
+                                              
+                                              child: IconButton(
                                                 onPressed: () {
                                                   updateData(
                                                     data['questionnaireType'],
@@ -507,32 +540,32 @@ class _StaffCaseState extends State<StaffNotify> {
                                                     Icons.add_circle_rounded,
                                                     color: Colors.black),
                                               ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  }
-                              }
-                            } else {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
                             }
-                          },
-                        ),
-                      )
-                    : Center(
-                        child: Text(
-                          'Empty notification',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 50,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        },
+                      ),
+                    )
+                  : Center(
+                      child: Text(
+                        'Empty notification',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-          ),
+                    ),
         ),
         bottomNavigationBar: BottomAppBar(
           child: SizedBox(height: h * 0.03),

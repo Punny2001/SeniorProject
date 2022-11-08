@@ -157,97 +157,88 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                   ),
                 ),
               ),
-              Column(
-                children: [
-                  Container(
-                    width: w,
-                    child: GestureDetector(
-                      child: Card(
-                        semanticContainer: true,
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Image.asset(
-                              'assets/images/athlete_badge.jpg',
-                              height: h / 4,
-                              fit: BoxFit.fitWidth,
+              Container(
+                width: w,
+                child: GestureDetector(
+                  child: Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.asset(
+                          'assets/images/athlete_badge.jpg',
+                          height: h / 4,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        Container(
+                          height: h * 0.05,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'อาการบาดเจ็บทางร่างกาย (Physical)',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: h * 0.02,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Container(
-                              height: h * 0.05,
-                              alignment: Alignment.center,
-                              child: Text(
-                                'อาการบาดเจ็บทางร่างกาย (Physical)',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: h * 0.02,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        elevation: 5,
-                        margin: const EdgeInsets.all(10),
-                      ),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              PhysicalQuestionnaire(),
-                        ),
-                      ),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    elevation: 5,
+                    margin: const EdgeInsets.all(10),
+                  ),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          PhysicalQuestionnaire(),
                     ),
                   ),
-                ],
+                ),
               ),
-              Column(
-                children: [
-                  Container(
-                    width: w,
-                    child: GestureDetector(
-                      child: Card(
-                        semanticContainer: true,
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Image.asset(
-                              'assets/images/athlete_badge.jpg',
-                              height: h / 4,
-                              fit: BoxFit.fitWidth,
+              Container(
+                width: w,
+                child: GestureDetector(
+                  child: Card(
+                    semanticContainer: true,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Image.asset(
+                          'assets/images/athlete_badge.jpg',
+                          height: h / 4,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        Container(
+                          height: h * 0.05,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'ปัญหาสุขภาพ (Health)',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: h * 0.02,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Container(
-                              height: h * 0.05,
-                              alignment: Alignment.center,
-                              child: Text(
-                                'ปัญหาสุขภาพ (Health)',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: h * 0.02,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        elevation: 5,
-                        margin: const EdgeInsets.all(10),
-                      ),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              HealthQuestionnaire(),
-                        ),
-                      ),
+                      ],
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    elevation: 5,
+                    margin: const EdgeInsets.all(10),
+                  ),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => HealthQuestionnaire(),
                     ),
                   ),
-                ],
+                ),
               ),
               Column(
                 children: [

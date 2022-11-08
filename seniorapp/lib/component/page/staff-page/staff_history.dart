@@ -124,10 +124,8 @@ class _StaffReportState extends State<StaffReport> {
                               Map<String, dynamic> data = mappedData[index];
                               return GestureDetector(
                                 child: Card(
-                                  margin:
-                                      const EdgeInsets.fromLTRB(20, 5, 20, 5),
                                   child: Container(
-                                    height: h / 10,
+                                    height: h * 0.2,
                                     child: Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
