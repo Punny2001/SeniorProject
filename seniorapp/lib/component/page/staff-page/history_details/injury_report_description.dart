@@ -52,25 +52,136 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
     final w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.report_id),
-      ),
+          automaticallyImplyLeading: false,
+          toolbarHeight: MediaQuery.of(context).size.height / 10,
+          elevation: 0,
+          scrolledUnderElevation: 1,
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                child: Ink(
+                  decoration: ShapeDecoration(
+                    shape: CircleBorder(),
+                    color: Colors.blue.shade200,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    alignment: Alignment.centerRight,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       body: Container(
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(10),
         height: h,
         width: w,
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                  'Injury Type: ${widget.injuryTypeCode} | ${widget.injuryType}'),
-              Text(
-                'Injury Body Part: ${widget.injuryBodyCode} | ${widget.injuryBody}',
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Image.asset('assets/images/success.png', width: 70, height: 70),
+                  const Text(
+                    'Record Successfully',
+                    style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Nunito',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  ),
+                ],
               ),
+              SizedBox(height: 30),
+               Text(
+                    widget.report_id,
+                    style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Nunito',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  ),
+              SizedBox(height: 15),
               Text(
-                formatDate((widget.injuryDateTime)),
+                    'Summary',
+                    style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Nunito',
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Injury Type: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: '${widget.injuryTypeCode} | ${widget.injuryType}'),
+                  ],
+                ),
               ),
-              Text(DateFormat.Hm().format(widget.injuryDateTime))
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Injury Body Part: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: '${widget.injuryBodyCode} | ${widget.injuryBody}'),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Date of injury: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: formatDate((widget.injuryDateTime))),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Time of injury: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: DateFormat.Hm().format(widget.injuryDateTime)),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

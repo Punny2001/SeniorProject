@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/staff-page/staff_personal.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
@@ -70,32 +71,11 @@ class _StaffProfileState extends State<StaffProfile> {
                 ),
               ),
             ),
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Personal Information'),
-                      content: Container(
-                        height: h / 5,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(stfData.staff_no),
-                            Text(stfData.email),
-                            Text(stfData.firstname + ' ' + stfData.lastname)
-                          ],
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: Navigator.of(context).pop,
-                          child: Text('Close window'),
-                        ),
-                      ],
-                    );
-                  });
-            },
+            onTap: () =>  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
+            StaffPersonal(email: stfData.email, firstname: stfData.firstname, lastname: stfData.lastname, staff_no: stfData.staff_no,
+            ),
+            )
+            ),
           ),
           GestureDetector(
             child: Card(

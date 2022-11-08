@@ -49,34 +49,145 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
     final w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.report_id),
-      ),
+          automaticallyImplyLeading: false,
+          toolbarHeight: MediaQuery.of(context).size.height / 10,
+          elevation: 0,
+          scrolledUnderElevation: 1,
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                child: Ink(
+                  decoration: ShapeDecoration(
+                    shape: CircleBorder(),
+                    color: Colors.blue.shade200,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    alignment: Alignment.centerRight,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       body: Container(
-        padding: const EdgeInsets.all(30),
+        padding: EdgeInsets.all(25.0),
         height: h,
         width: w,
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Image.asset('assets/images/success.png', width: 70, height: 70),
+                  const Text(
+                    'Record Successfully',
+                    style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Nunito',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+               Text(
+                    widget.report_id,
+                    style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Nunito',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  ),
+              SizedBox(height: 15),
               Text(
-                'Affected System: ${widget.affected_system_code} | ${widget.affected_system}',
-              ),
-              const Text(
-                'Main Symptoms:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              for (int i = 0; i < widget.mainSymptoms.length; i++)
-                Text(
-                  '${widget.mainSymptomsCode[i]} | ${widget.mainSymptoms[i]}',
+                    'Summary',
+                    style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Nunito',
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
-              Text(
-                formatDate((widget.occured_date)),
-              )
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Affected System: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: '${widget.affected_system_code} | ${widget.affected_system}'),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Illness cause: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: '${widget.illness_cause_code} | ${widget.illness_cause}'),
+                  ],
+                ),
+              ),
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Main Symptoms: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    for (int i = 0; i < widget.mainSymptoms.length; i++)
+                      TextSpan(text: '${widget.mainSymptomsCode[i]} | ${widget.mainSymptoms[i]}  '),
+                  ],
+                ),
+              ),
+              
+              SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  // Note: Styles for TextSpans must be explicitly defined.
+                  // Child text spans will inherit styles from parent
+                  style: const TextStyle(
+                    fontSize: 17.0,
+                    color: Colors.black,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(text: 'Date of illness: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: formatDate((widget.occured_date)),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+   
   }
 }
