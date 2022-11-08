@@ -1,8 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/user-data/staff_data.dart';
-import 'package:seniorapp/component/page/staff-page/staff_profile.dart';
 
 class StaffPersonal extends StatefulWidget {
   const StaffPersonal({Key key,  @required this.staff_no,
