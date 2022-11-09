@@ -314,7 +314,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รายงานผลเสร็จสิ้น'),
-              content: _healthChoosing != null
+              content: _healthChoosing != null || _healthChoosing != 'None'
                   ? Text('บันทึกข้อมูลอาการ${_healthChoosing}เรียบร้อย')
                   : Text('บันทึกข้อมูลอาการเรียบร้อย'),
               actions: <Widget>[

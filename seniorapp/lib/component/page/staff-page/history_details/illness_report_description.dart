@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/decoration/format_date.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
@@ -49,144 +50,165 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
     final w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          primary: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Colors.black,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                child: Ink(
-                  decoration: ShapeDecoration(
-                    shape: CircleBorder(),
-                    color: Colors.blue.shade200,
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back_ios),
-                    alignment: Alignment.centerRight,
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
+        automaticallyImplyLeading: false,
+        primary: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              child: Ink(
+                decoration: ShapeDecoration(
+                  shape: CircleBorder(),
+                  color: Colors.blue.shade200,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  alignment: Alignment.centerRight,
+                  onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
       body: Container(
-        padding: EdgeInsets.all(25.0),
         height: h,
         width: w,
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset('assets/images/success.png', width: 70, height: 70),
-                  const Text(
+                  Container(
+                    child: Icon(
+                      Icons.assignment_turned_in_rounded,
+                      color: Colors.green,
+                      size: h * 0.1,
+                    ),
+                  ),
+                  Text(
                     'Record Successfully',
                     style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Nunito',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      color: Colors.black,
+                      fontFamily: 'Nunito',
+                      fontSize: h * 0.03,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 30),
-               Text(
-                    widget.report_id,
-                    style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Nunito',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  ),
-              SizedBox(height: 15),
-              Text(
-                    'Summary',
-                    style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Nunito',
-                    fontSize: 17,
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
+              Container(
+                padding: EdgeInsets.only(
+                  left: w * 0.1,
+                  right: w * 0.1,
+                  top: h * 0.05,
                 ),
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  // Note: Styles for TextSpans must be explicitly defined.
-                  // Child text spans will inherit styles from parent
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(text: 'Affected System: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: '${widget.affected_system_code} | ${widget.affected_system}'),
-                  ],
-                ),
-              ),
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  // Note: Styles for TextSpans must be explicitly defined.
-                  // Child text spans will inherit styles from parent
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(text: 'Illness cause: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: '${widget.illness_cause_code} | ${widget.illness_cause}'),
-                  ],
-                ),
-              ),
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  // Note: Styles for TextSpans must be explicitly defined.
-                  // Child text spans will inherit styles from parent
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(text: 'Main Symptoms: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    for (int i = 0; i < widget.mainSymptoms.length; i++)
-                      TextSpan(text: '${widget.mainSymptomsCode[i]} | ${widget.mainSymptoms[i]}  '),
-                  ],
-                ),
-              ),
-              
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  // Note: Styles for TextSpans must be explicitly defined.
-                  // Child text spans will inherit styles from parent
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(text: 'Date of illness: ', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: formatDate((widget.occured_date)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${widget.report_id}\n',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Nunito',
+                        fontSize: h * 0.025,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Summary\n',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Nunito',
+                        fontSize: h * 0.025,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Main symptom(s): ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          for (int i = 0; i < widget.mainSymptoms.length; i++)
+                            TextSpan(
+                                text:
+                                    '${widget.mainSymptomsCode[i]} | ${widget.mainSymptoms[i]}\n'),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Illness cause: ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text:
+                                  '${widget.illness_cause_code} | ${widget.illness_cause}\n'),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Date of injury: ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                            text: '${formatDate(widget.occured_date)}\n',
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        // Note: Styles for TextSpans must be explicitly defined.
+                        // Child text spans will inherit styles from parent
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Time of injury: ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                            text:
+                                '${DateFormat.Hms().format(widget.occured_date)}\n',
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),
       ),
     );
-   
   }
 }

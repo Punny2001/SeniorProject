@@ -81,7 +81,8 @@ class _StaffCaseState extends State<StaffCase> {
 
   void _finishCase() {
     setState(() {
-      widget.createState();
+      getHealthSize();
+      getPhysicalSize();
     });
   }
 
@@ -127,7 +128,7 @@ class _StaffCaseState extends State<StaffCase> {
       body: Container(
         height: h,
         width: w,
-        child: isLoading
+        child: isLoading == true
             ? Center(
                 child: Text('Loading...'),
               )
@@ -164,48 +165,55 @@ class _StaffCaseState extends State<StaffCase> {
                                     case 'Health':
                                       HealthResultData health =
                                           HealthResultData.fromMap(data);
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              HealthReportCase(
-                                            docID: data['docID'],
-                                            answerList: health.answerList,
-                                            athleteNo: health.athleteNo,
-                                            doDate: health.doDate,
-                                            healthSymptom: health.healthSymptom,
-                                            questionnaireType:
-                                                health.questionnaireType,
-                                            questionnaireNo:
-                                                health.questionnaireNo,
-                                            totalPoint: health.totalPoint,
-                                            finishCaseHandler: _finishCase,
-                                            caseFinished: health.caseFinished,
-                                          ),
-                                        ),
-                                      );
+                                      Navigator.of(context)
+                                          .push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HealthReportCase(
+                                                docID: data['docID'],
+                                                answerList: health.answerList,
+                                                athleteNo: health.athleteNo,
+                                                doDate: health.doDate,
+                                                healthSymptom:
+                                                    health.healthSymptom,
+                                                questionnaireType:
+                                                    health.questionnaireType,
+                                                questionnaireNo:
+                                                    health.questionnaireNo,
+                                                totalPoint: health.totalPoint,
+                                                finishCaseHandler: _finishCase,
+                                                caseFinished:
+                                                    health.caseFinished,
+                                              ),
+                                            ),
+                                          )
+                                          .then((_) => setState(() {}));
                                       break;
                                     case 'Physical':
                                       PhysicalResultData physical =
                                           PhysicalResultData.fromMap(data);
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PhysicalReportCase(
-                                            docID: data['docID'],
-                                            answerList: physical.answerList,
-                                            athleteNo: physical.athleteNo,
-                                            doDate: physical.doDate,
-                                            bodyPart: physical.bodyPart,
-                                            questionnaireType:
-                                                physical.questionnaireType,
-                                            questionnaireNo:
-                                                physical.questionnaireNo,
-                                            totalPoint: physical.totalPoint,
-                                            finishCaseHandler: _finishCase,
-                                            caseFinished: physical.caseFinished,
-                                          ),
-                                        ),
-                                      );
+                                      Navigator.of(context)
+                                          .push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PhysicalReportCase(
+                                                docID: data['docID'],
+                                                answerList: physical.answerList,
+                                                athleteNo: physical.athleteNo,
+                                                doDate: physical.doDate,
+                                                bodyPart: physical.bodyPart,
+                                                questionnaireType:
+                                                    physical.questionnaireType,
+                                                questionnaireNo:
+                                                    physical.questionnaireNo,
+                                                totalPoint: physical.totalPoint,
+                                                finishCaseHandler: _finishCase,
+                                                caseFinished:
+                                                    physical.caseFinished,
+                                              ),
+                                            ),
+                                          )
+                                          .then((_) => setState(() {}));
                                       break;
                                     default:
                                   }

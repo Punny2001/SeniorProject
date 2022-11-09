@@ -64,7 +64,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     );
   }
 
-  static const List<Widget> _StaffPageList = <Widget>[
+  static const List<Widget> _staffPageList = <Widget>[
     StaffHomePage(),
     StaffReport(),
     StaffCase(),
@@ -80,7 +80,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     getHealthSize();
     getPhysicalSize();
     setState(() {
-      index = 0;
       notificationCount = healthSize + physicalSize;
     });
   }
@@ -98,6 +97,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
     _getNotificationCount();
+    index = 0;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -135,10 +135,12 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        Navigator.of(context).pushNamed(
-                          '/staffNotification',
-                          arguments: _getNotificationCount,
-                        );
+                        Navigator.of(context)
+                            .pushNamed(
+                              '/staffNotification',
+                              arguments: _getNotificationCount,
+                            )
+                            .then((_) => setState(() {}));
                       });
                     },
                     icon: Icon(Icons.notifications_none),
@@ -159,7 +161,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       ),
       body: Container(
         color: Colors.white,
-        child: _StaffPageList.elementAt(_selected_idx),
+        child: _staffPageList.elementAt(_selected_idx),
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(

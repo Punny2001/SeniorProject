@@ -340,7 +340,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รายงานผลเสร็จสิ้น'),
-              content: _bodyChoosing != null
+              content: _bodyChoosing != null || _bodyChoosing != 'None'
                   ? Text('บันทึกข้อมูลอาการ${_bodyChoosing}เรียบร้อย')
                   : Text('บันทึกข้อมูลอาการเรียบร้อย'),
               actions: <Widget>[

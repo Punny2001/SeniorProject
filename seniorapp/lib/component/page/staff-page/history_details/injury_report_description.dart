@@ -77,124 +77,135 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
         ),
       ),
       body: Container(
-        padding: const EdgeInsets.all(10),
         height: h,
         width: w,
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset('assets/images/success.png',
-                      width: 70, height: 70),
-                  const Text(
+                  Container(
+                    child: Icon(
+                      Icons.assignment_turned_in_rounded,
+                      color: Colors.green,
+                      size: h * 0.1,
+                    ),
+                  ),
+                  Text(
                     'Record Successfully',
                     style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Nunito',
-                      fontSize: 20,
+                      fontSize: h * 0.03,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 30),
-              Text(
-                widget.report_id,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Nunito',
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              Container(
+                padding: EdgeInsets.only(
+                  left: w * 0.1,
+                  right: w * 0.1,
+                  top: h * 0.05,
                 ),
-              ),
-              SizedBox(height: 15),
-              Text(
-                'Summary',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Nunito',
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
-                ),
-              ),
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  // Note: Styles for TextSpans must be explicitly defined.
-                  // Child text spans will inherit styles from parent
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'Injury Type: ',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text:
-                            '${widget.injuryTypeCode} | ${widget.injuryType}'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${widget.report_id}\n',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Nunito',
+                        fontSize: h * 0.025,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'Summary\n',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Nunito',
+                        fontSize: h * 0.025,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Injury Type: ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text:
+                                  '${widget.injuryTypeCode} | ${widget.injuryType}\n'),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Injury Body Part: ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                              text:
+                                  '${widget.injuryBodyCode} | ${widget.injuryBody}\n'),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Date of injury: ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                            text: '${formatDate(widget.injuryDateTime)}\n',
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        // Note: Styles for TextSpans must be explicitly defined.
+                        // Child text spans will inherit styles from parent
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.black,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Time of injury: ',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          TextSpan(
+                            text:
+                                '${DateFormat.Hms().format(widget.injuryDateTime)}\n',
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  // Note: Styles for TextSpans must be explicitly defined.
-                  // Child text spans will inherit styles from parent
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'Injury Body Part: ',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text:
-                            '${widget.injuryBodyCode} | ${widget.injuryBody}'),
-                  ],
-                ),
-              ),
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  // Note: Styles for TextSpans must be explicitly defined.
-                  // Child text spans will inherit styles from parent
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'Date of injury: ',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: formatDate((widget.injuryDateTime))),
-                  ],
-                ),
-              ),
-              SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  // Note: Styles for TextSpans must be explicitly defined.
-                  // Child text spans will inherit styles from parent
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'Time of injury: ',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(
-                        text: DateFormat.Hm().format(widget.injuryDateTime)),
-                  ],
-                ),
-              ),
+              )
             ],
           ),
         ),
