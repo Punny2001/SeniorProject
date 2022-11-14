@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seniorapp/component/language.dart';
+import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({Key key}) : super(key: key);
@@ -18,8 +19,36 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        actions: [LanguageSign()],
+        primary: true,
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Ink(
+              decoration: ShapeDecoration(
+                shape: CircleBorder(),
+                color: Colors.blue.shade200,
+              ),
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.of(context).pop();
+                  });
+                },
+                alignment: Alignment.centerRight,
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       body: Container(
         margin: const EdgeInsets.all(30),
@@ -27,25 +56,39 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         height: h,
         child: Column(
           children: [
-            Text('forgotpassword_page.email_input'.tr()),
-            const Padding(
-              padding: EdgeInsets.only(bottom: 10),
-            ),
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                border: const OutlineInputBorder(),
-                hintText: 'forgotpassword_page.email_hinttext'.tr(),
+            Text(
+              'Input your email',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
             const Padding(
               padding: EdgeInsets.only(bottom: 10),
             ),
+            TextFormField(
+              controller: _emailController,
+              decoration: textdecorate('Your email address'),
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: h * 0.02),
+            ),
             ElevatedButton(
-              onPressed: () {
-                resetPassword();
-              },
-              child: Text('forgotpassword_page.reset_button'.tr()),
+              onPressed: () => resetPassword(),
+              child: Text(
+                'Reset password',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: h * 0.025,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(w, h * 0.07),
+                elevation: 0,
+                primary: Colors.blue[200],
+                shape: StadiumBorder(),
+              ),
             ),
           ],
         ),

@@ -31,20 +31,14 @@ class _AthleteHistoryState extends State<AthleteHistory> {
 
   Stream<List<QuerySnapshot>> getData() {
     String athleteNo;
-    FirebaseFirestore.instance.collection('Athlete').doc(uid).get().then(
-      (snapshot) {
-        Map data = snapshot.data();
-        athleteNo = data['athlete_no'];
-        // print('Athlete No: $athlete_no');
-      },
-    );
+
     Stream healthQuestionnaire = FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('athleteNo', isEqualTo: athleteNo, isNull: false)
+        .where('athleteNo', isEqualTo: uid, isNull: false)
         .snapshots();
     Stream physicalQuestionnaire = FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('athleteNo', isEqualTo: athleteNo, isNull: false)
+        .where('athleteNo', isEqualTo: uid, isNull: false)
         .snapshots();
 
     return StreamZip([healthQuestionnaire, physicalQuestionnaire]);
@@ -53,7 +47,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
   getHealthSize() {
     FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('athleteNo', isEqualTo: athlete_no, isNull: false)
+        .where('athleteNo', isEqualTo: uid, isNull: false)
         .get()
         .then(
       (snapshot) {
@@ -67,7 +61,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
   getPhysicalSize() {
     FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('athleteNo', isEqualTo: athlete_no, isNull: false)
+        .where('athleteNo', isEqualTo: uid, isNull: false)
         .get()
         .then(
       (snapshot) {
@@ -84,12 +78,6 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     setState(() {
       isLoading = true;
     });
-    FirebaseFirestore.instance.collection('Athlete').doc(uid).get().then(
-      (snapshot) {
-        Map data = snapshot.data();
-        athlete_no = data['athlete_no'];
-      },
-    );
     getPhysicalSize();
     getHealthSize();
     _timer = Timer(Duration(seconds: 1), () {
@@ -119,7 +107,6 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
-        
         height: h,
         width: w,
         child: isLoading

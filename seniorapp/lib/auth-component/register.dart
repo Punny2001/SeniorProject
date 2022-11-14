@@ -1,4 +1,3 @@
-
 import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,9 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:seniorapp/decoration/authentication/textfield_login.dart';
 import 'package:seniorapp/decoration/padding.dart';
+import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -48,23 +49,36 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        primary: true,
         elevation: 0,
-        actions: [
-          LanguageSign(),
-          IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil('/login', (route) => false);
-              },
-              icon: const Icon(Icons.arrow_back))
-        ],
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Ink(
+              decoration: ShapeDecoration(
+                shape: CircleBorder(),
+                color: Color.fromARGB(255, 113, 157, 242),
+              ),
+              child: IconButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.of(context).pop();
+                  });
+                },
+                alignment: Alignment.centerRight,
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                ),
+              ),
+            ),
+            LanguageSign()
+          ],
+        ),
       ),
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: Color.fromARGB(255, 113, 157, 242),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Stack(
@@ -80,11 +94,11 @@ class _RegisterState extends State<Register> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 150.0),
+              padding: EdgeInsets.only(top: h * 0.2),
               child: Container(
-                width: double.infinity,
+                width: w,
                 decoration: const BoxDecoration(
-                  color: Colors.lightBlue,
+                  color: Color.fromARGB(255, 113, 157, 242),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(50),
                     topRight: Radius.circular(50),
@@ -100,8 +114,7 @@ class _RegisterState extends State<Register> {
               child: Container(
                 margin: const EdgeInsets.all(42),
                 decoration: const BoxDecoration(
-                  color: Colors.lightBlue,
-                ),
+                    color: Color.fromARGB(255, 113, 157, 242)),
                 child: Column(
                   children: [
                     Form(
@@ -134,13 +147,33 @@ class _RegisterState extends State<Register> {
                             controller: _passwordController,
                             obscureText: _passwordhide,
                             decoration: InputDecoration(
-                              border: InputBorder.none,
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFCFD8DC),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFCFD8DC),
+                                ),
+                              ),
                               fillColor: const Color(0xFFCFD8DC),
                               filled: true,
-                              hintText:
-                                  'register_page.password_description'.tr(),
-                              hintStyle:
-                                  const TextStyle(fontFamily: 'OpenSans'),
+                              hintText: 'register_page.password'.tr(),
+                              hintStyle: const TextStyle(
+                                fontFamily: 'OpenSans',
+                                fontSize: 15,
+                              ),
                               prefixIcon: const Icon(
                                 Icons.lock,
                                 color: Colors.black,
@@ -159,6 +192,9 @@ class _RegisterState extends State<Register> {
                                 },
                               ),
                             ),
+                          ),
+                          Text(
+                            'register_page.password_description'.tr(),
                           ),
                           const Padding(
                             padding: EdgeInsets.only(bottom: 15),
@@ -187,9 +223,28 @@ class _RegisterState extends State<Register> {
                             controller: _confirmPasswordController,
                             obscureText: _confirmPasswordhide,
                             decoration: InputDecoration(
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFCFD8DC),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color(0xFFCFD8DC),
+                                ),
+                              ),
                               fillColor: const Color(0xFFCFD8DC),
                               filled: true,
-                              border: InputBorder.none,
                               hintText:
                                   'register_page.confirmpassword_description'
                                       .tr(),
@@ -201,15 +256,14 @@ class _RegisterState extends State<Register> {
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _confirmPasswordhide
+                                  _passwordhide
                                       ? Icons.visibility
                                       : Icons.visibility_off,
                                   color: Colors.black,
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _confirmPasswordhide =
-                                        !_confirmPasswordhide;
+                                    _passwordhide = !_passwordhide;
                                   });
                                 },
                               ),
@@ -225,7 +279,7 @@ class _RegisterState extends State<Register> {
                           const Padding(
                             padding: EdgeInsets.only(bottom: 15),
                           ),
-                          //////Email container
+                          //////User container
                           TextFormField(
                             validator: (value) {
                               if (value.isEmpty) {
@@ -237,18 +291,10 @@ class _RegisterState extends State<Register> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             controller: _usernameController,
-                            decoration: InputDecoration(
-                                fillColor: const Color(0xFFCFD8DC),
-                                filled: true,
-                                prefixIcon: const Icon(
-                                  Icons.account_circle,
-                                  color: Colors.black,
-                                ),
-                                hintText:
-                                    'register_page.username_description'.tr(),
-                                hintStyle:
-                                    const TextStyle(fontFamily: 'OpenSans'),
-                                border: InputBorder.none),
+                            decoration: textdecorate_login(
+                              Icons.account_circle,
+                              'register_page.username_description'.tr(),
+                            ),
                           ),
                           const Padding(
                             padding: EdgeInsets.only(bottom: 15),
@@ -271,18 +317,10 @@ class _RegisterState extends State<Register> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             controller: _firstnameController,
-                            decoration: InputDecoration(
-                                fillColor: const Color(0xFFCFD8DC),
-                                filled: true,
-                                prefixIcon: const Icon(
-                                  Icons.perm_identity,
-                                  color: Colors.black,
-                                ),
-                                hintText:
-                                    'register_page.firstname_description'.tr(),
-                                hintStyle:
-                                    const TextStyle(fontFamily: 'OpenSans'),
-                                border: InputBorder.none),
+                            decoration: textdecorate_login(
+                              Icons.perm_identity,
+                              'register_page.firstname_description'.tr(),
+                            ),
                           ),
                           const Padding(
                             padding: EdgeInsets.only(bottom: 15),
@@ -306,18 +344,10 @@ class _RegisterState extends State<Register> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             controller: _lastnameController,
-                            decoration: InputDecoration(
-                                fillColor: const Color(0xFFCFD8DC),
-                                filled: true,
-                                prefixIcon: const Icon(
-                                  Icons.perm_identity,
-                                  color: Colors.black,
-                                ),
-                                hintText:
-                                    'register_page.lastname_description'.tr(),
-                                hintStyle:
-                                    const TextStyle(fontFamily: 'OpenSans'),
-                                border: InputBorder.none),
+                            decoration: textdecorate_login(
+                              Icons.perm_identity,
+                              'register_page.firstname_description'.tr(),
+                            ),
                           ),
                           const Padding(
                             padding: EdgeInsets.only(bottom: 15),
@@ -337,12 +367,36 @@ class _RegisterState extends State<Register> {
                             firstDate: DateTime(1900),
                             lastDate: DateTime.now(),
                             decoration: InputDecoration(
-                              border: InputBorder.none,
-                              fillColor: const Color(0xFFCFD8DC),
+                              suffixIcon: Icon(
+                                Icons.calendar_month,
+                                color: Colors.black,
+                              ),
+                              fillColor: Colors.blueGrey[100],
                               filled: true,
                               hintText:
                                   'register_page.birthdate_description'.tr(),
-                              suffixIcon: const Icon(Icons.calendar_month),
+                              hintStyle:
+                                  const TextStyle(fontFamily: 'OpenSans'),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromRGBO(217, 217, 217, 100),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Color.fromRGBO(217, 217, 217, 100),
+                                ),
+                              ),
                             ),
                             onChanged: (value) {
                               setState(() {
@@ -358,42 +412,6 @@ class _RegisterState extends State<Register> {
                               }
                             },
                           ),
-                          // TextFieldContainer(
-                          //   child: TextFormField(
-                          //     controller: dateCtl,
-                          //     decoration: InputDecoration(
-                          //         border: InputBorder.none,
-                          //         fillColor: const Color(0xFFCFD8DC),
-                          //         filled: true,
-                          //         hintText: 'register_page.birthdate_description'.tr(),
-                          //         suffixIcon: const Icon(Icons.calendar_month),
-                          //       ),
-                          //       onChanged: (value) {
-                          //         setState(() {
-                          //           _birthdate = DateTime.parse(value);
-                          //         });
-                          //       },
-                          //       validator: (value) {
-                          //         if (value.isEmpty) {
-                          //           return 'register_page.birthdate_required'.tr();
-                          //         } else {
-                          //           return null;
-                          //         }
-                          //       },
-                          //   onTap: () async{
-                          //     DateTime date = DateTime(1900);
-                          //     FocusScope.of(context).requestFocus(FocusNode());
-                          //
-                          //     date = await showDatePicker(
-                          //         context: context,
-                          //         initialDate:DateTime.now(),
-                          //         firstDate:DateTime(1900),
-                          //         lastDate: DateTime(2100));
-                          //
-                          //     dateCtl.text = date.toString();
-                          //     },
-                          //   ),
-                          // ),
                           const Padding(
                             padding: EdgeInsets.only(bottom: 15),
                           ),
@@ -415,6 +433,7 @@ class _RegisterState extends State<Register> {
                                         )
                                       : Container(),
                                   RadioListTile(
+                                    activeColor: Colors.black,
                                     value: 'Male',
                                     title: const Text('Male'),
                                     groupValue: _selectedGender,
@@ -426,6 +445,7 @@ class _RegisterState extends State<Register> {
                                     },
                                   ),
                                   RadioListTile(
+                                    activeColor: Colors.black,
                                     value: 'Female',
                                     title: const Text('Female'),
                                     groupValue: _selectedGender,
@@ -437,6 +457,7 @@ class _RegisterState extends State<Register> {
                                     },
                                   ),
                                   RadioListTile(
+                                    activeColor: Colors.black,
                                     value: 'LGBTQ+',
                                     title: const Text('LGBTQ+'),
                                     groupValue: _selectedGender,
@@ -477,7 +498,7 @@ class _RegisterState extends State<Register> {
                                         )
                                       : Container(),
                                   RadioListTile(
-                                    activeColor: Colors.white,
+                                    activeColor: Colors.black,
                                     value: 1,
                                     title: const Text('Athlete'),
                                     groupValue: _selectedDept,
@@ -491,6 +512,7 @@ class _RegisterState extends State<Register> {
                                     },
                                   ),
                                   RadioListTile(
+                                    activeColor: Colors.black,
                                     value: 2,
                                     title: const Text('Staff'),
                                     groupValue: _selectedDept,
@@ -533,12 +555,34 @@ class _RegisterState extends State<Register> {
                                 DropdownButtonFormField2<String>(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    fillColor: Color(0xFFCFD8DC),
+                                  icon: Icon(Icons.arrow_drop_down_circle),
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.blueGrey[50],
                                     filled: true,
+                                    hintText: 'Select type of sport',
+                                    hintStyle:
+                                        const TextStyle(fontFamily: 'OpenSans'),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.blueGrey[100],
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.blueGrey[100],
+                                      ),
+                                    ),
                                   ),
-                                  hint: const Text('Select type of sport'),
                                   items: sportList
                                       .map((sport) => DropdownMenuItem(
                                             child: Text(sport),
@@ -570,6 +614,14 @@ class _RegisterState extends State<Register> {
                                   minValue: 30,
                                   maxValue: 200,
                                   decimalPlaces: 1,
+                                  textStyle: TextStyle(
+                                    color: Colors.blueGrey[100],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  selectedTextStyle: TextStyle(
+                                    fontSize: h * 0.03,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                   value: _selectedWeight,
                                   onChanged: (value) {
                                     setState(() {
@@ -586,6 +638,14 @@ class _RegisterState extends State<Register> {
                                   style: textCustom(),
                                 ),
                                 DecimalNumberPicker(
+                                  textStyle: TextStyle(
+                                    color: Colors.blueGrey[100],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  selectedTextStyle: TextStyle(
+                                    fontSize: h * 0.03,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                   minValue: 150,
                                   maxValue: 200,
                                   decimalPlaces: 1,
@@ -618,12 +678,34 @@ class _RegisterState extends State<Register> {
                                 DropdownButtonFormField2<String>(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    fillColor: Color(0xFFCFD8DC),
+                                  icon: Icon(Icons.arrow_drop_down_circle),
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.blueGrey[50],
                                     filled: true,
+                                    hintText: 'Select type of staff',
+                                    hintStyle:
+                                        const TextStyle(fontFamily: 'OpenSans'),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.blueGrey[100],
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.blueGrey[100],
+                                      ),
+                                    ),
                                   ),
-                                  hint: const Text('Select type of staff'),
                                   items: staffList
                                       .map((staff) => DropdownMenuItem(
                                             child: Text(staff),
@@ -648,16 +730,25 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
                           const Padding(
-                            padding: EdgeInsets.only(bottom: 17),
+                            padding: EdgeInsets.only(bottom: 20),
                           ),
 
                           /// Sign Up button
                           ElevatedButton(
                             onPressed: () => signup(),
-                            child: Text('register_page.signup_button'.tr()),
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: Size(w / 1.1, h / 15),
+                            child: Text(
+                              'register_page.signup_button'.tr(),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: h * 0.025,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: Size(w, h * 0.07),
+                                elevation: 0,
+                                primary: Colors.white70,
+                                shape: StadiumBorder()),
                           ),
                         ],
                       ),

@@ -202,8 +202,9 @@ class _LoginState extends State<Login> {
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/staffPageChoosing', (route) => false);
           } else {
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/register', (route) => false);
+            Navigator.of(context).pushNamed(
+              '/register',
+            );
           }
         });
       }
