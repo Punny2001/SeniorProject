@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:seniorapp/component/message_data.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/decoration/padding.dart';
@@ -33,6 +34,8 @@ class _IllnessReportState extends State<IllnessReport> {
   final _affectedSearch = TextEditingController();
   final _mainSymptomSearch = TextEditingController();
   final _illnessCauseSearch = TextEditingController();
+  final _messageController = TextEditingController();
+
   DateTime _occuredDate;
   String _selectedSport;
   String _selectedAffected;
@@ -706,6 +709,21 @@ class _IllnessReportState extends State<IllnessReport> {
                 const Padding(
                   padding: EdgeInsets.all(10),
                 ),
+                Text(
+                  'Advice Message',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(10),
+                ),
+                TextFormField(
+                  maxLines: 10,
+                  controller: _messageController,
+                  decoration: textdecorate('Description...'),
+                ),
               ],
             ),
           ),
@@ -724,6 +742,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 primary: Colors.blue.shade200),
             onPressed: () {
               setState(() {
+                saveMessage();
                 saveIllnessReport();
               });
             },
@@ -957,7 +976,7 @@ class _IllnessReportState extends State<IllnessReport> {
               return AlertDialog(
                 title: const Text('Insert data successfully'),
                 content: Text(
-                    'Your report ID ${docReference.id} is successfully inserted!!'),
+                    'Your report ID ${report_no} is successfully inserted!!'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.of(context)
@@ -969,6 +988,58 @@ class _IllnessReportState extends State<IllnessReport> {
               );
             }).then((value) => print('Insert data to Firestore successfully'));
       });
+    }
+  }
+
+  Future<void> saveMessage() async {
+    var uid = FirebaseAuth.instance.currentUser.uid;
+    String staff_no;
+    FirebaseFirestore.instance
+        .collection('Staff')
+        .doc(uid)
+        .get()
+        .then((snapshot) {
+      Map data = snapshot.data();
+      staff_no = data['staff_no'];
+    });
+    bool isValidate = _illnessKey.currentState.validate();
+    String message_no = 'M';
+    String split;
+    int latestID;
+    NumberFormat format = NumberFormat('0000000000');
+    await FirebaseFirestore.instance
+        .collection('Message')
+        .orderBy('message_no', descending: true)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.size == 0) {
+        message_no += format.format(1);
+      } else {
+        querySnapshot.docs
+            .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+          Map data = queryDocumentSnapshot.data();
+          split = data['message_no'].toString().split('M')[1];
+          latestID = int.parse(split) + 1;
+          message_no += format.format(latestID);
+        });
+      }
+    });
+
+    if (isValidate) {
+      MessageData messageModel = MessageData(
+          messageNo: message_no,
+          staffUID: uid,
+          athleteNo: _athleteNo.text.trim(),
+          messageDateTime: DateTime.now(),
+          messageDescription: _messageController.text.trim());
+
+      Map<String, dynamic> data = messageModel.toMap();
+
+      final collectionReference =
+          FirebaseFirestore.instance.collection('Message');
+      DocumentReference docReference = collectionReference.doc();
+      docReference.set(data);
     }
   }
 }

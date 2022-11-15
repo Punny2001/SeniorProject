@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
@@ -13,6 +14,7 @@ class AthletePageChoosing extends StatefulWidget {
 
 class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int _selected_idx = 0;
+  int notificationCount =1;
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
@@ -26,19 +28,23 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     });
   }
 
+  void _getNotificationCount() {
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
-      // backgroundColor: Colors.transparent,
       appBar: AppBar(
         primary: true,
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Ink(
               decoration: ShapeDecoration(
@@ -52,6 +58,37 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
                   });
                 },
                 icon: Icon(Icons.menu),
+              ),
+            ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: CircleBorder(),
+                color: Colors.green.shade300,
+              ),
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        Navigator.of(context)
+                            .pushNamed(
+                              '/staffNotification',
+                            )
+                            .then((_) => setState(() {}));
+                      });
+                    },
+                    icon: Icon(Icons.notifications_none),
+                  ),
+                  Badge(
+                    badgeContent: Text(
+                      ' ',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    elevation: 0,
+                    showBadge: notificationCount > 0 ? true : false,
+                  ),
+                ],
               ),
             ),
           ],
