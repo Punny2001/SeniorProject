@@ -37,7 +37,7 @@ class MessageData {
     result.addAll({'messageNo': messageNo});
     result.addAll({'staffUID': staffUID});
     result.addAll({'athleteNo': athleteNo});
-    result.addAll({'messageDateTime': messageDateTime.millisecondsSinceEpoch});
+    result.addAll({'messageDateTime': messageDateTime});
     result.addAll({'messageDescription': messageDescription});
 
     return result;

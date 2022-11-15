@@ -14,7 +14,7 @@ class AthletePageChoosing extends StatefulWidget {
 
 class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int _selected_idx = 0;
-  int notificationCount =1;
+  int notificationCount = 1;
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
@@ -28,10 +28,16 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     });
   }
 
-  void _getNotificationCount() {
+  void _getNotificationCount() {}
 
+  void initState() {
+    super.initState();
+    setState(() {});
   }
 
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +79,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
                       setState(() {
                         Navigator.of(context)
                             .pushNamed(
-                              '/staffNotification',
+                              '/athleteNotification',
                             )
                             .then((_) => setState(() {}));
                       });
