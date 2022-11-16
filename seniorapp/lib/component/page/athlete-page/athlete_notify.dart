@@ -5,12 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/message_data.dart';
-import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
-import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
-import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
-import 'package:seniorapp/component/page/staff-page/staff_case.dart';
-import 'package:seniorapp/component/result-data/health_result_data.dart';
-import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_date.dart';
 
@@ -22,11 +16,12 @@ class AthleteNotify extends StatefulWidget {
   final Void refreshNotification;
 
   @override
-  _StaffCaseState createState() => _StaffCaseState();
+  _AthleteNotifyState createState() => _AthleteNotifyState();
 }
 
-class _StaffCaseState extends State<AthleteNotify> {
+class _AthleteNotifyState extends State<AthleteNotify> {
   String uid = FirebaseAuth.instance.currentUser.uid;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool isLoading = false;
   int messageSize;
   int healthSize = 0;
@@ -34,32 +29,23 @@ class _StaffCaseState extends State<AthleteNotify> {
   Timer _timer;
   MessageData messageData;
   String athleteNo;
-  Staff staffData;
+  List<Staff> staffData;
 
   getAthleteData() {
-    FirebaseFirestore.instance
-        .collection('Athlete')
-        .doc(uid)
-        .get()
-        .then((snapshot) {
+    firestore.collection('Athlete').doc(uid).get().then((snapshot) {
       Map data = snapshot.data();
       athleteNo = data['athlete_no'];
     });
   }
 
-  getStaffData(String staffId) {
-    FirebaseFirestore.instance
-        .collection('Staff')
-        .doc(staffId)
-        .get()
-        .then((snapshot) {
-      Map data = snapshot.data();
-      staffData = Staff.fromMap(data);
+  getStaffData() {
+    firestore.collection('Staff').get().then((snapshot) {
+      
     });
   }
 
   getMessageSize() {
-    FirebaseFirestore.instance
+    firestore
         .collection('Message')
         .where('athleteNo', isEqualTo: athleteNo)
         .get()
@@ -169,6 +155,7 @@ class _StaffCaseState extends State<AthleteNotify> {
                                 in documentSnapshot) {
                               mappedData.add(doc.data());
                               mappedData[index]['docID'] = doc.reference.id;
+                              // getStaffData(mappedData[index]['staffUID']);
                               index += 1;
                             }
 
@@ -188,7 +175,7 @@ class _StaffCaseState extends State<AthleteNotify> {
                                       Map<String, dynamic> data =
                                           mappedData[index];
                                       messageData = MessageData.fromMap(data);
-                                      getStaffData(messageData.staffUID);
+                                      getStaffData();
                                       return Card(
                                         child: Column(
                                           children: [
