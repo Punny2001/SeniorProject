@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -72,6 +74,15 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     );
   }
 
+  List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
+    data.sort(
+      (a, b) => (b['doDate'].toDate()).compareTo(
+        a['doDate'].toDate(),
+      ),
+    );
+    return data;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -131,6 +142,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                           for (QueryDocumentSnapshot doc in documentSnapshot) {
                             mappedData.add(doc.data());
                           }
+
+                          mappedData = add_filter(mappedData);
+
                           return ListView.builder(
                             itemCount: mappedData.length,
                             itemBuilder: (context, index) {
