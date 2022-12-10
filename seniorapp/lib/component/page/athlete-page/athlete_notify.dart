@@ -23,6 +23,7 @@ class AthleteNotify extends StatefulWidget {
 class _AthleteNotifyState extends State<AthleteNotify> {
   String uid = FirebaseAuth.instance.currentUser.uid;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  CollectionReference staff = FirebaseFirestore.instance.collection('Staff');
   bool isLoading = false;
   int messageSize;
   int healthSize = 0;
@@ -30,7 +31,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
   Timer _timer;
   MessageData messageData;
   String athleteNo;
-  List<Staff> staffData;
+  List<Map<String, dynamic>> staffData;
 
   getAthleteData() {
     firestore.collection('Athlete').doc(uid).get().then((snapshot) {
@@ -39,9 +40,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
     });
   }
 
-  getStaffData() {
-    firestore.collection('Staff').get().then((snapshot) {});
-  }
+  getStaffData() {}
 
   getMessageSize() {
     firestore
@@ -68,6 +67,8 @@ class _AthleteNotifyState extends State<AthleteNotify> {
       isLoading = true;
     });
     getAthleteData();
+
+    getStaffData();
     getMessageSize();
     _timer = Timer(Duration(milliseconds: 500), () {
       setState(() {
@@ -87,6 +88,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     print('data size: ${healthSize + physicalSize}');
+    print(staffData[0]);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

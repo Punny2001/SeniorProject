@@ -16,6 +16,7 @@ import 'package:seniorapp/decoration/format_date.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
+import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteHistory extends StatefulWidget {
   const AthleteHistory({Key key}) : super(key: key);
@@ -139,7 +140,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     });
     getPhysicalSize();
     getHealthSize();
-    _timer = Timer(Duration(milliseconds: 500), () {
+    _timer = Timer(Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
@@ -168,18 +169,33 @@ class _AthleteHistoryState extends State<AthleteHistory> {
       body: Column(
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.only(left: w * 0.1, right: w * 0.1),
-                width: w,
-                child: RaisedButton.icon(
-                  color: Colors.green.shade300,
-                  icon: Icon(Icons.filter_list_outlined),
+                padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
+                width: w * 0.65,
+                height: h * 0.052,
+                child: ElevatedButton.icon(
+                  icon: Icon(
+                    Icons.filter_list,
+                    color: Colors.black,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green.shade300,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                      side: BorderSide(color: Colors.green[800]),
+                    ),
+                  ),
                   label: Text(
                     'Filter',
                     style: TextStyle(
                       fontSize: h * 0.025,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                   onPressed: () {
@@ -193,48 +209,6 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                               ),
                               content: Column(
                                 children: [
-                                  ToggleButtons(
-                                    children: [Text('Default')],
-                                    isSelected: isDefault,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                    textStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    fillColor: Colors.green[300],
-                                    borderColor: Colors.grey,
-                                    selectedBorderColor: Colors.green[800],
-                                    selectedColor: Colors.white,
-                                    color: Colors.green,
-                                    constraints: BoxConstraints(
-                                      minHeight: h * 0.05,
-                                      minWidth: w * 0.3,
-                                    ),
-                                    onPressed: (int index) {
-                                      setState(() {
-                                        if (isDefault[0] == true) {
-                                          isDefault[0] = false;
-                                        } else {
-                                          isDefault[0] = true;
-                                          _selectedOrder = <bool>[true, false];
-                                          _selectedQuestionnaire = <bool>[
-                                            true,
-                                            true
-                                          ];
-                                          _selectedOrderType = <bool>[
-                                            true,
-                                            false
-                                          ];
-                                          _currentRangeValues =
-                                              RangeValues(0, 100);
-                                        }
-                                      });
-                                    },
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(10),
-                                  ),
                                   Text('Order by'),
                                   Padding(
                                     padding: EdgeInsets.all(5),
@@ -397,8 +371,42 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                   },
                 ),
               ),
+              ToggleButtons(
+                children: [Text('Default')],
+                isSelected: isDefault,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
+                textStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: h * 0.02,
+                ),
+                fillColor: Colors.green[300],
+                borderColor: Colors.grey,
+                selectedBorderColor: Colors.green[800],
+                selectedColor: Colors.black,
+                color: Colors.green,
+                constraints: BoxConstraints(
+                  minHeight: h * 0.05,
+                  minWidth: w * 0.3,
+                ),
+                onPressed: (int index) {
+                  setState(() {
+                    if (isDefault[0] == true) {
+                      isDefault[0] = false;
+                    } else {
+                      isDefault[0] = true;
+                      _selectedOrder = <bool>[true, false];
+                      _selectedQuestionnaire = <bool>[true, true];
+                      _selectedOrderType = <bool>[true, false];
+                      _currentRangeValues = RangeValues(0, 100);
+                    }
+                  });
+                },
+              ),
             ],
           ),
+          PaddingDecorate(5),
           Expanded(
             child: Container(
               height: h,
