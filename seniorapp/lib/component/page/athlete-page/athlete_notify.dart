@@ -31,7 +31,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
   Timer _timer;
   MessageData messageData;
   String athleteNo;
-  List<Map<String, dynamic>> staffData;
+  List<Map<String, dynamic>> staffData = [];
 
   getAthleteData() {
     firestore.collection('Athlete').doc(uid).get().then((snapshot) {
@@ -40,7 +40,16 @@ class _AthleteNotifyState extends State<AthleteNotify> {
     });
   }
 
-  getStaffData() {}
+  getStaffData() {
+    firestore.collection('Staff').get().then((document) {
+      int index = 0;
+      document.docs.forEach((snapshot) {
+        staffData.add(snapshot.data());
+        staffData[index]['staffUID'] = snapshot.reference.id;
+        index += 1;
+      });
+    });
+  }
 
   getMessageSize() {
     firestore
@@ -67,10 +76,9 @@ class _AthleteNotifyState extends State<AthleteNotify> {
       isLoading = true;
     });
     getAthleteData();
-
     getStaffData();
     getMessageSize();
-    _timer = Timer(Duration(milliseconds: 500), () {
+    _timer = Timer(Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
@@ -88,7 +96,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     print('data size: ${healthSize + physicalSize}');
-    print(staffData[0]);
+    print(staffData);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -172,7 +180,10 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                       Map<String, dynamic> data =
                                           mappedData[index];
                                       messageData = MessageData.fromMap(data);
-                                      getStaffData();
+                                      Map<String, dynamic> currentStaff;
+                                      staffData.retainWhere((element) =>
+                                          element['staffUID'] ==
+                                          messageData.staffUID);
                                       return Card(
                                         child: Column(
                                           children: [
@@ -213,8 +224,13 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                                                 ),
                                                                 children: [
                                                                   TextSpan(
-                                                                    text: messageData
-                                                                        .staffUID,
+                                                                    text: staffData[0]
+                                                                            [
+                                                                            'firstname'] +
+                                                                        ' ' +
+                                                                        staffData[0]
+                                                                            [
+                                                                            'lastname'],
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             18,

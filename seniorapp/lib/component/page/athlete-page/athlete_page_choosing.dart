@@ -28,8 +28,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     });
   }
 
-  void _getNotificationCount() {}
-
   void initState() {
     super.initState();
     setState(() {});

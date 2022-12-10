@@ -38,6 +38,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
   int physicalSize;
   bool isLoading = false;
   bool isFilter = false;
+  int data_length = 10;
 
   void choose_filter() {
     setState(() {});
@@ -439,7 +440,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                 mappedData = add_filter(mappedData);
 
                                 return ListView.builder(
-                                  itemCount: mappedData.length,
+                                  itemCount: data_length,
                                   itemBuilder: (context, index) {
                                     Map<String, dynamic> data =
                                         mappedData[index];
