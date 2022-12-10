@@ -202,6 +202,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,

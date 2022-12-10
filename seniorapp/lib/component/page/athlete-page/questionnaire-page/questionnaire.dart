@@ -190,30 +190,30 @@ class _QuestionnaireState extends State<Questionnaire> {
                     height: h * 0.3,
                   ),
                   Container(
-                width: w * 0.7,
-                height: h * 0.1,
-                child: RaisedButton(
-                  color: Colors.white,
-                  child: Text(
-                    'ถัดไป',
-                    style: TextStyle(
-                      fontSize: h * 0.025,
+                    width: w * 0.7,
+                    height: h * 0.1,
+                    child: RaisedButton(
+                      color: Colors.white,
+                      child: Text(
+                        'ถัดไป',
+                        style: TextStyle(
+                          fontSize: h * 0.025,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50),
+                        ),
+                      ),
+                      onPressed: () {
+                        if (canNext) {
+                          widget.answerQuestion(healthChoosing);
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50),
-                    ),
-                  ),
-                  onPressed: () {
-                    if (canNext) {
-                      widget.answerQuestion(healthChoosing);
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-              ),
                 ],
               );
         break;
@@ -289,11 +289,9 @@ class _QuestionnaireState extends State<Questionnaire> {
                           )
                           .toList(),
                   dropdownMaxHeight: h / 3,
-                  dropdownFullScreen: true,
-                  dropdownElevation: 1,
                   dropdownDecoration: BoxDecoration(
                     borderRadius: BorderRadius.all(
-                      Radius.circular(50),
+                      Radius.circular(25),
                     ),
                     border: Border(),
                   ),
@@ -404,7 +402,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 dropdownElevation: 1,
                 dropdownDecoration: BoxDecoration(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(50),
+                    Radius.circular(25),
                   ),
                   border: Border(),
                 ),
@@ -508,7 +506,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 dropdownElevation: 1,
                 dropdownDecoration: BoxDecoration(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(50),
+                    Radius.circular(25),
                   ),
                   border: Border(),
                 ),

@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/message_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
@@ -39,9 +40,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
   }
 
   getStaffData() {
-    firestore.collection('Staff').get().then((snapshot) {
-      
-    });
+    firestore.collection('Staff').get().then((snapshot) {});
   }
 
   getMessageSize() {
@@ -70,7 +69,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
     });
     getAthleteData();
     getMessageSize();
-    _timer = Timer(Duration(seconds: 1), () {
+    _timer = Timer(Duration(milliseconds: 500), () {
       setState(() {
         isLoading = false;
       });
@@ -130,11 +129,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
           height: h,
           width: w,
           child: isLoading
-              ? Center(
-                  child: Text(
-                    'Laoding...',
-                  ),
-                )
+              ? Center(child: CupertinoActivityIndicator())
               : messageSize != 0
                   ? Container(
                       child: StreamBuilder(
@@ -163,7 +158,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                               case (ConnectionState.waiting):
                                 {
                                   return Center(
-                                    child: Text('Loading...'),
+                                    child: CupertinoActivityIndicator(),
                                   );
                                 }
                                 break;
