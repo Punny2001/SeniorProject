@@ -103,7 +103,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
       ),
       bottomNavigationBar: Container(
         // padding: EdgeInsets.only(top: h * 0.01),
-
         child: ClipRRect(
           clipBehavior: Clip.antiAliasWithSaveLayer,
           borderRadius: const BorderRadius.only(

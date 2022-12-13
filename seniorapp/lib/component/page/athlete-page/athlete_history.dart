@@ -166,7 +166,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     print('physical size: $physicalSize');
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[100],
       body: Column(
         children: [
           Row(
@@ -407,7 +407,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
               ),
             ],
           ),
-          PaddingDecorate(5),
+          // PaddingDecorate(1),
           Expanded(
             child: Container(
               height: h,
