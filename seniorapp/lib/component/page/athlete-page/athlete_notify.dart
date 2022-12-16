@@ -164,6 +164,12 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                               index += 1;
                             }
 
+                            
+
+                            if (mappedData.length >= 10) {
+                              mappedData.fillRange(0, 10);
+                            }
+
                             switch (snapshot.connectionState) {
                               case (ConnectionState.waiting):
                                 {
@@ -180,7 +186,6 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                       Map<String, dynamic> data =
                                           mappedData[index];
                                       messageData = MessageData.fromMap(data);
-                                      Map<String, dynamic> currentStaff;
                                       staffData.retainWhere((element) =>
                                           element['staffUID'] ==
                                           messageData.staffUID);

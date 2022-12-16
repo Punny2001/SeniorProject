@@ -1,13 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checking_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/mental_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/physical_complain.dart';
-import 'package:seniorapp/component/user-data/athlete_data.dart';
-import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteHomePage extends StatefulWidget {
   const AthleteHomePage({Key key}) : super(key: key);

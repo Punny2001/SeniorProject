@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checking_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/more_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
-import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'questionnaire.dart';
