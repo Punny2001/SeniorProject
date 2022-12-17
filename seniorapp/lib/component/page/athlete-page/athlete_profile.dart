@@ -62,7 +62,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 width: w,
                 height: h / 10,
                 child: Text(
-                  'Personal Information',
+                  'ข้อมูลส่วนตัว',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -70,11 +70,14 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 ),
               ),
             ),
-            onTap: () =>Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-            AthletePersonal(email: athData.email, firstname: athData.firstname, lastname: athData.lastname, ath_no: athData.athlete_no,
-            ),
-            )
-            ),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => AthletePersonal(
+                email: athData.email,
+                firstname: athData.firstname,
+                lastname: athData.lastname,
+                ath_no: athData.athlete_no,
+              ),
+            )),
           ),
           GestureDetector(
             child: Card(
@@ -85,7 +88,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 width: w,
                 height: h / 10,
                 child: Text(
-                  'Delete Account',
+                  'ลบบัญชี',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -98,7 +101,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Delete Account'),
+                      title: Text('ลบบัญชี'),
                       content: Container(
                         height: h / 5,
                         child: Column(
@@ -106,7 +109,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                           children: [
                             Center(
                               child: Text(
-                                'Are you sure to delete this account?',
+                                'คุณแน่ใจจะลบบัญชีใช่หรือไม่?',
                               ),
                             ),
                             Row(
@@ -130,7 +133,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                                     });
                                   },
                                   icon: Icon(Icons.check_rounded),
-                                  label: Text('Accept'),
+                                  label: Text('ตกลง'),
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.green[900],
                                   ),
@@ -140,7 +143,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                                     Navigator.of(context).pop();
                                   },
                                   icon: Icon(Icons.close_rounded),
-                                  label: Text('Decline'),
+                                  label: Text('ปฏิเสธ'),
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.red[900],
                                   ),
@@ -163,7 +166,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 width: w,
                 height: h / 10,
                 child: Text(
-                  'Log Out',
+                  'ลงชื่อออก',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/history_details/injury_report_description.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
-import 'package:seniorapp/decoration/format_date.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/component/page/staff-page/history_details/illness_report_description.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 

@@ -11,13 +11,18 @@ class Questionnaire extends StatefulWidget {
   final Function answerQuestion;
   final String questionType;
   final String bodyChoosing;
+  final Function nextPage;
+  final Function previousPage;
 
-  Questionnaire(
-      {this.questions,
-      this.answerQuestion,
-      this.questionIndex,
-      this.questionType,
-      this.bodyChoosing});
+  Questionnaire({
+    this.questions,
+    this.answerQuestion,
+    this.questionIndex,
+    this.questionType,
+    this.bodyChoosing,
+    this.nextPage,
+    this.previousPage,
+  });
 
   @override
   State<Questionnaire> createState() => _QuestionnaireState();

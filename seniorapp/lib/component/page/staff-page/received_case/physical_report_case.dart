@@ -4,7 +4,7 @@ import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
-import 'package:seniorapp/decoration/format_date.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 
 class PhysicalReportCase extends StatefulWidget {
   String docID;

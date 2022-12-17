@@ -220,8 +220,8 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                   color: Colors.green.shade300,
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
+                  icon: Icon(Icons.home),
+                  alignment: Alignment.center,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
@@ -230,49 +230,43 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         ),
       ),
       body: Container(
-        padding: (hasProblem == false) && (isResult == true)
-            ? EdgeInsets.only(top: h * 0.3)
-            : EdgeInsets.only(top: h / 3),
-        child: hasQuestion
-            ? _bodyPartRound < 2
-                ? _questionnaireDisplay(_bodyPartRound)
-                : _questionIndex < _questions.length
-                    ? Questionnaire(
-                        answerQuestion: _answerQuestion,
-                        questionIndex: _questionIndex,
-                        questions: _questions,
-                        questionType: 'physical',
-                      )
-                    : isResult
-                        ? Result(
-                            resultScore: _totalScore,
-                            resetHandler: _resetQuestionnaire,
-                            insertHandler: savePhysicalResult,
-                            questionType: 'physical',
-                            bodyPart: _bodyChoosing,
-                          )
-                        : MoreQuestionnaire(
-                            _resetQuestionnaire,
-                            'physical',
-                          )
-            : hasProblem
-                ? CheckingQuestionnaire(
-                    'physical',
-                    _checkingQuestion,
-                    _hasProblem,
-                  )
-                : isResult
-                    ? Result(
-                        resultScore: 0,
-                        resetHandler: _resetQuestionnaire,
-                        insertHandler: savePhysicalResult,
-                        questionType: 'physical',
-                      )
-                    : MoreQuestionnaire(
-                        _resetQuestionnaire,
-                        'physical',
-                      ),
-      ),
+          padding: (hasProblem == false) && (isResult == true)
+              ? EdgeInsets.only(top: h * 0.3)
+              : EdgeInsets.only(top: h / 3),
+          child: hasQuestion
+              ? _bodyPartRound < 2
+                  ? _questionnaireDisplay(_bodyPartRound)
+                  : _questionIndex < _questions.length
+                      ? Questionnaire(
+                          answerQuestion: _answerQuestion,
+                          questionIndex: _questionIndex,
+                          questions: _questions,
+                          questionType: 'physical',
+                        )
+                      : isResult
+                          ? Result(
+                              resultScore: _totalScore,
+                              resetHandler: _resetQuestionnaire,
+                              insertHandler: savePhysicalResult,
+                              questionType: 'physical',
+                              bodyPart: _bodyChoosing,
+                            )
+                          : MoreQuestionnaire(
+                              _resetQuestionnaire,
+                              'physical',
+                            )
+              : hasProblem
+                  ? CheckingQuestionnaire(
+                      'physical',
+                      _checkingQuestion,
+                      _hasProblem,
+                    )
+                  : Result(
+                      resultScore: 0,
+                      resetHandler: _resetQuestionnaire,
+                      insertHandler: savePhysicalResult,
+                      questionType: 'physical',
+                    )),
 
       // : Result(_totalScore, _resetQuiz, savePhysicalResult)),
     );
@@ -339,18 +333,32 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       showDialog<void>(
           context: context,
           builder: (BuildContext context) {
+            print(_bodyChoosing);
             return AlertDialog(
-              title: const Text('รายงานผลเสร็จสิ้น'),
-              content: _bodyChoosing != null || _bodyChoosing != 'None'
+              title: const Text(
+                'รายงานผลเสร็จสิ้น',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              content: hasProblem == true
                   ? Text('บันทึกข้อมูลอาการ${_bodyChoosing}เรียบร้อย')
                   : Text('บันทึกข้อมูลอาการเรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
-                    setState(() {
-                      isResult = false;
-                    });
+                    if (hasProblem == true) {
+                      Navigator.pop(context);
+                      setState(() {
+                        isResult = false;
+                      });
+                    } else {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/athletePageChoosing', (route) => false);
+                      setState(() {
+                        isResult = false;
+                      });
+                    }
                   },
                   child: const Text('โอเค'),
                 ),

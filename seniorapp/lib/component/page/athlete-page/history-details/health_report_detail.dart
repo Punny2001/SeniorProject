@@ -1,9 +1,10 @@
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
-import 'package:seniorapp/decoration/format_date.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
+import 'package:seniorapp/decoration/textfield_normal.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 
 class HealthReportDetail extends StatelessWidget {
   final Map<String, int> answerList;
@@ -14,7 +15,7 @@ class HealthReportDetail extends StatelessWidget {
   final String questionnaireNo;
   final int totalPoint;
 
-  const HealthReportDetail({
+  HealthReportDetail({
     Key key,
     @required this.answerList,
     @required this.athleteNo,
@@ -25,8 +26,12 @@ class HealthReportDetail extends StatelessWidget {
     @required this.totalPoint,
   }) : super(key: key);
 
+  Result result = Result();
+
   @override
   Widget build(BuildContext context) {
+    String resultPhrase = result.resultPhrase('health', totalPoint);
+    resultPhrase = resultPhrase.replaceAll('null', healthSymptom);
     final _questions = [
       {
         'questionNo': 'Q1',
@@ -152,12 +157,83 @@ class HealthReportDetail extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                'Answer List',
+                'ข้อมูล $questionnaireNo',
                 style: TextStyle(
-                  fontSize: h * 0.04,
+                  fontSize: h * 0.03,
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.underline,
                 ),
+              ),
+              PaddingDecorate(10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      text: 'คะแนนรวม: ',
+                      style: TextStyle(
+                        fontSize: h * 0.02,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          style: TextStyle(
+                            color: score_color(totalPoint),
+                          ),
+                          text: '${totalPoint} ',
+                        ),
+                        TextSpan(
+                          text: 'คะแนน',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PaddingDecorate(5),
+                  RichText(
+                    text: TextSpan(
+                      text: 'คำแนะนำเบื้องต้น: ',
+                      style: TextStyle(
+                        fontSize: h * 0.02,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: '${resultPhrase}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PaddingDecorate(5),
+                  RichText(
+                    text: TextSpan(
+                      text: 'วันที่บันทึก: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: h * 0.02,
+                      ),
+                      children: [
+                        TextSpan(
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                          ),
+                          text:
+                              '${formatDate(doDate, 'Athlete')} | ${formatTime(doDate)} น.',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               PaddingDecorate(10),
               for (int i = 0; i < answerList.length; i++)
@@ -200,13 +276,6 @@ class HealthReportDetail extends StatelessWidget {
                     ),
                   ],
                 ),
-              PaddingDecorate(10),
-              Text(
-                formatDate(
-                  doDate,
-                  'Athlete',
-                ),
-              )
             ],
           ),
         ),

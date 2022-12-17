@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/message_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
-import 'package:seniorapp/decoration/format_date.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;

@@ -28,6 +28,7 @@ Future<void> main() async {
         if (athleteDoc.exists) {
           initPage = '/athletePageChoosing';
         } else if (staffDoc.exists) {
+          Intl.defaultLocale = 'en';
           initPage = '/staffPageChoosing';
         } else {
           initPage = '/register';
@@ -67,7 +68,6 @@ class MyApp extends StatelessWidget {
       title: 'SIAT2022',
       initialRoute: initPage,
       routes: map,
-      
     );
   }
 }

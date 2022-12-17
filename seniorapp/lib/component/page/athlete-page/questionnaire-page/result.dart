@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:seniorapp/decoration/textfield_normal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Result extends StatelessWidget {
@@ -19,7 +20,7 @@ class Result extends StatelessWidget {
       this.bodyPart,
       this.healthPart});
 
-  String resultPhrase(String type) {
+  String resultPhrase(String type, int resultScore) {
     var resultText = 'Hello';
     switch (type) {
       case 'health':
@@ -73,23 +74,22 @@ class Result extends StatelessWidget {
       padding: EdgeInsets.only(left: w * 0.03, right: w * 0.03),
       child: Column(
         children: [
-          Text(
-            checkQuestionType(questionType),
-            style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
+          checkQuestionType(questionType, h),
           Container(
             padding:
                 EdgeInsets.only(left: w * 0.03, right: w * 0.03, top: h * 0.03),
             alignment: Alignment.center,
             child: RichText(
               text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
+                style: TextStyle(
+                  fontSize: h * 0.03,
+                  color: Colors.black,
+                ),
                 children: questionType == 'health'
                     ? resultScore > 75
                         ? [
                             TextSpan(
-                              text: resultPhrase(questionType),
+                              text: resultPhrase(questionType, resultScore),
                             ),
                             TextSpan(
                               text: 'คลิกที่นี่',
@@ -106,18 +106,18 @@ class Result extends StatelessWidget {
                           ]
                         : [
                             TextSpan(
-                              text: resultPhrase(questionType),
+                              text: resultPhrase(questionType, resultScore),
                             ),
                           ]
                     : resultScore > 75
                         ? [
                             TextSpan(
-                              text: resultPhrase(questionType),
+                              text: resultPhrase(questionType, resultScore),
                             ),
                           ]
                         : [
                             TextSpan(
-                              text: resultPhrase(questionType),
+                              text: resultPhrase(questionType, resultScore),
                             ),
                           ],
               ),
@@ -140,7 +140,7 @@ class Result extends StatelessWidget {
               width: w,
               height: h * 0.07,
               child: Text(
-                'ถัดไป',
+                'บันทึก',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -154,20 +154,75 @@ class Result extends StatelessWidget {
     );
   }
 
-  String checkQuestionType(String questionType) {
+  RichText checkQuestionType(String questionType, double h) {
     switch (questionType) {
       case 'physical':
         if (resultScore == 0) {
-          return 'ท่านไม่มีอาการเจ็บป่วยทางกาย';
+          return RichText(
+            text: TextSpan(
+              text: 'ท่านไม่มีอาการบาดเจ็บ',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: h * 0.03,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
         } else {
-          return 'ท่านมีอาการทางกาย ณ บริเวณ ${bodyPart} อยู่ที่ระดับ ${resultScore} คะแนน';
+          return RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                text: 'อาการบาดเจ็บบริเวณ${bodyPart}ของท่านอยู่ในระดับ ',
+                style: TextStyle(
+                  fontSize: h * 0.03,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                children: [
+                  TextSpan(
+                    text: '$resultScore',
+                    style: TextStyle(
+                      color: score_color(resultScore),
+                    ),
+                  ),
+                  TextSpan(text: ' คะแนน')
+                ]),
+          );
         }
         break;
       case 'health':
         if (resultScore == 0) {
-          return 'ท่านไม่มีปัญหาสุขภาพ';
+          return RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              text: 'ท่านไม่มีปัญหาสุขภาพ',
+              style: TextStyle(
+                fontSize: h * 0.03,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
         } else {
-          return 'ท่านมีปัญหาสุขภาพ ${healthPart} อยู่ที่ระดับ ${resultScore} คะแนน';
+          return RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                text: 'ท่านมีปัญหาสุขภาพ${healthPart}อยู่ในระดับ ',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: h * 0.03,
+                  fontWeight: FontWeight.bold,
+                ),
+                children: [
+                  TextSpan(
+                    text: '$resultScore',
+                    style: TextStyle(
+                      color: score_color(resultScore),
+                    ),
+                  ),
+                  TextSpan(text: ' คะแนน')
+                ]),
+          );
         }
         break;
       default:

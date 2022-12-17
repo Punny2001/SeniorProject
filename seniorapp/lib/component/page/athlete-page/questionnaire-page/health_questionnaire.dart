@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checking_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/more_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
-import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'questionnaire.dart';
 
@@ -29,6 +28,10 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
   bool hasProblem = true;
 
   int questionSize;
+
+  void _nextPage() {
+    
+  }
 
   void _resetQuestionnaire() {
     setState(() {
@@ -195,8 +198,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                   color: Colors.green.shade300,
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
+                  icon: Icon(Icons.home),
+                  alignment: Alignment.center,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
               ),
@@ -207,8 +210,12 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       backgroundColor: Colors.white,
       body: Container(
         padding: (hasProblem == false) && (isResult == true)
-            ? EdgeInsets.only(top: h * 0.3)
-            : EdgeInsets.only(top: h / 3),
+            ? EdgeInsets.only(
+                top: h * 0.3,
+              )
+            : EdgeInsets.only(
+                top: h / 3,
+              ),
         child: hasQuestion
             ? answer_health
                 ? _questionIndex < _questions.length
@@ -226,7 +233,10 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                             questionType: 'health',
                             healthPart: _healthChoosing,
                           )
-                        : MoreQuestionnaire(_resetQuestionnaire, 'health')
+                        : MoreQuestionnaire(
+                            _resetQuestionnaire,
+                            'health',
+                          )
                 : Questionnaire(
                     questions: health_symp,
                     answerQuestion: _answerHealthPart,
@@ -234,15 +244,16 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                   )
             : hasProblem
                 ? CheckingQuestionnaire(
-                    'health', _checkingQuestion, _hasProblem)
-                : isResult
-                    ? Result(
-                        resultScore: 0,
-                        resetHandler: _resetQuestionnaire,
-                        insertHandler: saveHealthResult,
-                        questionType: 'health',
-                      )
-                    : MoreQuestionnaire(_resetQuestionnaire, 'health'),
+                    'health',
+                    _checkingQuestion,
+                    _hasProblem,
+                  )
+                : Result(
+                    resultScore: 0,
+                    resetHandler: _resetQuestionnaire,
+                    insertHandler: saveHealthResult,
+                    questionType: 'health',
+                  ),
       ),
     );
     // : Result(_totalScore, _resetQuiz, saveHealthResult)),
@@ -312,17 +323,24 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('รายงานผลเสร็จสิ้น'),
-              content: _healthChoosing != null || _healthChoosing != 'None'
+              content: hasProblem == true
                   ? Text('บันทึกข้อมูลอาการ${_healthChoosing}เรียบร้อย')
                   : Text('บันทึกข้อมูลอาการเรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
-                    StaffPageChoosing().createState();
-                    setState(() {
-                      isResult = false;
-                    });
+                    if (hasProblem == true) {
+                      Navigator.pop(context);
+                      setState(() {
+                        isResult = false;
+                      });
+                    } else {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/athletePageChoosing', (route) => false);
+                      setState(() {
+                        isResult = false;
+                      });
+                    }
                   },
                   child: const Text('โอเค'),
                 ),

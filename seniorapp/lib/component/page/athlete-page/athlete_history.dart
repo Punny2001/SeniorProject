@@ -12,11 +12,12 @@ import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
-import 'package:seniorapp/decoration/format_date.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
 import 'package:seniorapp/decoration/padding.dart';
+import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class AthleteHistory extends StatefulWidget {
   const AthleteHistory({Key key}) : super(key: key);
@@ -44,8 +45,6 @@ class _AthleteHistoryState extends State<AthleteHistory> {
   }
 
   Stream<List<QuerySnapshot>> getData() {
-    String athleteNo;
-
     Stream healthQuestionnaire = FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
         .where('athleteNo', isEqualTo: uid, isNull: false)
@@ -147,6 +146,22 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     });
   }
 
+  String toThaiType(String type) {
+    if (type == 'Health') {
+      return 'อาการเจ็บป่วย';
+    } else if (type == 'Physical') {
+      return 'อาการบาดเจ็บ';
+    }
+  }
+
+  String toThaiNoneInfo(String symptomOrbodypart) {
+    if (symptomOrbodypart == 'None') {
+      return 'ไม่มีอาการ';
+    } else {
+      return symptomOrbodypart;
+    }
+  }
+
   @override
   void dispose() {
     _timer.cancel();
@@ -191,7 +206,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                     ),
                   ),
                   label: Text(
-                    'Filter',
+                    'ตัวกรอง',
                     style: TextStyle(
                       fontSize: h * 0.025,
                       fontWeight: FontWeight.bold,
@@ -205,11 +220,11 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                           return StatefulBuilder(builder: (context, setState) {
                             return AlertDialog(
                               title: Container(
-                                child: Text('Filter'),
+                                child: Text('ตัวกรอง'),
                               ),
                               content: Column(
                                 children: [
-                                  Text('Order by'),
+                                  Text('จัดเรียงโดย'),
                                   Padding(
                                     padding: EdgeInsets.all(5),
                                   ),
@@ -229,7 +244,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minHeight: h * 0.05,
                                       minWidth: w * 0.3,
                                     ),
-                                    children: [Text('Date'), Text('Score')],
+                                    children: [Text('วันที่'), Text('คะแนน')],
                                     isSelected: _selectedOrder,
                                     onPressed: (int index) {
                                       setState(() {
@@ -263,8 +278,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minWidth: w * 0.3,
                                     ),
                                     children: [
-                                      Text('Descending'),
-                                      Text('Ascending')
+                                      Text('มาก => น้อย'),
+                                      Text('น้อย => มาก')
                                     ],
                                     isSelected: _selectedOrderType,
                                     onPressed: (int index) {
@@ -282,7 +297,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                   Padding(
                                     padding: EdgeInsets.all(10),
                                   ),
-                                  Text('Type of questionnaire'),
+                                  Text('ประเภทของแบบสอบถาม'),
                                   Padding(
                                     padding: EdgeInsets.all(5),
                                   ),
@@ -303,8 +318,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minWidth: w * 0.3,
                                     ),
                                     children: [
-                                      Text('Physical'),
-                                      Text('Health')
+                                      Text('การบาดเจ็บ'),
+                                      Text('การเจ็บป่วย')
                                     ],
                                     isSelected: _selectedQuestionnaire,
                                     onPressed: (int index) {
@@ -319,7 +334,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                   Padding(
                                     padding: EdgeInsets.all(10),
                                   ),
-                                  Text('Range of score'),
+                                  Text('ช่วงคะแนน'),
                                   Padding(
                                     padding: EdgeInsets.all(5),
                                   ),
@@ -353,7 +368,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                   child: RaisedButton(
                                     color: Colors.green[300],
                                     child: Text(
-                                      'Accept',
+                                      'ใช้งาน',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),
@@ -372,7 +387,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                 ),
               ),
               ToggleButtons(
-                children: [Text('Default')],
+                children: [Text('ค่าเริ่มต้น')],
                 isSelected: isDefault,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
@@ -477,20 +492,18 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           Text.rich(
                                                             TextSpan(
                                                               text:
-                                                                  'Problem type: ',
+                                                                  'ประเภทแบบสอบถาม: ',
                                                               style: TextStyle(
-                                                                fontSize: 18,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: healthData
-                                                                      .questionnaireType,
+                                                                  text: toThaiType(
+                                                                      healthData
+                                                                          .questionnaireType),
                                                                   style: TextStyle(
-                                                                      fontSize:
-                                                                          18,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -501,7 +514,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           Text.rich(
                                                             TextSpan(
                                                               text:
-                                                                  'Health Symptom: ',
+                                                                  'ปัญหาสุขภาพ: ',
                                                               style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -509,8 +522,11 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: healthData
-                                                                      .healthSymptom,
+                                                                  text:
+                                                                      toThaiNoneInfo(
+                                                                    healthData
+                                                                        .healthSymptom,
+                                                                  ),
                                                                   style:
                                                                       TextStyle(
                                                                     fontWeight:
@@ -523,7 +539,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           ),
                                                           Text.rich(
                                                             TextSpan(
-                                                              text: 'Done on: ',
+                                                              text:
+                                                                  'วันที่บันทึก: ',
                                                               style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -547,7 +564,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           ),
                                                           Text.rich(
                                                             TextSpan(
-                                                              text: 'Time: ',
+                                                              text:
+                                                                  'เวลาที่บันทึก: ',
                                                               style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -555,12 +573,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: DateFormat
-                                                                          .Hms()
-                                                                      .format(
-                                                                    healthData
-                                                                        .doDate,
-                                                                  ),
+                                                                  text:
+                                                                      '${formatTime(healthData.doDate)} น.',
                                                                   style: TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
@@ -585,10 +599,13 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
+                                                                color: score_color(
+                                                                    healthData
+                                                                        .totalPoint),
                                                                 fontSize:
                                                                     h * 0.05),
                                                           ),
-                                                          Text('score'),
+                                                          Text('คะแนน'),
                                                         ],
                                                       ),
                                                     )
@@ -611,20 +628,18 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           Text.rich(
                                                             TextSpan(
                                                               text:
-                                                                  'Problem type: ',
+                                                                  'ประเภทแบบสอบถาม: ',
                                                               style: TextStyle(
-                                                                fontSize: 18,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: physicalData
-                                                                      .questionnaireType,
+                                                                  text: toThaiType(
+                                                                      physicalData
+                                                                          .questionnaireType),
                                                                   style: TextStyle(
-                                                                      fontSize:
-                                                                          18,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -635,7 +650,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           Text.rich(
                                                             TextSpan(
                                                               text:
-                                                                  'Injured body: ',
+                                                                  'ส่วนที่บาดเจ็บ: ',
                                                               style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -643,8 +658,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: physicalData
-                                                                      .bodyPart,
+                                                                  text: toThaiNoneInfo(
+                                                                      physicalData
+                                                                          .bodyPart),
                                                                   style: TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
@@ -655,7 +671,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           ),
                                                           Text.rich(
                                                             TextSpan(
-                                                              text: 'Done on: ',
+                                                              text:
+                                                                  'วันที่บันทึก: ',
                                                               style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -679,7 +696,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           ),
                                                           Text.rich(
                                                             TextSpan(
-                                                              text: 'Time: ',
+                                                              text:
+                                                                  'เวลาที่บัทึก: ',
                                                               style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -687,12 +705,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: DateFormat
-                                                                          .Hms()
-                                                                      .format(
-                                                                    physicalData
-                                                                        .doDate,
-                                                                  ),
+                                                                  text:
+                                                                      '${formatTime(physicalData.doDate)} น.',
                                                                   style: TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
@@ -717,10 +731,13 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
+                                                                color: score_color(
+                                                                    healthData
+                                                                        .totalPoint),
                                                                 fontSize:
                                                                     h * 0.05),
                                                           ),
-                                                          Text('score'),
+                                                          Text('คะแนน'),
                                                         ],
                                                       ),
                                                     )

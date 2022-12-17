@@ -2,7 +2,6 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
-import 'package:seniorapp/component/page/athlete-page/athlete_profile.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_search.dart';
 
 class AthletePageChoosing extends StatefulWidget {
@@ -116,17 +115,17 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
                 activeIcon: Icon(Icons.home),
-                label: 'Home',
+                label: 'หน้าหลัก',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.search_off),
                 activeIcon: Icon(Icons.search),
-                label: 'Search',
+                label: 'ค้นหา',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.history_toggle_off),
                 activeIcon: Icon(Icons.history),
-                label: 'History',
+                label: 'ประวัติ',
               ),
             ],
             currentIndex: _selected_idx,
