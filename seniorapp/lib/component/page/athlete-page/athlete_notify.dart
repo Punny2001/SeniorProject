@@ -164,8 +164,6 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                               index += 1;
                             }
 
-                            
-
                             if (mappedData.length >= 10) {
                               mappedData.fillRange(0, 10);
                             }
@@ -281,9 +279,12 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                                                 ),
                                                                 children: [
                                                                   TextSpan(
-                                                                    text: formatDate(
-                                                                        messageData
-                                                                            .messageDateTime),
+                                                                    text:
+                                                                        formatDate(
+                                                                      messageData
+                                                                          .messageDateTime,
+                                                                      'Athlete',
+                                                                    ),
                                                                     style: TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),

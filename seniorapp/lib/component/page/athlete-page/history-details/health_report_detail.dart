@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/decoration/format_date.dart';
+import 'package:seniorapp/decoration/padding.dart';
 
 class HealthReportDetail extends StatelessWidget {
   final Map<String, int> answerList;
@@ -91,49 +92,120 @@ class HealthReportDetail extends StatelessWidget {
         ]
       },
     ];
+
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+
+    List<String> find_answer(List<Map<String, Object>> question) {
+      List<String> answerText = [];
+      int i = 1;
+      question.forEach((map) {
+        (map['answerText'] as List<Map<String, Object>>).forEach((answer) {
+          // print('${answerList['Q$i']} and ${answer['score']}');
+          if (answerList['Q$i'] == answer['score']) {
+            answerText.add(answer['text'].toString());
+            i++;
+          }
+        });
+      });
+      return answerText;
+    }
+
+    List<String> answerTextList = find_answer(_questions);
+    print(answerTextList);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(questionnaireNo),
+        automaticallyImplyLeading: false,
+        primary: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              child: Ink(
+                decoration: ShapeDecoration(
+                  shape: CircleBorder(),
+                  color: Colors.green.shade300,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  alignment: Alignment.centerRight,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       body: Container(
-        padding: const EdgeInsets.all(30),
+        padding: EdgeInsets.only(
+          left: 30,
+          right: 30,
+        ),
         height: h,
         width: w,
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
             children: [
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 17.0,
-                    color: Colors.black,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Answer List\n',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+              Text(
+                'Answer List',
+                style: TextStyle(
+                  fontSize: h * 0.04,
+                  fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+              PaddingDecorate(10),
+              for (int i = 0; i < answerList.length; i++)
+                Column(
+                  children: [
+                    Text(
+                      'ข้อ${i + 1} : ${_questions[i]['questionText']}\n',
+                      style: TextStyle(
+                        color: Colors.green[800],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        for (int i = 0; i < answerList.length; i++)
-                          TextSpan(children: [
-                            TextSpan(
-                                style: DefaultTextStyle.of(context).style.apply(),
-                                text:
-                                    'Q${i + 1} : ${_questions[i]['questionText']}\n'),
-                          ]),
+                        Container(
+                          width: w * 0.5,
+                          child: Text(
+                            answerTextList[i],
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'คะแนน',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text('${answerList['Q${i + 1}']}')
+                          ],
+                        ),
                       ],
+                    ),
+                    Divider(
+                      thickness: 2,
+                      height: h * 0.05,
+                      indent: 0,
                     ),
                   ],
                 ),
-              ),
-              const Text(
-                'Main Symptoms:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              PaddingDecorate(10),
               Text(
-                formatDate((doDate)),
+                formatDate(
+                  doDate,
+                  'Athlete',
+                ),
               )
             ],
           ),

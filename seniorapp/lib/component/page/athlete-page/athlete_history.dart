@@ -531,9 +531,12 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                               ),
                                                               children: [
                                                                 TextSpan(
-                                                                  text: formatDate(
-                                                                      healthData
-                                                                          .doDate),
+                                                                  text:
+                                                                      formatDate(
+                                                                    healthData
+                                                                        .doDate,
+                                                                    'Athlete',
+                                                                  ),
                                                                   style: TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
@@ -664,6 +667,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                       formatDate(
                                                                     physicalData
                                                                         .doDate,
+                                                                    'Athlete',
                                                                   ),
                                                                   style: TextStyle(
                                                                       fontWeight:

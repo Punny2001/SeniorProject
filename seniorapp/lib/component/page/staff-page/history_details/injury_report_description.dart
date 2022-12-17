@@ -176,7 +176,10 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(
-                            text: '${formatDate(widget.injuryDateTime)}\n',
+                            text: '${formatDate(
+                              widget.injuryDateTime,
+                              'Staff',
+                            )}\n',
                           ),
                         ],
                       ),

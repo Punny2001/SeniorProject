@@ -46,7 +46,7 @@ class PhysicalReportDetail extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                formatDate((doDate)),
+                formatDate(doDate, 'Athlete',),
               )
             ],
           ),

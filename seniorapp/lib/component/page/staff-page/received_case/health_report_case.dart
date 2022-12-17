@@ -230,7 +230,10 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
                             TextSpan(
-                              text: formatDate((widget.doDate)),
+                              text: formatDate(
+                                widget.doDate,
+                                'Staff',
+                              ),
                             ),
                           ],
                         ),
