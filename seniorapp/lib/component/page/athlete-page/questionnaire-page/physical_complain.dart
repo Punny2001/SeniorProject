@@ -51,9 +51,21 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     });
   }
 
+  void _previousBodyPart() {
+    setState(() {
+      _bodyPartRound--;
+    });
+  }
+
   void _checkingQuestion() {
     setState(() {
       hasQuestion = true;
+    });
+  }
+
+  void _previousCheckingQuestion() {
+    setState(() {
+      hasQuestion = false;
     });
   }
 
@@ -378,6 +390,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
             questionIndex: _bodyPartRound,
             questionType: 'physical',
             bodyChoosing: _bodyChoosing,
+            
           );
         }
         break;
@@ -389,6 +402,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
             questionIndex: _bodyPartRound,
             questionType: 'physical',
             bodyChoosing: _bodyChoosing,
+            previousPage: _previousBodyPart,
           );
         }
         break;

@@ -29,10 +29,6 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
   int questionSize;
 
-  void _nextPage() {
-    
-  }
-
   void _resetQuestionnaire() {
     setState(() {
       hasQuestion = true;
@@ -57,9 +53,21 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     });
   }
 
+  void _previousCheckingQuestion() {
+    setState(() {
+      hasQuestion = false;
+    });
+  }
+
   void _hasProblem() {
     setState(() {
       hasProblem = false;
+    });
+  }
+
+  void _previousProblem() {
+    setState(() {
+      hasProblem = true;
     });
   }
 
@@ -241,6 +249,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                     questions: health_symp,
                     answerQuestion: _answerHealthPart,
                     questionType: 'health',
+                    previousPage: _previousCheckingQuestion,
                   )
             : hasProblem
                 ? CheckingQuestionnaire(
