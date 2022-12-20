@@ -11,14 +11,17 @@ class Result extends StatelessWidget {
   final String questionType;
   final String bodyPart;
   final String healthPart;
+  final Function previousPage;
 
-  Result(
-      {this.resultScore,
-      this.resetHandler,
-      this.insertHandler,
-      this.questionType,
-      this.bodyPart,
-      this.healthPart});
+  Result({
+    this.resultScore,
+    this.resetHandler,
+    this.insertHandler,
+    this.questionType,
+    this.bodyPart,
+    this.healthPart,
+    this.previousPage,
+  });
 
   String resultPhrase(String type, int resultScore) {
     var resultText = 'Hello';
@@ -73,80 +76,92 @@ class Result extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(left: w * 0.03, right: w * 0.03),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          checkQuestionType(questionType, h),
-          Container(
-            padding:
-                EdgeInsets.only(left: w * 0.03, right: w * 0.03, top: h * 0.03),
-            alignment: Alignment.center,
-            child: RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  fontSize: h * 0.03,
-                  color: Colors.black,
+          Column(
+            
+            children: [
+              checkQuestionType(questionType, h),
+              Container(
+                padding: EdgeInsets.only(
+                    left: w * 0.03, right: w * 0.03, top: h * 0.03),
+                alignment: Alignment.center,
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: h * 0.03,
+                      color: Colors.black,
+                    ),
+                    children: questionType == 'health'
+                        ? resultScore > 75
+                            ? [
+                                TextSpan(
+                                  text: resultPhrase(questionType, resultScore),
+                                ),
+                                TextSpan(
+                                  text: 'คลิกที่นี่',
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launch(ucepUrl);
+                                    },
+                                ),
+                              ]
+                            : [
+                                TextSpan(
+                                  text: resultPhrase(questionType, resultScore),
+                                ),
+                              ]
+                        : resultScore > 75
+                            ? [
+                                TextSpan(
+                                  text: resultPhrase(questionType, resultScore),
+                                ),
+                              ]
+                            : [
+                                TextSpan(
+                                  text: resultPhrase(questionType, resultScore),
+                                ),
+                              ],
+                  ),
                 ),
-                children: questionType == 'health'
-                    ? resultScore > 75
-                        ? [
-                            TextSpan(
-                              text: resultPhrase(questionType, resultScore),
-                            ),
-                            TextSpan(
-                              text: 'คลิกที่นี่',
-                              style: TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                              ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  launch(ucepUrl);
-                                },
-                            ),
-                          ]
-                        : [
-                            TextSpan(
-                              text: resultPhrase(questionType, resultScore),
-                            ),
-                          ]
-                    : resultScore > 75
-                        ? [
-                            TextSpan(
-                              text: resultPhrase(questionType, resultScore),
-                            ),
-                          ]
-                        : [
-                            TextSpan(
-                              text: resultPhrase(questionType, resultScore),
-                            ),
-                          ],
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.only(top: h * 0.05),
+              ),
+              RaisedButton(
+                onPressed: insertHandler,
+                padding: EdgeInsets.zero,
+                color: Colors.green.shade300,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                ),
+                child: Container(
+                  alignment: Alignment.center,
+                  width: w,
+                  height: h * 0.07,
+                  child: Text(
+                    'บันทึก',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.only(top: h * 0.03),
-          ),
-          RaisedButton(
-            onPressed: insertHandler,
-            padding: EdgeInsets.zero,
-            color: Colors.green.shade300,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(15),
-              ),
-            ),
-            child: Container(
-              alignment: Alignment.center,
-              width: w,
-              height: h * 0.07,
-              child: Text(
-                'บันทึก',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
+          IconButton(
+            onPressed: previousPage,
+            icon: Icon(
+              Icons.arrow_back_ios,
             ),
           ),
         ],

@@ -66,7 +66,7 @@ Color score_color(int score) {
     return Colors.yellow[700];
   } else if (score < 75) {
     return Colors.orange[700];
-  } else if (score < 100) {
+  } else {
     return Colors.red[800];
   }
 }

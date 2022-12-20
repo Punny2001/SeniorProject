@@ -255,7 +255,7 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                               height: h * 0.05,
                               alignment: Alignment.center,
                               child: Text(
-                                'ปัญหาการนอนหลับและจิตใจ (Mental)',
+                                'ปัญหาการนอนหลับ (Sleeping problem)',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: h * 0.02,

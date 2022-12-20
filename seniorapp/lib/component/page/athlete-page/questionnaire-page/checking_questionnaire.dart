@@ -10,7 +10,7 @@ class CheckingQuestionnaire extends StatelessWidget {
   CheckingQuestionnaire(
       this.questionnaireType, this.checkingHandler, this.problemHandler);
 
-  List answer = ['ใช่', 'ไม่'];
+  List answer = ['ใช่ ', 'ไม่'];
 
   @override
   Widget build(BuildContext context) {
@@ -54,12 +54,13 @@ class CheckingQuestionnaire extends StatelessWidget {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.width;
     return Container(
-      margin: EdgeInsets.only(bottom: h * 0.1),
+      margin: EdgeInsets.only(
+        bottom: h * 0.1,
+      ),
       height: h * 0.2,
       width: w * 0.8,
       child: RaisedButton(
-        onPressed: answerText == 'ใช่' ? checkingHandler : problemHandler,
-        padding: EdgeInsets.zero,
+        onPressed: answerText == 'ใช่ ' ? checkingHandler : problemHandler,
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
@@ -69,10 +70,9 @@ class CheckingQuestionnaire extends StatelessWidget {
         child: Text(
           answerText,
           style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            overflow: TextOverflow.clip,
-          ),
+              color: Colors.black,
+              fontSize: h * 0.05,
+              overflow: TextOverflow.clip),
           textAlign: TextAlign.center,
         ),
       ),

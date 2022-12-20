@@ -11,7 +11,6 @@ class Answer extends StatefulWidget {
 }
 
 class _AnswerState extends State<Answer> {
-  bool _isSelected = false;
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -20,17 +19,10 @@ class _AnswerState extends State<Answer> {
       padding: EdgeInsets.only(bottom: 10),
       width: w,
       child: RaisedButton(
-        onPressed: () {
-          setState(() {
-            if (_isSelected == false) {
-              _isSelected = true;
-            } else {
-              _isSelected = false;
-            }
-          });
-        },
+        highlightColor: Colors.green[100],
+        onPressed: widget.selectHandler,
         padding: EdgeInsets.zero,
-        color: _isSelected == true ? Colors.green[100] : Colors.white,
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(15),

@@ -18,7 +18,7 @@ class HealthQuestionnaire extends StatefulWidget {
 class _HealthQuestionnaire extends State<HealthQuestionnaire> {
   GlobalKey updateState = GlobalKey();
   var _questionIndex = 0;
-  var _totalScore = 0;
+  int totalScore;
   Map<String, int> answer_list = {"Q1": 0};
 
   bool isResult = true;
@@ -34,7 +34,6 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       hasQuestion = true;
       answer_health = false;
       _questionIndex = 0;
-      _totalScore = 0;
       isResult = true;
       hasProblem = true;
     });
@@ -75,31 +74,31 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     {
       'questionText': 'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด',
       'answerText': [
-        'ไข้ ',
-        'อ่อนล้า',
+        'คลื่นไส้',
+        'ชา',
         'ต่อมอักเสบ',
-        'เจ็บคอ',
-        'มีน้ำมูก จาม ขัดจมูก',
-        'ไอ',
-        'หายใจลำบาก',
-        'ปวดหัว',
-        'คลื่นไส้ ',
-        'อาเจียน',
-        'ท้องเสีย',
         'ท้องผูก',
-        'เป็นลม',
-        'ผื่นคัน',
-        'หัวใจเต้นผิดจังหวะ',
-        'เจ็บหน้าอก',
+        'ท้องเสีย',
+        'น้ำมูก จาม ขัดจมูก',
         'ปวดกล้ามเนื้อส่วนท้อง',
         'ปวดบริเวณอื่น',
-        'ชา',
-        'เครียด',
-        'หดหู่ เศร้า',
-        'หงุดหงิดง่าย',
+        'ปวดหัว',
+        'ผื่นคัน',
         'มีอาการที่ตา',
         'มีอาการที่หู',
+        'อ่อนล้า',
+        'อาเจียน',
         'อาการที่ทางเดินปัสสาวะและอวัยวะเพศ',
+        'หงุดหงิดง่าย',
+        'หดหู่ เศร้า',
+        'หายใจลำบาก',
+        'หัวใจเต้นผิดจังหวะ',
+        'เครียด',
+        'เจ็บคอ',
+        'เจ็บหน้าอก',
+        'เป็นลม',
+        'ไข้',
+        'ไอ',
       ],
     }
   ];
@@ -174,8 +173,16 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
     questionSize = _questions.length;
 
+    int _findTotalScore() {
+      int _totalScore = 0;
+      answer_list.forEach((key, value) {
+        _totalScore += value;
+      });
+      totalScore = _totalScore;
+      return _totalScore;
+    }
+
     void _answerQuestion(int score) {
-      _totalScore += score;
       answer_list["Q${_questionIndex + 1}"] = score;
       setState(() {
         _questionIndex += 1;
@@ -184,6 +191,33 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       if (_questionIndex < _questions.length) {
         print('We have more question');
       }
+    }
+
+    void _previousQuestion(String health) {
+      setState(() {
+        if (_questionIndex == 0) {
+          _healthChoosing = health;
+          answer_health = false;
+        } else if (_questionIndex <= _questions.length) {
+          _questionIndex--;
+        }
+      });
+    }
+
+    void _nextQuestion() {
+      setState(() {
+        if (_questionIndex == _questions.length) {
+          isResult = true;
+        } else if (_questionIndex >= 0) {
+          _questionIndex++;
+        }
+      });
+    }
+
+    void _previousFromResult() {
+      setState(() {
+        _questionIndex = _questions.length - 1;
+      });
     }
 
     final w = MediaQuery.of(context).size.width;
@@ -208,7 +242,55 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                 child: IconButton(
                   icon: Icon(Icons.home),
                   alignment: Alignment.center,
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('ยกเลิกการบันทึกข้อมูล'),
+                            content: Container(
+                              height: h * 0.2,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      'คุณแน่ใจจะยกเลิกการบันทึกข้อมูลใช่หรือไม่?'),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          Navigator.popUntil(
+                                              context,
+                                              ModalRoute.withName(
+                                                  '/athletePageChoosing'));
+                                        },
+                                        icon: Icon(Icons.check_rounded),
+                                        label: Text('ตกลง'),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.green[900],
+                                        ),
+                                      ),
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        icon: Icon(Icons.close_rounded),
+                                        label: Text('ปฏิเสธ'),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.red[900],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  },
                 ),
               ),
             ),
@@ -217,7 +299,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       ),
       backgroundColor: Colors.white,
       body: Container(
-        padding: (hasProblem == false) && (isResult == true)
+        padding: (isResult == true)
             ? EdgeInsets.only(
                 top: h * 0.3,
               )
@@ -229,17 +311,21 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                 ? _questionIndex < _questions.length
                     ? Questionnaire(
                         answerQuestion: _answerQuestion,
+                        healthChoosing: _healthChoosing,
                         questionIndex: _questionIndex,
                         questions: _questions,
                         questionType: 'health',
+                        nextPage: _nextQuestion,
+                        previousPage: _previousQuestion,
                       )
                     : isResult
                         ? Result(
-                            resultScore: _totalScore,
+                            resultScore: _findTotalScore(),
                             resetHandler: _resetQuestionnaire,
                             insertHandler: saveHealthResult,
                             questionType: 'health',
                             healthPart: _healthChoosing,
+                            previousPage: _previousFromResult,
                           )
                         : MoreQuestionnaire(
                             _resetQuestionnaire,
@@ -249,6 +335,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                     questions: health_symp,
                     answerQuestion: _answerHealthPart,
                     questionType: 'health',
+                    healthChoosing: _healthChoosing,
                     previousPage: _previousCheckingQuestion,
                   )
             : hasProblem
@@ -262,10 +349,10 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                     resetHandler: _resetQuestionnaire,
                     insertHandler: saveHealthResult,
                     questionType: 'health',
+                    previousPage: _previousProblem,
                   ),
       ),
     );
-    // : Result(_totalScore, _resetQuiz, saveHealthResult)),
   }
 
   Future<void> saveHealthResult() async {
@@ -301,7 +388,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           athleteNo: uid,
           doDate: DateTime.now(),
           questionnaireType: 'Health',
-          totalPoint: _totalScore,
+          totalPoint: totalScore,
           answerList: answer_list,
           healthSymptom: _healthChoosing,
           caseReceived: false,
@@ -315,7 +402,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
           athleteNo: uid,
           doDate: DateTime.now(),
           questionnaireType: 'Health',
-          totalPoint: _totalScore,
+          totalPoint: 0,
           answerList: answer_list,
           healthSymptom: 'None',
           caseReceived: false,

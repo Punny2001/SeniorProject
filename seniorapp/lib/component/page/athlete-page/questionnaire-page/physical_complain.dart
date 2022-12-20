@@ -17,13 +17,14 @@ class PhysicalQuestionnaire extends StatefulWidget {
 
 class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
   var _questionIndex = 0;
-  var _totalScore = 0;
   var _bodyPartRound = 0;
   Map<String, int> answer_list = {"Q1": 0};
 
   bool isResult = true;
   bool hasQuestion = false;
   bool hasProblem = true;
+  int totalScore;
+  String _partChoosing;
 
   String _bodyChoosing;
   String insertedBody;
@@ -33,7 +34,6 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
   void _resetQuestionnaire() {
     setState(() {
       _questionIndex = 0;
-      _totalScore = 0;
       _bodyPartRound = 0;
       isResult = true;
       hasProblem = true;
@@ -44,17 +44,24 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     if (_bodyPartRound == 1) {
       insertedBody = body;
       print('round: $_bodyPartRound');
+    } else {
+      _bodyChoosing = body;
     }
     setState(() {
       _bodyPartRound += 1;
-      _bodyChoosing = body;
     });
   }
 
   void _previousBodyPart() {
-    setState(() {
-      _bodyPartRound--;
-    });
+    if (_bodyPartRound == 0) {
+      setState(() {
+        hasQuestion = false;
+      });
+    } else {
+      setState(() {
+        _bodyPartRound--;
+      });
+    }
   }
 
   void _checkingQuestion() {
@@ -75,18 +82,24 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     });
   }
 
+  void _previousProblem() {
+    setState(() {
+      hasProblem = true;
+    });
+  }
+
   final body_part = const [
     {
       'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด',
       'answerText': [
         {
-          'text': 'ส่วนหัวและลำตัว',
+          'text': 'ร่างกายส่วนหัวถึงลำตัว',
         },
         {
-          'text': 'ร่างกายส่วนบน',
+          'text': 'ร่างกายส่วนแขนถึงนิ้วมือ',
         },
         {
-          'text': 'ร่างกายส่วนล่าง',
+          'text': 'ร่างกายส่วนสะโพกถึงนิ้วเท้า',
         },
       ]
     }
@@ -95,7 +108,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
   final body_injured = [
     {
       'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด',
-      'ส่วนหัวและลำตัว': [
+      'ร่างกายส่วนหัวถึงลำตัว': [
         'ใบหน้า',
         'ศีรษะ',
         'คอ / กระดูกสันหลังส่วนคอ',
@@ -105,7 +118,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         'หน้าท้อง',
         'กระดูกเชิงกราน / กระดูกสันหลังส่วนกระเบ็นเหน็บ / ก้น',
       ],
-      'ร่างกายส่วนบน': [
+      'ร่างกายส่วนแขนถึงนิ้วมือ': [
         'ไหล่ / กระดูกไหปลาร้า',
         'ต้นแขน',
         'ข้อศอก',
@@ -115,7 +128,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         'นิ้ว',
         'นิ้วหัวแม่มือ',
       ],
-      'ร่างกายส่วนล่าง': [
+      'ร่างกายส่วนสะโพกถึงนิ้วเท้า': [
         'สะโพก',
         'ขาหนีบ',
         'ต้นขา',
@@ -134,7 +147,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       {
         'questionNo': 'Q1',
         'questionText':
-            'ใน 7 วันที่ผ่านมา ปัญหา${_bodyChoosing}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
+            'ใน 7 วันที่ผ่านมา ปัญหา${insertedBody}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
         'answerText': [
           {
             'text':
@@ -161,7 +174,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       {
         'questionNo': 'Q2',
         'questionText':
-            'ใน 7 วันที่ผ่านมา ปัญหา${_bodyChoosing}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา ปัญหา${insertedBody}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันเลย', 'score': 0},
           {'text': 'การฝึกซ้อมหรือแข่งขันลดลงเล็กน้อย', 'score': 6},
@@ -173,7 +186,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       {
         'questionNo': 'Q3',
         'questionText':
-            'ใน 7 วันที่ผ่านมา ปัญหา${_bodyChoosing}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา ปัญหา${insertedBody}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อความสามารถในการเล่นกีฬาเลย', 'score': 0},
           {'text': 'ความสามารถในการเล่นกีฬาลดลงเล็กน้อย', 'score': 6},
@@ -185,7 +198,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       {
         'questionNo': 'Q4',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการเจ็บปวดของ${_bodyChoosing}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
+            'ใน 7 วันที่ผ่านมา อาการเจ็บปวดของ${insertedBody}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
         'answerText': [
           {'text': 'ไม่เจ็บเลย', 'score': 0},
           {'text': 'เจ็บเล็กน้อย', 'score': 6},
@@ -198,8 +211,16 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
 
     questionSize = _questions.length;
 
+    int _findTotalScore() {
+      int _totalScore = 0;
+      answer_list.forEach((key, value) {
+        _totalScore += value;
+      });
+      totalScore = _totalScore;
+      return _totalScore;
+    }
+
     void _answerQuestion(int score) {
-      _totalScore += score;
       answer_list["Q${_questionIndex + 1}"] = score;
       setState(() {
         _questionIndex += 1;
@@ -208,6 +229,34 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       if (_questionIndex < _questions.length) {
         print('We have more question');
       }
+    }
+
+    void _previousQuestion(String body, String bodyPart) {
+      setState(() {
+        if (_questionIndex == 0) {
+          _bodyChoosing = body;
+          _partChoosing = bodyPart;
+          _bodyPartRound = 1;
+        } else if (_questionIndex > 0) {
+          _questionIndex--;
+        }
+      });
+    }
+
+    void _nextQuestion() {
+      setState(() {
+        if (_questionIndex == _questions.length) {
+          isResult = true;
+        } else if (_questionIndex < _questions.length) {
+          _questionIndex++;
+        }
+      });
+    }
+
+    void _previousFromResult() {
+      setState(() {
+        _questionIndex = _questions.length - 1;
+      });
     }
 
     final w = MediaQuery.of(context).size.width;
@@ -234,7 +283,55 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                 child: IconButton(
                   icon: Icon(Icons.home),
                   alignment: Alignment.center,
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('ยกเลิกการบันทึกข้อมูล'),
+                            content: Container(
+                              height: h * 0.2,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                      'คุณแน่ใจจะยกเลิกการบันทึกข้อมูลใช่หรือไม่?'),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          Navigator.popUntil(
+                                              context,
+                                              ModalRoute.withName(
+                                                  '/athletePageChoosing'));
+                                        },
+                                        icon: Icon(Icons.check_rounded),
+                                        label: Text('ตกลง'),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.green[900],
+                                        ),
+                                      ),
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        icon: Icon(Icons.close_rounded),
+                                        label: Text('ปฏิเสธ'),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.red[900],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  },
                 ),
               ),
             ),
@@ -242,7 +339,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         ),
       ),
       body: Container(
-          padding: (hasProblem == false) && (isResult == true)
+          padding: (isResult == true)
               ? EdgeInsets.only(top: h * 0.3)
               : EdgeInsets.only(top: h / 3),
           child: hasQuestion
@@ -254,14 +351,19 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                           questionIndex: _questionIndex,
                           questions: _questions,
                           questionType: 'physical',
+                          nextPage: _nextQuestion,
+                          previousPage: _previousQuestion,
+                          partChoosing: insertedBody,
+                          bodyChoosing: _bodyChoosing,
                         )
                       : isResult
                           ? Result(
-                              resultScore: _totalScore,
+                              resultScore: _findTotalScore(),
                               resetHandler: _resetQuestionnaire,
                               insertHandler: savePhysicalResult,
                               questionType: 'physical',
                               bodyPart: _bodyChoosing,
+                              previousPage: _previousFromResult,
                             )
                           : MoreQuestionnaire(
                               _resetQuestionnaire,
@@ -278,6 +380,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                       resetHandler: _resetQuestionnaire,
                       insertHandler: savePhysicalResult,
                       questionType: 'physical',
+                      previousPage: _previousProblem,
                     )),
 
       // : Result(_totalScore, _resetQuiz, savePhysicalResult)),
@@ -316,7 +419,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           athleteNo: uid,
           doDate: DateTime.now(),
           questionnaireType: 'Physical',
-          totalPoint: _totalScore,
+          totalPoint: totalScore,
           answerList: answer_list,
           bodyPart: insertedBody,
           caseReceived: false,
@@ -330,7 +433,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           athleteNo: uid,
           doDate: DateTime.now(),
           questionnaireType: 'Physical',
-          totalPoint: _totalScore,
+          totalPoint: 0,
           answerList: answer_list,
           bodyPart: 'None',
           caseReceived: false,
@@ -390,7 +493,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
             questionIndex: _bodyPartRound,
             questionType: 'physical',
             bodyChoosing: _bodyChoosing,
-            
+            previousPage: _previousBodyPart,
           );
         }
         break;
@@ -403,6 +506,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
             questionType: 'physical',
             bodyChoosing: _bodyChoosing,
             previousPage: _previousBodyPart,
+            partChoosing: _partChoosing,
           );
         }
         break;
