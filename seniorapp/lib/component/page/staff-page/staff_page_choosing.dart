@@ -10,8 +10,11 @@ import 'package:seniorapp/component/page/staff-page/staff_history.dart';
 import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
 
 class StaffPageChoosing extends StatefulWidget {
-  const StaffPageChoosing({Key key}) : super(key: key);
-
+  bool recieve_case;
+  StaffPageChoosing(
+      {
+      @required this.recieve_case,}
+      );
   @override
   State<StaffPageChoosing> createState() => _StaffPageChoosingState();
 }
@@ -179,7 +182,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             type: BottomNavigationBarType.fixed,
             unselectedItemColor: Colors.black,
             backgroundColor: Colors.blue.shade200,
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
                 activeIcon: Icon(Icons.home),
@@ -191,9 +194,52 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                 label: 'History',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.cases_outlined),
+                icon: Stack(
+                  children: <Widget>[
+                    new Icon(Icons.cases_outlined),
+                  //   Positioned(  // draw a red marble
+                  //   top: -8,
+                  //   right: -2,
+                  //   child: Badge(
+                  //   badgeContent: Text(
+                  //     ' ',
+                  //     style: TextStyle(color: Colors.white),
+                  //   ),
+                  //   elevation: 0,
+                  //   showBadge: notificationCount > 0 ? true : false,
+                  //   ),
+                  // )
+                  Visibility(
+                    visible: widget.recieve_case == true,
+                    child: Positioned(
+                    top: 0,
+                    right: 0,
+                  child: new Container(
+          padding: EdgeInsets.all(1),
+          decoration: new BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          constraints: BoxConstraints(
+            minWidth: 12,
+            minHeight: 12,
+          ),
+          child: new Text(
+            // '${notificationCount}',
+            ' ',
+            style: new TextStyle(
+              color: Colors.white,
+              fontSize: 8,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),),
+                    ),
+                  ]
+                  ),
                 activeIcon: Icon(Icons.cases_rounded),
                 label: 'Cases',
+                
               ),
             ],
             currentIndex: _selected_idx,

@@ -75,7 +75,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
-    print(widget.docID);
+    // print(widget.docID);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -242,28 +242,28 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                     ],
                   ),
                   SizedBox(height: 10),
-                  Visibility(
-                    visible: widget.caseFinished == false,
-                    child: Container(
-                      height: h * 0.1,
-                      child: RaisedButton(
-                        color: Colors.green[300],
-                        child: Text(
-                          'Finish this case',
-                          style: TextStyle(
-                            fontSize: h * 0.02,
-                          ),
-                        ),
-                        onPressed: () {
-                          updateData(widget.docID);
-                          widget.finishCaseHandler;
-                          setState(() {
-                            widget.caseFinished = true;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+                  // Visibility(
+                  //   visible: widget.caseFinished == false,
+                  //   child: Container(
+                  //     height: h * 0.1,
+                  //     child: RaisedButton(
+                  //       color: Colors.green[300],
+                  //       child: Text(
+                  //         'Finish this case',
+                  //         style: TextStyle(
+                  //           fontSize: h * 0.02,
+                  //         ),
+                  //       ),
+                  //       onPressed: () {
+                  //         updateData(widget.docID);
+                  //         widget.finishCaseHandler;
+                  //         setState(() {
+                  //           widget.caseFinished = true;
+                  //         });
+                  //       },
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

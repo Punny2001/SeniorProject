@@ -13,6 +13,8 @@ import 'package:seniorapp/component/page/athlete-page/questionnaire-page/physica
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
+import 'package:seniorapp/component/page/staff-page/report_update_case/illness_record_for_update.dart';
+
 import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/page/staff-page/history_details/illness_report_description.dart';
@@ -35,4 +37,5 @@ final Map<String, WidgetBuilder> map = {
   '/athleteProfile': (BuildContext context) => AthleteProfile(),
   '/resultPage': (BuildContext context) => Result(),
   '/athleteNotification': (BuildContext context) => AthleteNotify(),
+
 };
