@@ -7,15 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
-import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
-import 'package:seniorapp/component/page/staff-page/staff_case.dart';
-import 'package:seniorapp/component/page/staff-page/staff_history.dart';
 import 'package:seniorapp/component/page/staff-page/staff_case.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
-import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
@@ -37,10 +33,7 @@ class _StaffCaseState extends State<StaffNotify> {
   String staff_no;
   int healthSize = 0;
   int physicalSize = 0;
-  int _index;
-  int _selected_idx = 0;
   Timer _timer;
-  bool notify_case = false;
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
   HealthResultData healthData;
@@ -97,17 +90,6 @@ class _StaffCaseState extends State<StaffNotify> {
       },
     );
   }
-static const List<Widget> _staffPageList = <Widget>[
-    StaffHomePage(),
-    StaffReport(),
-    StaffCase(),
-  ];
-
-  void _onPageTap(index) {
-    setState(() {
-      _selected_idx = index;
-    });
-  }
 
   @override
   void initState() {
@@ -134,21 +116,6 @@ static const List<Widget> _staffPageList = <Widget>[
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    int _index = 0;
-    switch(_index) {
-    case 0:
-      StaffHomePage();
-      break;
-
-    case 1:
-      StaffReport();
-      break;
-
-    case 2:
-    StaffCase();
-    break;
-  }
-  print(_index);
     print('data size: ${healthSize + physicalSize}');
     return Scaffold(
         backgroundColor: Colors.white,
@@ -572,12 +539,7 @@ static const List<Widget> _staffPageList = <Widget>[
                                                   setState(() {
                                                     getHealthSize();
                                                     getPhysicalSize();
-                                                    StaffPageChoosing(
-                                                      recieve_case: true,
-                                                    
-                                                     );
                                                   });
-                                                  
                                                 },
                                                 icon: Icon(
                                                     Icons.add_circle_rounded,
@@ -610,47 +572,10 @@ static const List<Widget> _staffPageList = <Widget>[
                       ),
                     ),
         ),
-        bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-          child: BottomNavigationBar(
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            unselectedItemColor: Colors.black,
-            backgroundColor: Colors.blue.shade200,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.history_toggle_off),
-                activeIcon: Icon(Icons.history),
-                label: 'History',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.cases_outlined),
-                activeIcon: Icon(Icons.cases_rounded),
-                label: 'Cases',
-              ),
-            ],
-            currentIndex: _index,
-            onTap: (int index) => setState(() => _index = index),
-            selectedItemColor: Colors.black,
-            showUnselectedLabels: false,
-          ),
-        ),
-      ),
-        );
+        bottomNavigationBar: BottomAppBar(
+          child: SizedBox(height: h * 0.03),
+          elevation: 1,
+        ));
   }
 
   Future<void> updateData(String type, String docID) async {

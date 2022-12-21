@@ -11,11 +11,6 @@ import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
-import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
-import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
-
-import 'package:seniorapp/component/page/staff-page/report_update_case/illness_record_for_update.dart';
-import 'package:seniorapp/component/page/staff-page/report_update_case/injury_record_for_update.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
@@ -518,72 +513,74 @@ class _StaffCaseState extends State<StaffCase> {
                                         PhysicalResultData.fromMap(data);
 
                                     return GestureDetector(
-                                      // onTap: () {
-                                      //   switch (data['questionnaireType']) {
-                                      //     case 'Health':
-                                      //       HealthResultData health =
-                                      //           HealthResultData.fromMap(data);
-                                      //       Navigator.of(context)
-                                      //           .push(
-                                      //             MaterialPageRoute(
-                                      //               builder: (context) =>
-                                      //                   HealthReportCase(
-                                      //                 docID: data['docID'],
-                                      //                 answerList:
-                                      //                     health.answerList,
-                                      //                 athleteNo:
-                                      //                     health.athleteNo,
-                                      //                 doDate: health.doDate,
-                                      //                 healthSymptom:
-                                      //                     health.healthSymptom,
-                                      //                 questionnaireType: health
-                                      //                     .questionnaireType,
-                                      //                 questionnaireNo: health
-                                      //                     .questionnaireNo,
-                                      //                 totalPoint:
-                                      //                     health.totalPoint,
-                                      //                 finishCaseHandler:
-                                      //                     _finishCase,
-                                      //                 caseFinished:
-                                      //                     health.caseFinished,
-                                      //               ),
-                                      //             ),
-                                      //           )
-                                      //           .then((_) => setState(() {}));
-                                      //       break;
-                                      //     case 'Physical':
-                                      //       PhysicalResultData physical = PhysicalResultData.fromMap(data);
-                                      //       Navigator.of(context)
-                                      //           .push(
-                                      //             MaterialPageRoute(
-                                      //               builder: (context) =>
-                                      //                   PhysicalReportCase(
-                                      //                 docID: data['docID'],
-                                      //                 answerList:
-                                      //                     physical.answerList,
-                                      //                 athleteNo:
-                                      //                     physical.athleteNo,
-                                      //                 doDate: physical.doDate,
-                                      //                 bodyPart:
-                                      //                     physical.bodyPart,
-                                      //                 questionnaireType: physical
-                                      //                     .questionnaireType,
-                                      //                 questionnaireNo: physical
-                                      //                     .questionnaireNo,
-                                      //                 totalPoint:
-                                      //                     physical.totalPoint,
-                                      //                 finishCaseHandler:
-                                      //                     _finishCase,
-                                      //                 caseFinished:
-                                      //                     physical.caseFinished,
-                                      //               ),
-                                      //             ),
-                                      //           )
-                                      //           .then((_) => setState(() {}));
-                                      //       break;
-                                      //     default:
-                                      //   }
-                                      // },
+                                      onTap: () {
+                                        switch (data['questionnaireType']) {
+                                          case 'Health':
+                                            HealthResultData health =
+                                                HealthResultData.fromMap(data);
+                                            Navigator.of(context)
+                                                .push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        HealthReportCase(
+                                                      docID: data['docID'],
+                                                      answerList:
+                                                          health.answerList,
+                                                      athleteNo:
+                                                          health.athleteNo,
+                                                      doDate: health.doDate,
+                                                      healthSymptom:
+                                                          health.healthSymptom,
+                                                      questionnaireType: health
+                                                          .questionnaireType,
+                                                      questionnaireNo: health
+                                                          .questionnaireNo,
+                                                      totalPoint:
+                                                          health.totalPoint,
+                                                      finishCaseHandler:
+                                                          _finishCase,
+                                                      caseFinished:
+                                                          health.caseFinished,
+                                                    ),
+                                                  ),
+                                                )
+                                                .then((_) => setState(() {}));
+                                            break;
+                                          case 'Physical':
+                                            PhysicalResultData physical =
+                                                PhysicalResultData.fromMap(
+                                                    data);
+                                            Navigator.of(context)
+                                                .push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PhysicalReportCase(
+                                                      docID: data['docID'],
+                                                      answerList:
+                                                          physical.answerList,
+                                                      athleteNo:
+                                                          physical.athleteNo,
+                                                      doDate: physical.doDate,
+                                                      bodyPart:
+                                                          physical.bodyPart,
+                                                      questionnaireType: physical
+                                                          .questionnaireType,
+                                                      questionnaireNo: physical
+                                                          .questionnaireNo,
+                                                      totalPoint:
+                                                          physical.totalPoint,
+                                                      finishCaseHandler:
+                                                          _finishCase,
+                                                      caseFinished:
+                                                          physical.caseFinished,
+                                                    ),
+                                                  ),
+                                                )
+                                                .then((_) => setState(() {}));
+                                            break;
+                                          default:
+                                        }
+                                      },
                                       child: Card(
                                         child: Container(
                                           child: Container(
@@ -618,7 +615,6 @@ class _StaffCaseState extends State<StaffCase> {
                                                               CrossAxisAlignment
                                                                   .stretch,
                                                           children: <Widget>[
-                                                            Padding(padding:  EdgeInsets.only(top: 15)),
                                                             Text.rich(
                                                               TextSpan(
                                                                 text:
@@ -716,70 +712,6 @@ class _StaffCaseState extends State<StaffCase> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                              children: [
-                                                                 IconButton(
-                                                                  icon: Icon(Icons.article_rounded), onPressed: () {
-                                                                     HealthResultData health = HealthResultData.fromMap(data);
-                                                                  Navigator.of(context)
-                                                                      .push(
-                                                                        MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              HealthReportCase(
-                                                                            docID: data['docID'],
-                                                                            answerList:
-                                                                                health.answerList,
-                                                                            athleteNo:
-                                                                                health.athleteNo,
-                                                                            doDate: health.doDate,
-                                                                            healthSymptom:
-                                                                                health.healthSymptom,
-                                                                            questionnaireType: health
-                                                                                .questionnaireType,
-                                                                            questionnaireNo: health
-                                                                                .questionnaireNo,
-                                                                            totalPoint:
-                                                                                health.totalPoint,
-                                                                            finishCaseHandler:
-                                                                                _finishCase,
-                                                                            caseFinished:
-                                                                                health.caseFinished,
-                                                                          ),
-                                                                        ),
-                                                                      )
-                                                                      .then((_) => setState(() {}));
-                                                                  },
-                                                                  
-                                                                  ),
-                                                                Padding(padding: EdgeInsets.only(right: 70)),
-                                                                IconButton(
-                                                                  icon: Icon(Icons.assignment_rounded), 
-                                                                  onPressed: () { 
-                                                                    HealthResultData health = HealthResultData.fromMap(data);
-                                                                    Navigator.of(context)
-                                                                      .push(
-                                                                        MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              IllnessReport_update(
-                                                                                docID: data['docID'],
-                                                                            finishCaseHandler:
-                                                                                _finishCase,
-                                                                            caseFinished:
-                                                                                health.caseFinished,
-                                                                              ),
-                                                                        ),
-                                                                      );
-                                                                    // Navigator.of(context).pushNamed('/illnessReport');
-                                                                    
-                                                                 },),
-                                                              ],
-                                                            ),
-                                                            // Container(
-                                                            //   child: Icon(Icons.article_rounded),
-                                                            // ),
                                                           ],
                                                         ),
                                                       ),
@@ -802,8 +734,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                             Text('score'),
                                                           ],
                                                         ),
-                                                      ),
-                                                      
+                                                      )
                                                     ],
                                                   )
                                                 : Row(
@@ -829,7 +760,6 @@ class _StaffCaseState extends State<StaffCase> {
                                                               CrossAxisAlignment
                                                                   .stretch,
                                                           children: <Widget>[
-                                                            Padding(padding:  EdgeInsets.only(top: 15)),
                                                             Text.rich(
                                                               TextSpan(
                                                                 text:
@@ -923,67 +853,6 @@ class _StaffCaseState extends State<StaffCase> {
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                              children: [
-                                                                 IconButton(
-                                                                  icon: Icon(Icons.article_rounded), onPressed: () {
-                                                                  PhysicalResultData physical = PhysicalResultData.fromMap(data);
-                                                                  Navigator.of(context)
-                                                                      .push(
-                                                                        MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              PhysicalReportCase(
-                                                                            docID: data['docID'],
-                                                                            answerList:
-                                                                                physical.answerList,
-                                                                            athleteNo:
-                                                                                physical.athleteNo,
-                                                                            doDate: physical.doDate,
-                                                                            bodyPart:
-                                                                                physical.bodyPart,
-                                                                            questionnaireType: physical
-                                                                                .questionnaireType,
-                                                                            questionnaireNo: physical
-                                                                                .questionnaireNo,
-                                                                            totalPoint:
-                                                                                physical.totalPoint,
-                                                                            finishCaseHandler:
-                                                                                _finishCase,
-                                                                            caseFinished:
-                                                                                physical.caseFinished,
-                                                                          ),
-                                                                        ),
-                                                                      )
-                                                                      .then((_) => setState(() {}));
-                                                                  },
-                                                                  
-                                                                  ),
-                                                                Padding(padding: EdgeInsets.only(right: 70)),
-                                                                IconButton(
-                                                                  icon: Icon(Icons.assignment_rounded), 
-                                                                  onPressed: () { 
-                                                                    PhysicalResultData physical = PhysicalResultData.fromMap(data);
-                                                                    Navigator.of(context)
-                                                                      .push(
-                                                                        MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              InjuryReport_update(
-                                                                                docID: data['docID'],
-                                                                            finishCaseHandler:
-                                                                                _finishCase,
-                                                                            caseFinished:
-                                                                                physical.caseFinished,
-                                                                              ),
-                                                                        ),
-                                                                      );
-                                                                    // Navigator.of(context).pushNamed('/illnessReport');
-                                                                    
-                                                                 },),
-                                                              ],
                                                             ),
                                                           ],
                                                         ),
