@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 
 class StaffHomePage extends StatefulWidget {
   const StaffHomePage({Key key}) : super(key: key);
@@ -214,8 +215,12 @@ class _StaffHomePageState extends State<StaffHomePage> {
                         elevation: 5,
                         margin: const EdgeInsets.all(10),
                       ),
-                      onTap: () =>
-                          Navigator.of(context).pushNamed('/illnessReport'),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              IllnessReport(null, null),
+                        ),
+                      ),
                     ),
                   ),
                 ],

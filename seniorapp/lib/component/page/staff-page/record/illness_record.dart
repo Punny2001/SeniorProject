@@ -8,11 +8,14 @@ import 'package:flutter/services.dart';
 import 'package:seniorapp/component/message_data.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
+import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class IllnessReport extends StatefulWidget {
-  const IllnessReport({Key key}) : super(key: key);
+  final HealthResultData healthResultData;
+  final String docID;
+  IllnessReport(this.healthResultData, this.docID);
 
   @override
   _IllnessReportState createState() => _IllnessReportState();
@@ -53,6 +56,10 @@ class _IllnessReportState extends State<IllnessReport> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.docID);
+    if (widget.healthResultData != null) {
+      _athleteNo.text = widget.healthResultData.athleteNo;
+    }
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -100,19 +107,34 @@ class _IllnessReportState extends State<IllnessReport> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 PaddingDecorate(10),
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: textdecorate('Athlete No.'),
-                  controller: _athleteNo,
-                  onChanged: (value) {},
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Athlete No. is required';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
+                widget.healthResultData != null
+                    ? TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: textdecorate('Athlete No.'),
+                        readOnly: true,
+                        controller: _athleteNo,
+                        onChanged: (value) {},
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Athlete No. is required';
+                          } else {
+                            return null;
+                          }
+                        },
+                      )
+                    : TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: textdecorate('Athlete No.'),
+                        controller: _athleteNo,
+                        onChanged: (value) {},
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Athlete No. is required';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                 PaddingDecorate(20),
                 const Text(
                   'Sport and Event',
@@ -233,7 +255,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   'Affected System',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                PaddingDecorate(20),
+                PaddingDecorate(10),
                 TextFormField(
                   keyboardType: TextInputType.number,
                   decoration: textdecorate('Code'),
@@ -707,7 +729,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   },
                 ),
                 const Padding(
-                  padding: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(20),
                 ),
                 Text(
                   'Advice Message',
@@ -721,6 +743,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 ),
                 TextFormField(
                   maxLines: 10,
+                  keyboardType: TextInputType.text,
                   controller: _messageController,
                   decoration: textdecorate('Description...'),
                 ),
@@ -742,6 +765,9 @@ class _IllnessReportState extends State<IllnessReport> {
                 primary: Colors.blue.shade200),
             onPressed: () {
               setState(() {
+                if (widget.docID != null) {
+                  updateData(widget.docID);
+                }
                 saveMessage();
                 saveIllnessReport();
               });
@@ -1042,6 +1068,15 @@ class _IllnessReportState extends State<IllnessReport> {
       docReference.set(data);
     }
   }
+}
+
+Future<void> updateData(String docID) async {
+  await FirebaseFirestore.instance
+      .collection('HealthQuestionnaireResult')
+      .doc(docID)
+      .update({'caseFinished': true}).then((value) {
+    print('Updated data successfully');
+  });
 }
 
 class MainSymptomList {

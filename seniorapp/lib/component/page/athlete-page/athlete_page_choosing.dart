@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_notify.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_search.dart';
 
 class AthletePageChoosing extends StatefulWidget {
@@ -13,15 +14,19 @@ class AthletePageChoosing extends StatefulWidget {
 
 class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int _selected_idx = 0;
-  int notificationCount = 1;
+  int notificationCount = 0;
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
     AthleteSearch(),
     AthleteHistory(),
+    AthleteNotify(),
   ];
 
   void _onPageTap(int index) {
+    if (index == 3) {
+      notificationCount = 0;
+    }
     setState(() {
       _selected_idx = index;
     });
@@ -43,6 +48,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     return Scaffold(
       appBar: AppBar(
         primary: true,
+        
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -63,37 +69,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
                 icon: Icon(Icons.menu),
               ),
             ),
-            Ink(
-              decoration: ShapeDecoration(
-                shape: CircleBorder(),
-                color: Colors.green.shade300,
-              ),
-              child: Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        Navigator.of(context)
-                            .pushNamed(
-                              '/athleteNotification',
-                            )
-                            .then((_) => setState(() {}));
-                      });
-                    },
-                    icon: Icon(Icons.notifications_none),
-                  ),
-                  Badge(
-                    badgeContent: Text(
-                      ' ',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    elevation: 0,
-                    showBadge: notificationCount > 0 ? true : false,
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -109,9 +84,11 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
             topRight: Radius.circular(30.0),
           ),
           child: BottomNavigationBar(
-            backgroundColor: Colors.green.shade300,
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
             unselectedItemColor: Colors.black,
-            items: const <BottomNavigationBarItem>[
+            backgroundColor: Colors.green[300],
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
                 activeIcon: Icon(Icons.home),
@@ -127,13 +104,27 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
                 activeIcon: Icon(Icons.history),
                 label: 'ประวัติ',
               ),
+              BottomNavigationBarItem(
+                icon: Badge(
+                  position: BadgePosition.topEnd(),
+                  badgeContent: Text(
+                    '$notificationCount',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  elevation: 0,
+                  showBadge: notificationCount > 0 ? true : false,
+                  child: Icon(
+                    Icons.notifications_none,
+                  ),
+                ),
+                activeIcon: Icon(Icons.notifications),
+                label: 'การแจ้งเตือน',
+              )
             ],
             currentIndex: _selected_idx,
             onTap: _onPageTap,
             selectedItemColor: Colors.black,
             showUnselectedLabels: false,
-
-            // selectedLabelStyle: TextStyle(color: Colors.black),
           ),
         ),
       ),

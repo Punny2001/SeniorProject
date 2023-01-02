@@ -63,9 +63,9 @@ Color score_color(int score) {
   if (score < 25) {
     return Colors.green[800];
   } else if (score < 50) {
-    return Colors.yellow[700];
+    return Colors.yellow[600];
   } else if (score < 75) {
-    return Colors.orange[700];
+    return Colors.orange[800];
   } else {
     return Colors.red[800];
   }

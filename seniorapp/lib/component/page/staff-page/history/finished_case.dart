@@ -19,14 +19,14 @@ import 'package:async/async.dart' show StreamZip;
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
-class StaffCase extends StatefulWidget {
-  const StaffCase({Key key}) : super(key: key);
+class StaffFinishedCase extends StatefulWidget {
+  const StaffFinishedCase({Key key}) : super(key: key);
 
   @override
-  _StaffCaseState createState() => _StaffCaseState();
+  _StaffFinishedCaseState createState() => _StaffFinishedCaseState();
 }
 
-class _StaffCaseState extends State<StaffCase> {
+class _StaffFinishedCaseState extends State<StaffFinishedCase> {
   Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
   String staff_no;
@@ -46,7 +46,7 @@ class _StaffCaseState extends State<StaffCase> {
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
-    data.removeWhere((element) => element['caseFinished'] == true);
+    data.removeWhere((element) => element['caseFinished'] == false);
 
     if (_selectedOrder[0] == true) {
       if (_selectedOrderType[0] == true) {
@@ -337,6 +337,13 @@ class _StaffCaseState extends State<StaffCase> {
                                     Padding(
                                       padding: EdgeInsets.all(10),
                                     ),
+                                    Text('Type of cases'),
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(10),
+                                    ),
                                     Text('Range of score'),
                                     Padding(
                                       padding: EdgeInsets.all(5),
@@ -467,10 +474,10 @@ class _StaffCaseState extends State<StaffCase> {
                                       case 'Health':
                                         return Card(
                                           child: Container(
-                                            height: h * 0.25,
+                                            height: h * 0.2,
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
+                                                  MainAxisAlignment.start,
                                               children: [
                                                 Container(
                                                   padding: EdgeInsets.only(
@@ -578,7 +585,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                           ],
                                                         ),
                                                       ),
-                                                      PaddingDecorate(5),
+
                                                       Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -701,10 +708,10 @@ class _StaffCaseState extends State<StaffCase> {
                                       case 'Physical':
                                         return Card(
                                           child: Container(
-                                            height: h * 0.25,
+                                            height: h * 0.2,
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
+                                                  MainAxisAlignment.start,
                                               children: [
                                                 Container(
                                                   padding: EdgeInsets.only(

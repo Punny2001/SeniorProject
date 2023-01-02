@@ -6,6 +6,7 @@ import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checkin
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/more_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
+import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'questionnaire.dart';
 
 class HealthQuestionnaire extends StatefulWidget {
@@ -20,6 +21,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
   var _questionIndex = 0;
   int totalScore;
   Map<String, int> answer_list = {"Q1": 0};
+  String uid = FirebaseAuth.instance.currentUser.uid;
+  Athlete athData;
 
   bool isResult = true;
   String _healthChoosing;
@@ -41,7 +44,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
   void _answerHealthPart(String health) {
     setState(() {
-      _healthChoosing = health.trimRight();
+      _healthChoosing = health;
       answer_health = true;
     });
   }
@@ -74,7 +77,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     {
       'questionText': 'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด',
       'answerText': [
-        'คลื่นไส้',
+        'คลื่นไส้ ',
         'ชา',
         'ต่อมอักเสบ',
         'ท้องผูก',
@@ -85,7 +88,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
         'ปวดหัว',
         'ผื่นคัน',
         'มีอาการที่ตา',
-        'มีอาการที่หู',
+        'มีอาการที่หู ',
         'อ่อนล้า',
         'อาเจียน',
         'อาการที่ทางเดินปัสสาวะและอวัยวะเพศ',
@@ -97,7 +100,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
         'เจ็บคอ',
         'เจ็บหน้าอก',
         'เป็นลม',
-        'ไข้',
+        'ไข้ ',
         'ไอ',
       ],
     }
@@ -105,6 +108,16 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
   @override
   Widget build(BuildContext context) {
+    void getAthData() {
+      FirebaseFirestore.instance.collection('Athlete').doc(uid).get().then(
+        (snapshot) {
+          Map data = snapshot.data();
+          athData = Athlete.fromMap(data);
+          print(athData.athlete_no);
+        },
+      );
+    }
+
     final _questions = [
       {
         'questionNo': 'Q1',
@@ -220,6 +233,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       });
     }
 
+    getAthData();
+
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -299,7 +314,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       ),
       backgroundColor: Colors.white,
       body: Container(
-        padding: (isResult == true)
+        padding: (isResult == true && _questionIndex == _questions.length)
             ? EdgeInsets.only(
                 top: h * 0.3,
               )
@@ -385,7 +400,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     if (hasProblem == true) {
       healthResultModel = HealthResultData(
           questionnaireNo: questionnaireNo,
-          athleteNo: uid,
+          athleteNo: athData.athlete_no,
+          athleteUID: uid,
           doDate: DateTime.now(),
           questionnaireType: 'Health',
           totalPoint: totalScore,
@@ -399,7 +415,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       }
       healthResultModel = HealthResultData(
           questionnaireNo: questionnaireNo,
-          athleteNo: uid,
+          athleteNo: athData.athlete_no,
+          athleteUID: uid,
           doDate: DateTime.now(),
           questionnaireType: 'Health',
           totalPoint: 0,

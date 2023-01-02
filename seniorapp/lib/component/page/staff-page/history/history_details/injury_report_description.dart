@@ -3,47 +3,47 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
-import 'package:seniorapp/component/page/staff-page/staff_history.dart';
+import 'package:seniorapp/component/page/staff-page/history/staff_history.dart';
 
-class ReportIllnessDescription extends StatefulWidget {
-  const ReportIllnessDescription({
+class ReportInjuryDescription extends StatefulWidget {
+  const ReportInjuryDescription({
     Key key,
     @required this.report_id,
-    @required this.affected_system,
-    @required this.affected_system_code,
+    @required this.injuryBody,
+    @required this.injuryBodyCode,
+    @required this.injuryCause,
+    @required this.injuryCauseCode,
+    @required this.injuryType,
+    @required this.injuryTypeCode,
+    @required this.round_heat_training,
     @required this.athlete_no,
-    @required this.diagnosis,
-    @required this.illness_cause,
-    @required this.illness_cause_code,
-    @required this.mainSymptoms,
-    @required this.mainSymptomsCode,
     @required this.no_day,
-    @required this.occured_date,
+    @required this.injuryDateTime,
     @required this.report_type,
     @required this.sport_event,
     @required this.staff_uid,
   }) : super(key: key);
   final String report_id;
-  final String affected_system;
-  final int affected_system_code;
+  final String injuryBody;
+  final int injuryBodyCode;
+  final String injuryCause;
+  final int injuryCauseCode;
+  final String injuryType;
+  final int injuryTypeCode;
+  final String round_heat_training;
   final String athlete_no;
-  final String diagnosis;
-  final String illness_cause;
-  final int illness_cause_code;
-  final List<String> mainSymptoms;
-  final List<int> mainSymptomsCode;
   final String no_day;
-  final DateTime occured_date;
+  final DateTime injuryDateTime;
   final String report_type;
   final String sport_event;
   final String staff_uid;
 
   @override
-  State<ReportIllnessDescription> createState() =>
-      _ReportIllnessDescriptionState();
+  State<ReportInjuryDescription> createState() =>
+      _ReportInjuryDescriptionState();
 }
 
-class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
+class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
@@ -138,13 +138,12 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                              text: 'Main symptom(s): ',
+                              text: 'Injury Type: ',
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold)),
-                          for (int i = 0; i < widget.mainSymptoms.length; i++)
-                            TextSpan(
-                                text:
-                                    '${widget.mainSymptomsCode[i]} | ${widget.mainSymptoms[i]}\n'),
+                          TextSpan(
+                              text:
+                                  '${widget.injuryTypeCode} | ${widget.injuryType}\n'),
                         ],
                       ),
                     ),
@@ -156,12 +155,12 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
                         ),
                         children: <TextSpan>[
                           TextSpan(
-                              text: 'Illness cause: ',
+                              text: 'Injury Body Part: ',
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(
                               text:
-                                  '${widget.illness_cause_code} | ${widget.illness_cause}\n'),
+                                  '${widget.injuryBodyCode} | ${widget.injuryBody}\n'),
                         ],
                       ),
                     ),
@@ -178,7 +177,7 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
                                   const TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(
                             text: '${formatDate(
-                              widget.occured_date,
+                              widget.injuryDateTime,
                               'Staff',
                             )}\n',
                           ),
@@ -200,7 +199,7 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
                                   const TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(
                             text:
-                                '${DateFormat.Hms().format(widget.occured_date)}\n',
+                                '${DateFormat.Hms().format(widget.injuryDateTime)}\n',
                           ),
                         ],
                       ),

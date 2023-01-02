@@ -1,26 +1,25 @@
+import 'dart:async' show Stream, StreamController, Timer;
+
+import 'package:async/async.dart' show StreamZip;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:delayed_display/delayed_display.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/staff-page/history_details/injury_report_description.dart';
+import 'package:seniorapp/component/page/staff-page/history/history_details/illness_report_description.dart';
+import 'package:seniorapp/component/page/staff-page/history/history_details/injury_report_description.dart';
+import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
-import 'package:seniorapp/component/page/staff-page/history_details/illness_report_description.dart';
-import 'package:seniorapp/component/report-data/illness_report_data.dart';
 
-import 'dart:async' show Stream, StreamController, Timer;
-import 'package:async/async.dart' show StreamZip;
-
-class StaffReport extends StatefulWidget {
-  const StaffReport({Key key}) : super(key: key);
+class StaffHistory extends StatefulWidget {
+  const StaffHistory({Key key}) : super(key: key);
 
   @override
-  State<StaffReport> createState() => _StaffReportState();
+  State<StaffHistory> createState() => _StaffReportState();
 }
 
-class _StaffReportState extends State<StaffReport> {
+class _StaffReportState extends State<StaffHistory> {
   Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
   int illnessSize;

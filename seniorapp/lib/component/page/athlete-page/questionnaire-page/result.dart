@@ -79,14 +79,13 @@ class Result extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
-            
             children: [
               checkQuestionType(questionType, h),
               Container(
                 padding: EdgeInsets.only(
                     left: w * 0.03, right: w * 0.03, top: h * 0.03),
-                alignment: Alignment.center,
                 child: RichText(
+                  textAlign: TextAlign.center,
                   text: TextSpan(
                     style: TextStyle(
                       fontSize: h * 0.03,

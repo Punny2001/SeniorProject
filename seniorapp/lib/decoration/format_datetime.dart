@@ -5,6 +5,8 @@ import 'package:intl/date_symbol_data_local.dart';
 String formatDate(DateTime dateTime, String userType) {
   switch (userType) {
     case 'Staff':
+      Intl.defaultLocale = 'en';
+      initializeDateFormatting();
       return DateFormat.yMMMMd().format(dateTime);
       break;
     case 'Athlete':

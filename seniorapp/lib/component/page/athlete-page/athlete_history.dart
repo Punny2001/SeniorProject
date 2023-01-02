@@ -47,11 +47,11 @@ class _AthleteHistoryState extends State<AthleteHistory> {
   Stream<List<QuerySnapshot>> getData() {
     Stream healthQuestionnaire = FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('athleteNo', isEqualTo: uid, isNull: false)
+        .where('athleteUID', isEqualTo: uid, isNull: false)
         .snapshots();
     Stream physicalQuestionnaire = FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('athleteNo', isEqualTo: uid, isNull: false)
+        .where('athleteUID', isEqualTo: uid, isNull: false)
         .snapshots();
 
     return StreamZip([healthQuestionnaire, physicalQuestionnaire]);
@@ -60,7 +60,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
   getHealthSize() {
     FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('athleteNo', isEqualTo: uid, isNull: false)
+        .where('athleteUID', isEqualTo: uid, isNull: false)
         .get()
         .then(
       (snapshot) {
@@ -74,7 +74,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
   getPhysicalSize() {
     FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('athleteNo', isEqualTo: uid, isNull: false)
+        .where('athleteUID', isEqualTo: uid, isNull: false)
         .get()
         .then(
       (snapshot) {

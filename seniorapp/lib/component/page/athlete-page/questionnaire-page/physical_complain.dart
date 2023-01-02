@@ -6,6 +6,7 @@ import 'package:seniorapp/component/page/athlete-page/questionnaire-page/checkin
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/more_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
+import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'questionnaire.dart';
 
 class PhysicalQuestionnaire extends StatefulWidget {
@@ -19,6 +20,9 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
   var _questionIndex = 0;
   var _bodyPartRound = 0;
   Map<String, int> answer_list = {"Q1": 0};
+
+  String uid = FirebaseAuth.instance.currentUser.uid;
+  Athlete athData;
 
   bool isResult = true;
   bool hasQuestion = false;
@@ -259,6 +263,18 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       });
     }
 
+    void getAthData() {
+      FirebaseFirestore.instance.collection('Athlete').doc(uid).get().then(
+        (snapshot) {
+          Map data = snapshot.data();
+          athData = Athlete.fromMap(data);
+          print(athData.athlete_no);
+        },
+      );
+    }
+
+    getAthData();
+
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
@@ -339,7 +355,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         ),
       ),
       body: Container(
-          padding: (isResult == true)
+          padding: (isResult == true && _questionIndex == _questions.length)
               ? EdgeInsets.only(top: h * 0.3)
               : EdgeInsets.only(top: h / 3),
           child: hasQuestion
@@ -416,7 +432,8 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     if (hasProblem == true) {
       physicalResultModel = PhysicalResultData(
           questionnaireNo: questionnaireNo,
-          athleteNo: uid,
+          athleteNo: athData.athlete_no,
+          athleteUID: uid,
           doDate: DateTime.now(),
           questionnaireType: 'Physical',
           totalPoint: totalScore,
@@ -430,7 +447,8 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       }
       physicalResultModel = PhysicalResultData(
           questionnaireNo: questionnaireNo,
-          athleteNo: uid,
+          athleteNo: athData.athlete_no,
+          athleteUID: uid,
           doDate: DateTime.now(),
           questionnaireType: 'Physical',
           totalPoint: 0,

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 class PhysicalResultData {
   String questionnaireNo;
   String athleteNo;
+  String athleteUID;
   String questionnaireType;
   DateTime doDate;
   int totalPoint;
@@ -12,42 +13,51 @@ class PhysicalResultData {
   String bodyPart;
   bool caseReceived;
   String staff_no_received;
+  String staff_uid_received;
   bool caseFinished;
+  PhysicalResultData({
+    @required this.questionnaireNo,
+    @required this.athleteNo,
+    @required this.athleteUID,
+    @required this.questionnaireType,
+    @required this.doDate,
+    @required this.totalPoint,
+    @required this.answerList,
+    @required this.bodyPart,
+    @required this.caseReceived,
+    this.staff_no_received,
+    this.staff_uid_received,
+    @required this.caseFinished,
+  });
 
-  PhysicalResultData(
-      {@required this.questionnaireNo,
-      @required this.athleteNo,
-      @required this.questionnaireType,
-      @required this.doDate,
-      @required this.totalPoint,
-      @required this.answerList,
-      @required this.bodyPart,
-      @required this.caseReceived,
-      this.staff_no_received,
-      @required this.caseFinished});
-
-  PhysicalResultData copyWith(
-      {String questionnaireNo,
-      String athleteNo,
-      String questionnaireType,
-      DateTime doDate,
-      int totalPoint,
-      Map<String, int> answerList,
-      String bodyPart,
-      bool caseReceived,
-      String staff_no_received,
-      bool caseFinished}) {
+  PhysicalResultData copyWith({
+    String questionnaireNo,
+    String athleteNo,
+    String athleteUID,
+    String questionnaireType,
+    DateTime doDate,
+    int totalPoint,
+    Map<String, int> answerList,
+    String bodyPart,
+    bool caseReceived,
+    String staff_no_received,
+    String staff_uid_received,
+    bool caseFinished,
+  }) {
     return PhysicalResultData(
-        questionnaireNo: questionnaireNo ?? this.questionnaireNo,
-        athleteNo: athleteNo ?? this.athleteNo,
-        questionnaireType: questionnaireType ?? this.questionnaireType,
-        doDate: doDate ?? this.doDate,
-        totalPoint: totalPoint ?? this.totalPoint,
-        answerList: answerList ?? this.answerList,
-        bodyPart: bodyPart ?? this.bodyPart,
-        caseReceived: caseReceived ?? this.caseReceived,
-        staff_no_received: staff_no_received ?? this.staff_no_received,
-        caseFinished: caseFinished ?? this.caseFinished);
+      questionnaireNo: questionnaireNo ?? this.questionnaireNo,
+      athleteNo: athleteNo ?? this.athleteNo,
+      athleteUID: athleteUID ?? this.athleteUID,
+      questionnaireType: questionnaireType ?? this.questionnaireType,
+      doDate: doDate ?? this.doDate,
+      totalPoint: totalPoint ?? this.totalPoint,
+      answerList: answerList ?? this.answerList,
+      bodyPart: bodyPart ?? this.bodyPart,
+      caseReceived: caseReceived ?? this.caseReceived,
+      staff_no_received: staff_no_received ?? this.staff_no_received,
+      staff_uid_received: staff_uid_received ?? this.staff_uid_received,
+      caseFinished: caseFinished ?? this.caseFinished,
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -55,6 +65,7 @@ class PhysicalResultData {
 
     result.addAll({'questionnaireNo': questionnaireNo});
     result.addAll({'athleteNo': athleteNo});
+    result.addAll({'athleteUID': athleteUID});
     result.addAll({'questionnaireType': questionnaireType});
     result.addAll({'doDate': doDate});
     result.addAll({'totalPoint': totalPoint});
@@ -62,6 +73,7 @@ class PhysicalResultData {
     result.addAll({'bodyPart': bodyPart});
     result.addAll({'caseReceived': caseReceived});
     result.addAll({'staff_no_received': staff_no_received});
+    result.addAll({'staff_uid_received': staff_uid_received});
     result.addAll({'caseFinished': caseFinished});
 
     return result;
@@ -71,6 +83,7 @@ class PhysicalResultData {
     return PhysicalResultData(
       questionnaireNo: map['questionnaireNo'] ?? '',
       athleteNo: map['athleteNo'] ?? '',
+      athleteUID: map['athleteUID'] ?? '',
       questionnaireType: map['questionnaireType'] ?? '',
       doDate: DateTime.parse(map['doDate'].toDate().toString()),
       totalPoint: map['totalPoint']?.toInt() ?? 0,
@@ -78,6 +91,7 @@ class PhysicalResultData {
       bodyPart: map['bodyPart'] ?? '',
       caseReceived: map['caseReceived'] ?? false,
       staff_no_received: map['staff_no_received'] ?? '',
+      staff_uid_received: map['staff_uid_received'] ?? '',
       caseFinished: map['caseFinished'] ?? false,
     );
   }
@@ -89,7 +103,7 @@ class PhysicalResultData {
 
   @override
   String toString() {
-    return 'PhysicalResultData(athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, bodyPart: $bodyPart, caseReceived: $caseReceived, staff_no_received: $staff_no_received)';
+    return 'PhysicalResultData(questionnaireNo: $questionnaireNo, athleteNo: $athleteNo, athleteUID: $athleteUID, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, bodyPart: $bodyPart, caseReceived: $caseReceived, staff_no_received: $staff_no_received, staff_uid_received: $staff_uid_received, caseFinished: $caseFinished)';
   }
 
   @override
@@ -99,6 +113,7 @@ class PhysicalResultData {
     return other is PhysicalResultData &&
         other.questionnaireNo == questionnaireNo &&
         other.athleteNo == athleteNo &&
+        other.athleteUID == athleteUID &&
         other.questionnaireType == questionnaireType &&
         other.doDate == doDate &&
         other.totalPoint == totalPoint &&
@@ -106,6 +121,7 @@ class PhysicalResultData {
         other.bodyPart == bodyPart &&
         other.caseReceived == caseReceived &&
         other.staff_no_received == staff_no_received &&
+        other.staff_uid_received == staff_uid_received &&
         other.caseFinished == caseFinished;
   }
 
@@ -113,6 +129,7 @@ class PhysicalResultData {
   int get hashCode {
     return questionnaireNo.hashCode ^
         athleteNo.hashCode ^
+        athleteUID.hashCode ^
         questionnaireType.hashCode ^
         doDate.hashCode ^
         totalPoint.hashCode ^
@@ -120,6 +137,7 @@ class PhysicalResultData {
         bodyPart.hashCode ^
         caseReceived.hashCode ^
         staff_no_received.hashCode ^
+        staff_uid_received.hashCode ^
         caseFinished.hashCode;
   }
 }

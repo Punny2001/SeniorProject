@@ -27,9 +27,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: h / 10,
         elevation: 0,
-        scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         title: Row(

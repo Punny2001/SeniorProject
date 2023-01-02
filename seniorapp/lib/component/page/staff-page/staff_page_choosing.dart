@@ -5,9 +5,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
+import 'package:seniorapp/component/page/staff-page/choose_history.dart';
+import 'package:seniorapp/component/page/staff-page/history/finished_case.dart';
 import 'package:seniorapp/component/page/staff-page/staff_case.dart';
-import 'package:seniorapp/component/page/staff-page/staff_history.dart';
+import 'package:seniorapp/component/page/staff-page/history/staff_history.dart';
 import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
+import 'package:seniorapp/component/user-data/staff_data.dart';
 
 class StaffPageChoosing extends StatefulWidget {
   const StaffPageChoosing({Key key}) : super(key: key);
@@ -17,12 +20,15 @@ class StaffPageChoosing extends StatefulWidget {
 }
 
 class _StaffPageChoosingState extends State<StaffPageChoosing> {
+  String uid = FirebaseAuth.instance.currentUser.uid;
   int _selected_idx = 0;
   bool isRegister = false;
   int healthSize = 0;
   int physicalSize = 0;
   int notificationCount;
   int index;
+  int unfinishedCaseCount = 0;
+  Staff staff;
 
   getHealthSize() {
     FirebaseFirestore.instance
@@ -64,13 +70,14 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     );
   }
 
-  static const List<Widget> _staffPageList = <Widget>[
-    StaffHomePage(),
-    StaffReport(),
-    StaffCase(),
+  List<Widget> _staffPageList = [
+    const StaffHomePage(),
+    const StaffCase(),
+    const ChooseHistory(),
+    const StaffNotify(),
   ];
 
-  void _onPageTap(index) {
+  void _onPageTap(index) async {
     setState(() {
       _selected_idx = index;
     });
@@ -88,8 +95,23 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   void initState() {
     getHealthSize();
     getPhysicalSize();
+    FirebaseFirestore.instance
+        .collection('Staff')
+        .doc(uid)
+        .get()
+        .then((snapshot) {
+      setState(() {
+        Map data = snapshot.data();
+        staff = Staff.fromMap(data);
+      });
+    });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -104,7 +126,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       appBar: AppBar(
         primary: true,
         elevation: 0,
-        scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         title: Row(
@@ -122,38 +143,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                   });
                 },
                 icon: Icon(Icons.menu),
-              ),
-            ),
-            Ink(
-              decoration: ShapeDecoration(
-                shape: CircleBorder(),
-                color: Colors.blue.shade200,
-              ),
-              child: Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        Navigator.of(context)
-                            .pushNamed(
-                              '/staffNotification',
-                              arguments: _getNotificationCount,
-                            )
-                            .then((_) => setState(() {}));
-                      });
-                    },
-                    icon: Icon(Icons.notifications_none),
-                  ),
-                  Badge(
-                    badgeContent: Text(
-                      ' ',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    elevation: 0,
-                    showBadge: notificationCount > 0 ? true : false,
-                  ),
-                ],
               ),
             ),
           ],
@@ -179,21 +168,46 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             type: BottomNavigationBarType.fixed,
             unselectedItemColor: Colors.black,
             backgroundColor: Colors.blue.shade200,
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
                 activeIcon: Icon(Icons.home),
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.history_toggle_off),
+                icon: Badge(
+                  badgeContent: Text(
+                    '$unfinishedCaseCount',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  elevation: 0,
+                  showBadge: unfinishedCaseCount > 0 ? true : false,
+                  child: Icon(Icons.cases_outlined),
+                ),
+                activeIcon: Icon(Icons.cases_rounded),
+                label: 'Cases',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.history_toggle_off,
+                ),
                 activeIcon: Icon(Icons.history),
                 label: 'History',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.cases_outlined),
-                activeIcon: Icon(Icons.cases_rounded),
-                label: 'Cases',
+                icon: Badge(
+                  badgeContent: Text(
+                    '$notificationCount',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  elevation: 0,
+                  showBadge: notificationCount > 0 ? true : false,
+                  child: Icon(Icons.notifications_none),
+                ),
+                activeIcon: Icon(
+                  Icons.notifications,
+                ),
+                label: 'Notification',
               ),
             ],
             currentIndex: _selected_idx,

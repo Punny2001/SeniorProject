@@ -5,13 +5,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
+import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class InjuryReport extends StatefulWidget {
-  const InjuryReport({Key key}) : super(key: key);
+  final PhysicalResultData physicalResultData;
+  final String docID;
+
+  InjuryReport(this.physicalResultData, this.docID);
 
   @override
   _InjuryReportState createState() => _InjuryReportState();
@@ -60,6 +65,9 @@ class _InjuryReportState extends State<InjuryReport> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.physicalResultData != null) {
+      _athleteNo.text = widget.physicalResultData.athleteNo;
+    }
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -111,18 +119,34 @@ class _InjuryReportState extends State<InjuryReport> {
                   ),
                 ),
                 const Padding(padding: EdgeInsets.all(10)),
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: textdecorate('Athlete No.'),
-                  controller: _athleteNo,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Athlete No. is required';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
+                widget.physicalResultData != null
+                    ? TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: textdecorate('Athlete No.'),
+                        readOnly: true,
+                        controller: _athleteNo,
+                        onChanged: (value) {},
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Athlete No. is required';
+                          } else {
+                            return null;
+                          }
+                        },
+                      )
+                    : TextFormField(
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        decoration: textdecorate('Athlete No.'),
+                        controller: _athleteNo,
+                        onChanged: (value) {},
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Athlete No. is required';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
                 //
                 const Padding(
                   padding: EdgeInsets.all(20),
@@ -870,6 +894,9 @@ class _InjuryReportState extends State<InjuryReport> {
                 primary: Colors.blue.shade200),
             onPressed: () {
               setState(() {
+                if (widget.docID != null) {
+                  updateData(widget.docID);
+                }
                 saveInjuryReport();
               });
             },
@@ -1082,6 +1109,7 @@ class _InjuryReportState extends State<InjuryReport> {
       _selectedInjuryType += ', ${_otherInjuryType.text.trim()}';
     }
     print(isValidate);
+
     if (isValidate) {
       String report_no = 'IJR';
       String split;
@@ -1238,5 +1266,14 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       }
     }
+  }
+
+  Future<void> updateData(String docID) async {
+    await FirebaseFirestore.instance
+        .collection('PhysicalQuestionnaireResult')
+        .doc(docID)
+        .update({'caseFinished': true}).then((value) {
+      print('Updated data successfully');
+    });
   }
 }
