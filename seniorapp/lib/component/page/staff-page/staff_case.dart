@@ -465,11 +465,9 @@ class _StaffCaseState extends State<StaffCase> {
                                   itemBuilder: (context, index) {
                                     Map<String, dynamic> data =
                                         mappedData[index];
-
+                                    healthData = HealthResultData.fromMap(data);
                                     switch (data['questionnaireType']) {
                                       case 'Health':
-                                        healthData =
-                                            HealthResultData.fromMap(data);
                                         return Card(
                                           child: Container(
                                             height: h * 0.25,
@@ -603,21 +601,22 @@ class _StaffCaseState extends State<StaffCase> {
                                                               elevation: 0,
                                                             ),
                                                             onPressed: () {
+                                                              HealthResultData
+                                                                  healthResultData =
+                                                                  HealthResultData
+                                                                      .fromMap(
+                                                                          data);
                                                               Navigator.of(
                                                                       context)
                                                                   .push(
-                                                                    MaterialPageRoute(
-                                                                      builder: (context) => HealthReportCase(
-                                                                          healthResultData:
-                                                                              healthData,
-                                                                          docID:
-                                                                              data['docID']),
-                                                                    ),
-                                                                  )
-                                                                  .then(
-                                                                    (_) => setState(
-                                                                        () {}),
-                                                                  );
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => HealthReportCase(
+                                                                      healthResultData:
+                                                                          healthResultData,
+                                                                      docID: data[
+                                                                          'docID']),
+                                                                ),
+                                                              );
                                                             },
                                                             icon: const Icon(
                                                               Icons
@@ -667,14 +666,13 @@ class _StaffCaseState extends State<StaffCase> {
                                                                       Navigator.of(
                                                                               context)
                                                                           .push(
-                                                                            MaterialPageRoute(
-                                                                              builder: (context) => IllnessReport(healthData, data['docID'], athlete),
-                                                                            ),
-                                                                          )
-                                                                          .then(
-                                                                            (_) =>
-                                                                                setState(() {}),
-                                                                          );
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) => IllnessReport(
+                                                                              healthData,
+                                                                              data['docID'],
+                                                                              athlete),
+                                                                        ),
+                                                                      );
                                                                     });
                                                                   },
                                                                   icon:
@@ -860,21 +858,22 @@ class _StaffCaseState extends State<StaffCase> {
                                                               elevation: 0,
                                                             ),
                                                             onPressed: () {
+                                                              PhysicalResultData
+                                                                  physicalReportData =
+                                                                  PhysicalResultData
+                                                                      .fromMap(
+                                                                          data);
                                                               Navigator.of(
                                                                       context)
                                                                   .push(
-                                                                    MaterialPageRoute(
-                                                                      builder: (context) => PhysicalReportCase(
-                                                                          physicalResultData:
-                                                                              physicalData,
-                                                                          docID:
-                                                                              data['docID']),
-                                                                    ),
-                                                                  )
-                                                                  .then(
-                                                                    (_) => setState(
-                                                                        () {}),
-                                                                  );
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => PhysicalReportCase(
+                                                                      physicalResultData:
+                                                                          physicalReportData,
+                                                                      docID: data[
+                                                                          'docID']),
+                                                                ),
+                                                              );
                                                             },
                                                             icon: const Icon(
                                                               Icons

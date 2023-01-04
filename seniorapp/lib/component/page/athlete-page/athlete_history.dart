@@ -484,7 +484,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                       child: Column(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
-                                                                .center,
+                                                                .spaceEvenly,
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .stretch,
@@ -620,7 +620,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                       child: Column(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
-                                                                .center,
+                                                                .spaceEvenly,
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .stretch,

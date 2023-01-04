@@ -176,6 +176,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                         PhysicalResultData.fromMap(data);
 
                                     return Card(
+                                      elevation: 5,
                                       clipBehavior: Clip.antiAliasWithSaveLayer,
                                       child: Column(
                                         children: [
@@ -483,34 +484,35 @@ class _StaffCaseState extends State<StaffNotify> {
                                                   ),
                                           ),
                                           Container(
-                                              color: Colors.blue[200],
-                                              width: w,
-                                              height: h * 0.05,
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  updateData(
-                                                    data['questionnaireType'],
-                                                    data['docID'],
-                                                  );
-                                                  widget.refreshNotification;
-                                                  setState(() {
-                                                    getHealthSize();
-                                                    getPhysicalSize();
-                                                  });
-                                                },
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: const [
-                                                    Icon(
-                                                      Icons.add_circle_rounded,
-                                                    ),
-                                                    Text(
-                                                      'Add a case',
-                                                    ),
-                                                  ],
-                                                ),
-                                              )),
+                                            color: Colors.blue[200],
+                                            width: w,
+                                            height: h * 0.05,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                updateData(
+                                                  data['questionnaireType'],
+                                                  data['docID'],
+                                                );
+                                                widget.refreshNotification;
+                                                setState(() {
+                                                  getHealthSize();
+                                                  getPhysicalSize();
+                                                });
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  Icon(
+                                                    Icons.add_circle_rounded,
+                                                  ),
+                                                  Text(
+                                                    'Add a case',
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     );
