@@ -417,7 +417,9 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => IllnessReport(
-                                      widget.healthResultData, widget.docID),
+                                      widget.healthResultData,
+                                      widget.docID,
+                                      athlete),
                                 ),
                               );
                             },

@@ -9,13 +9,16 @@ import 'package:seniorapp/component/message_data.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
+import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class IllnessReport extends StatefulWidget {
   final HealthResultData healthResultData;
   final String docID;
-  IllnessReport(this.healthResultData, this.docID);
+  final Athlete athlete;
+
+  IllnessReport(this.healthResultData, this.docID, this.athlete);
 
   @override
   _IllnessReportState createState() => _IllnessReportState();
@@ -59,6 +62,8 @@ class _IllnessReportState extends State<IllnessReport> {
     print(widget.docID);
     if (widget.healthResultData != null) {
       _athleteNo.text = widget.healthResultData.athleteNo;
+      _selectedSport = widget.athlete.sportType;
+      _occuredDate = widget.healthResultData.doDate;
     }
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
@@ -66,7 +71,7 @@ class _IllnessReportState extends State<IllnessReport> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: h / 10,
+        primary: true,
         elevation: 0,
         scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
@@ -224,15 +229,10 @@ class _IllnessReportState extends State<IllnessReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 DateTimePicker(
+                  initialValue: _occuredDate.toString(),
                   dateLabelText: 'Occured Date',
                   dateMask: 'MMMM d, yyyy',
-                  decoration: const InputDecoration(
-                    labelText: 'Occured Date',
-                    border: InputBorder.none,
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    suffixIcon: Icon(Icons.event),
-                  ),
+                  decoration: textdecorate('Occured date'),
                   type: DateTimePickerType.date,
                   lastDate: DateTime.now(),
                   firstDate: DateTime(1900),

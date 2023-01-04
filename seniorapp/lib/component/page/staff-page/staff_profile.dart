@@ -27,7 +27,7 @@ class _StaffProfileState extends State<StaffProfile> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: h / 10,
+        primary: true,
         elevation: 0,
         scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
@@ -50,7 +50,6 @@ class _StaffProfileState extends State<StaffProfile> {
             ),
           ],
         ),
-
       ),
       body: Column(
         children: <Widget>[
@@ -71,11 +70,14 @@ class _StaffProfileState extends State<StaffProfile> {
                 ),
               ),
             ),
-            onTap: () =>  Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-            StaffPersonal(email: stfData.email, firstname: stfData.firstname, lastname: stfData.lastname, staff_no: stfData.staff_no,
-            ),
-            )
-            ),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => StaffPersonal(
+                email: stfData.email,
+                firstname: stfData.firstname,
+                lastname: stfData.lastname,
+                staff_no: stfData.staff_no,
+              ),
+            )),
           ),
           GestureDetector(
             child: Card(

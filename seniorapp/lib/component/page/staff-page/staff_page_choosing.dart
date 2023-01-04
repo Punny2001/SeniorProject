@@ -25,6 +25,8 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   bool isRegister = false;
   int healthSize = 0;
   int physicalSize = 0;
+  int unfinishedPhysical = 0;
+  int unfinishedHealth = 0;
   int notificationCount;
   int index;
   int unfinishedCaseCount = 0;
@@ -70,7 +72,39 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     );
   }
 
-  List<Widget> _staffPageList = [
+  getUnfinishedPhysicalCase() {
+    FirebaseFirestore.instance
+        .collection('PhysicalQuestionnaireResult')
+        .where('staff_uid_received', isEqualTo: uid, isNull: false)
+        .get()
+        .then(
+      (snapshot) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
+        list.removeWhere((element) => element['caseFinished'] == true);
+        setState(() {
+          unfinishedPhysical = list.length;
+        });
+      },
+    );
+  }
+
+  getUnfinishedHealthCase() {
+    FirebaseFirestore.instance
+        .collection('HealthQuestionnaireResult')
+        .where('staff_uid_received', isEqualTo: uid, isNull: false)
+        .get()
+        .then(
+      (snapshot) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
+        list.removeWhere((element) => element['caseFinished'] == true);
+        setState(() {
+          unfinishedHealth = list.length;
+        });
+      },
+    );
+  }
+
+  final List<Widget> _staffPageList = [
     const StaffHomePage(),
     const StaffCase(),
     const ChooseHistory(),
@@ -88,6 +122,16 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     getPhysicalSize();
     setState(() {
       notificationCount = healthSize + physicalSize;
+    });
+  }
+
+  void _getUnfinishedCaseCount() {
+    setState(() {
+      getUnfinishedHealthCase();
+      getUnfinishedPhysicalCase();
+      setState(() {
+        unfinishedCaseCount = unfinishedHealth + unfinishedPhysical;
+      });
     });
   }
 
@@ -110,15 +154,11 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
     _getNotificationCount();
+    _getUnfinishedCaseCount();
     index = 0;
 
     return Scaffold(
@@ -169,7 +209,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             unselectedItemColor: Colors.black,
             backgroundColor: Colors.blue.shade200,
             items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
                 activeIcon: Icon(Icons.home),
                 label: 'Home',
@@ -187,7 +227,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                 activeIcon: Icon(Icons.cases_rounded),
                 label: 'Cases',
               ),
-              BottomNavigationBarItem(
+              const BottomNavigationBarItem(
                 icon: Icon(
                   Icons.history_toggle_off,
                 ),

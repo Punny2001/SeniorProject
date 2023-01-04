@@ -410,7 +410,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     int latestID;
     NumberFormat format = NumberFormat('0000000000');
     await FirebaseFirestore.instance
-        .collection('PhysicalQuestionnareResult')
+        .collection('PhysicalQuestionnaireResult')
         .orderBy('questionnaireNo', descending: true)
         .limit(1)
         .get()

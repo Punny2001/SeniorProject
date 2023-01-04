@@ -418,7 +418,9 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => InjuryReport(
-                                      widget.physicalResultData, widget.docID),
+                                      widget.physicalResultData,
+                                      widget.docID,
+                                      athlete),
                                 ),
                               );
                             },

@@ -30,8 +30,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
   Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
   String staff_no;
-  int healthSize;
-  int physicalSize;
+  int healthSize = 0;
+  int physicalSize = 0;
   bool isLoading = false;
   bool caseFinished = false;
   List<bool> _selectedOrder = <bool>[true, false];
@@ -155,7 +155,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
     );
     getPhysicalSize();
     getHealthSize();
-    _timer = Timer(Duration(seconds: 1), () {
+    _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
@@ -181,6 +181,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
 
     return Scaffold(
       body: Container(
+        padding: const EdgeInsets.only(top: 10),
         height: h,
         width: w,
         child: Column(
@@ -193,7 +194,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                   width: w * 0.65,
                   height: h * 0.052,
                   child: ElevatedButton.icon(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.filter_list,
                       color: Colors.black,
                     ),
@@ -201,7 +202,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                       primary: Colors.blue[200],
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
                         side: BorderSide(color: Colors.blue[700]),
@@ -223,19 +224,19 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                 builder: (context, setState) {
                               return AlertDialog(
                                 title: Container(
-                                  child: Text('Filter'),
+                                  child: const Text('Filter'),
                                 ),
                                 content: Column(
                                   children: [
-                                    Text('Order by'),
-                                    Padding(
-                                      padding: EdgeInsets.all(5),
+                                    const Text('Order by'),
+                                    const Padding(
+                                      padding: const EdgeInsets.all(5),
                                     ),
                                     ToggleButtons(
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(8),
                                       ),
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                       fillColor: Colors.blue[200],
@@ -247,7 +248,10 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         minHeight: h * 0.05,
                                         minWidth: w * 0.3,
                                       ),
-                                      children: [Text('Date'), Text('Score')],
+                                      children: [
+                                        const Text('Date'),
+                                        const Text('Score')
+                                      ],
                                       isSelected: _selectedOrder,
                                       onPressed: (int index) {
                                         setState(() {
@@ -261,14 +265,14 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         });
                                       },
                                     ),
-                                    Padding(
+                                    const Padding(
                                       padding: EdgeInsets.all(5),
                                     ),
                                     ToggleButtons(
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(8),
                                       ),
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                       fillColor: Colors.blue[200],
@@ -281,8 +285,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         minWidth: w * 0.3,
                                       ),
                                       children: [
-                                        Text('Descending'),
-                                        Text('Ascending')
+                                        const Text('Descending'),
+                                        const Text('Ascending')
                                       ],
                                       isSelected: _selectedOrderType,
                                       onPressed: (int index) {
@@ -297,18 +301,18 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         });
                                       },
                                     ),
-                                    Padding(
+                                    const Padding(
                                       padding: EdgeInsets.all(10),
                                     ),
-                                    Text('Type of problem'),
-                                    Padding(
-                                      padding: EdgeInsets.all(5),
+                                    const Text('Type of problem'),
+                                    const Padding(
+                                      padding: const EdgeInsets.all(5),
                                     ),
                                     ToggleButtons(
                                       borderRadius: const BorderRadius.all(
                                         Radius.circular(8),
                                       ),
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
                                       fillColor: Colors.blue[200],
@@ -321,8 +325,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         minWidth: w * 0.3,
                                       ),
                                       children: [
-                                        Text('Physical'),
-                                        Text('Health')
+                                        const Text('Physical'),
+                                        const Text('Health')
                                       ],
                                       isSelected: _selectedQuestionnaire,
                                       onPressed: (int index) {
@@ -334,19 +338,12 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         });
                                       },
                                     ),
-                                    Padding(
+                                    const Padding(
                                       padding: EdgeInsets.all(10),
                                     ),
-                                    Text('Type of cases'),
-                                    Padding(
-                                      padding: EdgeInsets.all(5),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(10),
-                                    ),
-                                    Text('Range of score'),
-                                    Padding(
-                                      padding: EdgeInsets.all(5),
+                                    const Text('Range of score'),
+                                    const Padding(
+                                      padding: const EdgeInsets.all(5),
                                     ),
                                     RangeSlider(
                                       values: _currentRangeValues,
@@ -377,9 +374,9 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                     width: w,
                                     child: RaisedButton(
                                       color: Colors.blue[200],
-                                      child: Text(
+                                      child: const Text(
                                         'Accept',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color: Colors.white),
                                       ),
@@ -397,7 +394,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                   ),
                 ),
                 ToggleButtons(
-                  children: [Text('Default')],
+                  children: [const Text('Default')],
                   isSelected: isDefault,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
@@ -424,7 +421,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                         _selectedOrder = <bool>[true, false];
                         _selectedQuestionnaire = <bool>[true, true];
                         _selectedOrderType = <bool>[true, false];
-                        _currentRangeValues = RangeValues(0, 100);
+                        _currentRangeValues = const RangeValues(0, 100);
                       }
                     });
                   },
@@ -434,7 +431,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
             PaddingDecorate(5),
             Expanded(
               child: isLoading == true
-                  ? Center(
+                  ? const Center(
                       child: CupertinoActivityIndicator(),
                     )
                   : healthSize + physicalSize != 0
@@ -463,21 +460,21 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                 mappedData = add_filter(mappedData);
                                 return ListView.builder(
                                   itemCount: mappedData.length,
+                                  // ignore: missing_return
                                   itemBuilder: (context, index) {
                                     Map<String, dynamic> data =
                                         mappedData[index];
-                                    healthData = HealthResultData.fromMap(data);
-                                    physicalData =
-                                        PhysicalResultData.fromMap(data);
 
                                     switch (data['questionnaireType']) {
                                       case 'Health':
+                                        healthData =
+                                            HealthResultData.fromMap(data);
                                         return Card(
                                           child: Container(
-                                            height: h * 0.2,
+                                            height: h * 0.25,
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
                                                 Container(
                                                   padding: EdgeInsets.only(
@@ -486,21 +483,22 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .center,
+                                                            .spaceEvenly,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .stretch,
                                                     children: <Widget>[
-                                                      Padding(
+                                                      const Padding(
                                                         padding:
-                                                            EdgeInsets.only(
-                                                                top: 15),
+                                                            const EdgeInsets
+                                                                .only(top: 15),
                                                       ),
                                                       Text.rich(
                                                         TextSpan(
                                                           text:
                                                               'Problem type: ',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -508,7 +506,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                             TextSpan(
                                                               text: healthData
                                                                   .questionnaireType,
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal),
@@ -521,7 +519,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                         TextSpan(
                                                           text:
                                                               'Health Symptom: ',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -529,7 +528,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                             TextSpan(
                                                               text: healthData
                                                                   .healthSymptom,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .normal,
@@ -542,7 +542,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                       Text.rich(
                                                         TextSpan(
                                                           text: 'Done on: ',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -553,7 +554,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                                     .doDate,
                                                                 'Staff',
                                                               ),
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal),
@@ -565,7 +566,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                       Text.rich(
                                                         TextSpan(
                                                           text: 'Time: ',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -577,7 +579,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                                 healthData
                                                                     .doDate,
                                                               ),
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal),
@@ -585,11 +587,14 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                           ],
                                                         ),
                                                       ),
-
                                                       Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
+                                                        mainAxisAlignment: healthData
+                                                                    .caseFinished ==
+                                                                false
+                                                            ? MainAxisAlignment
+                                                                .spaceEvenly
+                                                            : MainAxisAlignment
+                                                                .center,
                                                         children: [
                                                           ElevatedButton.icon(
                                                             style:
@@ -604,27 +609,24 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                                       context)
                                                                   .push(
                                                                     MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              HealthReportCase(
-                                                                        healthResultData:
-                                                                            healthData,
-                                                                        docID: data[
-                                                                            'docID'],
-                                                                      ),
+                                                                      builder: (context) => HealthReportCase(
+                                                                          healthResultData:
+                                                                              healthData,
+                                                                          docID:
+                                                                              data['docID']),
                                                                     ),
                                                                   )
                                                                   .then((_) =>
                                                                       setState(
                                                                           () {}));
                                                             },
-                                                            icon: Icon(
+                                                            icon: const Icon(
                                                               Icons
                                                                   .article_rounded,
                                                               color:
                                                                   Colors.black,
                                                             ),
-                                                            label: Text(
+                                                            label: const Text(
                                                               'Details',
                                                               style: TextStyle(
                                                                 color: Colors
@@ -632,44 +634,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                               ),
                                                             ),
                                                           ),
-                                                          healthData.caseFinished ==
-                                                                  false
-                                                              ? ElevatedButton
-                                                                  .icon(
-                                                                  style: ElevatedButton
-                                                                      .styleFrom(
-                                                                    primary:
-                                                                        Colors.blue[
-                                                                            400],
-                                                                    elevation:
-                                                                        0,
-                                                                  ),
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder: (context) => IllnessReport(
-                                                                            healthData,
-                                                                            data['docID']),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  icon: Icon(
-                                                                    Icons
-                                                                        .add_box,
-                                                                  ),
-                                                                  label: Text(
-                                                                    'Record',
-                                                                  ),
-                                                                )
-                                                              : Container()
                                                         ],
                                                       ),
-                                                      // Container(
-                                                      //   child: Icon(Icons.article_rounded),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
@@ -706,12 +672,14 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         );
                                         break;
                                       case 'Physical':
+                                        physicalData =
+                                            PhysicalResultData.fromMap(data);
                                         return Card(
                                           child: Container(
-                                            height: h * 0.2,
+                                            height: h * 0.25,
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                                  MainAxisAlignment.spaceAround,
                                               children: [
                                                 Container(
                                                   padding: EdgeInsets.only(
@@ -720,12 +688,12 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .center,
+                                                            .spaceEvenly,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .stretch,
                                                     children: <Widget>[
-                                                      Padding(
+                                                      const Padding(
                                                         padding:
                                                             EdgeInsets.only(
                                                                 top: 15),
@@ -734,7 +702,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                         TextSpan(
                                                           text:
                                                               'Problem type: ',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -742,7 +711,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                             TextSpan(
                                                               text: physicalData
                                                                   .questionnaireType,
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal),
@@ -755,7 +724,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                         TextSpan(
                                                           text:
                                                               'Physical injured: ',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -763,7 +733,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                             TextSpan(
                                                               text: physicalData
                                                                   .bodyPart,
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .normal,
@@ -776,7 +747,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                       Text.rich(
                                                         TextSpan(
                                                           text: 'Done on: ',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -787,7 +759,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                                     .doDate,
                                                                 'Staff',
                                                               ),
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal),
@@ -799,7 +771,8 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                       Text.rich(
                                                         TextSpan(
                                                           text: 'Time: ',
-                                                          style: TextStyle(
+                                                          style:
+                                                              const TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
                                                           ),
@@ -811,7 +784,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                                 physicalData
                                                                     .doDate,
                                                               ),
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .normal),
@@ -819,11 +792,14 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                           ],
                                                         ),
                                                       ),
-
                                                       Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
+                                                        mainAxisAlignment: physicalData
+                                                                    .caseFinished ==
+                                                                false
+                                                            ? MainAxisAlignment
+                                                                .spaceEvenly
+                                                            : MainAxisAlignment
+                                                                .center,
                                                         children: [
                                                           ElevatedButton.icon(
                                                             style:
@@ -838,27 +814,25 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                                       context)
                                                                   .push(
                                                                     MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              PhysicalReportCase(
-                                                                        physicalResultData:
-                                                                            physicalData,
-                                                                        docID: data[
-                                                                            'docID'],
-                                                                      ),
+                                                                      builder: (context) => PhysicalReportCase(
+                                                                          physicalResultData:
+                                                                              physicalData,
+                                                                          docID:
+                                                                              data['docID']),
                                                                     ),
                                                                   )
-                                                                  .then((_) =>
-                                                                      setState(
-                                                                          () {}));
+                                                                  .then(
+                                                                    (_) => setState(
+                                                                        () {}),
+                                                                  );
                                                             },
-                                                            icon: Icon(
+                                                            icon: const Icon(
                                                               Icons
                                                                   .article_rounded,
                                                               color:
                                                                   Colors.black,
                                                             ),
-                                                            label: Text(
+                                                            label: const Text(
                                                               'Details',
                                                               style: TextStyle(
                                                                 color: Colors
@@ -866,48 +840,12 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                               ),
                                                             ),
                                                           ),
-                                                          physicalData.caseFinished ==
-                                                                  false
-                                                              ? ElevatedButton
-                                                                  .icon(
-                                                                  style: ElevatedButton
-                                                                      .styleFrom(
-                                                                    primary:
-                                                                        Colors.blue[
-                                                                            400],
-                                                                    elevation:
-                                                                        0,
-                                                                  ),
-                                                                  onPressed:
-                                                                      () {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder: (context) => InjuryReport(
-                                                                            physicalData,
-                                                                            data['docID']),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  icon: Icon(
-                                                                    Icons
-                                                                        .add_box,
-                                                                  ),
-                                                                  label: Text(
-                                                                    'Record',
-                                                                  ),
-                                                                )
-                                                              : Container()
                                                         ],
                                                       ),
-                                                      // Container(
-                                                      //   child: Icon(Icons.article_rounded),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: w * 0.2,
                                                   child: Column(
                                                     mainAxisAlignment:
@@ -944,14 +882,14 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                   },
                                 );
                               } else {
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(),
                                 );
                               }
                             },
                           ),
                         )
-                      : Center(
+                      : const Center(
                           child: Text(
                             'Empty athlete case received',
                             textAlign: TextAlign.center,

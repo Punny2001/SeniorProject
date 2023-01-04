@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/auth-component/register.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
+import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
 
 class StaffHomePage extends StatefulWidget {
   const StaffHomePage({Key key}) : super(key: key);
@@ -177,8 +178,12 @@ class _StaffHomePageState extends State<StaffHomePage> {
                         elevation: 5,
                         margin: const EdgeInsets.all(10),
                       ),
-                      onTap: () =>
-                          Navigator.of(context).pushNamed('/injuryReport'),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              InjuryReport(null, null, null),
+                        ),
+                      ),
                     ),
                   ),
                   Container(
@@ -218,7 +223,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              IllnessReport(null, null),
+                              IllnessReport(null, null, null),
                         ),
                       ),
                     ),
@@ -230,9 +235,5 @@ class _StaffHomePageState extends State<StaffHomePage> {
         ),
       ),
     );
-  }
-
-  Widget carouselView(int index) {
-    return Container();
   }
 }
