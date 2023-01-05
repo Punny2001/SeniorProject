@@ -384,7 +384,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                               Column(
                                 children: [
                                   Text(
-                                    'Score',
+                                    'คะแนน',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: h * 0.02,

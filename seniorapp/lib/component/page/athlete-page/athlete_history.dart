@@ -605,7 +605,14 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                 fontSize:
                                                                     h * 0.05),
                                                           ),
-                                                          Text('คะแนน'),
+                                                          Text(
+                                                            'คะแนน',
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
                                                         ],
                                                       ),
                                                     )

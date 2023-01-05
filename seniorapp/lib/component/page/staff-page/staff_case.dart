@@ -44,6 +44,11 @@ class _StaffCaseState extends State<StaffCase> {
   RangeValues _currentRangeValues = const RangeValues(0, 100);
   int data_length = 10;
 
+  Map<String, String> typeToThai = {
+    'Health': 'อาการเจ็บป่วย',
+    'Physical': 'อาการบาดเจ็บ'
+  };
+
   void choose_filter() {
     setState(() {});
   }
@@ -495,7 +500,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                       Text.rich(
                                                         TextSpan(
                                                           text:
-                                                              'Problem type: ',
+                                                              'ประเภทแบบสอบถาม: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -503,8 +508,9 @@ class _StaffCaseState extends State<StaffCase> {
                                                           ),
                                                           children: [
                                                             TextSpan(
-                                                              text: healthData
-                                                                  .questionnaireType,
+                                                              text: typeToThai[
+                                                                  healthData
+                                                                      .questionnaireType],
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -516,8 +522,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                       PaddingDecorate(5),
                                                       Text.rich(
                                                         TextSpan(
-                                                          text:
-                                                              'Health Symptom: ',
+                                                          text: 'ปัญหาสุขภาพ: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -540,7 +545,8 @@ class _StaffCaseState extends State<StaffCase> {
                                                       PaddingDecorate(5),
                                                       Text.rich(
                                                         TextSpan(
-                                                          text: 'Done on: ',
+                                                          text:
+                                                              'วันที่บันทึก: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -551,7 +557,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                               text: formatDate(
                                                                 healthData
                                                                     .doDate,
-                                                                'Staff',
+                                                                'Athlete',
                                                               ),
                                                               style: const TextStyle(
                                                                   fontWeight:
@@ -564,7 +570,8 @@ class _StaffCaseState extends State<StaffCase> {
                                                       PaddingDecorate(5),
                                                       Text.rich(
                                                         TextSpan(
-                                                          text: 'Time: ',
+                                                          text:
+                                                              'เวลาที่บันทึก: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -572,12 +579,11 @@ class _StaffCaseState extends State<StaffCase> {
                                                           ),
                                                           children: [
                                                             TextSpan(
-                                                              text: DateFormat
-                                                                      .Hms()
-                                                                  .format(
+                                                              text:
+                                                                  '${DateFormat.Hms().format(
                                                                 healthData
                                                                     .doDate,
-                                                              ),
+                                                              )} น.',
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -606,6 +612,11 @@ class _StaffCaseState extends State<StaffCase> {
                                                                   HealthResultData
                                                                       .fromMap(
                                                                           data);
+                                                              formatDate(
+                                                                healthResultData
+                                                                    .doDate,
+                                                                'Staff',
+                                                              );
                                                               Navigator.of(
                                                                       context)
                                                                   .push(
@@ -709,7 +720,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                             fontSize: h * 0.05),
                                                       ),
                                                       Text(
-                                                        'Score',
+                                                        'คะแนน',
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,
@@ -753,7 +764,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                       Text.rich(
                                                         TextSpan(
                                                           text:
-                                                              'Problem type: ',
+                                                              'ประเภทแบบสอบถาม: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -761,8 +772,9 @@ class _StaffCaseState extends State<StaffCase> {
                                                           ),
                                                           children: [
                                                             TextSpan(
-                                                              text: physicalData
-                                                                  .questionnaireType,
+                                                              text: typeToThai[
+                                                                  physicalData
+                                                                      .questionnaireType],
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -775,7 +787,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                       Text.rich(
                                                         TextSpan(
                                                           text:
-                                                              'Physical injured: ',
+                                                              'ส่วนที่บาดเจ็บ: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -798,7 +810,8 @@ class _StaffCaseState extends State<StaffCase> {
                                                       PaddingDecorate(5),
                                                       Text.rich(
                                                         TextSpan(
-                                                          text: 'Done on: ',
+                                                          text:
+                                                              'วันที่บันทึก: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -809,7 +822,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                               text: formatDate(
                                                                 physicalData
                                                                     .doDate,
-                                                                'Staff',
+                                                                'Athlete',
                                                               ),
                                                               style: const TextStyle(
                                                                   fontWeight:
@@ -822,7 +835,8 @@ class _StaffCaseState extends State<StaffCase> {
                                                       PaddingDecorate(5),
                                                       Text.rich(
                                                         TextSpan(
-                                                          text: 'Time: ',
+                                                          text:
+                                                              'เวลาที่บันทึก: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -830,12 +844,11 @@ class _StaffCaseState extends State<StaffCase> {
                                                           ),
                                                           children: [
                                                             TextSpan(
-                                                              text: DateFormat
-                                                                      .Hms()
-                                                                  .format(
+                                                              text:
+                                                                  '${DateFormat.Hms().format(
                                                                 physicalData
                                                                     .doDate,
-                                                              ),
+                                                              )} น.',
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -859,17 +872,22 @@ class _StaffCaseState extends State<StaffCase> {
                                                             ),
                                                             onPressed: () {
                                                               PhysicalResultData
-                                                                  physicalReportData =
+                                                                  physicalResultData =
                                                                   PhysicalResultData
                                                                       .fromMap(
                                                                           data);
+                                                              formatDate(
+                                                                physicalResultData
+                                                                    .doDate,
+                                                                'Staff',
+                                                              );
                                                               Navigator.of(
                                                                       context)
                                                                   .push(
                                                                 MaterialPageRoute(
                                                                   builder: (context) => PhysicalReportCase(
                                                                       physicalResultData:
-                                                                          physicalReportData,
+                                                                          physicalResultData,
                                                                       docID: data[
                                                                           'docID']),
                                                                 ),
@@ -969,7 +987,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                             fontSize: h * 0.05),
                                                       ),
                                                       Text(
-                                                        'Score',
+                                                        'คะแนน',
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.bold,

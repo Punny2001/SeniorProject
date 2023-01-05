@@ -385,7 +385,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                               Column(
                                 children: [
                                   Text(
-                                    'Score',
+                                    'คะแนน',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: h * 0.02,
