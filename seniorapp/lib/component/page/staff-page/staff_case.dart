@@ -188,7 +188,7 @@ class _StaffCaseState extends State<StaffCase> {
     print('physical size: $physicalSize');
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: h,
         width: w,
         child: Column(
@@ -255,9 +255,9 @@ class _StaffCaseState extends State<StaffCase> {
                                         minHeight: h * 0.05,
                                         minWidth: w * 0.3,
                                       ),
-                                      children: [
-                                        const Text('Date'),
-                                        const Text('Score')
+                                      children: const [
+                                        Text('Date'),
+                                        Text('Score')
                                       ],
                                       isSelected: _selectedOrder,
                                       onPressed: (int index) {
@@ -291,9 +291,9 @@ class _StaffCaseState extends State<StaffCase> {
                                         minHeight: h * 0.05,
                                         minWidth: w * 0.3,
                                       ),
-                                      children: [
-                                        const Text('Descending'),
-                                        const Text('Ascending')
+                                      children: const [
+                                        Text('Descending'),
+                                        Text('Ascending')
                                       ],
                                       isSelected: _selectedOrderType,
                                       onPressed: (int index) {
@@ -331,9 +331,9 @@ class _StaffCaseState extends State<StaffCase> {
                                         minHeight: h * 0.05,
                                         minWidth: w * 0.3,
                                       ),
-                                      children: [
-                                        const Text('Physical'),
-                                        const Text('Health')
+                                      children: const [
+                                        Text('Physical'),
+                                        Text('Health')
                                       ],
                                       isSelected: _selectedQuestionnaire,
                                       onPressed: (int index) {
@@ -377,7 +377,7 @@ class _StaffCaseState extends State<StaffCase> {
                                   ],
                                 ),
                                 actions: [
-                                  Container(
+                                  SizedBox(
                                     width: w,
                                     child: RaisedButton(
                                       color: Colors.blue[200],
@@ -401,7 +401,7 @@ class _StaffCaseState extends State<StaffCase> {
                   ),
                 ),
                 ToggleButtons(
-                  children: [const Text('Default')],
+                  children: const [Text('Default')],
                   isSelected: isDefault,
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
@@ -470,11 +470,12 @@ class _StaffCaseState extends State<StaffCase> {
                                   itemBuilder: (context, index) {
                                     Map<String, dynamic> data =
                                         mappedData[index];
+
                                     healthData = HealthResultData.fromMap(data);
                                     switch (data['questionnaireType']) {
                                       case 'Health':
                                         return Card(
-                                          child: Container(
+                                          child: SizedBox(
                                             height: h * 0.25,
                                             child: Row(
                                               mainAxisAlignment:
@@ -667,13 +668,13 @@ class _StaffCaseState extends State<StaffCase> {
                                                                         .get()
                                                                         .then(
                                                                             (snapshot) {
-                                                                      Map data =
+                                                                      Map athleteData =
                                                                           snapshot
                                                                               .data();
                                                                       Athlete
                                                                           athlete =
                                                                           Athlete.fromMap(
-                                                                              data);
+                                                                              athleteData);
                                                                       Navigator.of(
                                                                               context)
                                                                           .push(
@@ -702,7 +703,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                     ],
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: w * 0.2,
                                                   child: Column(
                                                     mainAxisAlignment:
@@ -738,7 +739,7 @@ class _StaffCaseState extends State<StaffCase> {
                                         physicalData =
                                             PhysicalResultData.fromMap(data);
                                         return Card(
-                                          child: Container(
+                                          child: SizedBox(
                                             height: h * 0.25,
                                             child: Row(
                                               mainAxisAlignment:
@@ -751,7 +752,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .center,
+                                                            .spaceEvenly,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .stretch,
@@ -930,24 +931,23 @@ class _StaffCaseState extends State<StaffCase> {
                                                                         .get()
                                                                         .then(
                                                                             (snapshot) {
-                                                                      Map data =
+                                                                      Map athleteData =
                                                                           snapshot
                                                                               .data();
                                                                       Athlete
                                                                           athlete =
                                                                           Athlete.fromMap(
-                                                                              data);
+                                                                              athleteData);
                                                                       Navigator.of(
                                                                               context)
                                                                           .push(
-                                                                            MaterialPageRoute(
-                                                                              builder: (context) => InjuryReport(physicalData, data['docID'], athlete),
-                                                                            ),
-                                                                          )
-                                                                          .then(
-                                                                            (_) =>
-                                                                                setState(() {}),
-                                                                          );
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) => InjuryReport(
+                                                                              physicalData,
+                                                                              data['docID'],
+                                                                              athlete),
+                                                                        ),
+                                                                      );
                                                                     });
                                                                   },
                                                                   icon:
@@ -963,13 +963,10 @@ class _StaffCaseState extends State<StaffCase> {
                                                               : Container()
                                                         ],
                                                       ),
-                                                      // Container(
-                                                      //   child: Icon(Icons.article_rounded),
-                                                      // ),
                                                     ],
                                                   ),
                                                 ),
-                                                Container(
+                                                SizedBox(
                                                   width: w * 0.2,
                                                   child: Column(
                                                     mainAxisAlignment:

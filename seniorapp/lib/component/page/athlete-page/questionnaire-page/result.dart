@@ -26,7 +26,7 @@ class Result extends StatelessWidget {
   String resultPhrase(String type, int resultScore) {
     var resultText = 'Hello';
     switch (type) {
-      case 'health':
+      case 'Health':
         {
           if (resultScore <= 25) {
             resultText = 'ระบบบันทึกข้อมูลเรียบร้อย ขอบคุณที่ให้ความร่วมมือ';
@@ -43,7 +43,7 @@ class Result extends StatelessWidget {
           print('result text: $resultText');
         }
         break;
-      case 'physical':
+      case 'Physical':
         {
           if (resultScore <= 25) {
             resultText = 'ระบบบันทึกข้อมูลเรียบร้อย ขอบคุณที่ให้ความร่วมมือ';
@@ -56,6 +56,23 @@ class Result extends StatelessWidget {
           } else {
             resultText =
                 'ระบบจะทำการรีบนัดหมายแพทย์ให้ท่านหรือให้ท่านนัดหมายแพทย์เพื่อทำการรักษาโดยด่วน ในขณะเดียวกัน ให้ท่านประคบเย็นพร้อมทั้งพันกระชับในส่วน${bodyPart}และลดการใช้งานในบริเวณ${bodyPart}ไม่ต่ำกว่า 7 วัน';
+          }
+          print('result text: $resultText');
+        }
+        break;
+      case 'Mental':
+        {
+          if (resultScore <= 25) {
+            resultText = 'ระบบบันทึกข้อมูลเรียบร้อย ขอบคุณที่ให้ความร่วมมือ';
+          } else if (resultScore <= 50) {
+            resultText =
+                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ท่านมีปัญหาการนอนหลับอยู่ในระดับ 1';
+          } else if (resultScore <= 75) {
+            resultText =
+                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ท่านมีปัญหาการนอนหลับอยู่ในระดับ 2';
+          } else {
+            resultText =
+                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ท่านมีปัญหาการนอนหลับอยู่ในระดับ 3';
           }
           print('result text: $resultText');
         }
@@ -91,7 +108,7 @@ class Result extends StatelessWidget {
                       fontSize: h * 0.03,
                       color: Colors.black,
                     ),
-                    children: questionType == 'health'
+                    children: questionType == 'Health'
                         ? resultScore > 75
                             ? [
                                 TextSpan(
@@ -99,7 +116,7 @@ class Result extends StatelessWidget {
                                 ),
                                 TextSpan(
                                   text: 'คลิกที่นี่',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.blue,
                                     fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.underline,
@@ -145,7 +162,7 @@ class Result extends StatelessWidget {
                   alignment: Alignment.center,
                   width: w,
                   height: h * 0.07,
-                  child: Text(
+                  child: const Text(
                     'บันทึก',
                     style: TextStyle(
                         color: Colors.white,
@@ -159,7 +176,7 @@ class Result extends StatelessWidget {
           ),
           IconButton(
             onPressed: previousPage,
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back_ios,
             ),
           ),
@@ -170,7 +187,7 @@ class Result extends StatelessWidget {
 
   RichText checkQuestionType(String questionType, double h) {
     switch (questionType) {
-      case 'physical':
+      case 'Physical':
         if (resultScore == 0) {
           return RichText(
             text: TextSpan(
@@ -199,12 +216,12 @@ class Result extends StatelessWidget {
                       color: score_color(resultScore),
                     ),
                   ),
-                  TextSpan(text: ' คะแนน')
+                  const TextSpan(text: ' คะแนน')
                 ]),
           );
         }
         break;
-      case 'health':
+      case 'Health':
         if (resultScore == 0) {
           return RichText(
             textAlign: TextAlign.center,
@@ -234,7 +251,41 @@ class Result extends StatelessWidget {
                       color: score_color(resultScore),
                     ),
                   ),
-                  TextSpan(text: ' คะแนน')
+                  const TextSpan(text: ' คะแนน')
+                ]),
+          );
+        }
+        break;
+      case 'Mental':
+        if (resultScore == 0) {
+          return RichText(
+            text: TextSpan(
+              text: 'ท่านไม่มีปัญหาการนอนหลับ',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: h * 0.03,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          );
+        } else {
+          return RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+                text: 'ปัญหาการนอนหลับของท่านอยู่ในระดับ ',
+                style: TextStyle(
+                  fontSize: h * 0.03,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+                children: [
+                  TextSpan(
+                    text: '$resultScore',
+                    style: TextStyle(
+                      color: score_color(resultScore),
+                    ),
+                  ),
+                  const TextSpan(text: ' คะแนน')
                 ]),
           );
         }

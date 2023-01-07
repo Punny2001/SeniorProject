@@ -1,5 +1,3 @@
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
@@ -30,13 +28,13 @@ class HealthReportDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String resultPhrase = result.resultPhrase('health', totalPoint);
+    String resultPhrase = result.resultPhrase('Health', totalPoint);
     resultPhrase = resultPhrase.replaceAll('null', healthSymptom);
     final _questions = [
       {
         'questionNo': 'Q1',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${healthSymptom}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
+            'ใน 7 วันที่ผ่านมา อาการ$healthSymptomของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
         'answerText': [
           {
             'text':
@@ -63,7 +61,7 @@ class HealthReportDetail extends StatelessWidget {
       {
         'questionNo': 'Q2',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${healthSymptom}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ$healthSymptomของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันเลย', 'score': 0},
           {'text': 'การฝึกซ้อมหรือแข่งขันลดลงเล็กน้อย', 'score': 6},
@@ -75,7 +73,7 @@ class HealthReportDetail extends StatelessWidget {
       {
         'questionNo': 'Q3',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${healthSymptom}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ$healthSymptomของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อความสามารถในการเล่นกีฬาเลย', 'score': 0},
           {'text': 'ความสามารถในการเล่นกีฬาลดลงเล็กน้อย', 'score': 6},
@@ -87,7 +85,7 @@ class HealthReportDetail extends StatelessWidget {
       {
         'questionNo': 'Q4',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${healthSymptom}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
+            'ใน 7 วันที่ผ่านมา อาการ$healthSymptomของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
         'answerText': [
           {'text': 'ไม่เจ็บเลย', 'score': 0},
           {'text': 'เจ็บเล็กน้อย', 'score': 6},
@@ -129,31 +127,29 @@ class HealthReportDetail extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(),
-                  color: Colors.green.shade300,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: const CircleBorder(),
+                color: Colors.green.shade300,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                alignment: Alignment.centerRight,
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
           ],
         ),
       ),
       body: Container(
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 30,
           right: 30,
         ),
         height: h,
         width: w,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
             children: [
               Text(
@@ -181,9 +177,9 @@ class HealthReportDetail extends StatelessWidget {
                           style: TextStyle(
                             color: score_color(totalPoint),
                           ),
-                          text: '${totalPoint} ',
+                          text: '$totalPoint ',
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text: 'คะแนน',
                           style: TextStyle(
                             color: Colors.black,
@@ -205,8 +201,8 @@ class HealthReportDetail extends StatelessWidget {
                       ),
                       children: [
                         TextSpan(
-                          text: '${resultPhrase}',
-                          style: TextStyle(
+                          text: resultPhrase,
+                          style: const TextStyle(
                             fontWeight: FontWeight.normal,
                           ),
                         ),
@@ -224,7 +220,7 @@ class HealthReportDetail extends StatelessWidget {
                       ),
                       children: [
                         TextSpan(
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.normal,
                           ),
                           text:
@@ -249,7 +245,7 @@ class HealthReportDetail extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Container(
+                        SizedBox(
                           width: w * 0.5,
                           child: Text(
                             answerTextList[i],
@@ -258,7 +254,7 @@ class HealthReportDetail extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Text(
+                            const Text(
                               'คะแนน',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,

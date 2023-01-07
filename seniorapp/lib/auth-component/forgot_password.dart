@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -32,7 +31,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           children: [
             Ink(
               decoration: ShapeDecoration(
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 color: Colors.blue.shade200,
               ),
               child: IconButton(
@@ -42,7 +41,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   });
                 },
                 alignment: Alignment.centerRight,
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                 ),
               ),
@@ -56,7 +55,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         height: h,
         child: Column(
           children: [
-            Text(
+            const Text(
               'Input your email',
               style: TextStyle(
                 fontSize: 20,
@@ -87,7 +86,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 minimumSize: Size(w, h * 0.07),
                 elevation: 0,
                 primary: Colors.blue[200],
-                shape: StadiumBorder(),
+                shape: const StadiumBorder(),
               ),
             ),
           ],

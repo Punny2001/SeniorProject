@@ -15,7 +15,8 @@ class Questionnaire extends StatefulWidget {
   final String partChoosing;
   final Function sendBodyChoosing;
 
-  Questionnaire({
+  const Questionnaire({
+    Key key,
     this.questions,
     this.answerQuestion,
     this.questionIndex,
@@ -26,7 +27,7 @@ class Questionnaire extends StatefulWidget {
     this.previousPage,
     this.partChoosing,
     this.sendBodyChoosing,
-  });
+  }) : super(key: key);
 
   @override
   State<Questionnaire> createState() => _QuestionnaireState();
@@ -50,7 +51,7 @@ class _QuestionnaireState extends State<Questionnaire> {
       height: h,
       decoration: BoxDecoration(
         color: Colors.green.shade300,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(50),
           topRight: Radius.circular(50),
         ),
@@ -63,7 +64,7 @@ class _QuestionnaireState extends State<Questionnaire> {
     TextEditingController _healthSearch = TextEditingController();
     String _partChoosing;
     switch (type) {
-      case 'physical':
+      case 'Physical':
         void _getPartChoosing(String bodypart) {
           _partChoosing = bodypart;
         }
@@ -91,31 +92,29 @@ class _QuestionnaireState extends State<Questionnaire> {
                       }).toList()
                     ],
                   ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () => widget.previousPage(
-                              widget.bodyChoosing, widget.partChoosing),
-                          icon: Icon(Icons.arrow_back_ios),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: h * 0.02),
-                          child: Text(
-                            '${widget.questionIndex + 1}/${widget.questions.length}',
-                            style: TextStyle(
-                              fontSize: h * 0.03,
-                            ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () => widget.previousPage(
+                            widget.bodyChoosing, widget.partChoosing),
+                        icon: const Icon(Icons.arrow_back_ios),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: h * 0.02),
+                        child: Text(
+                          '${widget.questionIndex + 1}/${widget.questions.length}',
+                          style: TextStyle(
+                            fontSize: h * 0.03,
                           ),
                         ),
-                        IconButton(
-                          onPressed: widget.nextPage,
-                          icon: Icon(Icons.arrow_forward_ios),
-                        ),
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        onPressed: widget.nextPage,
+                        icon: const Icon(Icons.arrow_forward_ios),
+                      ),
+                    ],
                   ),
                 ],
               )
@@ -139,11 +138,9 @@ class _QuestionnaireState extends State<Questionnaire> {
                           // : Text(questions[0].keys.last)
                         ],
                       ),
-                      Container(
-                        child: IconButton(
-                          onPressed: widget.previousPage,
-                          icon: Icon(Icons.arrow_back_ios),
-                        ),
+                      IconButton(
+                        onPressed: widget.previousPage,
+                        icon: const Icon(Icons.arrow_back_ios),
                       ),
                     ],
                   )
@@ -169,34 +166,32 @@ class _QuestionnaireState extends State<Questionnaire> {
                             ),
                           ],
                         ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: widget.previousPage,
-                                icon: Icon(Icons.arrow_back_ios),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  if (widget.partChoosing != null &&
-                                      _partChoosing == null) {
-                                    widget.answerQuestion(widget.partChoosing);
-                                  } else if (_keyForm.currentState.validate()) {
-                                    widget.answerQuestion(_partChoosing);
-                                  }
-                                },
-                                icon: Icon(Icons.arrow_forward_ios),
-                              ),
-                            ],
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              onPressed: widget.previousPage,
+                              icon: const Icon(Icons.arrow_back_ios),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                if (widget.partChoosing != null &&
+                                    _partChoosing == null) {
+                                  widget.answerQuestion(widget.partChoosing);
+                                } else if (_keyForm.currentState.validate()) {
+                                  widget.answerQuestion(_partChoosing);
+                                }
+                              },
+                              icon: const Icon(Icons.arrow_forward_ios),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   );
         break;
-      case 'health':
+      case 'Health':
         String healthChoosing;
         final _keyForm = GlobalKey<FormState>();
         return isQuestionnaire
@@ -222,31 +217,29 @@ class _QuestionnaireState extends State<Questionnaire> {
                         }).toList()
                       ],
                     ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: () =>
-                                widget.previousPage(widget.healthChoosing),
-                            icon: Icon(Icons.arrow_back_ios),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: h * 0.02),
-                            child: Text(
-                              '${widget.questionIndex + 1}/${widget.questions.length}',
-                              style: TextStyle(
-                                fontSize: h * 0.03,
-                              ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: () =>
+                              widget.previousPage(widget.healthChoosing),
+                          icon: const Icon(Icons.arrow_back_ios),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(bottom: h * 0.02),
+                          child: Text(
+                            '${widget.questionIndex + 1}/${widget.questions.length}',
+                            style: TextStyle(
+                              fontSize: h * 0.03,
                             ),
                           ),
-                          IconButton(
-                            onPressed: widget.nextPage,
-                            icon: Icon(Icons.arrow_forward_ios),
-                          ),
-                        ],
-                      ),
+                        ),
+                        IconButton(
+                          onPressed: widget.nextPage,
+                          icon: const Icon(Icons.arrow_forward_ios),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -293,12 +286,12 @@ class _QuestionnaireState extends State<Questionnaire> {
                               filled: true,
                               fillColor: Colors.white,
                               hintText: 'โปรดเลือกปัญหาสุขภาพ',
-                              focusedErrorBorder: OutlineInputBorder(
+                              focusedErrorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              errorBorder: OutlineInputBorder(
+                              errorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
@@ -350,69 +343,80 @@ class _QuestionnaireState extends State<Questionnaire> {
                         ),
                       ],
                     ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            onPressed: widget.previousPage,
-                            icon: Icon(Icons.arrow_back_ios),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              if (widget.healthChoosing != null &&
-                                  healthChoosing == null) {
-                                widget.answerQuestion(widget.healthChoosing);
-                              } else if (_keyForm.currentState.validate()) {
-                                widget.answerQuestion(healthChoosing);
-                              }
-                            },
-                            icon: Icon(Icons.arrow_forward_ios),
-                          ),
-                        ],
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          onPressed: widget.previousPage,
+                          icon: const Icon(Icons.arrow_back_ios),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            if (widget.healthChoosing != null &&
+                                healthChoosing == null) {
+                              widget.answerQuestion(widget.healthChoosing);
+                            } else if (_keyForm.currentState.validate()) {
+                              widget.answerQuestion(healthChoosing);
+                            }
+                          },
+                          icon: const Icon(Icons.arrow_forward_ios),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               );
         break;
-      case 'mental':
-        return isQuestionnaire
-            ? Column(
-                children: [
-                  Question(
-                    widget.questions[widget.questionIndex]['questionText']
-                        as String,
+      case 'Mental':
+        isQuestionnaire = true;
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Column(
+              children: [
+                Question(
+                  widget.questions[widget.questionIndex]['questionText']
+                      as String,
+                ),
+                // ... makes separating list into a value of a list, then take it into child list.
+                ...(widget.questions[widget.questionIndex]['answerText']
+                        as List<Map<String, Object>>)
+                    .map((answer) {
+                  return Answer(() => widget.answerQuestion(answer['score']),
+                      answer['text']);
+                }).toList()
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                widget.questionIndex != 0
+                    ? IconButton(
+                        onPressed: () =>
+                            widget.previousPage(widget.healthChoosing),
+                        icon: const Icon(Icons.arrow_back_ios),
+                      )
+                    : SizedBox(width: w * 0.12),
+                Padding(
+                  padding: EdgeInsets.only(bottom: h * 0.02),
+                  child: Text(
+                    '${widget.questionIndex + 1}/${widget.questions.length}',
+                    style: TextStyle(
+                      fontSize: h * 0.03,
+                    ),
                   ),
-                  // ... makes separating list into a value of a list, then take it into child list.
-
-                  ...(widget.questions[widget.questionIndex]['answerText']
-                          as List<Map<String, Object>>)
-                      .map((answer) {
-                    return Answer(() => widget.answerQuestion(answer['score']),
-                        answer['text']);
-                  }).toList()
-
-                  // : Text(questions[0].keys.last)
-                ],
-              )
-            : Column(
-                children: [
-                  Question(
-                    widget.questions[widget.questionIndex]['questionText']
-                        as String,
-                  ),
-                  // ... makes separating list into a value of a list, then take it into child list.
-                  ...(widget.questions[widget.questionIndex]['answerText']
-                          as List<Map<String, Object>>)
-                      .map((answer) {
-                    return Answer(() => widget.answerQuestion(answer['text']),
-                        answer['text']);
-                  }).toList()
-                  // : Text(questions[0].keys.last)
-                ],
-              );
+                ),
+                IconButton(
+                  onPressed: widget.nextPage,
+                  icon: const Icon(Icons.arrow_forward_ios),
+                ),
+              ],
+            ),
+          ],
+        );
         break;
       default:
     }
@@ -436,21 +440,22 @@ class _QuestionnaireState extends State<Questionnaire> {
                 return null;
               }
             },
-            items: (widget.questions[0]['ร่างกายส่วนหัวถึงลำตัว'] as List<String>)
-                .map(
-                  (body) => DropdownMenuItem(
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text(
-                        body,
+            items:
+                (widget.questions[0]['ร่างกายส่วนหัวถึงลำตัว'] as List<String>)
+                    .map(
+                      (body) => DropdownMenuItem(
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            body,
+                          ),
+                        ),
+                        value: body,
                       ),
-                    ),
-                    value: body,
-                  ),
-                )
-                .toList(),
+                    )
+                    .toList(),
             dropdownMaxHeight: h / 3,
-            dropdownDecoration: BoxDecoration(
+            dropdownDecoration: const BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(25),
               ),
@@ -460,12 +465,12 @@ class _QuestionnaireState extends State<Questionnaire> {
               fillColor: Colors.white,
               filled: true,
               hintText: 'โปรดเลือกร่างกายที่ได้รับบาดเจ็บ',
-              focusedErrorBorder: OutlineInputBorder(
+              focusedErrorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.red,
                 ),
               ),
-              errorBorder: OutlineInputBorder(
+              errorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.red,
                 ),
@@ -532,7 +537,8 @@ class _QuestionnaireState extends State<Questionnaire> {
                 return null;
               }
             },
-            items: (widget.questions[0]['ร่างกายส่วนแขนถึงนิ้วมือ'] as List<String>)
+            items: (widget.questions[0]['ร่างกายส่วนแขนถึงนิ้วมือ']
+                    as List<String>)
                 .map(
                   (body) => DropdownMenuItem(
                     child: FittedBox(
@@ -546,7 +552,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                 )
                 .toList(),
             dropdownMaxHeight: h / 3,
-            dropdownDecoration: BoxDecoration(
+            dropdownDecoration: const BoxDecoration(
               borderRadius: BorderRadius.all(
                 Radius.circular(25),
               ),
@@ -556,12 +562,12 @@ class _QuestionnaireState extends State<Questionnaire> {
               fillColor: Colors.white,
               filled: true,
               hintText: 'โปรดเลือกร่างกายที่ได้รับบาดเจ็บ',
-              focusedErrorBorder: OutlineInputBorder(
+              focusedErrorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.red,
                 ),
               ),
-              errorBorder: OutlineInputBorder(
+              errorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(
                   color: Colors.red,
                 ),
@@ -616,98 +622,97 @@ class _QuestionnaireState extends State<Questionnaire> {
         break;
 
       case 'ร่างกายส่วนสะโพกถึงนิ้วเท้า':
-        return Container(
-          child: DropdownButtonFormField2(
-            isExpanded: true,
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            selectedItemHighlightColor: Colors.grey[300],
-            validator: (value) {
-              if (value == null) {
-                return 'โปรดเลือกร่างกายส่วนสะโพกถึงนิ้วเท้า 1 อย่าง';
-              } else {
-                return null;
-              }
-            },
-            items: (widget.questions[0]['ร่างกายส่วนสะโพกถึงนิ้วเท้า'] as List<String>)
-                .map(
-                  (body) => DropdownMenuItem(
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text(
-                        body,
-                      ),
-                    ),
-                    value: body,
-                  ),
-                )
-                .toList(),
-            dropdownMaxHeight: h / 3,
-            dropdownDecoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(25),
-              ),
-              border: Border(),
-            ),
-            decoration: InputDecoration(
-              fillColor: Colors.white,
-              filled: true,
-              hintText: 'โปรดเลือกร่างกายที่ได้รับบาดเจ็บ',
-              focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.red,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.red,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.blueGrey[100],
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.blueGrey[100],
-                ),
-              ),
-            ),
-            onChanged: (body) {
-              partChoosing = body;
-              getBodyPart(partChoosing);
-            },
-            value: widgetPartChoosing,
-            searchController: _bodyHeadSearch,
-            searchInnerWidget: Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-                bottom: 10,
-                top: 10,
-              ),
-              child: TextFormField(
-                controller: _bodyHeadSearch,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(50),
+        return DropdownButtonFormField2(
+          isExpanded: true,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          selectedItemHighlightColor: Colors.grey[300],
+          validator: (value) {
+            if (value == null) {
+              return 'โปรดเลือกร่างกายส่วนสะโพกถึงนิ้วเท้า 1 อย่าง';
+            } else {
+              return null;
+            }
+          },
+          items: (widget.questions[0]['ร่างกายส่วนสะโพกถึงนิ้วเท้า']
+                  as List<String>)
+              .map(
+                (body) => DropdownMenuItem(
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      body,
                     ),
                   ),
-                  suffixIcon: IconButton(
-                    onPressed: () => _bodyHeadSearch.clear(),
-                    icon: const Icon(Icons.close),
-                  ),
-                  hintText: 'ค้นหา ...',
+                  value: body,
                 ),
-              ),
+              )
+              .toList(),
+          dropdownMaxHeight: h / 3,
+          dropdownDecoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(25),
             ),
-            searchMatchFn: (item, searchValue) {
-              return (item.value.toString().contains(
-                    searchValue,
-                  ));
-            },
+            border: Border(),
           ),
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            filled: true,
+            hintText: 'โปรดเลือกร่างกายที่ได้รับบาดเจ็บ',
+            focusedErrorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.red,
+              ),
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.red,
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.blueGrey[100],
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.blueGrey[100],
+              ),
+            ),
+          ),
+          onChanged: (body) {
+            partChoosing = body;
+            getBodyPart(partChoosing);
+          },
+          value: widgetPartChoosing,
+          searchController: _bodyHeadSearch,
+          searchInnerWidget: Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              bottom: 10,
+              top: 10,
+            ),
+            child: TextFormField(
+              controller: _bodyHeadSearch,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(50),
+                  ),
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () => _bodyHeadSearch.clear(),
+                  icon: const Icon(Icons.close),
+                ),
+                hintText: 'ค้นหา ...',
+              ),
+            ),
+          ),
+          searchMatchFn: (item, searchValue) {
+            return (item.value.toString().contains(
+                  searchValue,
+                ));
+          },
         );
         break;
 
@@ -717,7 +722,7 @@ class _QuestionnaireState extends State<Questionnaire> {
 
   void checkQuestionnaire(String type) {
     switch (type) {
-      case 'physical':
+      case 'Physical':
         if (widget.questions[0]['questionText'] !=
             'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด') {
           isQuestionnaire = true;
@@ -726,10 +731,9 @@ class _QuestionnaireState extends State<Questionnaire> {
         }
         break;
 
-      case 'health':
+      case 'Health':
         if (widget.questions[0]['questionText'] !=
             'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด') {
-          // โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด
           isQuestionnaire = true;
         } else {
           isQuestionnaire = false;

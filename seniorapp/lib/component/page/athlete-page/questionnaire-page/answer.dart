@@ -16,21 +16,21 @@ class _AnswerState extends State<Answer> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.width;
     return Container(
-      padding: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       width: w,
       child: RaisedButton(
         highlightColor: Colors.green[100],
         onPressed: widget.selectHandler,
         padding: EdgeInsets.zero,
         color: Colors.white,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(15),
           ),
         ),
         child: Text(
           widget.answerText,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 16,
             overflow: TextOverflow.clip,

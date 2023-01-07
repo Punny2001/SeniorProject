@@ -1,22 +1,16 @@
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/history-details/health_report_detail.dart';
 import 'package:seniorapp/component/page/athlete-page/history-details/physical_report_detail.dart';
-import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
-import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
-import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class AthleteHistory extends StatefulWidget {
@@ -139,7 +133,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     });
     getPhysicalSize();
     getHealthSize();
-    _timer = Timer(Duration(seconds: 1), () {
+    _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
@@ -191,7 +185,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                 width: w * 0.65,
                 height: h * 0.052,
                 child: ElevatedButton.icon(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.filter_list,
                     color: Colors.black,
                   ),
@@ -199,7 +193,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                     primary: Colors.green.shade300,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(8),
                       ),
                       side: BorderSide(color: Colors.green[800]),
@@ -220,19 +214,19 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                           return StatefulBuilder(builder: (context, setState) {
                             return AlertDialog(
                               title: Container(
-                                child: Text('ตัวกรอง'),
+                                child: const Text('ตัวกรอง'),
                               ),
                               content: Column(
                                 children: [
-                                  Text('จัดเรียงโดย'),
-                                  Padding(
-                                    padding: EdgeInsets.all(5),
+                                  const Text('จัดเรียงโดย'),
+                                  const Padding(
+                                    padding: const EdgeInsets.all(5),
                                   ),
                                   ToggleButtons(
                                     borderRadius: const BorderRadius.all(
                                       Radius.circular(8),
                                     ),
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                     fillColor: Colors.green[300],
@@ -244,7 +238,10 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minHeight: h * 0.05,
                                       minWidth: w * 0.3,
                                     ),
-                                    children: [Text('วันที่'), Text('คะแนน')],
+                                    children: [
+                                      const Text('วันที่'),
+                                      const Text('คะแนน')
+                                    ],
                                     isSelected: _selectedOrder,
                                     onPressed: (int index) {
                                       setState(() {
@@ -258,14 +255,14 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       });
                                     },
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(5),
+                                  const Padding(
+                                    padding: const EdgeInsets.all(5),
                                   ),
                                   ToggleButtons(
                                     borderRadius: const BorderRadius.all(
                                       Radius.circular(8),
                                     ),
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                     fillColor: Colors.green[300],
@@ -278,8 +275,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minWidth: w * 0.3,
                                     ),
                                     children: [
-                                      Text('มาก => น้อย'),
-                                      Text('น้อย => มาก')
+                                      const Text('มาก => น้อย'),
+                                      const Text('น้อย => มาก')
                                     ],
                                     isSelected: _selectedOrderType,
                                     onPressed: (int index) {
@@ -294,18 +291,18 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       });
                                     },
                                   ),
-                                  Padding(
+                                  const Padding(
                                     padding: EdgeInsets.all(10),
                                   ),
-                                  Text('ประเภทของแบบสอบถาม'),
-                                  Padding(
-                                    padding: EdgeInsets.all(5),
+                                  const Text('ประเภทของแบบสอบถาม'),
+                                  const Padding(
+                                    padding: const EdgeInsets.all(5),
                                   ),
                                   ToggleButtons(
                                     borderRadius: const BorderRadius.all(
                                       Radius.circular(8),
                                     ),
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                     fillColor: Colors.green[300],
@@ -318,8 +315,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minWidth: w * 0.3,
                                     ),
                                     children: [
-                                      Text('การบาดเจ็บ'),
-                                      Text('การเจ็บป่วย')
+                                      const Text('การบาดเจ็บ'),
+                                      const Text('การเจ็บป่วย')
                                     ],
                                     isSelected: _selectedQuestionnaire,
                                     onPressed: (int index) {
@@ -331,11 +328,11 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       });
                                     },
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(10),
+                                  const Padding(
+                                    padding: const EdgeInsets.all(10),
                                   ),
-                                  Text('ช่วงคะแนน'),
-                                  Padding(
+                                  const Text('ช่วงคะแนน'),
+                                  const Padding(
                                     padding: EdgeInsets.all(5),
                                   ),
                                   RangeSlider(
@@ -367,9 +364,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                   width: w,
                                   child: RaisedButton(
                                     color: Colors.green[300],
-                                    child: Text(
+                                    child: const Text(
                                       'ใช้งาน',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),
                                     ),
@@ -387,7 +384,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                 ),
               ),
               ToggleButtons(
-                children: [Text('ค่าเริ่มต้น')],
+                children: [const Text('ค่าเริ่มต้น')],
                 isSelected: isDefault,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
@@ -414,7 +411,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                       _selectedOrder = <bool>[true, false];
                       _selectedQuestionnaire = <bool>[true, true];
                       _selectedOrderType = <bool>[true, false];
-                      _currentRangeValues = RangeValues(0, 100);
+                      _currentRangeValues = const RangeValues(0, 100);
                     }
                   });
                 },
@@ -427,7 +424,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
               height: h,
               width: w,
               child: isLoading
-                  ? Center(
+                  ? const Center(
                       child: CupertinoActivityIndicator(),
                     )
                   : healthSize + physicalSize != 0
@@ -493,7 +490,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                             TextSpan(
                                                               text:
                                                                   'ประเภทแบบสอบถาม: ',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -503,7 +501,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                   text: toThaiType(
                                                                       healthData
                                                                           .questionnaireType),
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -515,7 +513,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                             TextSpan(
                                                               text:
                                                                   'ปัญหาสุขภาพ: ',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -528,7 +527,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                         .healthSymptom,
                                                                   ),
                                                                   style:
-                                                                      TextStyle(
+                                                                      const TextStyle(
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .normal,
@@ -541,7 +540,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                             TextSpan(
                                                               text:
                                                                   'วันที่บันทึก: ',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -554,7 +554,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                         .doDate,
                                                                     'Athlete',
                                                                   ),
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -566,7 +566,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                             TextSpan(
                                                               text:
                                                                   'เวลาที่บันทึก: ',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -575,7 +576,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                 TextSpan(
                                                                   text:
                                                                       '${formatTime(healthData.doDate)} น.',
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -605,7 +606,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                 fontSize:
                                                                     h * 0.05),
                                                           ),
-                                                          Text(
+                                                          const Text(
                                                             'คะแนน',
                                                             style: TextStyle(
                                                               fontWeight:
@@ -636,7 +637,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                             TextSpan(
                                                               text:
                                                                   'ประเภทแบบสอบถาม: ',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -646,7 +648,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                   text: toThaiType(
                                                                       physicalData
                                                                           .questionnaireType),
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -658,7 +660,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                             TextSpan(
                                                               text:
                                                                   'ส่วนที่บาดเจ็บ: ',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -668,7 +671,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                   text: toThaiNoneInfo(
                                                                       physicalData
                                                                           .bodyPart),
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -680,7 +683,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                             TextSpan(
                                                               text:
                                                                   'วันที่บันทึก: ',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -693,7 +697,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                         .doDate,
                                                                     'Athlete',
                                                                   ),
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -705,7 +709,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                             TextSpan(
                                                               text:
                                                                   'เวลาที่บัทึก: ',
-                                                              style: TextStyle(
+                                                              style:
+                                                                  const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
@@ -714,7 +719,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                 TextSpan(
                                                                   text:
                                                                       '${formatTime(physicalData.doDate)} น.',
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal),
@@ -744,7 +749,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                                 fontSize:
                                                                     h * 0.05),
                                                           ),
-                                                          Text('คะแนน'),
+                                                          const Text('คะแนน'),
                                                         ],
                                                       ),
                                                     )
@@ -805,15 +810,15 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                   },
                                 );
                               } else {
-                                return Center(
-                                  child: CircularProgressIndicator(),
+                                return const Center(
+                                  child: const CircularProgressIndicator(),
                                 );
                               }
                             },
                           ),
                         )
-                      : Center(
-                          child: Text(
+                      : const Center(
+                          child: const Text(
                             'ไม่มีบันทึกที่คุณสร้างไว้',
                             textAlign: TextAlign.center,
                             style: TextStyle(

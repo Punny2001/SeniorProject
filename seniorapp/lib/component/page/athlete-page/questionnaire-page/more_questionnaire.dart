@@ -35,9 +35,9 @@ class MoreQuestionnaire extends StatelessWidget {
   }
 
   String checkType() {
-    if (questionnaireType == 'health') {
+    if (questionnaireType == 'Health') {
       return 'คุณมีปัญหาการบาดเจ็บ การเจ็บป่วย หรือปัญหาสุขภาพอื่นๆอีกหรือไม่';
-    } else if (questionnaireType == 'physical') {
+    } else if (questionnaireType == 'Physical') {
       return 'คุณมีปัญหาการบาดเจ็บตามส่วนต่างๆของร่างกายอื่นๆอีกหรือไม่';
     }
   }

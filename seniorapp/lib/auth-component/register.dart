@@ -12,9 +12,10 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:seniorapp/decoration/authentication/textfield_login.dart';
 import 'package:seniorapp/decoration/padding.dart';
-import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class Register extends StatefulWidget {
+  const Register({Key key}) : super(key: key);
+
   @override
   State<Register> createState() => _RegisterState();
 }
@@ -58,7 +59,7 @@ class _RegisterState extends State<Register> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Ink(
-              decoration: ShapeDecoration(
+              decoration: const ShapeDecoration(
                 shape: CircleBorder(),
                 color: Color.fromARGB(255, 113, 157, 242),
               ),
@@ -69,7 +70,7 @@ class _RegisterState extends State<Register> {
                   });
                 },
                 alignment: Alignment.centerRight,
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                 ),
               ),
@@ -78,7 +79,7 @@ class _RegisterState extends State<Register> {
           ],
         ),
       ),
-      backgroundColor: Color.fromARGB(255, 113, 157, 242),
+      backgroundColor: const Color.fromARGB(255, 113, 157, 242),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Stack(
@@ -147,22 +148,22 @@ class _RegisterState extends State<Register> {
                             controller: _passwordController,
                             obscureText: _passwordhide,
                             decoration: InputDecoration(
-                              focusedErrorBorder: OutlineInputBorder(
+                              focusedErrorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              errorBorder: OutlineInputBorder(
+                              errorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              enabledBorder: OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0xFFCFD8DC),
                                 ),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0xFFCFD8DC),
                                 ),
@@ -223,22 +224,22 @@ class _RegisterState extends State<Register> {
                             controller: _confirmPasswordController,
                             obscureText: _confirmPasswordhide,
                             decoration: InputDecoration(
-                              focusedErrorBorder: OutlineInputBorder(
+                              focusedErrorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              errorBorder: OutlineInputBorder(
+                              errorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              enabledBorder: OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0xFFCFD8DC),
                                 ),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color(0xFFCFD8DC),
                                 ),
@@ -367,7 +368,7 @@ class _RegisterState extends State<Register> {
                             firstDate: DateTime(1900),
                             lastDate: DateTime.now(),
                             decoration: InputDecoration(
-                              suffixIcon: Icon(
+                              suffixIcon: const Icon(
                                 Icons.calendar_month,
                                 color: Colors.black,
                               ),
@@ -377,22 +378,22 @@ class _RegisterState extends State<Register> {
                                   'register_page.birthdate_description'.tr(),
                               hintStyle:
                                   const TextStyle(fontFamily: 'OpenSans'),
-                              focusedErrorBorder: OutlineInputBorder(
+                              focusedErrorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              errorBorder: OutlineInputBorder(
+                              errorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              enabledBorder: OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color.fromRGBO(217, 217, 217, 100),
                                 ),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Color.fromRGBO(217, 217, 217, 100),
                                 ),
@@ -555,19 +556,21 @@ class _RegisterState extends State<Register> {
                                 DropdownButtonFormField2<String>(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
-                                  icon: Icon(Icons.arrow_drop_down_circle),
+                                  icon:
+                                      const Icon(Icons.arrow_drop_down_circle),
                                   decoration: InputDecoration(
                                     fillColor: Colors.blueGrey[50],
                                     filled: true,
                                     hintText: 'Select type of sport',
                                     hintStyle:
                                         const TextStyle(fontFamily: 'OpenSans'),
-                                    focusedErrorBorder: OutlineInputBorder(
+                                    focusedErrorBorder:
+                                        const OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Colors.red,
                                       ),
                                     ),
-                                    errorBorder: OutlineInputBorder(
+                                    errorBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Colors.red,
                                       ),
@@ -678,19 +681,21 @@ class _RegisterState extends State<Register> {
                                 DropdownButtonFormField2<String>(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
-                                  icon: Icon(Icons.arrow_drop_down_circle),
+                                  icon:
+                                      const Icon(Icons.arrow_drop_down_circle),
                                   decoration: InputDecoration(
                                     fillColor: Colors.blueGrey[50],
                                     filled: true,
                                     hintText: 'Select type of staff',
                                     hintStyle:
                                         const TextStyle(fontFamily: 'OpenSans'),
-                                    focusedErrorBorder: OutlineInputBorder(
+                                    focusedErrorBorder:
+                                        const OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Colors.red,
                                       ),
                                     ),
-                                    errorBorder: OutlineInputBorder(
+                                    errorBorder: const OutlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Colors.red,
                                       ),
@@ -748,7 +753,7 @@ class _RegisterState extends State<Register> {
                                 minimumSize: Size(w, h * 0.07),
                                 elevation: 0,
                                 primary: Colors.white70,
-                                shape: StadiumBorder()),
+                                shape: const StadiumBorder()),
                           ),
                         ],
                       ),

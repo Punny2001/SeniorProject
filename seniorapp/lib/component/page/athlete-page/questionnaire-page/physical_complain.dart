@@ -355,51 +355,50 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         ),
       ),
       body: Container(
-          padding: (isResult == true && _questionIndex == _questions.length)
-              ? EdgeInsets.only(top: h * 0.3)
-              : EdgeInsets.only(top: h / 3),
-          child: hasQuestion
-              ? _bodyPartRound < 2
-                  ? _questionnaireDisplay(_bodyPartRound)
-                  : _questionIndex < _questions.length
-                      ? Questionnaire(
-                          answerQuestion: _answerQuestion,
-                          questionIndex: _questionIndex,
-                          questions: _questions,
-                          questionType: 'physical',
-                          nextPage: _nextQuestion,
-                          previousPage: _previousQuestion,
-                          partChoosing: insertedBody,
-                          bodyChoosing: _bodyChoosing,
-                        )
-                      : isResult
-                          ? Result(
-                              resultScore: _findTotalScore(),
-                              resetHandler: _resetQuestionnaire,
-                              insertHandler: savePhysicalResult,
-                              questionType: 'physical',
-                              bodyPart: _bodyChoosing,
-                              previousPage: _previousFromResult,
-                            )
-                          : MoreQuestionnaire(
-                              _resetQuestionnaire,
-                              'physical',
-                            )
-              : hasProblem
-                  ? CheckingQuestionnaire(
-                      'physical',
-                      _checkingQuestion,
-                      _hasProblem,
-                    )
-                  : Result(
-                      resultScore: 0,
-                      resetHandler: _resetQuestionnaire,
-                      insertHandler: savePhysicalResult,
-                      questionType: 'physical',
-                      previousPage: _previousProblem,
-                    )),
-
-      // : Result(_totalScore, _resetQuiz, savePhysicalResult)),
+        padding: (isResult == true && _questionIndex == _questions.length)
+            ? EdgeInsets.only(top: h * 0.3)
+            : EdgeInsets.only(top: h / 3),
+        child: hasQuestion
+            ? _bodyPartRound < 2
+                ? _questionnaireDisplay(_bodyPartRound)
+                : _questionIndex < _questions.length
+                    ? Questionnaire(
+                        answerQuestion: _answerQuestion,
+                        questionIndex: _questionIndex,
+                        questions: _questions,
+                        questionType: 'Physical',
+                        nextPage: _nextQuestion,
+                        previousPage: _previousQuestion,
+                        partChoosing: insertedBody,
+                        bodyChoosing: _bodyChoosing,
+                      )
+                    : isResult
+                        ? Result(
+                            resultScore: _findTotalScore(),
+                            resetHandler: _resetQuestionnaire,
+                            insertHandler: savePhysicalResult,
+                            questionType: 'Physical',
+                            bodyPart: _bodyChoosing,
+                            previousPage: _previousFromResult,
+                          )
+                        : MoreQuestionnaire(
+                            _resetQuestionnaire,
+                            'Physical',
+                          )
+            : hasProblem
+                ? CheckingQuestionnaire(
+                    'Physical',
+                    _checkingQuestion,
+                    _hasProblem,
+                  )
+                : Result(
+                    resultScore: 0,
+                    resetHandler: _resetQuestionnaire,
+                    insertHandler: savePhysicalResult,
+                    questionType: 'Physical',
+                    previousPage: _previousProblem,
+                  ),
+      ),
     );
   }
 
@@ -509,7 +508,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
             questions: body_part,
             answerQuestion: _answerBodyPart,
             questionIndex: _bodyPartRound,
-            questionType: 'physical',
+            questionType: 'Physical',
             bodyChoosing: _bodyChoosing,
             previousPage: _previousBodyPart,
           );
@@ -521,7 +520,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
             questions: body_injured,
             answerQuestion: _answerBodyPart,
             questionIndex: _bodyPartRound,
-            questionType: 'physical',
+            questionType: 'Physical',
             bodyChoosing: _bodyChoosing,
             previousPage: _previousBodyPart,
             partChoosing: _partChoosing,

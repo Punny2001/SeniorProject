@@ -80,6 +80,7 @@ class _InjuryReportState extends State<InjuryReport> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.docID);
     if (widget.physicalResultData != null) {
       _athleteNo.text = widget.physicalResultData.athleteNo;
       _selectedSport = widget.athlete.sportType;
@@ -102,11 +103,11 @@ class _InjuryReportState extends State<InjuryReport> {
             Container(
               child: Ink(
                 decoration: ShapeDecoration(
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   color: Colors.blue.shade200,
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
+                  icon: const Icon(Icons.arrow_back_ios),
                   alignment: Alignment.centerRight,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
@@ -116,7 +117,7 @@ class _InjuryReportState extends State<InjuryReport> {
         ),
       ),
       body: isLoading == true
-          ? Center(
+          ? const Center(
               child: CupertinoActivityIndicator(),
             )
           : Container(
@@ -925,7 +926,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       const Padding(
                         padding: EdgeInsets.all(10),
                       ),
-                      Text(
+                      const Text(
                         'Advice Message',
                         style: TextStyle(
                           fontSize: 18,
@@ -950,21 +951,19 @@ class _InjuryReportState extends State<InjuryReport> {
       bottomNavigationBar: Container(
         padding:
             EdgeInsets.only(left: w * 0.2, right: w * 0.2, bottom: h * 0.03),
-        child: Container(
+        child: SizedBox(
           width: w,
           height: h * 0.06,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 elevation: 0,
-                shape: StadiumBorder(),
+                shape: const StadiumBorder(),
                 primary: Colors.blue.shade200),
             onPressed: () {
-              setState(() {
-                if (widget.docID != null) {
-                  updateData(widget.docID);
-                }
-                saveInjuryReport();
-              });
+              if (widget.docID != null) {
+                updateData(widget.docID);
+              }
+              saveInjuryReport();
             },
             child: const Text(
               'Save',

@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:seniorapp/auth-component/register.dart';
 import 'package:seniorapp/decoration/authentication/textfield_login.dart';
 import 'package:seniorapp/decoration/authentication/page_title_bar.dart';
-import 'package:seniorapp/component/language.dart';
 
 class Login extends StatefulWidget {
+  const Login({Key key}) : super(key: key);
+
   @override
   State<Login> createState() => _LoginState();
 }
@@ -91,22 +91,22 @@ class _LoginState extends State<Login> {
                               controller: _passwordController,
                               obscureText: _passwordhide,
                               decoration: InputDecoration(
-                                focusedErrorBorder: OutlineInputBorder(
+                                focusedErrorBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.red,
                                   ),
                                 ),
-                                errorBorder: OutlineInputBorder(
+                                errorBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Colors.red,
                                   ),
                                 ),
-                                enabledBorder: OutlineInputBorder(
+                                enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0xFFCFD8DC),
                                   ),
                                 ),
-                                focusedBorder: OutlineInputBorder(
+                                focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                     color: Color(0xFFCFD8DC),
                                   ),
@@ -139,7 +139,7 @@ class _LoginState extends State<Login> {
                               alignment: const Alignment(1.05, 0.2),
                               child: TextButton(
                                   style: TextButton.styleFrom(
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                       color: Color.fromARGB(255, 113, 157, 242),
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -162,8 +162,9 @@ class _LoginState extends State<Login> {
                               style: ElevatedButton.styleFrom(
                                   minimumSize: Size(w, h * 0.07),
                                   elevation: 0,
-                                  primary: Color.fromARGB(255, 113, 157, 242),
-                                  shape: StadiumBorder()),
+                                  primary:
+                                      const Color.fromARGB(255, 113, 157, 242),
+                                  shape: const StadiumBorder()),
                             ),
                           ],
                         ),

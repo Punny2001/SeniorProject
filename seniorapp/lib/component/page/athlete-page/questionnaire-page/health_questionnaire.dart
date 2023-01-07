@@ -122,7 +122,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       {
         'questionNo': 'Q1',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${_healthChoosing}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
+            'ใน 7 วันที่ผ่านมา อาการ$_healthChoosingของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
         'answerText': [
           {
             'text':
@@ -149,7 +149,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       {
         'questionNo': 'Q2',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${_healthChoosing}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ$_healthChoosingของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันเลย', 'score': 0},
           {'text': 'การฝึกซ้อมหรือแข่งขันลดลงเล็กน้อย', 'score': 6},
@@ -161,7 +161,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       {
         'questionNo': 'Q3',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${_healthChoosing}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ$_healthChoosingของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อความสามารถในการเล่นกีฬาเลย', 'score': 0},
           {'text': 'ความสามารถในการเล่นกีฬาลดลงเล็กน้อย', 'score': 6},
@@ -173,7 +173,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       {
         'questionNo': 'Q4',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${_healthChoosing}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
+            'ใน 7 วันที่ผ่านมา อาการ$_healthChoosingของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
         'answerText': [
           {'text': 'ไม่เจ็บเลย', 'score': 0},
           {'text': 'เจ็บเล็กน้อย', 'score': 6},
@@ -248,65 +248,62 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(),
-                  color: Colors.green.shade300,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.home),
-                  alignment: Alignment.center,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('ยกเลิกการบันทึกข้อมูล'),
-                            content: Container(
-                              height: h * 0.2,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                      'คุณแน่ใจจะยกเลิกการบันทึกข้อมูลใช่หรือไม่?'),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      ElevatedButton.icon(
-                                        onPressed: () {
-                                          Navigator.popUntil(
-                                              context,
-                                              ModalRoute.withName(
-                                                  '/athletePageChoosing'));
-                                        },
-                                        icon: Icon(Icons.check_rounded),
-                                        label: Text('ตกลง'),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.green[900],
-                                        ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: const CircleBorder(),
+                color: Colors.green.shade300,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.home),
+                alignment: Alignment.center,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('ยกเลิกการบันทึกข้อมูล'),
+                          content: SizedBox(
+                            height: h * 0.2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                    'คุณแน่ใจจะยกเลิกการบันทึกข้อมูลใช่หรือไม่?'),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        Navigator.popUntil(
+                                            context,
+                                            ModalRoute.withName(
+                                                '/athletePageChoosing'));
+                                      },
+                                      icon: const Icon(Icons.check_rounded),
+                                      label: const Text('ตกลง'),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.green[900],
                                       ),
-                                      ElevatedButton.icon(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        icon: Icon(Icons.close_rounded),
-                                        label: Text('ปฏิเสธ'),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.red[900],
-                                        ),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon: const Icon(Icons.close_rounded),
+                                      label: const Text('ปฏิเสธ'),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.red[900],
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          );
-                        });
-                  },
-                ),
+                          ),
+                        );
+                      });
+                },
               ),
             ),
           ],
@@ -329,7 +326,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                         healthChoosing: _healthChoosing,
                         questionIndex: _questionIndex,
                         questions: _questions,
-                        questionType: 'health',
+                        questionType: 'Health',
                         nextPage: _nextQuestion,
                         previousPage: _previousQuestion,
                       )
@@ -338,24 +335,24 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                             resultScore: _findTotalScore(),
                             resetHandler: _resetQuestionnaire,
                             insertHandler: saveHealthResult,
-                            questionType: 'health',
+                            questionType: 'Health',
                             healthPart: _healthChoosing,
                             previousPage: _previousFromResult,
                           )
                         : MoreQuestionnaire(
                             _resetQuestionnaire,
-                            'health',
+                            'Health',
                           )
                 : Questionnaire(
                     questions: health_symp,
                     answerQuestion: _answerHealthPart,
-                    questionType: 'health',
+                    questionType: 'Health',
                     healthChoosing: _healthChoosing,
                     previousPage: _previousCheckingQuestion,
                   )
             : hasProblem
                 ? CheckingQuestionnaire(
-                    'health',
+                    'Health',
                     _checkingQuestion,
                     _hasProblem,
                   )
@@ -363,7 +360,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                     resultScore: 0,
                     resetHandler: _resetQuestionnaire,
                     insertHandler: saveHealthResult,
-                    questionType: 'health',
+                    questionType: 'Health',
                     previousPage: _previousProblem,
                   ),
       ),
@@ -437,8 +434,8 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
             return AlertDialog(
               title: const Text('รายงานผลเสร็จสิ้น'),
               content: hasProblem == true
-                  ? Text('บันทึกข้อมูลอาการ${_healthChoosing}เรียบร้อย')
-                  : Text('บันทึกข้อมูลอาการเรียบร้อย'),
+                  ? Text('บันทึกข้อมูลอาการ$_healthChoosingเรียบร้อย')
+                  : const Text('บันทึกข้อมูลอาการเรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {

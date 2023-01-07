@@ -18,7 +18,9 @@ class IllnessReport extends StatefulWidget {
   final String docID;
   final Athlete athlete;
 
-  IllnessReport(this.healthResultData, this.docID, this.athlete);
+  const IllnessReport(this.healthResultData, this.docID, this.athlete,
+      {Key key})
+      : super(key: key);
 
   @override
   _IllnessReportState createState() => _IllnessReportState();
@@ -63,6 +65,7 @@ class _IllnessReportState extends State<IllnessReport> {
     if (widget.healthResultData != null) {
       _athleteNo.text = widget.healthResultData.athleteNo;
       _selectedSport = widget.athlete.sportType;
+
       _occuredDate = widget.healthResultData.doDate;
     }
     final w = MediaQuery.of(context).size.width;
@@ -82,11 +85,11 @@ class _IllnessReportState extends State<IllnessReport> {
             Container(
               child: Ink(
                 decoration: ShapeDecoration(
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   color: Colors.blue.shade200,
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
+                  icon: const Icon(Icons.arrow_back_ios),
                   alignment: Alignment.centerRight,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
@@ -543,9 +546,9 @@ class _IllnessReportState extends State<IllnessReport> {
                             Card(
                               elevation: 0,
                               color: Colors.green.shade100,
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
+                                  const Radius.circular(30),
                                 ),
                               ),
                               child: Container(
@@ -731,7 +734,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 const Padding(
                   padding: EdgeInsets.all(20),
                 ),
-                Text(
+                const Text(
                   'Advice Message',
                   style: TextStyle(
                     fontSize: 18,
@@ -755,22 +758,20 @@ class _IllnessReportState extends State<IllnessReport> {
       bottomNavigationBar: Container(
         padding:
             EdgeInsets.only(left: w * 0.2, right: w * 0.2, bottom: h * 0.03),
-        child: Container(
+        child: SizedBox(
           width: w,
           height: h * 0.06,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 elevation: 0,
-                shape: StadiumBorder(),
+                shape: const StadiumBorder(),
                 primary: Colors.blue.shade200),
             onPressed: () {
-              setState(() {
-                if (widget.docID != null) {
-                  updateData(widget.docID);
-                }
-                saveMessage();
-                saveIllnessReport();
-              });
+              if (widget.docID != null) {
+                updateData(widget.docID);
+              }
+              saveMessage();
+              saveIllnessReport();
             },
             child: const Text(
               'Save',

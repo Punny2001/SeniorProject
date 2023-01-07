@@ -32,11 +32,13 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     });
   }
 
+  @override
   void initState() {
     super.initState();
     setState(() {});
   }
 
+  @override
   void dispose() {
     super.dispose();
   }
@@ -57,7 +59,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
           children: [
             Ink(
               decoration: ShapeDecoration(
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 color: Colors.green.shade300,
               ),
               child: IconButton(
@@ -66,7 +68,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
                     Navigator.of(context).pushNamed('/athleteProfile');
                   });
                 },
-                icon: Icon(Icons.menu),
+                icon: const Icon(Icons.menu),
               ),
             ),
           ],
@@ -75,57 +77,54 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
       body: Container(
         child: _athletePageList.elementAt(_selected_idx),
       ),
-      bottomNavigationBar: Container(
-        // padding: EdgeInsets.only(top: h * 0.01),
-        child: ClipRRect(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-          child: BottomNavigationBar(
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            unselectedItemColor: Colors.black,
-            backgroundColor: Colors.green[300],
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'หน้าหลัก',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search_off),
-                activeIcon: Icon(Icons.search),
-                label: 'ค้นหา',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.history_toggle_off),
-                activeIcon: Icon(Icons.history),
-                label: 'ประวัติ',
-              ),
-              BottomNavigationBarItem(
-                icon: Badge(
-                  position: BadgePosition.topEnd(),
-                  badgeContent: Text(
-                    '$notificationCount',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  elevation: 0,
-                  showBadge: notificationCount > 0 ? true : false,
-                  child: Icon(
-                    Icons.notifications_none,
-                  ),
+      bottomNavigationBar: ClipRRect(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+        child: BottomNavigationBar(
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          unselectedItemColor: Colors.black,
+          backgroundColor: Colors.green[300],
+          items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: 'หน้าหลัก',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.search_off),
+              activeIcon: Icon(Icons.search),
+              label: 'ค้นหา',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.history_toggle_off),
+              activeIcon: Icon(Icons.history),
+              label: 'ประวัติ',
+            ),
+            BottomNavigationBarItem(
+              icon: Badge(
+                position: BadgePosition.topEnd(),
+                badgeContent: Text(
+                  '$notificationCount',
+                  style: const TextStyle(color: Colors.white),
                 ),
-                activeIcon: Icon(Icons.notifications),
-                label: 'การแจ้งเตือน',
-              )
-            ],
-            currentIndex: _selected_idx,
-            onTap: _onPageTap,
-            selectedItemColor: Colors.black,
-            showUnselectedLabels: false,
-          ),
+                elevation: 0,
+                showBadge: notificationCount > 0 ? true : false,
+                child: const Icon(
+                  Icons.notifications_none,
+                ),
+              ),
+              activeIcon: const Icon(Icons.notifications),
+              label: 'การแจ้งเตือน',
+            )
+          ],
+          currentIndex: _selected_idx,
+          onTap: _onPageTap,
+          selectedItemColor: Colors.black,
+          showUnselectedLabels: false,
         ),
       ),
     );
