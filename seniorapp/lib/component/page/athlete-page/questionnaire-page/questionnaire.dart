@@ -1,4 +1,5 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './question.dart';
 import './answer.dart';
@@ -35,6 +36,7 @@ class Questionnaire extends StatefulWidget {
 
 class _QuestionnaireState extends State<Questionnaire> {
   bool isQuestionnaire = false;
+  double _currentSliderValue = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -381,25 +383,41 @@ class _QuestionnaireState extends State<Questionnaire> {
                       as String,
                 ),
                 // ... makes separating list into a value of a list, then take it into child list.
-                ...(widget.questions[widget.questionIndex]['answerText']
-                        as List<Map<String, Object>>)
-                    .map((answer) {
-                  return Answer(() => widget.answerQuestion(answer['score']),
-                      answer['text']);
-                }).toList()
+                if (widget.questions.length == 4)
+                  ...(widget.questions[widget.questionIndex]['answerText']
+                          as List<Map<String, Object>>)
+                      .map((answer) {
+                    return Answer(() => widget.answerQuestion(answer['score']),
+                        answer['text']);
+                  }).toList()
+                else
+                  Column(
+                    children: [
+                      Text(_currentSliderValue.floor().toString()),
+                      CupertinoSlider(
+                          value: _currentSliderValue,
+                          min: 0,
+                          max: 10,
+                          divisions: 10,
+                          onChanged: (value) {
+                            setState(() {
+                              _currentSliderValue = value;
+                            });
+                          })
+                    ],
+                  ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                widget.questionIndex != 0
-                    ? IconButton(
-                        onPressed: () =>
-                            widget.previousPage(widget.healthChoosing),
+                widget.questionIndex == 0 && widget.questions.length == 4
+                    ? SizedBox(width: w * 0.12)
+                    : IconButton(
+                        onPressed: () => widget.previousPage,
                         icon: const Icon(Icons.arrow_back_ios),
-                      )
-                    : SizedBox(width: w * 0.12),
+                      ),
                 Padding(
                   padding: EdgeInsets.only(bottom: h * 0.02),
                   child: Text(

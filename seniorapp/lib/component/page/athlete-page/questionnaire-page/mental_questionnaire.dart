@@ -22,7 +22,9 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
   var _questionIndexPart2 = 0;
   var _questionIndexPart3 = 0;
   int totalScore;
-  Map<String, int> answer_list = {"Q1": 0};
+  Map<String, int> answer_list_part1 = {"Q1": 0};
+  Map<String, int> answer_list_part2 = {'Q1': 0};
+  Map<String, int> answer_list_part3 = {'Q1': 0};
   String uid = FirebaseAuth.instance.currentUser.uid;
   Athlete athData;
   bool isResult = false;
@@ -189,15 +191,15 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
 
     int _findTotalScore() {
       int _totalScore = 0;
-      answer_list.forEach((key, value) {
+      answer_list_part1.forEach((key, value) {
         _totalScore += value;
       });
       totalScore = _totalScore;
       return _totalScore;
     }
 
-    void _answerQuestion(int score) {
-      answer_list["Q${_questionIndexPart1 + 1}"] = score;
+    void _answerQuestionPart1(int score) {
+      answer_list_part1["Q${_questionIndexPart1 + 1}"] = score;
       setState(() {
         _questionIndexPart1 += 1;
       });
@@ -207,20 +209,62 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
       }
     }
 
-    void _previousQuestion(String health) {
+    void _answerQuestionPart2(int score) {
+      answer_list_part2["Q${_questionIndexPart2 + 1}"] = score;
+      setState(() {
+        _questionIndexPart2 += 1;
+      });
+      print('Index: $_questionIndexPart2');
+      if (_questionIndexPart2 < _questionsPart2.length) {
+        print('We have more question');
+      }
+    }
+
+    void _answerQuestionPart3(int score) {
+      answer_list_part3["Q${_questionIndexPart3 + 1}"] = score;
+      setState(() {
+        _questionIndexPart3 += 1;
+      });
+      print('Index: $_questionIndexPart3');
+      if (_questionIndexPart3 < _questionsPart3.length) {
+        print('We have more question');
+      }
+    }
+
+    void _nextQuestionPart1() {
+      setState(() {
+        _questionIndexPart1++;
+      });
+    }
+
+    void _previousQuestionPart1(String health) {
       setState(() {
         _questionIndexPart1--;
       });
     }
 
-    void _nextQuestion() {
-      setState(() {
-        if (_questionIndexPart1 == _questionsPart1.length) {
-          isResult = true;
-        } else if (_questionIndexPart1 >= 0) {
-          _questionIndexPart1++;
-        }
-      });
+    void _previousQuestionPart2(String health) {
+      if (_questionIndexPart2 == 0) {
+        setState(() {
+          _questionIndexPart1--;
+        });
+      } else {
+        setState(() {
+          _questionIndexPart2--;
+        });
+      }
+    }
+
+    void _previousQuestionPart3(String health) {
+      if (_questionIndexPart3 == 0) {
+        setState(() {
+          _questionIndexPart2--;
+        });
+      } else {
+        setState(() {
+          _questionIndexPart3--;
+        });
+      }
     }
 
     void _previousFromResult() {
@@ -317,30 +361,28 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
                   ),
         child: _questionIndexPart1 < _questionsPart1.length
             ? Questionnaire(
-                answerQuestion: _answerQuestion,
+                answerQuestion: _answerQuestionPart1,
                 questionIndex: _questionIndexPart1,
                 questions: _questionsPart1,
                 questionType: 'Mental',
-                nextPage: _nextQuestion,
-                previousPage: _previousQuestion,
+                nextPage: _nextQuestionPart1,
+                previousPage: _previousQuestionPart1,
               )
             : _questionIndexPart2 < _questionsPart2.length
                 ? Questionnaire(
-                    answerQuestion: _answerQuestion,
+                    answerQuestion: _answerQuestionPart2,
                     questionIndex: _questionIndexPart2,
                     questions: _questionsPart2,
                     questionType: 'Mental',
-                    nextPage: _nextQuestion,
-                    previousPage: _previousQuestion,
+                    previousPage: _previousQuestionPart2,
                   )
                 : _questionIndexPart3 < _questionsPart3.length
                     ? Questionnaire(
-                        answerQuestion: _answerQuestion,
+                        answerQuestion: _answerQuestionPart3,
                         questionIndex: _questionIndexPart3,
                         questions: _questionsPart3,
                         questionType: 'Mental',
-                        nextPage: _nextQuestion,
-                        previousPage: _previousQuestion,
+                        previousPage: _previousQuestionPart3,
                       )
                     : Result(
                         resultScore: _findTotalScore(),
@@ -388,7 +430,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
       doDate: DateTime.now(),
       questionnaireType: 'Mental',
       totalPoint: totalScore,
-      answerList: answer_list,
+      answerList: answer_list_part1,
       caseReceived: false,
       caseFinished: false,
     );
