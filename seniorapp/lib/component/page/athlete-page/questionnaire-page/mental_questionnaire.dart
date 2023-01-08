@@ -8,6 +8,8 @@ import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'questionnaire.dart';
 
 class MentalQuestionnaire extends StatefulWidget {
+  const MentalQuestionnaire({Key key}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _MentalQuestionnaire();
@@ -16,58 +18,22 @@ class MentalQuestionnaire extends StatefulWidget {
 
 class _MentalQuestionnaire extends State<MentalQuestionnaire> {
   GlobalKey updateState = GlobalKey();
-  var _questionIndex = 0;
+  var _questionIndexPart1 = 0;
+  var _questionIndexPart2 = 0;
+  var _questionIndexPart3 = 0;
   int totalScore;
   Map<String, int> answer_list = {"Q1": 0};
   String uid = FirebaseAuth.instance.currentUser.uid;
   Athlete athData;
-
-  bool isResult = true;
-  String _healthChoosing;
-  bool answer_health = false;
-  bool hasQuestion = false;
-  bool hasProblem = true;
+  bool isResult = false;
 
   int questionSize;
 
   void _resetQuestionnaire() {
     setState(() {
-      hasQuestion = true;
-      answer_health = false;
-      _questionIndex = 0;
-      isResult = true;
-      hasProblem = true;
-    });
-  }
-
-  void _answerMentalPart(String health) {
-    setState(() {
-      _healthChoosing = health;
-      answer_health = true;
-    });
-  }
-
-  void _checkingQuestion() {
-    setState(() {
-      hasQuestion = true;
-    });
-  }
-
-  void _previousCheckingQuestion() {
-    setState(() {
-      hasQuestion = false;
-    });
-  }
-
-  void _hasProblem() {
-    setState(() {
-      hasProblem = false;
-    });
-  }
-
-  void _previousProblem() {
-    setState(() {
-      hasProblem = true;
+      _questionIndexPart1 = 0;
+      _questionIndexPart2 = 0;
+      _questionIndexPart3 = 0;
     });
   }
 
@@ -89,9 +55,9 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
         'questionText': 'นอนไม่หลับหลังจากเข้านอนไปแล้วนานกว่า 30 นาที',
         'answerText': [
           {'text': 'ไม่เคยมีอาการ', 'score': 0},
-          {'text': 'น้อยกว่า 1 ครั้ง/สัปดาห์ ', 'score': 8},
-          {'text': 'มีปัญหา 1-2 ครั้ง/สัปดาห์ ', 'score': 17},
-          {'text': 'มีปัญหามากกว่า 3 ครั้ง/สัปดาห์หรือมากกว่า', 'score': 25}
+          {'text': 'น้อยกว่า 1 ครั้ง/สัปดาห์ ', 'score': 1},
+          {'text': 'มีปัญหา 1-2 ครั้ง/สัปดาห์ ', 'score': 2},
+          {'text': 'มีปัญหามากกว่า 3 ครั้ง/สัปดาห์หรือมากกว่า', 'score': 3}
         ]
       },
       {
@@ -99,9 +65,9 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
         'questionText': 'ตื่นกลางดึกหรือตื่นช้ากว่าปกติ',
         'answerText': [
           {'text': 'ไม่เคยมีอาการ', 'score': 0},
-          {'text': 'น้อยกว่า 1 ครั้ง/สัปดาห์ ', 'score': 8},
-          {'text': 'มีปัญหา 1-2 ครั้ง/สัปดาห์ ', 'score': 17},
-          {'text': 'มีปัญหามากกว่า 3 ครั้ง/สัปดาห์หรือมากกว่า', 'score': 25}
+          {'text': 'น้อยกว่า 1 ครั้ง/สัปดาห์ ', 'score': 1},
+          {'text': 'มีปัญหา 1-2 ครั้ง/สัปดาห์ ', 'score': 2},
+          {'text': 'มีปัญหามากกว่า 3 ครั้ง/สัปดาห์หรือมากกว่า', 'score': 3}
         ]
       },
       {
@@ -109,9 +75,9 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
         'questionText': 'ท่านใช้ยานอนหลับบ่อยครั้งเพียงใด',
         'answerText': [
           {'text': 'ไม่เคยมีอาการ', 'score': 0},
-          {'text': 'น้อยกว่า 1 ครั้ง/สัปดาห์ ', 'score': 8},
-          {'text': 'มีปัญหา 1-2 ครั้ง/สัปดาห์ ', 'score': 17},
-          {'text': 'มีปัญหามากกว่า 3 ครั้ง/สัปดาห์หรือมากกว่า', 'score': 25}
+          {'text': 'น้อยกว่า 1 ครั้ง/สัปดาห์ ', 'score': 1},
+          {'text': 'มีปัญหา 1-2 ครั้ง/สัปดาห์ ', 'score': 2},
+          {'text': 'มีปัญหามากกว่า 3 ครั้ง/สัปดาห์หรือมากกว่า', 'score': 3}
         ]
       },
       {
@@ -120,10 +86,102 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
             'ในระยะ 1 เดือนที่ผ่านมา คุณภาพการนอนโดยรวมของท่านเป็นอย่างไร',
         'answerText': [
           {'text': 'ดีมาก', 'score': 0},
-          {'text': 'ดี', 'score': 8},
-          {'text': 'ไม่ค่อยดี', 'score': 17},
-          {'text': 'ไม่ดีเลย', 'score': 25}
+          {'text': 'ดี', 'score': 1},
+          {'text': 'ไม่ค่อยดี', 'score': 2},
+          {'text': 'ไม่ดีเลย', 'score': 3}
         ]
+      },
+    ];
+
+    final _questionsPart2 = [
+      {
+        'questionNo': 'Q1',
+        'questionText': 'คุณมีความมั่นใจโดยรวมมากแค่ไหน?',
+      },
+      {
+        'questionNo': 'Q2',
+        'questionText': 'คุณมีความมั่นใจในการเล่นโดยที่ไม่รู้สึกเจ็บแค่ไหน?',
+      },
+      {
+        'questionNo': 'Q3',
+        'questionText': 'คุณมีความมั่นใจที่จะออกแรงมากน้อยแค่ไหน?',
+      },
+      {
+        'questionNo': 'Q4',
+        'questionText':
+            'คุณคิดว่าคุณมีความมั่นใจมากแค่ไหนในการแสดงทักษะทางกีฬา?',
+      },
+      {
+        'questionNo': 'Q5',
+        'questionText':
+            'คุณคิดว่าคุณมีความมั่นใจมากแค่ไหนในการที่จะไม่สนใจส่วนที่บาดเจ็บ?',
+      },
+    ];
+
+    final _questionsPart3 = [
+      {
+        'questionNo': 'Q1',
+        'questionText': 'คุณมีอาการเหนื่อยบ้างไหม?',
+      },
+      {
+        'questionNo': 'Q2',
+        'questionText': 'คุณได้หลับเพียงพอแล้วหรือยัง?',
+      },
+      {
+        'questionNo': 'Q3',
+        'questionText': 'คุณมีอาการง่วงนอนหรือไม่?',
+      },
+      {
+        'questionNo': 'Q4',
+        'questionText': 'คุณมีอาการเหนื่อยล้าหรือไม่?',
+      },
+      {
+        'questionNo': 'Q5',
+        'questionText': 'คุณมีอาการหมดแรงหรือไม่?',
+      },
+      {
+        'questionNo': 'Q6',
+        'questionText': 'คุณมีความกระฉับกระเฉงว่องไวหรือไม่?',
+      },
+      {
+        'questionNo': 'Q7',
+        'questionText': 'คุณมีความคล่องแคล่วหรือไม่?',
+      },
+      {
+        'questionNo': 'Q8',
+        'questionText': 'คุณแข็งแรงดีหรือไม่?',
+      },
+      {
+        'questionNo': 'Q9',
+        'questionText': 'คุณในตอนนี้มีสมรรถภาพดีเยี่ยมหรือไม่?',
+      },
+      {
+        'questionNo': 'Q10',
+        'questionText': 'ตอนนี้คุณมีสภาพจิดใจที่ร่าเริงหรือไม่?',
+      },
+      {
+        'questionNo': 'Q11',
+        'questionText': 'คุณมีอาการเหนืื่อยหรือเปล่า?',
+      },
+      {
+        'questionNo': 'Q12',
+        'questionText': 'คุณในตอนนี้ยังสามารถมองเห็นได้ปกติหรือเปล่า?',
+      },
+      {
+        'questionNo': 'Q13',
+        'questionText': 'คุณยังสามารถขยับส่วนของร่างกายได้ปกใช่หรือไม่?',
+      },
+      {
+        'questionNo': 'Q14',
+        'questionText': 'คุณยังสามารถมีสมาธิจดจ่อกับการเล่นกีฬาได้หรือไม่?',
+      },
+      {
+        'questionNo': 'Q15',
+        'questionText': 'คุณยังสามารถโต้ตอบบทสนทนาได้แบบปกติใช่หรือไม่?',
+      },
+      {
+        'questionNo': 'Q16',
+        'questionText': 'คุณอยากที่จะนอนพักหรือไม่?',
       },
     ];
 
@@ -139,40 +197,35 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
     }
 
     void _answerQuestion(int score) {
-      answer_list["Q${_questionIndex + 1}"] = score;
+      answer_list["Q${_questionIndexPart1 + 1}"] = score;
       setState(() {
-        _questionIndex += 1;
+        _questionIndexPart1 += 1;
       });
-      print('Index: $_questionIndex');
-      if (_questionIndex < _questionsPart1.length) {
+      print('Index: $_questionIndexPart1');
+      if (_questionIndexPart1 < _questionsPart1.length) {
         print('We have more question');
       }
     }
 
     void _previousQuestion(String health) {
       setState(() {
-        if (_questionIndex == 0) {
-          _healthChoosing = health;
-          answer_health = false;
-        } else if (_questionIndex <= _questionsPart1.length) {
-          _questionIndex--;
-        }
+        _questionIndexPart1--;
       });
     }
 
     void _nextQuestion() {
       setState(() {
-        if (_questionIndex == _questionsPart1.length) {
+        if (_questionIndexPart1 == _questionsPart1.length) {
           isResult = true;
-        } else if (_questionIndex >= 0) {
-          _questionIndex++;
+        } else if (_questionIndexPart1 >= 0) {
+          _questionIndexPart1++;
         }
       });
     }
 
     void _previousFromResult() {
       setState(() {
-        _questionIndex = _questionsPart1.length - 1;
+        _questionIndexPart1 = _questionsPart1.length - 1;
       });
     }
 
@@ -254,36 +307,55 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
       ),
       backgroundColor: Colors.white,
       body: Container(
-        padding: (isResult == true && _questionIndex == _questionsPart1.length)
-            ? EdgeInsets.only(
-                top: h * 0.3,
-              )
-            : EdgeInsets.only(
-                top: h / 3,
-              ),
-        child: _questionIndex < _questionsPart1.length
+        padding:
+            (isResult == true && _questionIndexPart1 == _questionsPart1.length)
+                ? EdgeInsets.only(
+                    top: h * 0.3,
+                  )
+                : EdgeInsets.only(
+                    top: h / 3,
+                  ),
+        child: _questionIndexPart1 < _questionsPart1.length
             ? Questionnaire(
                 answerQuestion: _answerQuestion,
-                questionIndex: _questionIndex,
+                questionIndex: _questionIndexPart1,
                 questions: _questionsPart1,
                 questionType: 'Mental',
                 nextPage: _nextQuestion,
                 previousPage: _previousQuestion,
               )
-            : Result(
-                resultScore: _findTotalScore(),
-                resetHandler: _resetQuestionnaire,
-                insertHandler: saveMentalResult,
-                questionType: 'Mental',
-                previousPage: _previousFromResult,
-              ),
+            : _questionIndexPart2 < _questionsPart2.length
+                ? Questionnaire(
+                    answerQuestion: _answerQuestion,
+                    questionIndex: _questionIndexPart2,
+                    questions: _questionsPart2,
+                    questionType: 'Mental',
+                    nextPage: _nextQuestion,
+                    previousPage: _previousQuestion,
+                  )
+                : _questionIndexPart3 < _questionsPart3.length
+                    ? Questionnaire(
+                        answerQuestion: _answerQuestion,
+                        questionIndex: _questionIndexPart3,
+                        questions: _questionsPart3,
+                        questionType: 'Mental',
+                        nextPage: _nextQuestion,
+                        previousPage: _previousQuestion,
+                      )
+                    : Result(
+                        resultScore: _findTotalScore(),
+                        resetHandler: _resetQuestionnaire,
+                        insertHandler: saveMentalResult,
+                        questionType: 'Mental',
+                        previousPage: _previousFromResult,
+                      ),
       ),
     );
   }
 
   Future<void> saveMentalResult() async {
     var uid = FirebaseAuth.instance.currentUser.uid;
-    String questionnaireNo = 'HQ';
+    String questionnaireNo = 'MQ';
     String split;
     int latestID;
     NumberFormat format = NumberFormat('0000000000');
@@ -300,7 +372,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
         querySnapshot.docs
             .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
           Map data = queryDocumentSnapshot.data();
-          split = data['questionnaireNo'].toString().split('HQ')[1];
+          split = data['questionnaireNo'].toString().split('MQ')[1];
           latestID = int.parse(split) + 1;
           questionnaireNo += format.format(latestID);
         });
@@ -308,32 +380,19 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
     });
 
     MentalResultData mentalResultModel;
-    if (hasProblem == true) {
-      mentalResultModel = MentalResultData(
-          questionnaireNo: questionnaireNo,
-          athleteNo: athData.athlete_no,
-          athleteUID: uid,
-          doDate: DateTime.now(),
-          questionnaireType: 'Mental',
-          totalPoint: totalScore,
-          answerList: answer_list,
-          caseReceived: false,
-          caseFinished: false);
-    } else {
-      for (int i = 0; i < questionSize; i++) {
-        answer_list["Q${i + 1}"] = 0;
-      }
-      mentalResultModel = MentalResultData(
-          questionnaireNo: questionnaireNo,
-          athleteNo: athData.athlete_no,
-          athleteUID: uid,
-          doDate: DateTime.now(),
-          questionnaireType: 'Mental',
-          totalPoint: 0,
-          answerList: answer_list,
-          caseReceived: false,
-          caseFinished: false);
-    }
+
+    mentalResultModel = MentalResultData(
+      questionnaireNo: questionnaireNo,
+      athleteNo: athData.athlete_no,
+      athleteUID: uid,
+      doDate: DateTime.now(),
+      questionnaireType: 'Mental',
+      totalPoint: totalScore,
+      answerList: answer_list,
+      caseReceived: false,
+      caseFinished: false,
+    );
+
     Map<String, dynamic> data = mentalResultModel.toMap();
 
     final collectionReference =
