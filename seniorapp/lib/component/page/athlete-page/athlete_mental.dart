@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/history-details/health_report_detail.dart';
+import 'package:seniorapp/component/page/athlete-page/history-details/mental_report_detail.dart';
 import 'package:seniorapp/component/page/athlete-page/history-details/physical_report_detail.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/mental_result_data.dart';
@@ -13,14 +14,14 @@ import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
-class AthleteHistory extends StatefulWidget {
-  const AthleteHistory({Key key}) : super(key: key);
+class AthleteMentalHistory extends StatefulWidget {
+  const AthleteMentalHistory({Key key}) : super(key: key);
 
   @override
   _AthleteHistoryState createState() => _AthleteHistoryState();
 }
 
-class _AthleteHistoryState extends State<AthleteHistory> {
+class _AthleteHistoryState extends State<AthleteMentalHistory> {
   List<bool> _selectedOrderType = <bool>[true, false];
   final List<bool> isDefault = <bool>[true];
   Timer _timer;
@@ -40,7 +41,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
         .where('athleteUID', isEqualTo: uid, isNull: false)
         .snapshots();
 
-    return mentalQuestionnaire;
+    return StreamZip([mentalQuestionnaire]);
   }
 
   getMentalSize() {
@@ -89,8 +90,11 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     });
   }
 
-  String toThaiType(String type) {
-    return 'ปัญหาการนอนหลับ';
+  String find_questnaireNo(String docNo) {
+    int docNoInt;
+    docNo = docNo.split('MQ')[1];
+    docNoInt = int.parse(docNo);
+    return docNoInt.toString();
   }
 
   @override
@@ -321,7 +325,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                       Text.rich(
                                                         TextSpan(
                                                           text:
-                                                              'ประเภทแบบสอบถาม: ',
+                                                              'รายงานปัญหารการนอนหลับครั้งที่: ',
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -329,9 +333,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           ),
                                                           children: [
                                                             TextSpan(
-                                                              text: toThaiType(
+                                                              text: find_questnaireNo(
                                                                   mentalResultData
-                                                                      .questionnaireType),
+                                                                      .questionnaireNo),
                                                               style: const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
@@ -398,17 +402,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 MentalReportDetail(
-                                              answerListPart1: mental.answerList,
-                                              athleteNo: mental.athleteNo,
-                                              doDate: mental.doDate,
-                                              healthSymptom:
-                                                  mental.healthSymptom,
-                                              questionnaireType:
-                                                  mental.questionnaireType,
-                                              questionnaireNo:
-                                                  mental.questionnaireNo,
-                                              totalPoint: mental.totalPoint,
-                                            ),
+                                                    mentalResultData: mental),
                                           ),
                                         );
                                       },

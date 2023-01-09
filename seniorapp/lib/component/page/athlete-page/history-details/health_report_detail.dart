@@ -104,12 +104,12 @@ class HealthReportDetail extends StatelessWidget {
       int i = 1;
       question.forEach((map) {
         (map['answerText'] as List<Map<String, Object>>).forEach((answer) {
-          // print('${answerList['Q$i']} and ${answer['score']}');
+          print('${answerList['Q$i']} and ${answer['score']}');
           if (answerList['Q$i'] == answer['score']) {
             answerText.add(answer['text'].toString());
-            i++;
           }
         });
+        i++;
       });
       return answerText;
     }

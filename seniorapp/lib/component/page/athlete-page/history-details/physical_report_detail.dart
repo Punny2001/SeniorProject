@@ -107,9 +107,9 @@ class PhysicalReportDetail extends StatelessWidget {
           // print('${answerList['Q$i']} and ${answer['score']}');
           if (answerList['Q$i'] == answer['score']) {
             answerText.add(answer['text'].toString());
-            i++;
           }
         });
+        i++;
       });
       return answerText;
     }

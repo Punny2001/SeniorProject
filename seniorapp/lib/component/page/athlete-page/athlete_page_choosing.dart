@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_notify.dart';
-import 'package:seniorapp/component/page/athlete-page/athlete_search.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_mental.dart';
 
 class AthletePageChoosing extends StatefulWidget {
   const AthletePageChoosing({Key key}) : super(key: key);
@@ -18,7 +18,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
-    AthleteSearch(),
+    AthleteMentalHistory(),
     AthleteHistory(),
     AthleteNotify(),
   ];
@@ -50,7 +50,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     return Scaffold(
       appBar: AppBar(
         primary: true,
-        
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
@@ -95,9 +94,9 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
               label: 'หน้าหลัก',
             ),
             const BottomNavigationBarItem(
-              icon: Icon(Icons.search_off),
-              activeIcon: Icon(Icons.search),
-              label: 'ค้นหา',
+              icon: Icon(Icons.save),
+              activeIcon: Icon(Icons.save_outlined),
+              label: 'บันทึกการนอน',
             ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.history_toggle_off),
