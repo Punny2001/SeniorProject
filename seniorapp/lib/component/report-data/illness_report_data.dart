@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class IllnessReportData {
+  final String caseUid;
   final String report_no;
   final String staff_uid;
   final String athlete_no;
@@ -18,7 +19,9 @@ class IllnessReportData {
   final int illness_cause_code;
   final String no_day;
   final DateTime doDate;
+
   IllnessReportData({
+    @required this.caseUid,
     @required this.report_no,
     @required this.staff_uid,
     @required this.athlete_no,
@@ -37,6 +40,7 @@ class IllnessReportData {
   });
 
   IllnessReportData copyWith({
+    String caseUid,
     String report_no,
     String staff_uid,
     String athlete_no,
@@ -54,6 +58,7 @@ class IllnessReportData {
     DateTime doDate,
   }) {
     return IllnessReportData(
+      caseUid: caseUid ?? this.caseUid,
       report_no: report_no ?? this.report_no,
       staff_uid: staff_uid ?? this.staff_uid,
       athlete_no: athlete_no ?? this.athlete_no,
@@ -74,7 +79,7 @@ class IllnessReportData {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-
+    result.addAll({'caseUid': caseUid});
     result.addAll({'report_no': report_no});
     result.addAll({'staff_uid': staff_uid});
     result.addAll({'athlete_no': athlete_no});
@@ -96,6 +101,7 @@ class IllnessReportData {
 
   factory IllnessReportData.fromMap(Map<String, dynamic> map) {
     return IllnessReportData(
+      caseUid: map['caseUid'] ?? '',
       report_no: map['report_no'] ?? '',
       staff_uid: map['staff_uid'] ?? '',
       athlete_no: map['athlete_no'] ?? '',
@@ -121,7 +127,7 @@ class IllnessReportData {
 
   @override
   String toString() {
-    return 'IllnessReportData(report_no: $report_no, staff_uid: $staff_uid, athlete_no: $athlete_no, report_type: $report_type, sport_event: $sport_event, diagnosis: $diagnosis, occured_date: $occured_date, affected_system: $affected_system, affected_system_code: $affected_system_code, mainSymptoms: $mainSymptoms, mainSymptomsCode: $mainSymptomsCode, illness_cause: $illness_cause, illness_cause_code: $illness_cause_code, no_day: $no_day, doDate: $doDate)';
+    return 'IllnessReportData(caseUid: $caseUid, report_no: $report_no, staff_uid: $staff_uid, athlete_no: $athlete_no, report_type: $report_type, sport_event: $sport_event, diagnosis: $diagnosis, occured_date: $occured_date, affected_system: $affected_system, affected_system_code: $affected_system_code, mainSymptoms: $mainSymptoms, mainSymptomsCode: $mainSymptomsCode, illness_cause: $illness_cause, illness_cause_code: $illness_cause_code, no_day: $no_day, doDate: $doDate)';
   }
 
   @override
@@ -129,6 +135,7 @@ class IllnessReportData {
     if (identical(this, other)) return true;
 
     return other is IllnessReportData &&
+        other.caseUid == caseUid &&
         other.report_no == report_no &&
         other.staff_uid == staff_uid &&
         other.athlete_no == athlete_no &&
@@ -148,7 +155,8 @@ class IllnessReportData {
 
   @override
   int get hashCode {
-    return report_no.hashCode ^
+    return caseUid.hashCode ^
+        report_no.hashCode ^
         staff_uid.hashCode ^
         athlete_no.hashCode ^
         report_type.hashCode ^

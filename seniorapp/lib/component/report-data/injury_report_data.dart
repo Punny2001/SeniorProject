@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class InjuryReportData {
+  final String caseUid;
   final String report_no;
   final String staff_uid;
   final String athlete_no;
@@ -20,6 +21,7 @@ class InjuryReportData {
   final DateTime doDate;
 
   InjuryReportData({
+    @required this.caseUid,
     @required this.report_no,
     @required this.staff_uid,
     @required this.athlete_no,
@@ -38,6 +40,7 @@ class InjuryReportData {
   });
 
   InjuryReportData copyWith({
+    String caseUid,
     String report_no,
     String staff_uid,
     String athlete_no,
@@ -55,6 +58,7 @@ class InjuryReportData {
     DateTime doDate,
   }) {
     return InjuryReportData(
+      caseUid: caseUid ?? this.caseUid,
       report_no: report_no ?? this.report_no,
       staff_uid: staff_uid ?? this.staff_uid,
       athlete_no: athlete_no ?? this.athlete_no,
@@ -76,6 +80,7 @@ class InjuryReportData {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
+    result.addAll({'caseUid': caseUid});
     result.addAll({'report_no': report_no});
     result.addAll({'staff_uid': staff_uid});
     result.addAll({'athlete_no': athlete_no});
@@ -97,6 +102,7 @@ class InjuryReportData {
 
   factory InjuryReportData.fromMap(Map<String, dynamic> map) {
     return InjuryReportData(
+      caseUid: map['caseUid'] ?? '',
       report_no: map['report_no'] ?? '',
       staff_uid: map['staff_uid'] ?? '',
       athlete_no: map['athlete_no'] ?? '',
@@ -122,7 +128,7 @@ class InjuryReportData {
 
   @override
   String toString() {
-    return 'InjuryReportData(report_no: $report_no, staff_uid: $staff_uid, athlete_no: $athlete_no, report_type: $report_type, sport_event: $sport_event, round_heat_training: $round_heat_training, injuryDateTime: $injuryDateTime, injuryBodyCode: $injuryBodyCode, injuryBody: $injuryBody, injuryTypeCode: $injuryTypeCode, injuryType: $injuryType, injuryCauseCode: $injuryCauseCode, injuryCause: $injuryCause, no_day: $no_day, doDate: $doDate)';
+    return 'InjuryReportData(caseUid: $caseUid, report_no: $report_no, staff_uid: $staff_uid, athlete_no: $athlete_no, report_type: $report_type, sport_event: $sport_event, round_heat_training: $round_heat_training, injuryDateTime: $injuryDateTime, injuryBodyCode: $injuryBodyCode, injuryBody: $injuryBody, injuryTypeCode: $injuryTypeCode, injuryType: $injuryType, injuryCauseCode: $injuryCauseCode, injuryCause: $injuryCause, no_day: $no_day, doDate: $doDate)';
   }
 
   @override
@@ -130,6 +136,7 @@ class InjuryReportData {
     if (identical(this, other)) return true;
 
     return other is InjuryReportData &&
+        other.caseUid == caseUid &&
         other.report_no == report_no &&
         other.staff_uid == staff_uid &&
         other.athlete_no == athlete_no &&
@@ -149,7 +156,8 @@ class InjuryReportData {
 
   @override
   int get hashCode {
-    return report_no.hashCode ^
+    return caseUid.hashCode ^
+        report_no.hashCode ^
         staff_uid.hashCode ^
         athlete_no.hashCode ^
         report_type.hashCode ^

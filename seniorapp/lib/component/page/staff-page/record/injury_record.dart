@@ -1202,6 +1202,7 @@ class _InjuryReportState extends State<InjuryReport> {
       if (bodyType == 1) {
         print(bodyType);
         InjuryReportData injuryReportModel = InjuryReportData(
+            caseUid: widget.docID,
             report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),
@@ -1245,6 +1246,7 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       } else if (bodyType == 2) {
         InjuryReportData injuryReportModel = InjuryReportData(
+            caseUid: widget.docID,
             report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),
@@ -1288,6 +1290,7 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       } else if (bodyType == 3) {
         InjuryReportData injuryReportModel = InjuryReportData(
+            caseUid: widget.docID,
             report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),

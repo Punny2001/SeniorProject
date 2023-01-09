@@ -975,6 +975,7 @@ class _IllnessReportState extends State<IllnessReport> {
 
     if (isValidate && (addingValidator || valueAdded == true)) {
       IllnessReportData illnessReportModel = IllnessReportData(
+          caseUid: widget.docID,
           report_no: report_no,
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),
