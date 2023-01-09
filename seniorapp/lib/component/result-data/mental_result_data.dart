@@ -8,24 +8,18 @@ class MentalResultData {
   String athleteNo;
   String questionnaireType;
   DateTime doDate;
-  int totalPoint;
-  Map<String, int> answerList;
-  bool caseReceived;
-  String staff_no_received;
-  String staff_uid_received;
-  bool caseFinished;
+  Map<String, int> answerListPart1;
+  Map<String, int> answerListPart2;
+  Map<String, int> answerListPart3;
   MentalResultData({
     @required this.questionnaireNo,
     @required this.athleteUID,
     @required this.athleteNo,
     @required this.questionnaireType,
     @required this.doDate,
-    @required this.totalPoint,
-    @required this.answerList,
-    @required this.caseReceived,
-    this.staff_no_received,
-    this.staff_uid_received,
-    @required this.caseFinished,
+    @required this.answerListPart1,
+    @required this.answerListPart2,
+    @required this.answerListPart3,
   });
 
   MentalResultData copyWith({
@@ -34,12 +28,9 @@ class MentalResultData {
     String athleteNo,
     String questionnaireType,
     DateTime doDate,
-    int totalPoint,
-    Map<String, int> answerList,
-    bool caseReceived,
-    String staff_no_received,
-    String staff_uid_received,
-    bool caseFinished,
+    Map<String, int> answerListPart1,
+    Map<String, int> answerListPart2,
+    Map<String, int> answerListPart3,
   }) {
     return MentalResultData(
       questionnaireNo: questionnaireNo ?? this.questionnaireNo,
@@ -47,12 +38,9 @@ class MentalResultData {
       athleteNo: athleteNo ?? this.athleteNo,
       questionnaireType: questionnaireType ?? this.questionnaireType,
       doDate: doDate ?? this.doDate,
-      totalPoint: totalPoint ?? this.totalPoint,
-      answerList: answerList ?? this.answerList,
-      caseReceived: caseReceived ?? this.caseReceived,
-      staff_no_received: staff_no_received ?? this.staff_no_received,
-      staff_uid_received: staff_uid_received ?? this.staff_uid_received,
-      caseFinished: caseFinished ?? this.caseFinished,
+      answerListPart1: answerListPart1 ?? this.answerListPart1,
+      answerListPart2: answerListPart2 ?? this.answerListPart2,
+      answerListPart3: answerListPart3 ?? this.answerListPart3,
     );
   }
 
@@ -64,12 +52,9 @@ class MentalResultData {
     result.addAll({'athleteNo': athleteNo});
     result.addAll({'questionnaireType': questionnaireType});
     result.addAll({'doDate': doDate});
-    result.addAll({'totalPoint': totalPoint});
-    result.addAll({'answerList': answerList});
-    result.addAll({'caseReceived': caseReceived});
-    result.addAll({'staff_no_received': staff_no_received});
-    result.addAll({'staff_uid_received': staff_uid_received});
-    result.addAll({'caseFinished': caseFinished});
+    result.addAll({'answerListPart1': answerListPart1});
+    result.addAll({'answerListPart2': answerListPart2});
+    result.addAll({'answerListPart3': answerListPart3});
 
     return result;
   }
@@ -81,12 +66,9 @@ class MentalResultData {
       athleteNo: map['athleteNo'] ?? '',
       questionnaireType: map['questionnaireType'] ?? '',
       doDate: DateTime.parse(map['doDate'].toDate().toString()),
-      totalPoint: map['totalPoint']?.toInt() ?? 0,
-      answerList: Map<String, int>.from(map['answerList']),
-      caseReceived: map['caseReceived'] ?? false,
-      staff_no_received: map['staff_no_received'] ?? '',
-      staff_uid_received: map['staff_uid_received'] ?? '',
-      caseFinished: map['caseFinished'] ?? false,
+      answerListPart1: Map<String, int>.from(map['answerListPart1']),
+      answerListPart2: Map<String, int>.from(map['answerListPart2']),
+      answerListPart3: Map<String, int>.from(map['answerListPart3']),
     );
   }
 
@@ -97,7 +79,7 @@ class MentalResultData {
 
   @override
   String toString() {
-    return 'MentalResultData(questionnaireNo: $questionnaireNo, athleteUID: $athleteUID, athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, caseReceived: $caseReceived, staff_no_received: $staff_no_received, staff_uid_received: $staff_uid_received, caseFinished: $caseFinished)';
+    return 'MentalResultData(questionnaireNo: $questionnaireNo, athleteUID: $athleteUID, athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, answerListPart1: $answerListPart1, answerListPart2: $answerListPart2, answerListPart3: $answerListPart3)';
   }
 
   @override
@@ -110,12 +92,9 @@ class MentalResultData {
         other.athleteNo == athleteNo &&
         other.questionnaireType == questionnaireType &&
         other.doDate == doDate &&
-        other.totalPoint == totalPoint &&
-        mapEquals(other.answerList, answerList) &&
-        other.caseReceived == caseReceived &&
-        other.staff_no_received == staff_no_received &&
-        other.staff_uid_received == staff_uid_received &&
-        other.caseFinished == caseFinished;
+        mapEquals(other.answerListPart1, answerListPart1) &&
+        mapEquals(other.answerListPart2, answerListPart2) &&
+        mapEquals(other.answerListPart3, answerListPart3);
   }
 
   @override
@@ -125,11 +104,8 @@ class MentalResultData {
         athleteNo.hashCode ^
         questionnaireType.hashCode ^
         doDate.hashCode ^
-        totalPoint.hashCode ^
-        answerList.hashCode ^
-        caseReceived.hashCode ^
-        staff_no_received.hashCode ^
-        staff_uid_received.hashCode ^
-        caseFinished.hashCode;
+        answerListPart1.hashCode ^
+        answerListPart2.hashCode ^
+        answerListPart3.hashCode;
   }
 }

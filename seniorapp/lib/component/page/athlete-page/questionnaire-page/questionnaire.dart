@@ -15,6 +15,8 @@ class Questionnaire extends StatefulWidget {
   final Function previousPage;
   final String partChoosing;
   final Function sendBodyChoosing;
+  final Map answerPart2;
+  final Map answerPart3;
 
   const Questionnaire({
     Key key,
@@ -28,6 +30,8 @@ class Questionnaire extends StatefulWidget {
     this.previousPage,
     this.partChoosing,
     this.sendBodyChoosing,
+    this.answerPart2,
+    this.answerPart3,
   }) : super(key: key);
 
   @override
@@ -374,9 +378,10 @@ class _QuestionnaireState extends State<Questionnaire> {
         isQuestionnaire = true;
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Question(
                   widget.questions[widget.questionIndex]['questionText']
@@ -393,17 +398,24 @@ class _QuestionnaireState extends State<Questionnaire> {
                 else
                   Column(
                     children: [
-                      Text(_currentSliderValue.floor().toString()),
-                      CupertinoSlider(
-                          value: _currentSliderValue,
-                          min: 0,
-                          max: 10,
-                          divisions: 10,
-                          onChanged: (value) {
-                            setState(() {
-                              _currentSliderValue = value;
-                            });
-                          })
+                      Text(
+                        _currentSliderValue.floor().toString(),
+                        style: TextStyle(fontSize: h * 0.025),
+                      ),
+                      SizedBox(
+                        width: w,
+                        child: CupertinoSlider(
+                          
+                            value: _currentSliderValue,
+                            min: 0,
+                            max: 10,
+                            divisions: 10,
+                            onChanged: (value) {
+                              setState(() {
+                                _currentSliderValue = value;
+                              });
+                            }),
+                      )
                     ],
                   ),
               ],
@@ -415,7 +427,20 @@ class _QuestionnaireState extends State<Questionnaire> {
                 widget.questionIndex == 0 && widget.questions.length == 4
                     ? SizedBox(width: w * 0.12)
                     : IconButton(
-                        onPressed: () => widget.previousPage,
+                        onPressed: () {
+                          if (widget.questions.length == 5 &&
+                              widget.questionIndex != 0) {
+                            _currentSliderValue =
+                                (widget.answerPart2['Q${widget.questionIndex}'])
+                                    .toDouble();
+                          } else if (widget.questions.length > 10 &&
+                              widget.questionIndex != 0) {
+                            _currentSliderValue =
+                                (widget.answerPart3['Q${widget.questionIndex}'])
+                                    .toDouble();
+                          }
+                          widget.previousPage();
+                        },
                         icon: const Icon(Icons.arrow_back_ios),
                       ),
                 Padding(
@@ -427,10 +452,18 @@ class _QuestionnaireState extends State<Questionnaire> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: widget.nextPage,
-                  icon: const Icon(Icons.arrow_forward_ios),
-                ),
+                widget.questions.length == 4
+                    ? IconButton(
+                        onPressed: widget.nextPage,
+                        icon: const Icon(Icons.arrow_forward_ios),
+                      )
+                    : IconButton(
+                        onPressed: () {
+                          widget.answerQuestion(_currentSliderValue.floor());
+                          _currentSliderValue = 0.0;
+                        },
+                        icon: const Icon(Icons.arrow_forward_ios),
+                      ),
               ],
             ),
           ],

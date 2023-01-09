@@ -1,25 +1,441 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/athlete-page/history-details/health_report_detail.dart';
+import 'package:seniorapp/component/page/athlete-page/history-details/physical_report_detail.dart';
+import 'package:seniorapp/component/result-data/health_result_data.dart';
+import 'package:seniorapp/component/result-data/mental_result_data.dart';
+import 'package:seniorapp/component/result-data/physical_result_data.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 
-class AthleteSearch extends StatefulWidget {
-  const AthleteSearch({Key key}) : super(key: key);
+import 'dart:async' show Stream, StreamController, Timer;
+import 'package:async/async.dart' show StreamZip;
+import 'package:seniorapp/decoration/textfield_normal.dart';
+
+class AthleteHistory extends StatefulWidget {
+  const AthleteHistory({Key key}) : super(key: key);
 
   @override
-  State<AthleteSearch> createState() => _AthleteSearchState();
+  _AthleteHistoryState createState() => _AthleteHistoryState();
 }
 
-class _AthleteSearchState extends State<AthleteSearch> {
+class _AthleteHistoryState extends State<AthleteHistory> {
+  List<bool> _selectedOrderType = <bool>[true, false];
+  final List<bool> isDefault = <bool>[true];
+  Timer _timer;
+  String uid = FirebaseAuth.instance.currentUser.uid;
+  String athlete_no;
+  int mentalSize;
+  bool isLoading = false;
+  bool isFilter = false;
+
+  void choose_filter() {
+    setState(() {});
+  }
+
+  Stream<List<QuerySnapshot>> getData() {
+    Stream mentalQuestionnaire = FirebaseFirestore.instance
+        .collection('MentalQuestionnaireResult')
+        .where('athleteUID', isEqualTo: uid, isNull: false)
+        .snapshots();
+
+    return mentalQuestionnaire;
+  }
+
+  getMentalSize() {
+    FirebaseFirestore.instance
+        .collection('MentalQuestionnaireResult')
+        .where('athleteUID', isEqualTo: uid, isNull: false)
+        .get()
+        .then(
+      (snapshot) {
+        setState(() {
+          mentalSize = snapshot.docs.length;
+        });
+      },
+    );
+  }
+
+  List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
+    if (_selectedOrderType[0] == true) {
+      data.sort(
+        (a, b) => (b['doDate'].toDate()).compareTo(
+          a['doDate'].toDate(),
+        ),
+      );
+    } else {
+      data.sort(
+        (a, b) => (a['doDate'].toDate()).compareTo(
+          b['doDate'].toDate(),
+        ),
+      );
+    }
+
+    return data;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      isLoading = true;
+    });
+    getMentalSize();
+    _timer = Timer(const Duration(seconds: 1), () {
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
+  String toThaiType(String type) {
+    return 'ปัญหาการนอนหลับ';
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  MentalResultData mentalResultData;
+
   @override
   Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      body: Container(
-        child: Text(
-          'อยู่ระหว่างการปรับปรุง',
-          style: TextStyle(
-            fontSize: 50,
-            color: Colors.red.shade900,
-            fontWeight: FontWeight.bold,
+      backgroundColor: Colors.grey[100],
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
+                width: w * 0.65,
+                height: h * 0.052,
+                child: ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.filter_list,
+                    color: Colors.black,
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green.shade300,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                      side: BorderSide(color: Colors.green[800]),
+                    ),
+                  ),
+                  label: Text(
+                    'ตัวกรอง',
+                    style: TextStyle(
+                      fontSize: h * 0.025,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(builder: (context, setState) {
+                            return AlertDialog(
+                              title: Container(
+                                child: const Text('ตัวกรอง'),
+                              ),
+                              content: Column(
+                                children: [
+                                  const Text('จัดเรียงโดย'),
+                                  const Padding(
+                                    padding: const EdgeInsets.all(5),
+                                  ),
+                                  const Padding(
+                                    padding: const EdgeInsets.all(5),
+                                  ),
+                                  ToggleButtons(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    fillColor: Colors.green[300],
+                                    borderColor: Colors.grey,
+                                    selectedBorderColor: Colors.green[800],
+                                    selectedColor: Colors.white,
+                                    color: Colors.green,
+                                    constraints: BoxConstraints(
+                                      minHeight: h * 0.05,
+                                      minWidth: w * 0.3,
+                                    ),
+                                    children: [
+                                      const Text('มาก => น้อย'),
+                                      const Text('น้อย => มาก')
+                                    ],
+                                    isSelected: _selectedOrderType,
+                                    onPressed: (int index) {
+                                      setState(() {
+                                        // The button that is tapped is set to true, and the others to false.
+                                        for (int i = 0;
+                                            i < _selectedOrderType.length;
+                                            i++) {
+                                          _selectedOrderType[i] = i == index;
+                                        }
+                                        isDefault[0] = false;
+                                      });
+                                    },
+                                  ),
+                                  const Padding(
+                                    padding: EdgeInsets.all(10),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                Container(
+                                  width: w,
+                                  child: RaisedButton(
+                                    color: Colors.green[300],
+                                    child: const Text(
+                                      'ใช้งาน',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      choose_filter();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
+                        });
+                  },
+                ),
+              ),
+              ToggleButtons(
+                children: [const Text('ค่าเริ่มต้น')],
+                isSelected: isDefault,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
+                textStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: h * 0.02,
+                ),
+                fillColor: Colors.green[300],
+                borderColor: Colors.grey,
+                selectedBorderColor: Colors.green[800],
+                selectedColor: Colors.black,
+                color: Colors.green,
+                constraints: BoxConstraints(
+                  minHeight: h * 0.05,
+                  minWidth: w * 0.3,
+                ),
+                onPressed: (int index) {
+                  setState(() {
+                    if (isDefault[0] == true) {
+                      isDefault[0] = false;
+                    } else {
+                      isDefault[0] = true;
+
+                      _selectedOrderType = <bool>[true, false];
+                    }
+                  });
+                },
+              ),
+            ],
           ),
-        ),
+          // PaddingDecorate(1),
+          Expanded(
+            child: Container(
+              height: h,
+              width: w,
+              child: isLoading
+                  ? const Center(
+                      child: CupertinoActivityIndicator(),
+                    )
+                  : mentalSize != 0
+                      ? Container(
+                          child: StreamBuilder(
+                            stream: getData(),
+                            builder: (BuildContext context, snapshot) {
+                              if (snapshot.hasData) {
+                                List<QuerySnapshot> querySnapshot =
+                                    snapshot.data.toList();
+
+                                List<QueryDocumentSnapshot> documentSnapshot =
+                                    [];
+                                querySnapshot.forEach((query) {
+                                  documentSnapshot.addAll(query.docs);
+                                });
+
+                                List<Map<String, dynamic>> mappedData = [];
+                                for (QueryDocumentSnapshot doc
+                                    in documentSnapshot) {
+                                  mappedData.add(doc.data());
+                                }
+
+                                mappedData = add_filter(mappedData);
+                                if (mappedData.length >= 10) {
+                                  mappedData.removeRange(10, mappedData.length);
+                                }
+
+                                return ListView.builder(
+                                  itemCount: mappedData.length,
+                                  itemBuilder: (context, index) {
+                                    Map<String, dynamic> data =
+                                        mappedData[index];
+                                    mentalResultData =
+                                        MentalResultData.fromMap(data);
+                                    return GestureDetector(
+                                      child: Card(
+                                        child: Container(
+                                            height: h * 0.2,
+                                            padding: EdgeInsets.only(
+                                              left: w * 0.05,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.only(
+                                                      left: w * 0.03),
+                                                  width: w * 0.7,
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .stretch,
+                                                    children: <Widget>[
+                                                      Text.rich(
+                                                        TextSpan(
+                                                          text:
+                                                              'ประเภทแบบสอบถาม: ',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          children: [
+                                                            TextSpan(
+                                                              text: toThaiType(
+                                                                  mentalResultData
+                                                                      .questionnaireType),
+                                                              style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Text.rich(
+                                                        TextSpan(
+                                                          text:
+                                                              'วันที่บันทึก: ',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          children: [
+                                                            TextSpan(
+                                                              text: formatDate(
+                                                                mentalResultData
+                                                                    .doDate,
+                                                                'Athlete',
+                                                              ),
+                                                              style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Text.rich(
+                                                        TextSpan(
+                                                          text:
+                                                              'เวลาที่บันทึก: ',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          children: [
+                                                            TextSpan(
+                                                              text:
+                                                                  '${formatTime(mentalResultData.doDate)} น.',
+                                                              style: const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            )),
+                                      ),
+                                      onTap: () {
+                                        MentalResultData mental =
+                                            MentalResultData.fromMap(data);
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                MentalReportDetail(
+                                              answerListPart1: mental.answerList,
+                                              athleteNo: mental.athleteNo,
+                                              doDate: mental.doDate,
+                                              healthSymptom:
+                                                  mental.healthSymptom,
+                                              questionnaireType:
+                                                  mental.questionnaireType,
+                                              questionnaireNo:
+                                                  mental.questionnaireNo,
+                                              totalPoint: mental.totalPoint,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                );
+                              } else {
+                                return const Center(
+                                  child: const CircularProgressIndicator(),
+                                );
+                              }
+                            },
+                          ),
+                        )
+                      : const Center(
+                          child: const Text(
+                            'ไม่มีบันทึกที่คุณสร้างไว้',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 50,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+            ),
+          ),
+        ],
       ),
     );
   }

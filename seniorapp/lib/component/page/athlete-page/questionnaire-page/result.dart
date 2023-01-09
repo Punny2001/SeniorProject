@@ -61,21 +61,7 @@ class Result extends StatelessWidget {
         }
         break;
       case 'Mental':
-        {
-          if (resultScore <= 25) {
-            resultText = 'ระบบบันทึกข้อมูลเรียบร้อย ขอบคุณที่ให้ความร่วมมือ';
-          } else if (resultScore <= 50) {
-            resultText =
-                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ท่านมีปัญหาการนอนหลับอยู่ในระดับ 1';
-          } else if (resultScore <= 75) {
-            resultText =
-                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ท่านมีปัญหาการนอนหลับอยู่ในระดับ 2';
-          } else {
-            resultText =
-                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ท่านมีปัญหาการนอนหลับอยู่ในระดับ 3';
-          }
-          print('result text: $resultText');
-        }
+        resultText = 'ระบบบันทึกข้อมูลเรียบร้อย ขอบคุณที่ให้ความร่วมมือ';
         break;
       default:
         break;
@@ -132,17 +118,11 @@ class Result extends StatelessWidget {
                                   text: resultPhrase(questionType, resultScore),
                                 ),
                               ]
-                        : resultScore > 75
-                            ? [
-                                TextSpan(
-                                  text: resultPhrase(questionType, resultScore),
-                                ),
-                              ]
-                            : [
-                                TextSpan(
-                                  text: resultPhrase(questionType, resultScore),
-                                ),
-                              ],
+                        : [
+                            TextSpan(
+                              text: resultPhrase(questionType, resultScore),
+                            ),
+                          ],
                   ),
                 ),
               ),
@@ -257,38 +237,39 @@ class Result extends StatelessWidget {
         }
         break;
       case 'Mental':
-        if (resultScore == 0) {
-          return RichText(
-            text: TextSpan(
-              text: 'ท่านไม่มีปัญหาการนอนหลับ',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: h * 0.03,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          );
-        } else {
-          return RichText(
-            textAlign: TextAlign.center,
-            text: TextSpan(
-                text: 'ปัญหาการนอนหลับของท่านอยู่ในระดับ ',
-                style: TextStyle(
-                  fontSize: h * 0.03,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-                children: [
-                  TextSpan(
-                    text: '$resultScore',
-                    style: TextStyle(
-                      color: score_color(resultScore),
-                    ),
-                  ),
-                  const TextSpan(text: ' คะแนน')
-                ]),
-          );
-        }
+        return RichText(text: TextSpan(text: ''));
+        //   if (resultScore == 0) {
+        //     return RichText(
+        //       text: TextSpan(
+        //         text: 'ท่านไม่มีปัญหาการนอนหลับ',
+        //         style: TextStyle(
+        //           color: Colors.black,
+        //           fontSize: h * 0.03,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //     );
+        //   } else {
+        //     return RichText(
+        //       textAlign: TextAlign.center,
+        //       text: TextSpan(
+        //           text: 'ปัญหาการนอนหลับของท่านอยู่ในระดับ ',
+        //           style: TextStyle(
+        //             fontSize: h * 0.03,
+        //             color: Colors.black,
+        //             fontWeight: FontWeight.bold,
+        //           ),
+        //           children: [
+        //             TextSpan(
+        //               text: '$resultScore',
+        //               style: TextStyle(
+        //                 color: score_color(resultScore),
+        //               ),
+        //             ),
+        //             const TextSpan(text: ' คะแนน')
+        //           ]),
+        //     );
+        //   }
         break;
       default:
     }

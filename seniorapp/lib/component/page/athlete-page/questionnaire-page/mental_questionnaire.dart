@@ -28,8 +28,11 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
   String uid = FirebaseAuth.instance.currentUser.uid;
   Athlete athData;
   bool isResult = false;
+  int sliderPart = 1;
+  List<bool> slideCheck = [true, false, false];
 
-  int questionSize;
+  int questionSizePart2;
+  int questionSizePart3;
 
   void _resetQuestionnaire() {
     setState(() {
@@ -187,8 +190,6 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
       },
     ];
 
-    questionSize = _questionsPart1.length;
-
     int _findTotalScore() {
       int _totalScore = 0;
       answer_list_part1.forEach((key, value) {
@@ -237,13 +238,13 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
       });
     }
 
-    void _previousQuestionPart1(String health) {
+    void _previousQuestionPart1() {
       setState(() {
         _questionIndexPart1--;
       });
     }
 
-    void _previousQuestionPart2(String health) {
+    void _previousQuestionPart2() {
       if (_questionIndexPart2 == 0) {
         setState(() {
           _questionIndexPart1--;
@@ -255,7 +256,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
       }
     }
 
-    void _previousQuestionPart3(String health) {
+    void _previousQuestionPart3() {
       if (_questionIndexPart3 == 0) {
         setState(() {
           _questionIndexPart2--;
@@ -269,7 +270,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
 
     void _previousFromResult() {
       setState(() {
-        _questionIndexPart1 = _questionsPart1.length - 1;
+        _questionIndexPart3--;
       });
     }
 
@@ -375,6 +376,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
                     questions: _questionsPart2,
                     questionType: 'Mental',
                     previousPage: _previousQuestionPart2,
+                    answerPart2: answer_list_part2,
                   )
                 : _questionIndexPart3 < _questionsPart3.length
                     ? Questionnaire(
@@ -383,9 +385,10 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
                         questions: _questionsPart3,
                         questionType: 'Mental',
                         previousPage: _previousQuestionPart3,
+                        answerPart3: answer_list_part3,
                       )
                     : Result(
-                        resultScore: _findTotalScore(),
+                        // resultScore: _findTotalScore(),
                         resetHandler: _resetQuestionnaire,
                         insertHandler: saveMentalResult,
                         questionType: 'Mental',
@@ -429,10 +432,9 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
       athleteUID: uid,
       doDate: DateTime.now(),
       questionnaireType: 'Mental',
-      totalPoint: totalScore,
-      answerList: answer_list_part1,
-      caseReceived: false,
-      caseFinished: false,
+      answerListPart1: answer_list_part1,
+      answerListPart2: answer_list_part2,
+      answerListPart3: answer_list_part3,
     );
 
     Map<String, dynamic> data = mentalResultModel.toMap();
@@ -450,10 +452,8 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
-                    setState(() {
-                      isResult = false;
-                    });
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/athletePageChoosing', (route) => false);
                   },
                   child: const Text('โอเค'),
                 ),
