@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/result-data/mental_result_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
-import 'package:seniorapp/decoration/textfield_normal.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 
 class MentalReportDetail extends StatelessWidget {

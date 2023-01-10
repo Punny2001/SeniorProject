@@ -178,7 +178,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
           children: [
             Ink(
               decoration: ShapeDecoration(
-                shape: CircleBorder(),
+                shape: const CircleBorder(),
                 color: Colors.blue.shade200,
               ),
               child: IconButton(
@@ -187,7 +187,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                     Navigator.of(context).pushNamed('/staffProfile');
                   });
                 },
-                icon: Icon(Icons.menu),
+                icon: const Icon(Icons.menu),
               ),
             ),
           ],
@@ -223,13 +223,13 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                 icon: Badge(
                   badgeContent: Text(
                     '$unfinishedCaseCount',
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   elevation: 0,
                   showBadge: unfinishedCaseCount > 0 ? true : false,
-                  child: Icon(Icons.cases_outlined),
+                  child: const Icon(Icons.cases_outlined),
                 ),
-                activeIcon: Icon(Icons.cases_rounded),
+                activeIcon: const Icon(Icons.cases_rounded),
                 label: 'Cases',
               ),
               const BottomNavigationBarItem(
@@ -243,13 +243,13 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
                 icon: Badge(
                   badgeContent: Text(
                     '$notificationCount',
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   elevation: 0,
                   showBadge: notificationCount > 0 ? true : false,
-                  child: Icon(Icons.notifications_none),
+                  child: const Icon(Icons.notifications_none),
                 ),
-                activeIcon: Icon(
+                activeIcon: const Icon(
                   Icons.notifications,
                 ),
                 label: 'Notification',

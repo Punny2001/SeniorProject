@@ -30,7 +30,7 @@ class _RegisterState extends State<Register> {
   String _selectedStaff;
   int _selectedDept;
   bool _passwordhide = true;
-  bool _confirmPasswordhide = true;
+  final bool _confirmPasswordhide = true;
   DateTime _birthdate;
   final _keyForm = GlobalKey<FormState>();
   bool isAthlete = false;

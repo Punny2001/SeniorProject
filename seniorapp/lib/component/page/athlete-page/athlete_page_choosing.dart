@@ -94,8 +94,8 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
               label: 'หน้าหลัก',
             ),
             const BottomNavigationBarItem(
-              icon: Icon(Icons.save),
-              activeIcon: Icon(Icons.save_outlined),
+              icon: Icon(Icons.save_outlined),
+              activeIcon: Icon(Icons.save),
               label: 'บันทึกการนอน',
             ),
             const BottomNavigationBarItem(
