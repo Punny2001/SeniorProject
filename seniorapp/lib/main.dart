@@ -39,17 +39,17 @@ Future<void> main() async {
 
         FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-        NotificationSettings settings = await messaging.requestPermission(
-          alert: true,
-          announcement: false,
-          badge: true,
-          carPlay: false,
-          criticalAlert: false,
-          provisional: false,
-          sound: true,
-        );
+        // NotificationSettings settings = await messaging.requestPermission(
+        //   alert: true,
+        //   announcement: false,
+        //   badge: true,
+        //   carPlay: false,
+        //   criticalAlert: false,
+        //   provisional: false,
+        //   sound: true,
+        // );
 
-        print('User granted permission: ${settings.authorizationStatus}');
+        // print('User granted permission: ${settings.authorizationStatus}');
 
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
           print('Got a message whilst in the foreground!');

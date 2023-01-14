@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Staff {
+  final String token;
   final String staff_no;
   final String username;
   final String firstname;
@@ -15,6 +16,7 @@ class Staff {
   final String gender;
   final int age;
   Staff({
+    @required this.token,
     @required this.staff_no,
     @required this.username,
     @required this.firstname,
@@ -28,6 +30,7 @@ class Staff {
   });
 
   Staff copyWith({
+    String token,
     String staff_no,
     String username,
     String firstname,
@@ -40,6 +43,7 @@ class Staff {
     int age,
   }) {
     return Staff(
+      token: token ?? this.token,
       staff_no: staff_no ?? this.staff_no,
       username: username ?? this.username,
       firstname: firstname ?? this.firstname,
@@ -56,6 +60,7 @@ class Staff {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
+    result.addAll({'token': token});
     result.addAll({'staff_no': staff_no});
     result.addAll({'username': username});
     result.addAll({'firstname': firstname});
@@ -72,6 +77,7 @@ class Staff {
 
   factory Staff.fromMap(Map<String, dynamic> map) {
     return Staff(
+      token: map['token'] ?? '',
       staff_no: map['staff_no'] ?? '',
       username: map['username'] ?? '',
       firstname: map['firstname'] ?? '',
@@ -91,7 +97,7 @@ class Staff {
 
   @override
   String toString() {
-    return 'Staff(staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, department: $department, email: $email, gender: $gender, age: $age)';
+    return 'Staff(token: $token, staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, department: $department, email: $email, gender: $gender, age: $age)';
   }
 
   @override
@@ -99,6 +105,7 @@ class Staff {
     if (identical(this, other)) return true;
 
     return other is Staff &&
+        other.token == token &&
         other.staff_no == staff_no &&
         other.username == username &&
         other.firstname == firstname &&
@@ -113,7 +120,8 @@ class Staff {
 
   @override
   int get hashCode {
-    return staff_no.hashCode ^
+    return token.hashCode ^
+        staff_no.hashCode ^
         username.hashCode ^
         firstname.hashCode ^
         lastname.hashCode ^

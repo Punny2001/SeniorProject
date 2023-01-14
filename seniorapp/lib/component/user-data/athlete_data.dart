@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Athlete {
+  final String token;
   final String athlete_no;
   final String username;
   final String firstname;
@@ -16,6 +17,7 @@ class Athlete {
   final String gender;
   final int age;
   Athlete({
+    @required this.token,
     @required this.athlete_no,
     @required this.username,
     @required this.firstname,
@@ -31,6 +33,7 @@ class Athlete {
   });
 
   Athlete copyWith({
+    String token,
     String athlete_no,
     String username,
     String firstname,
@@ -45,6 +48,7 @@ class Athlete {
     int age,
   }) {
     return Athlete(
+      token: token ?? this.token,
       athlete_no: athlete_no ?? this.athlete_no,
       username: username ?? this.username,
       firstname: firstname ?? this.firstname,
@@ -62,7 +66,8 @@ class Athlete {
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
+    result.addAll({'token': token});
     result.addAll({'athlete_no': athlete_no});
     result.addAll({'username': username});
     result.addAll({'firstname': firstname});
@@ -75,12 +80,13 @@ class Athlete {
     result.addAll({'email': email});
     result.addAll({'gender': gender});
     result.addAll({'age': age});
-  
+
     return result;
   }
 
   factory Athlete.fromMap(Map<String, dynamic> map) {
     return Athlete(
+      token: map['token'] ?? '',
       athlete_no: map['athlete_no'] ?? '',
       username: map['username'] ?? '',
       firstname: map['firstname'] ?? '',
@@ -98,45 +104,48 @@ class Athlete {
 
   String toJson() => json.encode(toMap());
 
-  factory Athlete.fromJson(String source) => Athlete.fromMap(json.decode(source));
+  factory Athlete.fromJson(String source) =>
+      Athlete.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Athlete(athlete_no: $athlete_no, username: $username, firstname: $firstname, lastname: $lastname, sportType: $sportType, birthdate: $birthdate, department: $department, weight: $weight, height: $height, email: $email, gender: $gender, age: $age)';
+    return 'Athlete(token: $token, athlete_no: $athlete_no, username: $username, firstname: $firstname, lastname: $lastname, sportType: $sportType, birthdate: $birthdate, department: $department, weight: $weight, height: $height, email: $email, gender: $gender, age: $age)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Athlete &&
-      other.athlete_no == athlete_no &&
-      other.username == username &&
-      other.firstname == firstname &&
-      other.lastname == lastname &&
-      other.sportType == sportType &&
-      other.birthdate == birthdate &&
-      other.department == department &&
-      other.weight == weight &&
-      other.height == height &&
-      other.email == email &&
-      other.gender == gender &&
-      other.age == age;
+        other.token == token &&
+        other.athlete_no == athlete_no &&
+        other.username == username &&
+        other.firstname == firstname &&
+        other.lastname == lastname &&
+        other.sportType == sportType &&
+        other.birthdate == birthdate &&
+        other.department == department &&
+        other.weight == weight &&
+        other.height == height &&
+        other.email == email &&
+        other.gender == gender &&
+        other.age == age;
   }
 
   @override
   int get hashCode {
-    return athlete_no.hashCode ^
-      username.hashCode ^
-      firstname.hashCode ^
-      lastname.hashCode ^
-      sportType.hashCode ^
-      birthdate.hashCode ^
-      department.hashCode ^
-      weight.hashCode ^
-      height.hashCode ^
-      email.hashCode ^
-      gender.hashCode ^
-      age.hashCode;
+    return token.hashCode ^
+        athlete_no.hashCode ^
+        username.hashCode ^
+        firstname.hashCode ^
+        lastname.hashCode ^
+        sportType.hashCode ^
+        birthdate.hashCode ^
+        department.hashCode ^
+        weight.hashCode ^
+        height.hashCode ^
+        email.hashCode ^
+        gender.hashCode ^
+        age.hashCode;
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -12,6 +14,7 @@ import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
+import 'package:http/http.dart' as http;
 
 class IllnessReport extends StatefulWidget {
   final HealthResultData healthResultData;
@@ -59,9 +62,38 @@ class _IllnessReportState extends State<IllnessReport> {
   bool isRepeat = false;
   bool valueAdded = false;
 
+  void sendPushMessage(String token, String title, String body) async {
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAOmXVBT0:APA91bFonAMAsnJl3UDp2LQHXvThSOQd2j7q01EL1afdZI13TP7VEZxRa7q_Odj3wUL_urjyfS7e0wbgEbwKbUKPkm8p5LFLAVE498z3X4VgNaR5iMF4M9JMpv8s14YsGqI2plf_lCBK',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'status': 'done',
+            'body': 'This is a test notify',
+            'title': 'Test'
+          },
+          'notification': {
+            'title': 'Test',
+            'body': 'This is a test notify',
+          },
+          'to': token,
+        }),
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.docID);
+    print(widget.athlete.token);
     if (widget.healthResultData != null) {
       _athleteNo.text = widget.healthResultData.athleteNo;
       _selectedSport = widget.athlete.sportType;
@@ -767,11 +799,12 @@ class _IllnessReportState extends State<IllnessReport> {
                 shape: const StadiumBorder(),
                 primary: Colors.blue.shade200),
             onPressed: () {
-              if (widget.docID != null) {
-                updateData(widget.docID);
-              }
-              saveMessage();
-              saveIllnessReport();
+              // if (widget.docID != null) {
+              //   updateData(widget.docID);
+              // }
+              // saveMessage();
+              // saveIllnessReport();
+              sendPushMessage(widget.athlete.token, 'hello', 'hello');
             },
             child: const Text(
               'Save',

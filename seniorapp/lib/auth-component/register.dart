@@ -1,5 +1,6 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/component/language.dart';
@@ -40,6 +41,20 @@ class _RegisterState extends State<Register> {
   double _selectedHeight = 170.0;
   String _selectedGender;
   int age;
+  String token;
+
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((tok) {
+      setState(() {
+        token = tok;
+      });
+    });
+  }
+
+  void initState() {
+    super.initState();
+    getToken();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -831,6 +846,7 @@ class _RegisterState extends State<Register> {
             });
 
             Athlete athleteModel = Athlete(
+                token: token,
                 athlete_no: athlete_no,
                 username: _usernameController.text.trim(),
                 firstname: _firstnameController.text.trim(),
@@ -885,6 +901,7 @@ class _RegisterState extends State<Register> {
             });
 
             Staff staffModel = Staff(
+                token: token,
                 staff_no: staff_no,
                 username: _usernameController.text.trim(),
                 firstname: _firstnameController.text.trim(),
