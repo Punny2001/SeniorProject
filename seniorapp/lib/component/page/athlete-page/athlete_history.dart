@@ -708,7 +708,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                                           Text.rich(
                                                             TextSpan(
                                                               text:
-                                                                  'เวลาที่บัทึก: ',
+                                                                  'เวลาที่บันทึก: ',
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
