@@ -62,38 +62,9 @@ class _IllnessReportState extends State<IllnessReport> {
   bool isRepeat = false;
   bool valueAdded = false;
 
-  void sendPushMessage(String token, String title, String body) async {
-    try {
-      await http.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization':
-              'key=AAAAOmXVBT0:APA91bFonAMAsnJl3UDp2LQHXvThSOQd2j7q01EL1afdZI13TP7VEZxRa7q_Odj3wUL_urjyfS7e0wbgEbwKbUKPkm8p5LFLAVE498z3X4VgNaR5iMF4M9JMpv8s14YsGqI2plf_lCBK',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'priority': 'high',
-          'data': <String, dynamic>{
-            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'status': 'done',
-            'body': 'This is a test notify',
-            'title': 'Test'
-          },
-          'notification': {
-            'title': 'Test',
-            'body': 'This is a test notify',
-          },
-          'to': token,
-        }),
-      );
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(widget.athlete.token);
+    print(widget.athlete);
     if (widget.healthResultData != null) {
       _athleteNo.text = widget.healthResultData.athleteNo;
       _selectedSport = widget.athlete.sportType;
@@ -804,6 +775,7 @@ class _IllnessReportState extends State<IllnessReport> {
               // }
               // saveMessage();
               // saveIllnessReport();
+              print(widget.athlete.token);
               sendPushMessage(widget.athlete.token, 'hello', 'hello');
             },
             child: const Text(
@@ -914,6 +886,36 @@ class _IllnessReportState extends State<IllnessReport> {
     '5': 'Reaction to medication',
     '6': 'Other'
   };
+
+  void sendPushMessage(String token, String title, String body) async {
+    print(token);
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAOmXVBT0:APA91bFonAMAsnJl3UDp2LQHXvThSOQd2j7q01EL1afdZI13TP7VEZxRa7q_Odj3wUL_urjyfS7e0wbgEbwKbUKPkm8p5LFLAVE498z3X4VgNaR5iMF4M9JMpv8s14YsGqI2plf_lCBK',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'status': 'done',
+            'body': 'This is a test notify',
+            'title': 'Test'
+          },
+          'notification': {
+            'title': 'Test',
+            'body': 'This is a test notify',
+          },
+          'to': token,
+        }),
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void addMainSymptomList() {
     isRepeat = false;

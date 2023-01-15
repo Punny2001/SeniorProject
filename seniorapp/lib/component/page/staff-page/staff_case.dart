@@ -471,9 +471,10 @@ class _StaffCaseState extends State<StaffCase> {
                                     Map<String, dynamic> data =
                                         mappedData[index];
 
-                                    healthData = HealthResultData.fromMap(data);
                                     switch (data['questionnaireType']) {
                                       case 'Health':
+                                        healthData =
+                                            HealthResultData.fromMap(data);
                                         return Card(
                                           child: SizedBox(
                                             height: h * 0.25,
@@ -675,6 +676,8 @@ class _StaffCaseState extends State<StaffCase> {
                                                                           athlete =
                                                                           Athlete.fromMap(
                                                                               athleteData);
+                                                                      print(
+                                                                          athlete);
                                                                       Navigator.of(
                                                                               context)
                                                                           .push(
