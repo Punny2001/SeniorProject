@@ -6,13 +6,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page_route.dart';
 import 'package:seniorapp/firebase/firebase_options.dart';
+import 'dart:io' show Platform;
 
 String initPage = '/login';
 
-Future<void> myBackgroundMessageHandler(RemoteMessage message) async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print(
-      'onBackground: ${message.notification.title}/${message.notification.body}/${message.notification.titleLocKey}');
+
+  print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> main() async {
@@ -39,17 +40,17 @@ Future<void> main() async {
 
         FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-        // NotificationSettings settings = await messaging.requestPermission(
-        //   alert: true,
-        //   announcement: false,
-        //   badge: true,
-        //   carPlay: false,
-        //   criticalAlert: false,
-        //   provisional: false,
-        //   sound: true,
-        // );
+        NotificationSettings settings = await messaging.requestPermission(
+          alert: true,
+          announcement: false,
+          badge: true,
+          carPlay: false,
+          criticalAlert: false,
+          provisional: false,
+          sound: true,
+        );
 
-        // print('User granted permission: ${settings.authorizationStatus}');
+        print('User granted permission: ${settings.authorizationStatus}');
 
         FirebaseMessaging.onMessage.listen((RemoteMessage message) {
           print('Got a message whilst in the foreground!');
@@ -60,7 +61,10 @@ Future<void> main() async {
                 'Message also contained a notification: ${message.notification}');
           }
         });
-        FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+
+        FirebaseMessaging.onBackgroundMessage(
+            _firebaseMessagingBackgroundHandler);
+
         runApp(
           EasyLocalization(
             supportedLocales: const [Locale('en', 'US'), Locale('th', 'TH')],

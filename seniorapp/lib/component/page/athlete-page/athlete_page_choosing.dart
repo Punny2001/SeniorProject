@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
@@ -15,6 +19,7 @@ class AthletePageChoosing extends StatefulWidget {
 class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int _selected_idx = 0;
   int notificationCount = 0;
+  FirebaseMessaging messaging;
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
@@ -47,6 +52,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         primary: true,
