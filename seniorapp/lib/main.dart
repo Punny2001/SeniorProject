@@ -10,12 +10,12 @@ import 'dart:io' show Platform;
 
 String initPage = '/login';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print(
-      'title: ${message.notification.title}, body: ${message.notification.body}');
-  print("Handling a background message: ${message.messageId}");
-}
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   print(
+//       'title: ${message.notification.title}, body: ${message.notification.body}');
+//   print("Handling a background message: ${message.messageId}");
+// }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,34 +39,34 @@ Future<void> main() async {
           initPage = '/register';
         }
 
-        FirebaseMessaging messaging = FirebaseMessaging.instance;
+        // FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-        if (Platform.isIOS) {
-          NotificationSettings settings = await messaging.requestPermission(
-            alert: true,
-            announcement: false,
-            badge: true,
-            carPlay: false,
-            criticalAlert: false,
-            provisional: false,
-            sound: true,
-          );
+        // if (Platform.isIOS) {
+        //   NotificationSettings settings = await messaging.requestPermission(
+        //     alert: true,
+        //     announcement: false,
+        //     badge: true,
+        //     carPlay: false,
+        //     criticalAlert: false,
+        //     provisional: false,
+        //     sound: true,
+        //   );
 
-          print('User granted permission: ${settings.authorizationStatus}');
-        }
+        //   print('User granted permission: ${settings.authorizationStatus}');
+        // }
 
-        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-          print('Got a message whilst in the foreground!');
-          print('Message data: ${message.data}');
+        // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        //   print('Got a message whilst in the foreground!');
+        //   print('Message data: ${message.data}');
 
-          if (message.notification != null) {
-            print(
-                'Message also contained a notification: ${message.notification}');
-          }
-        });
+        //   if (message.notification != null) {
+        //     print(
+        //         'Message also contained a notification: ${message.notification}');
+        //   }
+        // });
 
-        FirebaseMessaging.onBackgroundMessage(
-            _firebaseMessagingBackgroundHandler);
+        // FirebaseMessaging.onBackgroundMessage(
+        //     _firebaseMessagingBackgroundHandler);
 
         runApp(
           EasyLocalization(

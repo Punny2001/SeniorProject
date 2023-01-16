@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,7 +9,9 @@ import 'package:seniorapp/component/page/athlete-page/questionnaire-page/more_qu
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 import 'questionnaire.dart';
+import 'package:http/http.dart' as http;
 
 class HealthQuestionnaire extends StatefulWidget {
   @override
@@ -367,6 +371,38 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     );
   }
 
+  void sendPushMessage(
+      Athlete athlete, HealthResultData healthResultData) async {
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAOmXVBT0:APA91bFonAMAsnJl3UDp2LQHXvThSOQd2j7q01EL1afdZI13TP7VEZxRa7q_Odj3wUL_urjyfS7e0wbgEbwKbUKPkm8p5LFLAVE498z3X4VgNaR5iMF4M9JMpv8s14YsGqI2plf_lCBK',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'status': 'done',
+            'title': 'ปัญหาอาการเจ็บป่วยถูกรายงาน',
+            'body':
+                'ข้อมูล ${healthResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+          },
+          'notification': {
+            'title': 'ปัญหาอาการเจ็บป่วยถูกรายงาน',
+            'body':
+                'ข้อมูล ${healthResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+          },
+          'to': '/topics/Staff',
+        }),
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> saveHealthResult() async {
     var uid = FirebaseAuth.instance.currentUser.uid;
     String questionnaireNo = 'HQ';
@@ -428,6 +464,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
         FirebaseFirestore.instance.collection('HealthQuestionnaireResult');
     DocumentReference docReference = collectionReference.doc();
     docReference.set(data).then((value) {
+      sendPushMessage(athData, healthResultModel);
       showDialog<void>(
           context: context,
           builder: (BuildContext context) {

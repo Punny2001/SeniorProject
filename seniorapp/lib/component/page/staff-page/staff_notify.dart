@@ -1,18 +1,15 @@
+import 'dart:convert';
 import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
-import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
-import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
-import 'package:seniorapp/component/page/staff-page/staff_case.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
+import 'package:http/http.dart' as http;
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
@@ -28,6 +25,7 @@ class StaffNotify extends StatefulWidget {
 
 class _StaffCaseState extends State<StaffNotify> {
   String uid = FirebaseAuth.instance.currentUser.uid;
+  final firestore = FirebaseFirestore.instance;
   User user;
   bool isLoading = false;
   int healthSize = 0;
@@ -36,6 +34,18 @@ class _StaffCaseState extends State<StaffNotify> {
   HealthResultData healthData;
   PhysicalResultData physicalData;
   Staff _staff;
+  List<Map<String, dynamic>> athleteData = [];
+
+  getAthleteData() {
+    firestore.collection('Athlete').get().then((document) {
+      int index = 0;
+      document.docs.forEach((snapshot) {
+        athleteData.add(snapshot.data());
+        athleteData[index]['athleteUID'] = snapshot.reference.id;
+        index += 1;
+      });
+    });
+  }
 
   Stream<List<QuerySnapshot>> getData() {
     Stream healthQuestionnaire = FirebaseFirestore.instance
@@ -95,6 +105,7 @@ class _StaffCaseState extends State<StaffNotify> {
     setState(() {
       isLoading = true;
     });
+    getAthleteData();
     getPhysicalSize();
     getHealthSize();
     FirebaseFirestore.instance
@@ -171,6 +182,15 @@ class _StaffCaseState extends State<StaffNotify> {
                                   itemBuilder: (context, index) {
                                     Map<String, dynamic> data =
                                         mappedData[index];
+
+                                    String athleteToken;
+                                    athleteData.forEach((athlete) {
+                                      if (data['athleteUID'] ==
+                                          athlete['athleteUID']) {
+                                        athleteToken = athlete['token'];
+                                      }
+                                    });
+
                                     healthData = HealthResultData.fromMap(data);
                                     physicalData =
                                         PhysicalResultData.fromMap(data);
@@ -486,13 +506,18 @@ class _StaffCaseState extends State<StaffNotify> {
                                           Container(
                                             color: Colors.blue[200],
                                             width: w,
-                                            height: h * 0.05,
+                                            height: h * 0.055,
                                             child: GestureDetector(
                                               onTap: () {
                                                 updateData(
                                                   data['questionnaireType'],
                                                   data['docID'],
                                                 );
+                                                print(athleteToken);
+                                                sendPushMessage(
+                                                    athleteToken,
+                                                    _staff,
+                                                    data['questionnaireNo']);
                                                 widget.refreshNotification;
                                                 setState(() {
                                                   getHealthSize();
@@ -541,6 +566,39 @@ class _StaffCaseState extends State<StaffNotify> {
                   ),
       ),
     );
+  }
+
+  void sendPushMessage(
+      String token, Staff staff, String questionnaireNo) async {
+    print(token);
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAOmXVBT0:APA91bFonAMAsnJl3UDp2LQHXvThSOQd2j7q01EL1afdZI13TP7VEZxRa7q_Odj3wUL_urjyfS7e0wbgEbwKbUKPkm8p5LFLAVE498z3X4VgNaR5iMF4M9JMpv8s14YsGqI2plf_lCBK',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'status': 'done',
+            'title': 'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟเรียบร้อย',
+            'body':
+                'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+          },
+          'notification': {
+            'title': 'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟเรียบร้อย',
+            'body':
+                'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+          },
+          'to': token,
+        }),
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<void> updateData(String type, String docID) async {

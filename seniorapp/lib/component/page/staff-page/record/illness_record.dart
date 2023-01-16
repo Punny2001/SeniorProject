@@ -12,6 +12,8 @@ import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/component/user-data/staff_data.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 import 'package:http/http.dart' as http;
@@ -62,9 +64,24 @@ class _IllnessReportState extends State<IllnessReport> {
   bool isRepeat = false;
   bool valueAdded = false;
 
+  Staff staff;
+  String uid;
+
+  void getStaff() {
+    uid = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance
+        .collection('Staff')
+        .doc(uid)
+        .get()
+        .then((snapshot) {
+      Map data = snapshot.data();
+      staff = Staff.fromMap(data);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.athlete);
+    getStaff();
     if (widget.healthResultData != null) {
       _athleteNo.text = widget.healthResultData.athleteNo;
       _selectedSport = widget.athlete.sportType;
@@ -770,13 +787,15 @@ class _IllnessReportState extends State<IllnessReport> {
                 shape: const StadiumBorder(),
                 primary: Colors.blue.shade200),
             onPressed: () {
-              // if (widget.docID != null) {
-              //   updateData(widget.docID);
-              // }
-              // saveMessage();
-              // saveIllnessReport();
-              print(widget.athlete.token);
-              sendPushMessage(widget.athlete.token, 'hello', 'hello');
+              bool isValidate = _illnessKey.currentState.validate();
+              if (isValidate) {
+                if (widget.docID != null) {
+                  updateData(widget.docID);
+                }
+                saveMessage();
+                saveIllnessReport();
+                sendPushMessage(widget.athlete.token, staff);
+              }
             },
             child: const Text(
               'Save',
@@ -887,7 +906,7 @@ class _IllnessReportState extends State<IllnessReport> {
     '6': 'Other'
   };
 
-  void sendPushMessage(String token, String title, String body) async {
+  void sendPushMessage(String token, Staff staff) async {
     print(token);
     try {
       await http.post(
@@ -902,12 +921,16 @@ class _IllnessReportState extends State<IllnessReport> {
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
             'status': 'done',
-            'body': 'This is a test notify',
-            'title': 'Test'
+            'title':
+                'ข้อมูล ${widget.healthResultData.questionnaireNo} บันทึกเสร็จสิ้น',
+            'body':
+                'ข้อมูล ${widget.healthResultData.questionnaireNo} ถูกบันทึกโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
           },
           'notification': {
-            'title': 'Test',
-            'body': 'This is a test notify',
+            'title':
+                'ข้อมูล ${widget.healthResultData.questionnaireNo} บันทึกเสร็จสิ้น',
+            'body':
+                'ข้อมูล ${widget.healthResultData.questionnaireNo} ถูกบันทึกโดยสตาฟ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
           },
           'to': token,
         }),
@@ -1072,7 +1095,7 @@ class _IllnessReportState extends State<IllnessReport> {
     NumberFormat format = NumberFormat('0000000000');
     await FirebaseFirestore.instance
         .collection('Message')
-        .orderBy('message_no', descending: true)
+        .orderBy('messageNo', descending: true)
         .limit(1)
         .get()
         .then((QuerySnapshot querySnapshot) {
@@ -1082,7 +1105,7 @@ class _IllnessReportState extends State<IllnessReport> {
         querySnapshot.docs
             .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
           Map data = queryDocumentSnapshot.data();
-          split = data['message_no'].toString().split('M')[1];
+          split = data['messageNo'].toString().split('M')[1];
           latestID = int.parse(split) + 1;
           message_no += format.format(latestID);
         });

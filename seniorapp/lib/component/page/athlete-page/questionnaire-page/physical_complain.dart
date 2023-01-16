@@ -7,7 +7,10 @@ import 'package:seniorapp/component/page/athlete-page/questionnaire-page/more_qu
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 import 'questionnaire.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PhysicalQuestionnaire extends StatefulWidget {
   @override
@@ -402,6 +405,38 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     );
   }
 
+  void sendPushMessage(
+      Athlete athlete, PhysicalResultData physicalResultData) async {
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAOmXVBT0:APA91bFonAMAsnJl3UDp2LQHXvThSOQd2j7q01EL1afdZI13TP7VEZxRa7q_Odj3wUL_urjyfS7e0wbgEbwKbUKPkm8p5LFLAVE498z3X4VgNaR5iMF4M9JMpv8s14YsGqI2plf_lCBK',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'status': 'done',
+            'title': 'ปัญหาอาการบาดเจ็บถูกรายงาน',
+            'body':
+                'ข้อมูล ${physicalResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+          },
+          'notification': {
+            'title': 'ปัญหาอาการบาดเจ็บถูกรายงาน',
+            'body':
+                'ข้อมูล ${physicalResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+          },
+          'to': '/topics/Staff',
+        }),
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> savePhysicalResult() async {
     var uid = FirebaseAuth.instance.currentUser.uid;
     String questionnaireNo = 'PQ';
@@ -462,6 +497,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         FirebaseFirestore.instance.collection('PhysicalQuestionnaireResult');
     DocumentReference docReference = collectionReference.doc();
     docReference.set(data).then((value) {
+      sendPushMessage(athData, physicalResultModel);
       showDialog<void>(
           context: context,
           builder: (BuildContext context) {

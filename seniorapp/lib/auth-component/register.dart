@@ -51,6 +51,7 @@ class _RegisterState extends State<Register> {
     });
   }
 
+  @override
   void initState() {
     super.initState();
     getToken();
@@ -869,10 +870,11 @@ class _RegisterState extends State<Register> {
                 .then(
                   (value) => print('Insert data to Firestore successfully'),
                 );
-          }).then(
-            (value) => Navigator.of(context).pushNamedAndRemoveUntil(
-                '/athletePageChoosing', (route) => false),
-          );
+          }).then((value) {
+            FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                '/athletePageChoosing', (route) => false);
+          });
         } else if (passwordConfirm() && _selectedDepartment == 'Staff') {
           await FirebaseAuth.instance.currentUser
               .updateProfile(displayName: _usernameController.text.trim())
@@ -923,8 +925,11 @@ class _RegisterState extends State<Register> {
                   (value) => print('Insert data to Firestore successfully'),
                 );
           }).then(
-            (value) => Navigator.of(context).pushNamedAndRemoveUntil(
-                '/staffPageChoosing', (route) => false),
+            (value) {
+              FirebaseMessaging.instance.subscribeToTopic('Staff');
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/staffPageChoosing', (route) => false);
+            },
           );
         }
       }

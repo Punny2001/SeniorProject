@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/staff_personal.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
@@ -175,6 +176,7 @@ class _StaffProfileState extends State<StaffProfile> {
               ),
             ),
             onTap: () {
+              FirebaseMessaging.instance.deleteToken();
               FirebaseAuth.instance.signOut();
               Navigator.of(context).pushNamedAndRemoveUntil(
                 '/login',

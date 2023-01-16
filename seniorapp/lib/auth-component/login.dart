@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -19,6 +20,25 @@ class _LoginState extends State<Login> {
   bool isEmailVerified;
   final _keyForm = GlobalKey<FormState>();
   bool isRegister;
+
+  String token;
+
+  void getToken() {
+    FirebaseMessaging.instance.getToken().then((mytoken) {
+      token = mytoken;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getToken();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,6 +201,7 @@ class _LoginState extends State<Login> {
   }
 
   Future signin() async {
+    print('token: $token');
     bool validate = _keyForm.currentState.validate();
     try {
       if (validate) {
@@ -197,9 +218,13 @@ class _LoginState extends State<Login> {
           DocumentSnapshot athleteDoc = await athleteRef.get();
           DocumentSnapshot staffDoc = await staffRef.get();
           if (athleteDoc.exists) {
+            athleteRef.update({'token': token});
+            FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/athletePageChoosing', (route) => false);
           } else if (staffDoc.exists) {
+            staffRef.update({'token': token});
+            FirebaseMessaging.instance.subscribeToTopic('Staff');
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/staffPageChoosing', (route) => false);
           } else {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
@@ -8,13 +9,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
+import 'package:seniorapp/component/user-data/staff_data.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
+import 'package:http/http.dart' as http;
 
 class InjuryReport extends StatefulWidget {
   final PhysicalResultData physicalResultData;
@@ -66,6 +69,21 @@ class _InjuryReportState extends State<InjuryReport> {
   Athlete athlete;
   bool isLoading = false;
   Timer _timer;
+
+  Staff staff;
+  String uid;
+
+  void getStaff() {
+    uid = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance
+        .collection('Staff')
+        .doc(uid)
+        .get()
+        .then((snapshot) {
+      Map data = snapshot.data();
+      staff = Staff.fromMap(data);
+    });
+  }
 
   @override
   void initState() {
@@ -960,10 +978,15 @@ class _InjuryReportState extends State<InjuryReport> {
                 shape: const StadiumBorder(),
                 primary: Colors.blue.shade200),
             onPressed: () {
-              if (widget.docID != null) {
-                updateData(widget.docID);
+              bool isValidate = _injuryKey.currentState.validate();
+              if (isValidate) {
+                if (widget.docID != null) {
+                  updateData(widget.docID);
+                }
+                saveMessage();
+                saveInjuryReport();
+                sendPushMessage(widget.athlete.token, staff);
               }
-              saveInjuryReport();
             },
             child: const Text(
               'Save',
@@ -1333,6 +1356,76 @@ class _InjuryReportState extends State<InjuryReport> {
               .then((value) => print('Insert data to Firestore successfully'));
         });
       }
+    }
+  }
+
+  Future<void> saveMessage() async {
+    var uid = FirebaseAuth.instance.currentUser.uid;
+    String staff_no;
+    FirebaseFirestore.instance
+        .collection('Staff')
+        .doc(uid)
+        .get()
+        .then((snapshot) {
+      Map data = snapshot.data();
+      staff_no = data['staff_no'];
+    });
+    bool isValidate = _injuryKey.currentState.validate();
+    String message_no = 'M';
+    String split;
+    int latestID;
+    NumberFormat format = NumberFormat('0000000000');
+    await FirebaseFirestore.instance
+        .collection('Message')
+        .orderBy('messageNo', descending: true)
+        .limit(1)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.size == 0) {
+        message_no += format.format(1);
+      } else {
+        querySnapshot.docs
+            .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+          Map data = queryDocumentSnapshot.data();
+          split = data['messageNo'].toString().split('M')[1];
+          latestID = int.parse(split) + 1;
+          message_no += format.format(latestID);
+        });
+      }
+    });
+  }
+
+  void sendPushMessage(String token, Staff staff) async {
+    print(token);
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAAOmXVBT0:APA91bFonAMAsnJl3UDp2LQHXvThSOQd2j7q01EL1afdZI13TP7VEZxRa7q_Odj3wUL_urjyfS7e0wbgEbwKbUKPkm8p5LFLAVE498z3X4VgNaR5iMF4M9JMpv8s14YsGqI2plf_lCBK',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'status': 'done',
+            'title':
+                'ข้อมูล ${widget.physicalResultData.questionnaireNo} บันทึกเสร็จสิ้น',
+            'body':
+                'ข้อมูล ${widget.physicalResultData.questionnaireNo} ถูกบันทึกโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+          },
+          'notification': {
+            'title':
+                'ข้อมูล ${widget.physicalResultData.questionnaireNo} บันทึกเสร็จสิ้น',
+            'body':
+                'ข้อมูล ${widget.physicalResultData.questionnaireNo} ถูกบันทึกโดยสตาฟ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+          },
+          'to': token,
+        }),
+      );
+    } catch (e) {
+      print(e);
     }
   }
 

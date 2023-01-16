@@ -1,14 +1,14 @@
+import 'dart:io';
+
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/staff-page/choose_history.dart';
-import 'package:seniorapp/component/page/staff-page/history/finished_case.dart';
 import 'package:seniorapp/component/page/staff-page/staff_case.dart';
-import 'package:seniorapp/component/page/staff-page/history/staff_history.dart';
 import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 
@@ -31,6 +31,14 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int index;
   int unfinishedCaseCount = 0;
   Staff staff;
+
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print(
+        'title: ${message.notification.title}, body: ${message.notification.body}');
+    print("Handling a background message: ${message.messageId}");
+  }
 
   getHealthSize() {
     FirebaseFirestore.instance
@@ -135,8 +143,45 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     });
   }
 
+  void registerNotification() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    if (Platform.isIOS) {
+      NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+
+      print('User granted permission: ${settings.authorizationStatus}');
+    } else if (Platform.isAndroid) {
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+    }
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
+
   @override
   void initState() {
+    // registerNotification();
     getHealthSize();
     getPhysicalSize();
     FirebaseFirestore.instance
