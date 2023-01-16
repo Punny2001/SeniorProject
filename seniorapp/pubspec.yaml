@@ -63,6 +63,7 @@ dependencies:
   badges: ^2.0.3
   sort: ^0.0.2
   http: ^0.13.5
+  flutter_local_notifications: ^13.0.0
 
 dev_dependencies:
   flutter_test:

@@ -23,8 +23,8 @@ class _LoginState extends State<Login> {
 
   String token;
 
-  void getToken() {
-    FirebaseMessaging.instance.getToken().then((mytoken) {
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((mytoken) {
       token = mytoken;
     });
   }

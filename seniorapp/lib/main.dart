@@ -8,18 +8,22 @@ import 'package:seniorapp/component/page_route.dart';
 import 'package:seniorapp/firebase/firebase_options.dart';
 import 'dart:io' show Platform;
 
+import 'package:seniorapp/local_notification.dart';
+
 String initPage = '/login';
 
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   print(
-//       'title: ${message.notification.title}, body: ${message.notification.body}');
-//   print("Handling a background message: ${message.messageId}");
-// }
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print(
+      'title: ${message.notification.title}, body: ${message.notification.body}');
+  print("Handling a background message: ${message.messageId}");
+  LocalNotificationService.displayNotification(message);
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  LocalNotificationService.initialize();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) async {
     FirebaseAuth.instance.authStateChanges().listen((event) async {
@@ -39,34 +43,43 @@ Future<void> main() async {
           initPage = '/register';
         }
 
-        // FirebaseMessaging messaging = FirebaseMessaging.instance;
+        FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-        // if (Platform.isIOS) {
-        //   NotificationSettings settings = await messaging.requestPermission(
-        //     alert: true,
-        //     announcement: false,
-        //     badge: true,
-        //     carPlay: false,
-        //     criticalAlert: false,
-        //     provisional: false,
-        //     sound: true,
-        //   );
+        if (Platform.isIOS) {
+          NotificationSettings settings = await messaging.requestPermission(
+            alert: true,
+            announcement: false,
+            badge: true,
+            carPlay: false,
+            criticalAlert: false,
+            provisional: false,
+            sound: true,
+          );
 
-        //   print('User granted permission: ${settings.authorizationStatus}');
-        // }
+          print('User granted permission: ${settings.authorizationStatus}');
+        } else if (Platform.isAndroid) {
+          await FirebaseMessaging.instance
+              .setForegroundNotificationPresentationOptions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+        }
 
-        // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        //   print('Got a message whilst in the foreground!');
-        //   print('Message data: ${message.data}');
+        FirebaseMessaging.instance.getInitialMessage();
 
-        //   if (message.notification != null) {
-        //     print(
-        //         'Message also contained a notification: ${message.notification}');
-        //   }
-        // });
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+          if (message.notification != null) {
+            print('title: ${message.notification.title}');
+            print('body: ${message.notification.body}');
+          }
+          LocalNotificationService.displayNotification(message);
+        });
 
-        // FirebaseMessaging.onBackgroundMessage(
-        //     _firebaseMessagingBackgroundHandler);
+        FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
+
+        FirebaseMessaging.onBackgroundMessage(
+            _firebaseMessagingBackgroundHandler);
 
         runApp(
           EasyLocalization(

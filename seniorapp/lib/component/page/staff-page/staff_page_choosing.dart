@@ -32,14 +32,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int unfinishedCaseCount = 0;
   Staff staff;
 
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    await Firebase.initializeApp();
-    print(
-        'title: ${message.notification.title}, body: ${message.notification.body}');
-    print("Handling a background message: ${message.messageId}");
-  }
-
   getHealthSize() {
     FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
@@ -119,7 +111,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     const StaffNotify(),
   ];
 
-  void _onPageTap(index) async {
+  void _onPageTap(index) {
     setState(() {
       _selected_idx = index;
     });
@@ -143,45 +135,8 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     });
   }
 
-  void registerNotification() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    if (Platform.isIOS) {
-      NotificationSettings settings = await messaging.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: false,
-        criticalAlert: false,
-        provisional: false,
-        sound: true,
-      );
-
-      print('User granted permission: ${settings.authorizationStatus}');
-    } else if (Platform.isAndroid) {
-      await FirebaseMessaging.instance
-          .setForegroundNotificationPresentationOptions(
-        alert: true,
-        badge: true,
-        sound: true,
-      );
-    }
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-    });
-
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
   @override
   void initState() {
-    registerNotification();
     getHealthSize();
     getPhysicalSize();
     FirebaseFirestore.instance
