@@ -181,7 +181,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
 
   @override
   void initState() {
-    // registerNotification();
+    registerNotification();
     getHealthSize();
     getPhysicalSize();
     FirebaseFirestore.instance
