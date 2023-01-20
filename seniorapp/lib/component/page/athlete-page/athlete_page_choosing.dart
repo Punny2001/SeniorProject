@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,8 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int _selected_idx = 0;
   int notificationCount = 0;
   FirebaseMessaging messaging;
+  String token;
+  String uid = FirebaseAuth.instance.currentUser.uid;
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
@@ -37,9 +41,36 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     });
   }
 
+  getToken() async {
+    String token = await FirebaseMessaging.instance.getToken();
+    await FirebaseFirestore.instance
+        .collection('Athlete')
+        .doc(uid)
+        .update({'token': token});
+  }
+
+  requestPermission() async {
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+    if (Platform.isIOS) {
+      requestPermission();
+    }
+    getToken();
+    FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
     setState(() {});
   }
 

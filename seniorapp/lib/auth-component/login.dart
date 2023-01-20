@@ -21,18 +21,9 @@ class _LoginState extends State<Login> {
   final _keyForm = GlobalKey<FormState>();
   bool isRegister;
 
-  String token;
-
-  void getToken() async {
-    await FirebaseMessaging.instance.getToken().then((mytoken) {
-      token = mytoken;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    getToken();
   }
 
   @override
@@ -201,7 +192,6 @@ class _LoginState extends State<Login> {
   }
 
   Future signin() async {
-    print('token: $token');
     bool validate = _keyForm.currentState.validate();
     try {
       if (validate) {
@@ -218,13 +208,9 @@ class _LoginState extends State<Login> {
           DocumentSnapshot athleteDoc = await athleteRef.get();
           DocumentSnapshot staffDoc = await staffRef.get();
           if (athleteDoc.exists) {
-            athleteRef.update({'token': token});
-            FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/athletePageChoosing', (route) => false);
           } else if (staffDoc.exists) {
-            staffRef.update({'token': token});
-            FirebaseMessaging.instance.subscribeToTopic('Staff');
             Navigator.of(context).pushNamedAndRemoveUntil(
                 '/staffPageChoosing', (route) => false);
           } else {

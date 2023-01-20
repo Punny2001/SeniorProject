@@ -135,8 +135,36 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     });
   }
 
+  getToken() async {
+    String token = await FirebaseMessaging.instance.getToken();
+    await FirebaseFirestore.instance
+        .collection('Staff')
+        .doc(uid)
+        .update({'token': token});
+  }
+
+  requestPermission() async {
+    FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await firebaseMessaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+  }
+
   @override
   void initState() {
+    super.initState();
+    getToken();
+    FirebaseMessaging.instance.subscribeToTopic('Staff');
+    if (Platform.isIOS) {
+      requestPermission();
+    }
     getHealthSize();
     getPhysicalSize();
     FirebaseFirestore.instance
@@ -149,8 +177,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         staff = Staff.fromMap(data);
       });
     });
-
-    super.initState();
   }
 
   @override
