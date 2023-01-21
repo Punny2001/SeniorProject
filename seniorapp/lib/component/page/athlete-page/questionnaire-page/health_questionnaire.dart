@@ -429,34 +429,44 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       }
     });
 
+    DateTime defaultDate = DateTime(1950);
+
     HealthResultData healthResultModel;
     if (hasProblem == true) {
       healthResultModel = HealthResultData(
-          questionnaireNo: questionnaireNo,
-          athleteNo: athData.athlete_no,
-          athleteUID: uid,
-          doDate: DateTime.now(),
-          questionnaireType: 'Health',
-          totalPoint: totalScore,
-          answerList: answer_list,
-          healthSymptom: _healthChoosing,
-          caseReceived: false,
-          caseFinished: false);
+        questionnaireNo: questionnaireNo,
+        athleteNo: athData.athlete_no,
+        athleteUID: uid,
+        doDate: DateTime.now(),
+        questionnaireType: 'Health',
+        totalPoint: totalScore,
+        answerList: answer_list,
+        healthSymptom: _healthChoosing,
+        caseReceived: false,
+        caseFinished: false,
+        caseFinishedDateTime: defaultDate,
+        caseReceivedDateTime: defaultDate,
+        messageReceivedDateTime: defaultDate,
+      );
     } else {
       for (int i = 0; i < questionSize; i++) {
         answer_list["Q${i + 1}"] = 0;
       }
       healthResultModel = HealthResultData(
-          questionnaireNo: questionnaireNo,
-          athleteNo: athData.athlete_no,
-          athleteUID: uid,
-          doDate: DateTime.now(),
-          questionnaireType: 'Health',
-          totalPoint: 0,
-          answerList: answer_list,
-          healthSymptom: 'None',
-          caseReceived: false,
-          caseFinished: false);
+        questionnaireNo: questionnaireNo,
+        athleteNo: athData.athlete_no,
+        athleteUID: uid,
+        doDate: DateTime.now(),
+        questionnaireType: 'Health',
+        totalPoint: 0,
+        answerList: answer_list,
+        healthSymptom: 'None',
+        caseReceived: false,
+        caseFinished: false,
+        caseFinishedDateTime: defaultDate,
+        caseReceivedDateTime: defaultDate,
+        messageReceivedDateTime: defaultDate,
+      );
     }
     Map<String, dynamic> data = healthResultModel.toMap();
 

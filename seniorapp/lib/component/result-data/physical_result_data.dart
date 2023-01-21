@@ -15,6 +15,11 @@ class PhysicalResultData {
   String staff_no_received;
   String staff_uid_received;
   bool caseFinished;
+  DateTime caseReceivedDateTime;
+  DateTime caseFinishedDateTime;
+  String adviceMessage;
+  DateTime messageReceivedDateTime;
+
   PhysicalResultData({
     @required this.questionnaireNo,
     @required this.athleteNo,
@@ -24,10 +29,14 @@ class PhysicalResultData {
     @required this.totalPoint,
     @required this.answerList,
     @required this.bodyPart,
-    @required this.caseReceived,
+    this.caseReceived,
     this.staff_no_received,
     this.staff_uid_received,
-    @required this.caseFinished,
+    this.caseFinished,
+    this.caseReceivedDateTime,
+    this.caseFinishedDateTime,
+    this.adviceMessage,
+    this.messageReceivedDateTime,
   });
 
   PhysicalResultData copyWith({
@@ -43,6 +52,10 @@ class PhysicalResultData {
     String staff_no_received,
     String staff_uid_received,
     bool caseFinished,
+    DateTime caseReceivedDateTime,
+    DateTime caseFinishedDateTime,
+    String adviceMessage,
+    DateTime messageReceivedDateTime,
   }) {
     return PhysicalResultData(
       questionnaireNo: questionnaireNo ?? this.questionnaireNo,
@@ -57,6 +70,11 @@ class PhysicalResultData {
       staff_no_received: staff_no_received ?? this.staff_no_received,
       staff_uid_received: staff_uid_received ?? this.staff_uid_received,
       caseFinished: caseFinished ?? this.caseFinished,
+      caseReceivedDateTime: caseReceivedDateTime ?? this.caseReceivedDateTime,
+      caseFinishedDateTime: caseFinishedDateTime ?? this.caseFinishedDateTime,
+      adviceMessage: adviceMessage ?? this.adviceMessage,
+      messageReceivedDateTime:
+          messageReceivedDateTime ?? this.messageReceivedDateTime,
     );
   }
 
@@ -75,6 +93,10 @@ class PhysicalResultData {
     result.addAll({'staff_no_received': staff_no_received});
     result.addAll({'staff_uid_received': staff_uid_received});
     result.addAll({'caseFinished': caseFinished});
+    result.addAll({'caseReceivedDateTime': caseReceivedDateTime});
+    result.addAll({'caseFinishedDateTime': caseFinishedDateTime});
+    result.addAll({'adviceMessage': adviceMessage});
+    result.addAll({'messageReceivedDateTime': messageReceivedDateTime});
 
     return result;
   }
@@ -93,6 +115,13 @@ class PhysicalResultData {
       staff_no_received: map['staff_no_received'] ?? '',
       staff_uid_received: map['staff_uid_received'] ?? '',
       caseFinished: map['caseFinished'] ?? false,
+      caseReceivedDateTime:
+          DateTime.parse(map['caseReceivedDateTime'].toDate().toString()),
+      caseFinishedDateTime:
+          DateTime.parse(map['caseFinishedDateTime'].toDate().toString()),
+      adviceMessage: map['adviceMessage'] ?? '',
+      messageReceivedDateTime:
+          DateTime.parse(map['messageReceivedDateTime'].toDate().toString()),
     );
   }
 
@@ -103,7 +132,7 @@ class PhysicalResultData {
 
   @override
   String toString() {
-    return 'PhysicalResultData(questionnaireNo: $questionnaireNo, athleteNo: $athleteNo, athleteUID: $athleteUID, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, bodyPart: $bodyPart, caseReceived: $caseReceived, staff_no_received: $staff_no_received, staff_uid_received: $staff_uid_received, caseFinished: $caseFinished)';
+    return 'PhysicalResultData(questionnaireNo: $questionnaireNo, athleteNo: $athleteNo, athleteUID: $athleteUID, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, bodyPart: $bodyPart, caseReceived: $caseReceived, staff_no_received: $staff_no_received, staff_uid_received: $staff_uid_received, caseFinished: $caseFinished, caseReceivedDateTime: $caseReceivedDateTime, caseFinishedDateTime: $caseFinishedDateTime, adviceMessage: $adviceMessage, messageReceivedDateTime: $messageReceivedDateTime)';
   }
 
   @override
@@ -122,7 +151,11 @@ class PhysicalResultData {
         other.caseReceived == caseReceived &&
         other.staff_no_received == staff_no_received &&
         other.staff_uid_received == staff_uid_received &&
-        other.caseFinished == caseFinished;
+        other.caseFinished == caseFinished &&
+        other.caseReceivedDateTime == caseReceivedDateTime &&
+        other.caseFinishedDateTime == caseFinishedDateTime &&
+        other.adviceMessage == adviceMessage &&
+        other.messageReceivedDateTime == messageReceivedDateTime;
   }
 
   @override
@@ -138,6 +171,10 @@ class PhysicalResultData {
         caseReceived.hashCode ^
         staff_no_received.hashCode ^
         staff_uid_received.hashCode ^
-        caseFinished.hashCode;
+        caseFinished.hashCode ^
+        caseReceivedDateTime.hashCode ^
+        caseFinishedDateTime.hashCode ^
+        adviceMessage.hashCode ^
+        messageReceivedDateTime.hashCode;
   }
 }

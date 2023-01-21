@@ -462,19 +462,25 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       }
     });
 
+    DateTime defaultDate = DateTime(1950);
+
     PhysicalResultData physicalResultModel;
     if (hasProblem == true) {
       physicalResultModel = PhysicalResultData(
-          questionnaireNo: questionnaireNo,
-          athleteNo: athData.athlete_no,
-          athleteUID: uid,
-          doDate: DateTime.now(),
-          questionnaireType: 'Physical',
-          totalPoint: totalScore,
-          answerList: answer_list,
-          bodyPart: insertedBody,
-          caseReceived: false,
-          caseFinished: false);
+        questionnaireNo: questionnaireNo,
+        athleteNo: athData.athlete_no,
+        athleteUID: uid,
+        doDate: DateTime.now(),
+        questionnaireType: 'Physical',
+        totalPoint: totalScore,
+        answerList: answer_list,
+        bodyPart: insertedBody,
+        caseReceived: false,
+        caseFinished: false,
+        caseFinishedDateTime: defaultDate,
+        caseReceivedDateTime: defaultDate,
+        messageReceivedDateTime: defaultDate,
+      );
     } else {
       for (int i = 0; i < questionSize; i++) {
         answer_list["Q${i + 1}"] = 0;
@@ -489,7 +495,10 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
           answerList: answer_list,
           bodyPart: 'None',
           caseReceived: false,
-          caseFinished: false);
+          caseFinished: false,
+          caseFinishedDateTime: defaultDate,
+          caseReceivedDateTime: defaultDate,
+          messageReceivedDateTime: defaultDate);
     }
     Map<String, dynamic> data = physicalResultModel.toMap();
 

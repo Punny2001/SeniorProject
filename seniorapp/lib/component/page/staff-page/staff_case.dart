@@ -4,15 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
-import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
@@ -497,7 +494,8 @@ class _StaffCaseState extends State<StaffCase> {
                                                       const Padding(
                                                         padding:
                                                             EdgeInsets.only(
-                                                                top: 15),
+                                                          top: 15,
+                                                        ),
                                                       ),
                                                       Text.rich(
                                                         TextSpan(
@@ -755,7 +753,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                   child: Column(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .spaceEvenly,
+                                                            .center,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .stretch,
@@ -861,6 +859,7 @@ class _StaffCaseState extends State<StaffCase> {
                                                           ],
                                                         ),
                                                       ),
+                                                      PaddingDecorate(5),
                                                       Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment

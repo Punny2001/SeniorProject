@@ -71,6 +71,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     }
     getToken();
     FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
+    FirebaseMessaging.instance.subscribeToTopic('Athlete');
     setState(() {});
   }
 

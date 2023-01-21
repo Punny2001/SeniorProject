@@ -983,7 +983,7 @@ class _InjuryReportState extends State<InjuryReport> {
                 if (widget.docID != null) {
                   updateData(widget.docID);
                 }
-                saveMessage();
+                // saveMessage();
                 saveInjuryReport();
                 sendPushMessage(widget.athlete.token, staff);
               }
@@ -1359,41 +1359,41 @@ class _InjuryReportState extends State<InjuryReport> {
     }
   }
 
-  Future<void> saveMessage() async {
-    var uid = FirebaseAuth.instance.currentUser.uid;
-    String staff_no;
-    FirebaseFirestore.instance
-        .collection('Staff')
-        .doc(uid)
-        .get()
-        .then((snapshot) {
-      Map data = snapshot.data();
-      staff_no = data['staff_no'];
-    });
-    bool isValidate = _injuryKey.currentState.validate();
-    String message_no = 'M';
-    String split;
-    int latestID;
-    NumberFormat format = NumberFormat('0000000000');
-    await FirebaseFirestore.instance
-        .collection('Message')
-        .orderBy('messageNo', descending: true)
-        .limit(1)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      if (querySnapshot.size == 0) {
-        message_no += format.format(1);
-      } else {
-        querySnapshot.docs
-            .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
-          Map data = queryDocumentSnapshot.data();
-          split = data['messageNo'].toString().split('M')[1];
-          latestID = int.parse(split) + 1;
-          message_no += format.format(latestID);
-        });
-      }
-    });
-  }
+  // Future<void> saveMessage() async {
+  //   var uid = FirebaseAuth.instance.currentUser.uid;
+  //   String staff_no;
+  //   FirebaseFirestore.instance
+  //       .collection('Staff')
+  //       .doc(uid)
+  //       .get()
+  //       .then((snapshot) {
+  //     Map data = snapshot.data();
+  //     staff_no = data['staff_no'];
+  //   });
+  //   bool isValidate = _injuryKey.currentState.validate();
+  //   String message_no = 'M';
+  //   String split;
+  //   int latestID;
+  //   NumberFormat format = NumberFormat('0000000000');
+  //   await FirebaseFirestore.instance
+  //       .collection('Message')
+  //       .orderBy('messageNo', descending: true)
+  //       .limit(1)
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //     if (querySnapshot.size == 0) {
+  //       message_no += format.format(1);
+  //     } else {
+  //       querySnapshot.docs
+  //           .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+  //         Map data = queryDocumentSnapshot.data();
+  //         split = data['messageNo'].toString().split('M')[1];
+  //         latestID = int.parse(split) + 1;
+  //         message_no += format.format(latestID);
+  //       });
+  //     }
+  //   });
+  // }
 
   void sendPushMessage(String token, Staff staff) async {
     print(token);
@@ -1433,7 +1433,11 @@ class _InjuryReportState extends State<InjuryReport> {
     await FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
         .doc(docID)
-        .update({'caseFinished': true}).then((value) {
+        .update({
+      'caseFinished': true,
+      'caseFinishedDateTime': DateTime.now(),
+      'adviceMessage': _messageController.text,
+    }).then((value) {
       print('Updated data successfully');
     });
   }

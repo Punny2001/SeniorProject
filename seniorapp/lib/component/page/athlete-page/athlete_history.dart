@@ -458,6 +458,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                   itemBuilder: (context, index) {
                                     Map<String, dynamic> data =
                                         mappedData[index];
+                                        
                                     healthData = HealthResultData.fromMap(data);
                                     physicalData =
                                         PhysicalResultData.fromMap(data);

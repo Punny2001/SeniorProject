@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
@@ -161,6 +160,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   void initState() {
     super.initState();
     getToken();
+    FirebaseMessaging.instance.unsubscribeFromTopic('Athlete');
     FirebaseMessaging.instance.subscribeToTopic('Staff');
     if (Platform.isIOS) {
       requestPermission();

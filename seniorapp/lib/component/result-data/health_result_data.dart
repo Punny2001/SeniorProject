@@ -15,6 +15,10 @@ class HealthResultData {
   String staff_no_received;
   String staff_uid_received;
   bool caseFinished;
+  DateTime caseReceivedDateTime;
+  DateTime caseFinishedDateTime;
+  String adviceMessage;
+  DateTime messageReceivedDateTime;
   HealthResultData({
     @required this.questionnaireNo,
     @required this.athleteUID,
@@ -24,10 +28,14 @@ class HealthResultData {
     @required this.totalPoint,
     @required this.answerList,
     @required this.healthSymptom,
-    @required this.caseReceived,
+    this.caseReceived,
     this.staff_no_received,
     this.staff_uid_received,
-    @required this.caseFinished,
+    this.caseFinished,
+    this.caseReceivedDateTime,
+    this.caseFinishedDateTime,
+    this.adviceMessage,
+    this.messageReceivedDateTime,
   });
 
   HealthResultData copyWith({
@@ -43,6 +51,10 @@ class HealthResultData {
     String staff_no_received,
     String staff_uid_received,
     bool caseFinished,
+    DateTime caseReceivedDateTime,
+    DateTime caseFinishedDateTime,
+    String adviceMessage,
+    DateTime messageReceivedDateTime,
   }) {
     return HealthResultData(
       questionnaireNo: questionnaireNo ?? this.questionnaireNo,
@@ -57,12 +69,17 @@ class HealthResultData {
       staff_no_received: staff_no_received ?? this.staff_no_received,
       staff_uid_received: staff_uid_received ?? this.staff_uid_received,
       caseFinished: caseFinished ?? this.caseFinished,
+      caseReceivedDateTime: caseReceivedDateTime ?? this.caseReceivedDateTime,
+      caseFinishedDateTime: caseFinishedDateTime ?? this.caseFinishedDateTime,
+      adviceMessage: adviceMessage ?? this.adviceMessage,
+      messageReceivedDateTime:
+          messageReceivedDateTime ?? this.messageReceivedDateTime,
     );
   }
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
-  
+
     result.addAll({'questionnaireNo': questionnaireNo});
     result.addAll({'athleteUID': athleteUID});
     result.addAll({'athleteNo': athleteNo});
@@ -75,7 +92,11 @@ class HealthResultData {
     result.addAll({'staff_no_received': staff_no_received});
     result.addAll({'staff_uid_received': staff_uid_received});
     result.addAll({'caseFinished': caseFinished});
-  
+    result.addAll({'caseReceivedDateTime': caseReceivedDateTime});
+    result.addAll({'caseFinishedDateTime': caseFinishedDateTime});
+    result.addAll({'adviceMessage': adviceMessage});
+    result.addAll({'messageReceivedDateTime': messageReceivedDateTime});
+
     return result;
   }
 
@@ -93,50 +114,66 @@ class HealthResultData {
       staff_no_received: map['staff_no_received'] ?? '',
       staff_uid_received: map['staff_uid_received'] ?? '',
       caseFinished: map['caseFinished'] ?? false,
+      caseReceivedDateTime:
+          DateTime.parse(map['caseReceivedDateTime'].toDate().toString()),
+      caseFinishedDateTime:
+          DateTime.parse(map['caseFinishedDateTime'].toDate().toString()),
+      adviceMessage: map['adviceMessage'] ?? '',
+      messageReceivedDateTime:
+          DateTime.parse(map['messageReceivedDateTime'].toDate().toString()),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory HealthResultData.fromJson(String source) => HealthResultData.fromMap(json.decode(source));
+  factory HealthResultData.fromJson(String source) =>
+      HealthResultData.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'HealthResultData(questionnaireNo: $questionnaireNo, athleteUID: $athleteUID, athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, healthSymptom: $healthSymptom, caseReceived: $caseReceived, staff_no_received: $staff_no_received, staff_uid_received: $staff_uid_received, caseFinished: $caseFinished)';
+    return 'HealthResultData(questionnaireNo: $questionnaireNo, athleteUID: $athleteUID, athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, healthSymptom: $healthSymptom, caseReceived: $caseReceived, staff_no_received: $staff_no_received, staff_uid_received: $staff_uid_received, caseFinished: $caseFinished, caseReceivedDateTime: $caseReceivedDateTime, caseFinishedDateTime: $caseFinishedDateTime, adviceMessage: $adviceMessage, messageReceivedDateTime: $messageReceivedDateTime)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is HealthResultData &&
-      other.questionnaireNo == questionnaireNo &&
-      other.athleteUID == athleteUID &&
-      other.athleteNo == athleteNo &&
-      other.questionnaireType == questionnaireType &&
-      other.doDate == doDate &&
-      other.totalPoint == totalPoint &&
-      mapEquals(other.answerList, answerList) &&
-      other.healthSymptom == healthSymptom &&
-      other.caseReceived == caseReceived &&
-      other.staff_no_received == staff_no_received &&
-      other.staff_uid_received == staff_uid_received &&
-      other.caseFinished == caseFinished;
+        other.questionnaireNo == questionnaireNo &&
+        other.athleteUID == athleteUID &&
+        other.athleteNo == athleteNo &&
+        other.questionnaireType == questionnaireType &&
+        other.doDate == doDate &&
+        other.totalPoint == totalPoint &&
+        mapEquals(other.answerList, answerList) &&
+        other.healthSymptom == healthSymptom &&
+        other.caseReceived == caseReceived &&
+        other.staff_no_received == staff_no_received &&
+        other.staff_uid_received == staff_uid_received &&
+        other.caseFinished == caseFinished &&
+        other.caseReceivedDateTime == caseReceivedDateTime &&
+        other.caseFinishedDateTime == caseFinishedDateTime &&
+        other.adviceMessage == adviceMessage &&
+        other.messageReceivedDateTime == messageReceivedDateTime;
   }
 
   @override
   int get hashCode {
     return questionnaireNo.hashCode ^
-      athleteUID.hashCode ^
-      athleteNo.hashCode ^
-      questionnaireType.hashCode ^
-      doDate.hashCode ^
-      totalPoint.hashCode ^
-      answerList.hashCode ^
-      healthSymptom.hashCode ^
-      caseReceived.hashCode ^
-      staff_no_received.hashCode ^
-      staff_uid_received.hashCode ^
-      caseFinished.hashCode;
+        athleteUID.hashCode ^
+        athleteNo.hashCode ^
+        questionnaireType.hashCode ^
+        doDate.hashCode ^
+        totalPoint.hashCode ^
+        answerList.hashCode ^
+        healthSymptom.hashCode ^
+        caseReceived.hashCode ^
+        staff_no_received.hashCode ^
+        staff_uid_received.hashCode ^
+        caseFinished.hashCode ^
+        caseReceivedDateTime.hashCode ^
+        caseFinishedDateTime.hashCode ^
+        adviceMessage.hashCode ^
+        messageReceivedDateTime.hashCode;
   }
 }

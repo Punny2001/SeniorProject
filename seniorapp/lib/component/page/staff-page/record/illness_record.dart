@@ -792,7 +792,7 @@ class _IllnessReportState extends State<IllnessReport> {
                 if (widget.docID != null) {
                   updateData(widget.docID);
                 }
-                saveMessage();
+                // saveMessage();
                 saveIllnessReport();
                 sendPushMessage(widget.athlete.token, staff);
               }
@@ -1077,66 +1077,70 @@ class _IllnessReportState extends State<IllnessReport> {
     }
   }
 
-  Future<void> saveMessage() async {
-    var uid = FirebaseAuth.instance.currentUser.uid;
-    String staff_no;
-    FirebaseFirestore.instance
-        .collection('Staff')
-        .doc(uid)
-        .get()
-        .then((snapshot) {
-      Map data = snapshot.data();
-      staff_no = data['staff_no'];
-    });
-    bool isValidate = _illnessKey.currentState.validate();
-    String message_no = 'M';
-    String split;
-    int latestID;
-    NumberFormat format = NumberFormat('0000000000');
+  // Future<void> saveMessage() async {
+  //   var uid = FirebaseAuth.instance.currentUser.uid;
+  //   String staff_no;
+  //   FirebaseFirestore.instance
+  //       .collection('Staff')
+  //       .doc(uid)
+  //       .get()
+  //       .then((snapshot) {
+  //     Map data = snapshot.data();
+  //     staff_no = data['staff_no'];
+  //   });
+  //   bool isValidate = _illnessKey.currentState.validate();
+  //   String message_no = 'M';
+  //   String split;
+  //   int latestID;
+  //   NumberFormat format = NumberFormat('0000000000');
+  //   await FirebaseFirestore.instance
+  //       .collection('Message')
+  //       .orderBy('messageNo', descending: true)
+  //       .limit(1)
+  //       .get()
+  //       .then((QuerySnapshot querySnapshot) {
+  //     if (querySnapshot.size == 0) {
+  //       message_no += format.format(1);
+  //     } else {
+  //       querySnapshot.docs
+  //           .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+  //         Map data = queryDocumentSnapshot.data();
+  //         split = data['messageNo'].toString().split('M')[1];
+  //         latestID = int.parse(split) + 1;
+  //         message_no += format.format(latestID);
+  //       });
+  //     }
+  //   });
+
+  //   if (isValidate) {
+  //     MessageData messageModel = MessageData(
+  //         messageNo: message_no,
+  //         staffUID: uid,
+  //         athleteNo: _athleteNo.text.trim(),
+  //         messageDateTime: DateTime.now(),
+  //         messageDescription: _messageController.text.trim());
+
+  //     Map<String, dynamic> data = messageModel.toMap();
+
+  //     final collectionReference =
+  //         FirebaseFirestore.instance.collection('Message');
+  //     DocumentReference docReference = collectionReference.doc();
+  //     docReference.set(data);
+  //   }
+  // }
+
+  Future<void> updateData(String docID) async {
     await FirebaseFirestore.instance
-        .collection('Message')
-        .orderBy('messageNo', descending: true)
-        .limit(1)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      if (querySnapshot.size == 0) {
-        message_no += format.format(1);
-      } else {
-        querySnapshot.docs
-            .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
-          Map data = queryDocumentSnapshot.data();
-          split = data['messageNo'].toString().split('M')[1];
-          latestID = int.parse(split) + 1;
-          message_no += format.format(latestID);
-        });
-      }
+        .collection('HealthQuestionnaireResult')
+        .doc(docID)
+        .update({
+      'caseFinished': true,
+      'caseFinishedDateTime': DateTime.now(),
+      'adviceMessage': _messageController.text,
+    }).then((value) {
+      print('Updated data successfully');
     });
-
-    if (isValidate) {
-      MessageData messageModel = MessageData(
-          messageNo: message_no,
-          staffUID: uid,
-          athleteNo: _athleteNo.text.trim(),
-          messageDateTime: DateTime.now(),
-          messageDescription: _messageController.text.trim());
-
-      Map<String, dynamic> data = messageModel.toMap();
-
-      final collectionReference =
-          FirebaseFirestore.instance.collection('Message');
-      DocumentReference docReference = collectionReference.doc();
-      docReference.set(data);
-    }
   }
-}
-
-Future<void> updateData(String docID) async {
-  await FirebaseFirestore.instance
-      .collection('HealthQuestionnaireResult')
-      .doc(docID)
-      .update({'caseFinished': true}).then((value) {
-    print('Updated data successfully');
-  });
 }
 
 class MainSymptomList {

@@ -611,7 +611,8 @@ class _StaffCaseState extends State<StaffNotify> {
               .update({
             'caseReceived': true,
             'staff_no_received': _staff.staff_no,
-            'staff_uid_received': uid
+            'staff_uid_received': uid,
+            'caseReceivedDateTime': DateTime.now(),
           }).then((value) {
             print('Updated data successfully');
           });
@@ -625,7 +626,8 @@ class _StaffCaseState extends State<StaffNotify> {
               .update({
             'caseReceived': true,
             'staff_no_received': _staff.staff_no,
-            'staff_uid_received': uid
+            'staff_uid_received': uid,
+            'caseReceivedDateTime': DateTime.now(),
           }).then((value) {
             print('Updated data successfully');
           });

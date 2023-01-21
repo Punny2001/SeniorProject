@@ -13,8 +13,8 @@ import 'package:seniorapp/local_notification.dart';
 String initPage = '/login';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  LocalNotificationService.displayNotification(message);
   await Firebase.initializeApp();
+  LocalNotificationService.displayNotification(message);
   print(
       'title: ${message.notification.title}, body: ${message.notification.body}');
   print("Handling a background message: ${message.messageId}");
