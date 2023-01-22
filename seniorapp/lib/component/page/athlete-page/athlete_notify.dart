@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -442,7 +443,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
           // ),
           // PaddingDecorate(1),
           Expanded(
-            child: Container(
+            child: SizedBox(
               height: h,
               width: w,
               child: isLoading
@@ -464,10 +465,13 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                   documentSnapshot.addAll(query.docs);
                                 });
 
+                                int index = 0;
                                 List<Map<String, dynamic>> mappedData = [];
                                 for (QueryDocumentSnapshot doc
                                     in documentSnapshot) {
                                   mappedData.add(doc.data());
+                                  mappedData[index]['docID'] = doc.reference.id;
+                                  index += 1;
                                 }
 
                                 // mappedData = add_filter(mappedData);
@@ -520,6 +524,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
     staffData.retainWhere(
         (element) => element['staffUID'] == data['staff_uid_received']);
     Staff _currentStaff = Staff.fromMap(staffData[0]);
+    DateTime _defaultDateTime = DateTime(1950);
     return GestureDetector(
       child: Card(
         child: Container(
@@ -608,25 +613,30 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                         ],
                       ),
                     ),
-                    Container(
-                      width: w * 0.2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${healthData.totalPoint}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: score_color(healthData.totalPoint),
-                                fontSize: h * 0.05),
-                          ),
-                          const Text(
-                            'คะแนน',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                    Badge(
+                      badgeContent: const Text('  '),
+                      showBadge:
+                          data['messageReceived'] == false ? true : false,
+                      child: SizedBox(
+                        width: w * 0.2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${healthData.totalPoint}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: score_color(healthData.totalPoint),
+                                  fontSize: h * 0.05),
                             ),
-                          ),
-                        ],
+                            const Text(
+                              'คะแนน',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     )
                   ],
@@ -707,20 +717,25 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                         ],
                       ),
                     ),
-                    Container(
-                      width: w * 0.2,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${healthData.totalPoint}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: score_color(healthData.totalPoint),
-                                fontSize: h * 0.05),
-                          ),
-                          const Text('คะแนน'),
-                        ],
+                    Badge(
+                      badgeContent: Text('  '),
+                      showBadge:
+                          data['messageReceived'] == false ? true : false,
+                      child: SizedBox(
+                        width: w * 0.2,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${physicalData.totalPoint}',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: score_color(physicalData.totalPoint),
+                                  fontSize: h * 0.05),
+                            ),
+                            const Text('คะแนน'),
+                          ],
+                        ),
                       ),
                     )
                   ],
@@ -744,6 +759,9 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                 ),
               ),
             );
+            setState(() {
+              updateReadMessage(data['docID'], 'HealthQuestionnaireResult');
+            });
             break;
           case 'Physical':
             PhysicalResultData physical = PhysicalResultData.fromMap(data);
@@ -760,10 +778,22 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                 ),
               ),
             );
+            setState(() {
+              updateReadMessage(data['docID'], 'PhysicalQuestionnaireResult');
+            });
             break;
           default:
         }
       },
     );
+  }
+
+  Future<void> updateReadMessage(String docID, String collection) async {
+    print('docID: $docID');
+    print('collection: $collection');
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(docID)
+        .update({'messageReceived': true});
   }
 }

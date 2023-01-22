@@ -20,10 +20,12 @@ class AthletePageChoosing extends StatefulWidget {
 
 class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int _selected_idx = 0;
-  int notificationCount = 0;
+  int notificationCount;
   FirebaseMessaging messaging;
   String token;
   String uid = FirebaseAuth.instance.currentUser.uid;
+  int unreceivedHealthSize;
+  int unreceivedPhysicalSize;
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
@@ -33,11 +35,46 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   ];
 
   void _onPageTap(int index) {
-    if (index == 3) {
-      notificationCount = 0;
-    }
     setState(() {
       _selected_idx = index;
+    });
+  }
+
+  getUnreceivedMessageHealthSize() {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> queryList;
+    FirebaseFirestore.instance
+        .collection('HealthQuestionnaireResult')
+        .where('athleteUID', isEqualTo: uid)
+        .get()
+        .then((querySnapshot) {
+      queryList = querySnapshot.docs;
+      queryList.removeWhere((data) => data['messageReceived'] == true);
+      setState(() {
+        unreceivedHealthSize = queryList.length;
+      });
+    });
+  }
+
+  getUnreceivedMessagePhysicalSize() {
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> queryList;
+    FirebaseFirestore.instance
+        .collection('PhysicalQuestionnaireResult')
+        .where('athleteUID', isEqualTo: uid)
+        .get()
+        .then((querySnapshot) {
+      queryList = querySnapshot.docs;
+      queryList.removeWhere((data) => data['messageReceived'] == true);
+      setState(() {
+        unreceivedPhysicalSize = queryList.length;
+      });
+    });
+  }
+
+  getNotificationCount() {
+    getUnreceivedMessageHealthSize();
+    getUnreceivedMessagePhysicalSize();
+    setState(() {
+      notificationCount = unreceivedHealthSize + unreceivedPhysicalSize;
     });
   }
 
@@ -84,6 +121,8 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+
+    getNotificationCount();
 
     return Scaffold(
       appBar: AppBar(
@@ -143,7 +182,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
             ),
             BottomNavigationBarItem(
               icon: Badge(
-                position: BadgePosition.topEnd(),
                 badgeContent: Text(
                   '$notificationCount',
                   style: const TextStyle(color: Colors.white),

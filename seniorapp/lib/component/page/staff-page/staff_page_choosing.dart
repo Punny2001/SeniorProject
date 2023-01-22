@@ -125,12 +125,10 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   }
 
   void _getUnfinishedCaseCount() {
+    getUnfinishedHealthCase();
+    getUnfinishedPhysicalCase();
     setState(() {
-      getUnfinishedHealthCase();
-      getUnfinishedPhysicalCase();
-      setState(() {
-        unfinishedCaseCount = unfinishedHealth + unfinishedPhysical;
-      });
+      unfinishedCaseCount = unfinishedHealth + unfinishedPhysical;
     });
   }
 

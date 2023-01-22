@@ -18,7 +18,9 @@ class HealthResultData {
   DateTime caseReceivedDateTime;
   DateTime caseFinishedDateTime;
   String adviceMessage;
+  bool messageReceived;
   DateTime messageReceivedDateTime;
+
   HealthResultData({
     @required this.questionnaireNo,
     @required this.athleteUID,
@@ -35,6 +37,7 @@ class HealthResultData {
     this.caseReceivedDateTime,
     this.caseFinishedDateTime,
     this.adviceMessage,
+    this.messageReceived,
     this.messageReceivedDateTime,
   });
 
@@ -54,6 +57,7 @@ class HealthResultData {
     DateTime caseReceivedDateTime,
     DateTime caseFinishedDateTime,
     String adviceMessage,
+    bool messageReceived,
     DateTime messageReceivedDateTime,
   }) {
     return HealthResultData(
@@ -72,6 +76,7 @@ class HealthResultData {
       caseReceivedDateTime: caseReceivedDateTime ?? this.caseReceivedDateTime,
       caseFinishedDateTime: caseFinishedDateTime ?? this.caseFinishedDateTime,
       adviceMessage: adviceMessage ?? this.adviceMessage,
+      messageReceived: messageReceived ?? this.messageReceived,
       messageReceivedDateTime:
           messageReceivedDateTime ?? this.messageReceivedDateTime,
     );
@@ -95,6 +100,7 @@ class HealthResultData {
     result.addAll({'caseReceivedDateTime': caseReceivedDateTime});
     result.addAll({'caseFinishedDateTime': caseFinishedDateTime});
     result.addAll({'adviceMessage': adviceMessage});
+    result.addAll({'messageReceived': messageReceived});
     result.addAll({'messageReceivedDateTime': messageReceivedDateTime});
 
     return result;
@@ -119,6 +125,7 @@ class HealthResultData {
       caseFinishedDateTime:
           DateTime.parse(map['caseFinishedDateTime'].toDate().toString()),
       adviceMessage: map['adviceMessage'] ?? '',
+      messageReceived: map['messageReceived'] ?? false,
       messageReceivedDateTime:
           DateTime.parse(map['messageReceivedDateTime'].toDate().toString()),
     );
@@ -131,7 +138,7 @@ class HealthResultData {
 
   @override
   String toString() {
-    return 'HealthResultData(questionnaireNo: $questionnaireNo, athleteUID: $athleteUID, athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, healthSymptom: $healthSymptom, caseReceived: $caseReceived, staff_no_received: $staff_no_received, staff_uid_received: $staff_uid_received, caseFinished: $caseFinished, caseReceivedDateTime: $caseReceivedDateTime, caseFinishedDateTime: $caseFinishedDateTime, adviceMessage: $adviceMessage, messageReceivedDateTime: $messageReceivedDateTime)';
+    return 'HealthResultData(questionnaireNo: $questionnaireNo, athleteUID: $athleteUID, athleteNo: $athleteNo, questionnaireType: $questionnaireType, doDate: $doDate, totalPoint: $totalPoint, answerList: $answerList, healthSymptom: $healthSymptom, caseReceived: $caseReceived, staff_no_received: $staff_no_received, staff_uid_received: $staff_uid_received, caseFinished: $caseFinished, caseReceivedDateTime: $caseReceivedDateTime, caseFinishedDateTime: $caseFinishedDateTime, adviceMessage: $adviceMessage, messageReceived: $messageReceived, messageReceivedDateTime: $messageReceivedDateTime)';
   }
 
   @override
@@ -154,6 +161,7 @@ class HealthResultData {
         other.caseReceivedDateTime == caseReceivedDateTime &&
         other.caseFinishedDateTime == caseFinishedDateTime &&
         other.adviceMessage == adviceMessage &&
+        other.messageReceived == messageReceived &&
         other.messageReceivedDateTime == messageReceivedDateTime;
   }
 
@@ -174,6 +182,7 @@ class HealthResultData {
         caseReceivedDateTime.hashCode ^
         caseFinishedDateTime.hashCode ^
         adviceMessage.hashCode ^
+        messageReceived.hashCode ^
         messageReceivedDateTime.hashCode;
   }
 }
