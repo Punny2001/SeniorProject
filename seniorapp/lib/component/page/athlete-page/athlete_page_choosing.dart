@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
@@ -20,12 +21,14 @@ class AthletePageChoosing extends StatefulWidget {
 
 class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int _selected_idx = 0;
-  int notificationCount;
+  int notificationCount = 0;
   FirebaseMessaging messaging;
   String token;
   String uid = FirebaseAuth.instance.currentUser.uid;
-  int unreceivedHealthSize;
-  int unreceivedPhysicalSize;
+  int unreceivedHealthSize = 0;
+  int unreceivedPhysicalSize = 0;
+  List<Map<String, dynamic>> unreceivedMessageHealth = [];
+  List<Map<String, dynamic>> unreceivedMessagePhysical = [];
 
   static const List<Widget> _athletePageList = <Widget>[
     AthleteHomePage(),
@@ -40,37 +43,39 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     });
   }
 
-  getUnreceivedMessageHealthSize() {
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> queryList;
+  void getUnreceivedMessageHealthSize() {
     FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid)
+        .where('athleteUID', isEqualTo: uid, isNull: false)
         .get()
-        .then((querySnapshot) {
-      queryList = querySnapshot.docs;
-      queryList.removeWhere((data) => data['messageReceived'] == true);
-      setState(() {
-        unreceivedHealthSize = queryList.length;
-      });
-    });
+        .then(
+      (snapshot) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
+        list.removeWhere((element) => element['messageReceived'] == true);
+        setState(() {
+          unreceivedHealthSize = list.length;
+        });
+      },
+    );
   }
 
-  getUnreceivedMessagePhysicalSize() {
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> queryList;
+  void getUnreceivedMessagePhysicalSize() {
     FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid)
+        .where('athleteUID', isEqualTo: uid, isNull: false)
         .get()
-        .then((querySnapshot) {
-      queryList = querySnapshot.docs;
-      queryList.removeWhere((data) => data['messageReceived'] == true);
-      setState(() {
-        unreceivedPhysicalSize = queryList.length;
-      });
-    });
+        .then(
+      (snapshot) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
+        list.removeWhere((element) => element['messageReceived'] == true);
+        setState(() {
+          unreceivedPhysicalSize = list.length;
+        });
+      },
+    );
   }
 
-  getNotificationCount() {
+  void getNotificationCount() {
     getUnreceivedMessageHealthSize();
     getUnreceivedMessagePhysicalSize();
     setState(() {
@@ -109,7 +114,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     getToken();
     FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
     FirebaseMessaging.instance.subscribeToTopic('Athlete');
-    setState(() {});
   }
 
   @override
