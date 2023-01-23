@@ -30,8 +30,8 @@ class _StaffCaseState extends State<StaffCase> {
   Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
   String staff_no;
-  int healthSize;
-  int physicalSize;
+  int healthSize = 0;
+  int physicalSize = 0;
   bool isLoading = false;
   bool caseFinished = false;
   List<bool> _selectedOrder = <bool>[true, false];
@@ -118,8 +118,10 @@ class _StaffCaseState extends State<StaffCase> {
         .get()
         .then(
       (snapshot) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
+        list.retainWhere((element) => element['caseFinished'] == false);
         setState(() {
-          healthSize = snapshot.docs.length;
+          healthSize = list.length;
         });
       },
     );
@@ -132,8 +134,10 @@ class _StaffCaseState extends State<StaffCase> {
         .get()
         .then(
       (snapshot) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
+        list.retainWhere((element) => element['caseFinished'] == false);
         setState(() {
-          physicalSize = snapshot.docs.length;
+          physicalSize = list.length;
         });
       },
     );
@@ -438,7 +442,7 @@ class _StaffCaseState extends State<StaffCase> {
                   ? const Center(
                       child: const CupertinoActivityIndicator(),
                     )
-                  : healthSize + physicalSize != 0
+                  : healthSize + physicalSize > 0
                       ? Container(
                           child: StreamBuilder(
                             stream: getData(),
@@ -473,6 +477,14 @@ class _StaffCaseState extends State<StaffCase> {
                                         healthData =
                                             HealthResultData.fromMap(data);
                                         return Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            side: BorderSide(
+                                                width: 2,
+                                                color: Colors.blue[200]),
+                                          ),
+                                          elevation: 0,
                                           child: SizedBox(
                                             height: h * 0.25,
                                             child: Row(
@@ -740,6 +752,14 @@ class _StaffCaseState extends State<StaffCase> {
                                         physicalData =
                                             PhysicalResultData.fromMap(data);
                                         return Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            side: BorderSide(
+                                                width: 2,
+                                                color: Colors.blue[200]),
+                                          ),
+                                          elevation: 0,
                                           child: SizedBox(
                                             height: h * 0.25,
                                             child: Row(

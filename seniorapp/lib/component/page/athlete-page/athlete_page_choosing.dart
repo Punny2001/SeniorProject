@@ -93,7 +93,9 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
             element['caseFinished'] == true &&
             element['messageReceived'] == false);
 
-        unreceivedPhysicalSize = list.length;
+        setState(() {
+          unreceivedPhysicalSize = list.length;
+        });
       },
     );
   }
@@ -111,7 +113,9 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
             element['messageReceived'] == false);
         print('List: ${list.length}');
 
-        unreceivedHealthSize = list.length;
+        setState(() {
+          unreceivedHealthSize = list.length;
+        });
       },
     );
   }

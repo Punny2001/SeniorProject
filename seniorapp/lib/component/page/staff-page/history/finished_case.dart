@@ -434,7 +434,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                   ? const Center(
                       child: CupertinoActivityIndicator(),
                     )
-                  : healthSize + physicalSize != 0
+                  : healthSize + physicalSize > 0
                       ? Container(
                           child: StreamBuilder(
                             stream: getData(),
@@ -470,6 +470,14 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         healthData =
                                             HealthResultData.fromMap(data);
                                         return Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            side: BorderSide(
+                                                width: 2,
+                                                color: Colors.blue[200]),
+                                          ),
+                                          elevation: 0,
                                           child: Container(
                                             height: h * 0.25,
                                             child: Row(
@@ -675,6 +683,14 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         physicalData =
                                             PhysicalResultData.fromMap(data);
                                         return Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            side: BorderSide(
+                                                width: 2,
+                                                color: Colors.blue[200]),
+                                          ),
+                                          elevation: 0,
                                           child: Container(
                                             height: h * 0.25,
                                             child: Row(

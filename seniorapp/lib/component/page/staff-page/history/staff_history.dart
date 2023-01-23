@@ -381,6 +381,14 @@ class _StaffReportState extends State<StaffHistory> {
                                           mappedData[index];
                                       return GestureDetector(
                                         child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            side: BorderSide(
+                                                width: 2,
+                                                color: Colors.blue[200]),
+                                          ),
+                                          elevation: 0,
                                           child: Container(
                                             height: h * 0.2,
                                             child: Column(

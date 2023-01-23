@@ -490,20 +490,20 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                     if (data['caseFinished'] == true) {
                                       return _showFinishedHistory(data, h, w);
                                     } else {
-                                      return SizedBox();
+                                      return const SizedBox();
                                     }
                                   },
                                 );
                               } else {
                                 return const Center(
-                                  child: const CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(),
                                 );
                               }
                             },
                           ),
                         )
                       : const Center(
-                          child: const Text(
+                          child: Text(
                             'ไม่มีบันทึกที่คุณสร้างไว้',
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -547,9 +547,28 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                 '${_currentStaff.firstname} ${_currentStaff.lastname}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: h * 0.02,
+                                  fontSize: h * 0.023,
                                 ),
                               ),
+                              Text(
+                                  'ข้อมูล ${healthData.questionnaireNo} รายงานเสร็จสิ้น'),
+                              healthData.adviceMessage != '' ||
+                                      healthData.adviceMessage != null
+                                  ? Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          const TextSpan(
+                                            text: 'คำแนะนำจากทีมแพทย์: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          TextSpan(
+                                            text: healthData.adviceMessage,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
@@ -582,84 +601,46 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                       ],
                     )
                   : Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          width: w * 0.7,
                           padding: EdgeInsets.only(left: w * 0.03),
+                          width: w * 0.7,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
-                              Text.rich(
-                                TextSpan(
-                                  text: 'ข้อมูล: ',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: physicalData.questionnaireNo,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ],
+                              Text(
+                                '${_currentStaff.firstname} ${_currentStaff.lastname}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: h * 0.023,
                                 ),
                               ),
-                              Text.rich(
-                                TextSpan(
-                                  text: 'ส่วนที่บาดเจ็บ: ',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          toThaiNoneInfo(physicalData.bodyPart),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Text.rich(
-                                TextSpan(
-                                  text: 'วันที่เสร็จสิ้นการรายงาน: ',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text: '${formatDate(
-                                        physicalData.caseFinishedDateTime,
-                                        'Athlete',
-                                      )} | ${formatTime(physicalData.caseFinishedDateTime)} น.',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Text.rich(
-                                TextSpan(
-                                  text: 'เสร็จสิ้นการรายงานโดย ',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          '${_currentStaff.firstname} ${_currentStaff.lastname}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.normal),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              Text(
+                                  'ข้อมูล ${physicalData.questionnaireNo} รายงานเสร็จสิ้น'),
+                              physicalData.adviceMessage != '' ||
+                                      physicalData.adviceMessage != null
+                                  ? Text.rich(
+                                      TextSpan(
+                                        children: [
+                                          const TextSpan(
+                                            text: 'คำแนะนำจากทีมแพทย์: ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          TextSpan(
+                                            text: physicalData.adviceMessage,
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
                         Badge(
-                          badgeContent: Text('  '),
+                          badgeContent: const Text('  '),
                           showBadge:
                               data['messageReceived'] == false ? true : false,
                           child: SizedBox(
@@ -675,7 +656,12 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                           score_color(physicalData.totalPoint),
                                       fontSize: h * 0.05),
                                 ),
-                                const Text('คะแนน'),
+                                const Text(
+                                  'คะแนน',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
