@@ -2,17 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/athlete-page/history-details/health_report_detail.dart';
 import 'package:seniorapp/component/page/athlete-page/history-details/mental_report_detail.dart';
-import 'package:seniorapp/component/page/athlete-page/history-details/physical_report_detail.dart';
-import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/mental_result_data.dart';
-import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
-import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class AthleteMentalHistory extends StatefulWidget {
   const AthleteMentalHistory({Key key}) : super(key: key);
@@ -110,9 +105,9 @@ class _AthleteHistoryState extends State<AthleteMentalHistory> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Column(
+    return Container(
+      color: Colors.white,
+      child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -268,153 +263,152 @@ class _AthleteHistoryState extends State<AthleteMentalHistory> {
                     )
                   : mentalSize != 0
                       ? StreamBuilder(
-                        stream: getData(),
-                        builder: (BuildContext context, snapshot) {
-                          if (snapshot.hasData) {
-                            List<QuerySnapshot> querySnapshot =
-                                snapshot.data.toList();
+                          stream: getData(),
+                          builder: (BuildContext context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<QuerySnapshot> querySnapshot =
+                                  snapshot.data.toList();
 
-                            List<QueryDocumentSnapshot> documentSnapshot =
-                                [];
-                            querySnapshot.forEach((query) {
-                              documentSnapshot.addAll(query.docs);
-                            });
+                              List<QueryDocumentSnapshot> documentSnapshot = [];
+                              querySnapshot.forEach((query) {
+                                documentSnapshot.addAll(query.docs);
+                              });
 
-                            List<Map<String, dynamic>> mappedData = [];
-                            for (QueryDocumentSnapshot doc
-                                in documentSnapshot) {
-                              mappedData.add(doc.data());
-                            }
+                              List<Map<String, dynamic>> mappedData = [];
+                              for (QueryDocumentSnapshot doc
+                                  in documentSnapshot) {
+                                mappedData.add(doc.data());
+                              }
 
-                            mappedData = add_filter(mappedData);
-                            if (mappedData.length >= 10) {
-                              mappedData.removeRange(10, mappedData.length);
-                            }
+                              mappedData = add_filter(mappedData);
+                              if (mappedData.length >= 10) {
+                                mappedData.removeRange(10, mappedData.length);
+                              }
 
-                            return ListView.builder(
-                              itemCount: mappedData.length,
-                              itemBuilder: (context, index) {
-                                Map<String, dynamic> data =
-                                    mappedData[index];
-                                mentalResultData =
-                                    MentalResultData.fromMap(data);
-                                return GestureDetector(
-                                  child: Card(
-                                    child: Container(
-                                        height: h * 0.2,
-                                        padding: EdgeInsets.only(
-                                          left: w * 0.05,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              padding: EdgeInsets.only(
-                                                  left: w * 0.03),
-                                              width: w * 0.7,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment
-                                                        .stretch,
-                                                children: <Widget>[
-                                                  Text.rich(
-                                                    TextSpan(
-                                                      text:
-                                                          'รายงานปัญหารการนอนหลับครั้งที่: ',
-                                                      style:
-                                                          const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      children: [
-                                                        TextSpan(
-                                                          text: find_questnaireNo(
-                                                              mentalResultData
-                                                                  .questionnaireNo),
-                                                          style: const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Text.rich(
-                                                    TextSpan(
-                                                      text:
-                                                          'วันที่บันทึก: ',
-                                                      style:
-                                                          const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      children: [
-                                                        TextSpan(
-                                                          text: formatDate(
-                                                            mentalResultData
-                                                                .doDate,
-                                                            'Athlete',
-                                                          ),
-                                                          style: const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Text.rich(
-                                                    TextSpan(
-                                                      text:
-                                                          'เวลาที่บันทึก: ',
-                                                      style:
-                                                          const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                      children: [
-                                                        TextSpan(
-                                                          text:
-                                                              '${formatTime(mentalResultData.doDate)} น.',
-                                                          style: const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        )),
-                                  ),
-                                  onTap: () {
-                                    MentalResultData mental =
-                                        MentalResultData.fromMap(data);
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            MentalReportDetail(
-                                                mentalResultData: mental),
+                              return ListView.builder(
+                                itemCount: mappedData.length,
+                                itemBuilder: (context, index) {
+                                  Map<String, dynamic> data = mappedData[index];
+                                  mentalResultData =
+                                      MentalResultData.fromMap(data);
+                                  return GestureDetector(
+                                    child: Card(
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                        side: BorderSide(
+                                            width: 2, color: Colors.green[200]),
                                       ),
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                        },
-                      )
+                                      child: Container(
+                                          height: h * 0.2,
+                                          padding: EdgeInsets.only(
+                                            left: w * 0.05,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: w * 0.03),
+                                                width: w * 0.7,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  children: <Widget>[
+                                                    Text.rich(
+                                                      TextSpan(
+                                                        text:
+                                                            'รายงานปัญหารการนอนหลับครั้งที่: ',
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        children: [
+                                                          TextSpan(
+                                                            text: find_questnaireNo(
+                                                                mentalResultData
+                                                                    .questionnaireNo),
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Text.rich(
+                                                      TextSpan(
+                                                        text: 'วันที่บันทึก: ',
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        children: [
+                                                          TextSpan(
+                                                            text: formatDate(
+                                                              mentalResultData
+                                                                  .doDate,
+                                                              'Athlete',
+                                                            ),
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Text.rich(
+                                                      TextSpan(
+                                                        text: 'เวลาที่บันทึก: ',
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        children: [
+                                                          TextSpan(
+                                                            text:
+                                                                '${formatTime(mentalResultData.doDate)} น.',
+                                                            style: const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                    ),
+                                    onTap: () {
+                                      MentalResultData mental =
+                                          MentalResultData.fromMap(data);
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              MentalReportDetail(
+                                                  mentalResultData: mental),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
+                        )
                       : const Center(
                           child: Text(
                             'ไม่มีบันทึกที่คุณสร้างไว้',

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -173,9 +172,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     print('health size: $healthSize');
     print('physical size: $physicalSize');
 
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Column(
+    return Container(
+      color: Colors.white,
+      child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -360,7 +359,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                 ],
                               ),
                               actions: [
-                                Container(
+                                SizedBox(
                                   width: w,
                                   child: RaisedButton(
                                     color: Colors.green[300],
@@ -420,7 +419,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
           ),
           // PaddingDecorate(1),
           Expanded(
-            child: Container(
+            child: SizedBox(
               height: h,
               width: w,
               child: isLoading
@@ -428,395 +427,390 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                       child: CupertinoActivityIndicator(),
                     )
                   : healthSize + physicalSize != 0
-                      ? Container(
-                          child: StreamBuilder(
-                            stream: getData(),
-                            builder: (BuildContext context, snapshot) {
-                              if (snapshot.hasData) {
-                                List<QuerySnapshot> querySnapshot =
-                                    snapshot.data.toList();
+                      ? StreamBuilder(
+                          stream: getData(),
+                          builder: (BuildContext context, snapshot) {
+                            if (snapshot.hasData) {
+                              List<QuerySnapshot> querySnapshot =
+                                  snapshot.data.toList();
 
-                                List<QueryDocumentSnapshot> documentSnapshot =
-                                    [];
-                                querySnapshot.forEach((query) {
-                                  documentSnapshot.addAll(query.docs);
-                                });
+                              List<QueryDocumentSnapshot> documentSnapshot = [];
+                              querySnapshot.forEach((query) {
+                                documentSnapshot.addAll(query.docs);
+                              });
 
-                                List<Map<String, dynamic>> mappedData = [];
-                                for (QueryDocumentSnapshot doc
-                                    in documentSnapshot) {
-                                  mappedData.add(doc.data());
-                                }
-
-                                mappedData = add_filter(mappedData);
-                                if (mappedData.length >= 10) {
-                                  mappedData.removeRange(10, mappedData.length);
-                                }
-
-                                return ListView.builder(
-                                  itemCount: mappedData.length,
-                                  itemBuilder: (context, index) {
-                                    Map<String, dynamic> data =
-                                        mappedData[index];
-                                        
-                                    healthData = HealthResultData.fromMap(data);
-                                    physicalData =
-                                        PhysicalResultData.fromMap(data);
-                                    return GestureDetector(
-                                      child: Card(
-                                        child: Container(
-                                          height: h * 0.2,
-                                          padding: EdgeInsets.only(
-                                            left: w * 0.05,
-                                          ),
-                                          child: data['questionnaireType'] ==
-                                                  'Health'
-                                              ? Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      padding: EdgeInsets.only(
-                                                          left: w * 0.03),
-                                                      width: w * 0.7,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .stretch,
-                                                        children: <Widget>[
-                                                          Text.rich(
-                                                            TextSpan(
-                                                              text:
-                                                                  'ประเภทแบบสอบถาม: ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              children: [
-                                                                TextSpan(
-                                                                  text: toThaiType(
-                                                                      healthData
-                                                                          .questionnaireType),
-                                                                  style: const TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Text.rich(
-                                                            TextSpan(
-                                                              text:
-                                                                  'ปัญหาสุขภาพ: ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              children: [
-                                                                TextSpan(
-                                                                  text:
-                                                                      toThaiNoneInfo(
-                                                                    healthData
-                                                                        .healthSymptom,
-                                                                  ),
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Text.rich(
-                                                            TextSpan(
-                                                              text:
-                                                                  'วันที่บันทึก: ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              children: [
-                                                                TextSpan(
-                                                                  text:
-                                                                      formatDate(
-                                                                    healthData
-                                                                        .doDate,
-                                                                    'Athlete',
-                                                                  ),
-                                                                  style: const TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Text.rich(
-                                                            TextSpan(
-                                                              text:
-                                                                  'เวลาที่บันทึก: ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              children: [
-                                                                TextSpan(
-                                                                  text:
-                                                                      '${formatTime(healthData.doDate)} น.',
-                                                                  style: const TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      width: w * 0.2,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            '${healthData.totalPoint}',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: score_color(
-                                                                    healthData
-                                                                        .totalPoint),
-                                                                fontSize:
-                                                                    h * 0.05),
-                                                          ),
-                                                          const Text(
-                                                            'คะแนน',
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                )
-                                              : Row(
-                                                  children: [
-                                                    Container(
-                                                      width: w * 0.7,
-                                                      padding: EdgeInsets.only(
-                                                          left: w * 0.03),
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .stretch,
-                                                        children: <Widget>[
-                                                          Text.rich(
-                                                            TextSpan(
-                                                              text:
-                                                                  'ประเภทแบบสอบถาม: ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              children: [
-                                                                TextSpan(
-                                                                  text: toThaiType(
-                                                                      physicalData
-                                                                          .questionnaireType),
-                                                                  style: const TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Text.rich(
-                                                            TextSpan(
-                                                              text:
-                                                                  'ส่วนที่บาดเจ็บ: ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              children: [
-                                                                TextSpan(
-                                                                  text: toThaiNoneInfo(
-                                                                      physicalData
-                                                                          .bodyPart),
-                                                                  style: const TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Text.rich(
-                                                            TextSpan(
-                                                              text:
-                                                                  'วันที่บันทึก: ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              children: [
-                                                                TextSpan(
-                                                                  text:
-                                                                      formatDate(
-                                                                    physicalData
-                                                                        .doDate,
-                                                                    'Athlete',
-                                                                  ),
-                                                                  style: const TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Text.rich(
-                                                            TextSpan(
-                                                              text:
-                                                                  'เวลาที่บันทึก: ',
-                                                              style:
-                                                                  const TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                              children: [
-                                                                TextSpan(
-                                                                  text:
-                                                                      '${formatTime(physicalData.doDate)} น.',
-                                                                  style: const TextStyle(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      width: w * 0.2,
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            '${healthData.totalPoint}',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: score_color(
-                                                                    healthData
-                                                                        .totalPoint),
-                                                                fontSize:
-                                                                    h * 0.05),
-                                                          ),
-                                                          const Text('คะแนน'),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                        ),
-                                      ),
-                                      onTap: () {
-                                        switch (data['questionnaireType']) {
-                                          case 'Health':
-                                            HealthResultData health =
-                                                HealthResultData.fromMap(data);
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    HealthReportDetail(
-                                                  answerList: health.answerList,
-                                                  athleteNo: health.athleteNo,
-                                                  doDate: health.doDate,
-                                                  healthSymptom:
-                                                      health.healthSymptom,
-                                                  questionnaireType:
-                                                      health.questionnaireType,
-                                                  questionnaireNo:
-                                                      health.questionnaireNo,
-                                                  totalPoint: health.totalPoint,
-                                                ),
-                                              ),
-                                            );
-                                            break;
-                                          case 'Physical':
-                                            PhysicalResultData physical =
-                                                PhysicalResultData.fromMap(
-                                                    data);
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PhysicalReportDetail(
-                                                  answerList:
-                                                      physical.answerList,
-                                                  athleteNo: physical.athleteNo,
-                                                  doDate: physical.doDate,
-                                                  bodyPart: physical.bodyPart,
-                                                  questionnaireType: physical
-                                                      .questionnaireType,
-                                                  questionnaireNo:
-                                                      physical.questionnaireNo,
-                                                  totalPoint:
-                                                      physical.totalPoint,
-                                                ),
-                                              ),
-                                            );
-                                            break;
-                                          default:
-                                        }
-                                      },
-                                    );
-                                  },
-                                );
-                              } else {
-                                return const Center(
-                                  child: const CircularProgressIndicator(),
-                                );
+                              List<Map<String, dynamic>> mappedData = [];
+                              for (QueryDocumentSnapshot doc
+                                  in documentSnapshot) {
+                                mappedData.add(doc.data());
                               }
-                            },
-                          ),
+
+                              mappedData = add_filter(mappedData);
+                              if (mappedData.length >= 10) {
+                                mappedData.removeRange(10, mappedData.length);
+                              }
+
+                              return ListView.builder(
+                                itemCount: mappedData.length,
+                                itemBuilder: (context, index) {
+                                  Map<String, dynamic> data = mappedData[index];
+
+                                  healthData = HealthResultData.fromMap(data);
+                                  physicalData =
+                                      PhysicalResultData.fromMap(data);
+                                  return GestureDetector(
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                        side: BorderSide(
+                                            width: 2, color: Colors.green[200]),
+                                      ),
+                                      elevation: 0,
+                                      child: Container(
+                                        height: h * 0.2,
+                                        padding: EdgeInsets.only(
+                                          left: w * 0.05,
+                                        ),
+                                        child:
+                                            data['questionnaireType'] ==
+                                                    'Health'
+                                                ? Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: w * 0.03),
+                                                        width: w * 0.7,
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .stretch,
+                                                          children: <Widget>[
+                                                            Text.rich(
+                                                              TextSpan(
+                                                                text:
+                                                                    'ประเภทแบบสอบถาม: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text: toThaiType(
+                                                                        healthData
+                                                                            .questionnaireType),
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text.rich(
+                                                              TextSpan(
+                                                                text:
+                                                                    'ปัญหาสุขภาพ: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        toThaiNoneInfo(
+                                                                      healthData
+                                                                          .healthSymptom,
+                                                                    ),
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text.rich(
+                                                              TextSpan(
+                                                                text:
+                                                                    'วันที่บันทึก: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        formatDate(
+                                                                      healthData
+                                                                          .doDate,
+                                                                      'Athlete',
+                                                                    ),
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text.rich(
+                                                              TextSpan(
+                                                                text:
+                                                                    'เวลาที่บันทึก: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        '${formatTime(healthData.doDate)} น.',
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: w * 0.2,
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              '${healthData.totalPoint}',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: score_color(
+                                                                      healthData
+                                                                          .totalPoint),
+                                                                  fontSize:
+                                                                      h * 0.05),
+                                                            ),
+                                                            const Text(
+                                                              'คะแนน',
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                : Row(
+                                                    children: [
+                                                      Container(
+                                                        width: w * 0.7,
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: w * 0.03),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .stretch,
+                                                          children: <Widget>[
+                                                            Text.rich(
+                                                              TextSpan(
+                                                                text:
+                                                                    'ประเภทแบบสอบถาม: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text: toThaiType(
+                                                                        physicalData
+                                                                            .questionnaireType),
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text.rich(
+                                                              TextSpan(
+                                                                text:
+                                                                    'ส่วนที่บาดเจ็บ: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text: toThaiNoneInfo(
+                                                                        physicalData
+                                                                            .bodyPart),
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text.rich(
+                                                              TextSpan(
+                                                                text:
+                                                                    'วันที่บันทึก: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        formatDate(
+                                                                      physicalData
+                                                                          .doDate,
+                                                                      'Athlete',
+                                                                    ),
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Text.rich(
+                                                              TextSpan(
+                                                                text:
+                                                                    'เวลาที่บันทึก: ',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        '${formatTime(physicalData.doDate)} น.',
+                                                                    style: const TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: w * 0.2,
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              '${healthData.totalPoint}',
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: score_color(
+                                                                      healthData
+                                                                          .totalPoint),
+                                                                  fontSize:
+                                                                      h * 0.05),
+                                                            ),
+                                                            const Text('คะแนน'),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      switch (data['questionnaireType']) {
+                                        case 'Health':
+                                          HealthResultData health =
+                                              HealthResultData.fromMap(data);
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HealthReportDetail(
+                                                answerList: health.answerList,
+                                                athleteNo: health.athleteNo,
+                                                doDate: health.doDate,
+                                                healthSymptom:
+                                                    health.healthSymptom,
+                                                questionnaireType:
+                                                    health.questionnaireType,
+                                                questionnaireNo:
+                                                    health.questionnaireNo,
+                                                totalPoint: health.totalPoint,
+                                              ),
+                                            ),
+                                          );
+                                          break;
+                                        case 'Physical':
+                                          PhysicalResultData physical =
+                                              PhysicalResultData.fromMap(data);
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PhysicalReportDetail(
+                                                answerList: physical.answerList,
+                                                athleteNo: physical.athleteNo,
+                                                doDate: physical.doDate,
+                                                bodyPart: physical.bodyPart,
+                                                questionnaireType:
+                                                    physical.questionnaireType,
+                                                questionnaireNo:
+                                                    physical.questionnaireNo,
+                                                totalPoint: physical.totalPoint,
+                                              ),
+                                            ),
+                                          );
+                                          break;
+                                        default:
+                                      }
+                                    },
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Center(
+                                child: const CircularProgressIndicator(),
+                              );
+                            }
+                          },
                         )
                       : const Center(
                           child: const Text(

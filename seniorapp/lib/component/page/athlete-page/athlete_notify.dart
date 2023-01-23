@@ -196,9 +196,9 @@ class _AthleteNotifyState extends State<AthleteNotify> {
     print('health size: $healthSize');
     print('physical size: $physicalSize');
 
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: Column(
+    return Container(
+      color: Colors.white,
+      child: Column(
         children: [
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.start,
@@ -519,272 +519,223 @@ class _AthleteNotifyState extends State<AthleteNotify> {
     );
   }
 
-  GestureDetector _showFinishedHistory(
-      Map<String, dynamic> data, double h, double w) {
+  Column _showFinishedHistory(Map<String, dynamic> data, double h, double w) {
     staffData.retainWhere(
         (element) => element['staffUID'] == data['staff_uid_received']);
     Staff _currentStaff = Staff.fromMap(staffData[0]);
-    DateTime _defaultDateTime = DateTime(1950);
-    return GestureDetector(
-      child: Card(
-        child: Container(
-          height: h * 0.2,
-          padding: EdgeInsets.only(
-            left: w * 0.05,
+    return Column(
+      children: [
+        GestureDetector(
+          child: Card(
+            elevation: 0,
+            child: Container(
+              padding: EdgeInsets.only(
+                left: w * 0.05,
+              ),
+              child: data['questionnaireType'] == 'Health'
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: w * 0.03),
+                          width: w * 0.7,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Text(
+                                '${_currentStaff.firstname} ${_currentStaff.lastname}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: h * 0.02,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Badge(
+                          badgeContent: const Text('  '),
+                          showBadge:
+                              data['messageReceived'] == false ? true : false,
+                          child: SizedBox(
+                            width: w * 0.2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${healthData.totalPoint}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: score_color(healthData.totalPoint),
+                                      fontSize: h * 0.05),
+                                ),
+                                const Text(
+                                  'คะแนน',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Container(
+                          width: w * 0.7,
+                          padding: EdgeInsets.only(left: w * 0.03),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Text.rich(
+                                TextSpan(
+                                  text: 'ข้อมูล: ',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: physicalData.questionnaireNo,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text.rich(
+                                TextSpan(
+                                  text: 'ส่วนที่บาดเจ็บ: ',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          toThaiNoneInfo(physicalData.bodyPart),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text.rich(
+                                TextSpan(
+                                  text: 'วันที่เสร็จสิ้นการรายงาน: ',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: '${formatDate(
+                                        physicalData.caseFinishedDateTime,
+                                        'Athlete',
+                                      )} | ${formatTime(physicalData.caseFinishedDateTime)} น.',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Text.rich(
+                                TextSpan(
+                                  text: 'เสร็จสิ้นการรายงานโดย ',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          '${_currentStaff.firstname} ${_currentStaff.lastname}',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Badge(
+                          badgeContent: Text('  '),
+                          showBadge:
+                              data['messageReceived'] == false ? true : false,
+                          child: SizedBox(
+                            width: w * 0.2,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${physicalData.totalPoint}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          score_color(physicalData.totalPoint),
+                                      fontSize: h * 0.05),
+                                ),
+                                const Text('คะแนน'),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+            ),
           ),
-          child: data['questionnaireType'] == 'Health'
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: w * 0.03),
-                      width: w * 0.7,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Text.rich(
-                            TextSpan(
-                              text: 'ข้อมูล: ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: healthData.questionnaireNo,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              text: 'ปัญหาสุขภาพ: ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: toThaiNoneInfo(
-                                    healthData.healthSymptom,
-                                  ),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              text: 'วันที่เสร็จสิ้นการรายงาน: ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: '${formatDate(
-                                    physicalData.caseFinishedDateTime,
-                                    'Athlete',
-                                  )} | ${formatTime(healthData.caseFinishedDateTime)} น.',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              text: 'เสร็จสิ้นการรายงานโดย ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text:
-                                      '${_currentStaff.firstname} ${_currentStaff.lastname}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+          onTap: () {
+            switch (data['questionnaireType']) {
+              case 'Health':
+                HealthResultData health = HealthResultData.fromMap(data);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => HealthReportDetail(
+                      answerList: health.answerList,
+                      athleteNo: health.athleteNo,
+                      doDate: health.doDate,
+                      healthSymptom: health.healthSymptom,
+                      questionnaireType: health.questionnaireType,
+                      questionnaireNo: health.questionnaireNo,
+                      totalPoint: health.totalPoint,
                     ),
-                    Badge(
-                      badgeContent: const Text('  '),
-                      showBadge:
-                          data['messageReceived'] == false ? true : false,
-                      child: SizedBox(
-                        width: w * 0.2,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${healthData.totalPoint}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: score_color(healthData.totalPoint),
-                                  fontSize: h * 0.05),
-                            ),
-                            const Text(
-                              'คะแนน',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                )
-              : Row(
-                  children: [
-                    Container(
-                      width: w * 0.7,
-                      padding: EdgeInsets.only(left: w * 0.03),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Text.rich(
-                            TextSpan(
-                              text: 'ข้อมูล: ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: physicalData.questionnaireNo,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              text: 'ส่วนที่บาดเจ็บ: ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: toThaiNoneInfo(physicalData.bodyPart),
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              text: 'วันที่เสร็จสิ้นการรายงาน: ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: '${formatDate(
-                                    physicalData.caseFinishedDateTime,
-                                    'Athlete',
-                                  )} | ${formatTime(physicalData.caseFinishedDateTime)} น.',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              text: 'เสร็จสิ้นการรายงานโดย ',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text:
-                                      '${_currentStaff.firstname} ${_currentStaff.lastname}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                  ),
+                );
+                setState(() {
+                  updateReadMessage(data['docID'], 'HealthQuestionnaireResult');
+                });
+                break;
+              case 'Physical':
+                PhysicalResultData physical = PhysicalResultData.fromMap(data);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => PhysicalReportDetail(
+                      answerList: physical.answerList,
+                      athleteNo: physical.athleteNo,
+                      doDate: physical.doDate,
+                      bodyPart: physical.bodyPart,
+                      questionnaireType: physical.questionnaireType,
+                      questionnaireNo: physical.questionnaireNo,
+                      totalPoint: physical.totalPoint,
                     ),
-                    Badge(
-                      badgeContent: Text('  '),
-                      showBadge:
-                          data['messageReceived'] == false ? true : false,
-                      child: SizedBox(
-                        width: w * 0.2,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${physicalData.totalPoint}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: score_color(physicalData.totalPoint),
-                                  fontSize: h * 0.05),
-                            ),
-                            const Text('คะแนน'),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                );
+                setState(() {
+                  updateReadMessage(
+                      data['docID'], 'PhysicalQuestionnaireResult');
+                });
+                break;
+              default:
+            }
+          },
         ),
-      ),
-      onTap: () {
-        switch (data['questionnaireType']) {
-          case 'Health':
-            HealthResultData health = HealthResultData.fromMap(data);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => HealthReportDetail(
-                  answerList: health.answerList,
-                  athleteNo: health.athleteNo,
-                  doDate: health.doDate,
-                  healthSymptom: health.healthSymptom,
-                  questionnaireType: health.questionnaireType,
-                  questionnaireNo: health.questionnaireNo,
-                  totalPoint: health.totalPoint,
-                ),
-              ),
-            );
-            setState(() {
-              updateReadMessage(data['docID'], 'HealthQuestionnaireResult');
-            });
-            break;
-          case 'Physical':
-            PhysicalResultData physical = PhysicalResultData.fromMap(data);
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => PhysicalReportDetail(
-                  answerList: physical.answerList,
-                  athleteNo: physical.athleteNo,
-                  doDate: physical.doDate,
-                  bodyPart: physical.bodyPart,
-                  questionnaireType: physical.questionnaireType,
-                  questionnaireNo: physical.questionnaireNo,
-                  totalPoint: physical.totalPoint,
-                ),
-              ),
-            );
-            setState(() {
-              updateReadMessage(data['docID'], 'PhysicalQuestionnaireResult');
-            });
-            break;
-          default:
-        }
-      },
+        Divider(
+          thickness: 2,
+          height: h * 0.01,
+          indent: w * 0.05,
+          endIndent: w * 0.05,
+        ),
+      ],
     );
   }
 
