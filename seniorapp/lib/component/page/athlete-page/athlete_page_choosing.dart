@@ -7,7 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/athlete-page/athlete_graph.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_notify.dart';
@@ -34,7 +33,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   final List<Widget> _athletePageList = const <Widget>[
     AthleteHomePage(),
     AthleteMentalHistory(),
-    // AthleteGraph(),
     AthleteHistory(),
     AthleteNotify(),
   ];
@@ -188,11 +186,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
               activeIcon: Icon(Icons.save),
               label: 'บันทึกการนอน',
             ),
-            // const BottomNavigationBarItem(
-            //   icon: Icon(Icons.insert_chart_outlined),
-            //   activeIcon: Icon(Icons.insert_chart),
-            //   label: 'สถิติข้อมูล',
-            // ),
             const BottomNavigationBarItem(
               icon: Icon(Icons.history_toggle_off),
               activeIcon: Icon(Icons.history),
