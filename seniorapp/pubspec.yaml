@@ -64,8 +64,9 @@ dependencies:
   sort: ^0.0.2
   http: ^0.13.5
   flutter_local_notifications: ^13.0.0
-  syncfusion_flutter_charts: ^20.4.44
+  fl_chart: ^0.55.2
 
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_graph.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_notify.dart';
@@ -34,6 +35,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     AthleteHomePage(),
     AthleteMentalHistory(),
     AthleteHistory(),
+    AthleteGraph(),
     AthleteNotify(),
   ];
 
@@ -190,6 +192,11 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
               icon: Icon(Icons.history_toggle_off),
               activeIcon: Icon(Icons.history),
               label: 'ประวัติ',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.insert_chart_outlined),
+              activeIcon: Icon(Icons.insert_chart),
+              label: 'สถิติ',
             ),
             BottomNavigationBarItem(
               icon: Badge(
