@@ -113,7 +113,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
         list.retainWhere((element) =>
             element['caseFinished'] == true &&
             element['messageReceived'] == false);
-        print('List: ${list.length}');
 
         setState(() {
           unreceivedHealthSize = list.length;
