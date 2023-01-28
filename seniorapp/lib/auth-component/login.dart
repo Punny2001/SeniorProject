@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seniorapp/decoration/authentication/textfield_login.dart';
 import 'package:seniorapp/decoration/authentication/page_title_bar.dart';
+import 'package:seniorapp/decoration/padding.dart';
 
 class Login extends StatefulWidget {
   const Login({Key key}) : super(key: key);
@@ -147,7 +148,7 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             Container(
-                              alignment: const Alignment(1.05, 0.2),
+                              alignment: Alignment.centerRight,
                               child: TextButton(
                                   style: TextButton.styleFrom(
                                     textStyle: const TextStyle(
@@ -164,7 +165,7 @@ class _LoginState extends State<Login> {
                             ElevatedButton(
                               onPressed: () => signin(),
                               child: Text(
-                                'Log In',
+                                'Sign In',
                                 style: TextStyle(
                                   fontSize: h * 0.025,
                                   fontWeight: FontWeight.bold,
@@ -175,6 +176,55 @@ class _LoginState extends State<Login> {
                                   elevation: 0,
                                   primary:
                                       const Color.fromARGB(255, 113, 157, 242),
+                                  shape: const StadiumBorder()),
+                            ),
+                            PaddingDecorate(10),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.only(right: w * 0.05),
+                                    child: Divider(
+                                      thickness: 2,
+                                      height: h * 0.05,
+                                      indent: 0,
+                                    ),
+                                  ),
+                                ),
+                                Text('OR'),
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: w * 0.05),
+                                    child: Divider(
+                                      thickness: 2,
+                                      height: h * 0.05,
+                                      indent: 0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            PaddingDecorate(10),
+                            ElevatedButton(
+                              onPressed: () =>
+                                  Navigator.of(context).pushNamed('/register'),
+                              child: Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                  fontSize: h * 0.025,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      const Color.fromARGB(255, 113, 157, 242),
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: Size(w, h * 0.07),
+                                  side: const BorderSide(
+                                    color: Color.fromARGB(255, 113, 157, 242),
+                                    width: 3,
+                                  ),
+                                  elevation: 0,
+                                  primary: Colors.white,
                                   shape: const StadiumBorder()),
                             ),
                           ],
