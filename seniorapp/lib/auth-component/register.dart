@@ -139,6 +139,29 @@ class _RegisterState extends State<Register> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text(
+                            'Email',
+                            style: textCustom(),
+                          ),
+                          PaddingDecorate(10),
+                          TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'register_page.username_required'.tr();
+                              } else {
+                                return null;
+                              }
+                            },
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _usernameController,
+                            decoration: textdecorate_login(
+                              Icons.account_circle,
+                              'register_page.username_description'.tr(),
+                            ),
+                          ),
+                          PaddingDecorate(15),
+
                           /// Password registration
                           Text(
                             'register_page.password'.tr(),

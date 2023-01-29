@@ -69,42 +69,35 @@ class _AthleteGraphState extends State<AthleteGraph> {
     super.dispose();
   }
 
-  // cleanData() {
-  //   healthResultDataList.sort((a, b) =>
-  //       ('${a['doDate'].toDate()}${a['totalPoint']}}')
-  //           .compareTo('${b['doDate'].toDate()}${b['totalPoint']}}'));
-  //   physicalResultDataList.sort(
-  //     (a, b) => (a['doDate'].toDate()).compareTo(
-  //       b['doDate'].toDate(),
-  //     ),
-  //   );
+  List<Map<String, dynamic>> cleanHealthData() {
+    healthResultDataList.sort((a, b) =>
+        ('${a['doDate'].toDate()}').compareTo('${b['doDate'].toDate()}'));
+    List<Map<String, dynamic>> cleanList;
+    for (int i = 0; i < healthResultDataList.length - 1; i++) {
+      int weekDay =
+          AthleteLineGraph.getWeekDay(healthResultDataList[i]['doDate'])
+              .toInt();
+      int nextweekDay =
+          AthleteLineGraph.getWeekDay(healthResultDataList[i + 1]['doDate'])
+              .toInt();
+      print(
+          '$weekDay || ${(healthResultDataList[i]['doDate']).toDate()} || ${healthResultDataList[i]['totalPoint']}');
+      print(
+          '$nextweekDay || ${(healthResultDataList[i + 1]['doDate']).toDate()} || ${healthResultDataList[i + 1]['totalPoint']}');
 
-  //   List<Map<String, dynamic>> cleanList;
+      if (weekDay == nextweekDay) {
+        print('Yes');
+      } else {
+        print('no');
+      }
+    }
 
-  //   for (int i = 0; i < healthResultDataList.length; i++) {
-  //     int weekdays =
-  //         AthleteLineGraph.getWeekDay(healthResultDataList[i]['doDate'])
-  //             .toInt();
-  //     int nextWeekdays =
-  //         AthleteLineGraph.getWeekDay(healthResultDataList[i + 1]['doDate'])
-  //             .toInt();
-  //     print('round: $i');
-  //     if (weekdays == nextWeekdays) {
-  //       print('$weekdays | $nextWeekdays');
-  //       // print(healthResultDataList[i]);
-  //       // print(healthResultDataList[i + 1]);
-  //       if (healthResultDataList[i]['totalPoint'] <
-  //           healthResultDataList[i + 1]['totalPoint']) {
-  //         print('hello');
-  //       }
-  //     }
-  //   }
-  // }
+    return healthResultDataList;
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(healthResultDataList.length);
-    // cleanData();
+    List<Map<String, dynamic>> cleanedHealthDataList = cleanHealthData();
     return isLoading
         ? Center(
             child: CupertinoActivityIndicator(),
@@ -113,7 +106,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
             children: [
               ElevatedButton(onPressed: () {}, child: Text('Hello')),
               AthleteLineGraph(
-                healthResultDataList: healthResultDataList,
+                healthResultDataList: cleanedHealthDataList,
                 physicalResultDataList: physicalResultDataList,
               ),
             ],
