@@ -17,17 +17,40 @@ class _AthleteGraphState extends State<AthleteGraph> {
   final String uid = FirebaseAuth.instance.currentUser.uid;
   bool isLoading = true;
   Timer _timer;
+  int _selectedWeek;
 
   List<bool> _selectedQuestionnaire = <bool>[true, true];
   final List<bool> isDefault = <bool>[true];
+  int defaultWeek;
 
-  List<Map<String, dynamic>> healthResultDataList = [];
-  List<Map<String, dynamic>> physicalResultDataList = [];
-  List<Map<String, dynamic>> cleanedHealthDataList = [];
-  List<Map<String, dynamic>> cleanedPhysicalDataList = [];
+  List<Map<String, dynamic>> latestData = [];
 
   void choose_filter() {
     setState(() {});
+  }
+
+  getLatestHealthDataWeek() {
+    FirebaseFirestore.instance
+        .collection('HealthQuestionnaireResult')
+        .where('athleteUID', isEqualTo: uid)
+        .get()
+        .then((snapshot) {
+      setState(() {
+        latestData.add(snapshot.docs.last.data());
+      });
+    });
+  }
+
+  getLatestPhysicalDataWeek() {
+    FirebaseFirestore.instance
+        .collection('PhysicalQuestionnaireResult')
+        .where('athleteUID', isEqualTo: uid)
+        .get()
+        .then((snapshot) {
+      setState(() {
+        latestData.add(snapshot.docs.first.data());
+      });
+    });
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
@@ -62,9 +85,17 @@ class _AthleteGraphState extends State<AthleteGraph> {
     setState(() {
       isLoading = true;
     });
+    getLatestHealthDataWeek();
+    getLatestPhysicalDataWeek();
+    latestData.sort((a, b) =>
+        ('${a['doDate'].toDate()}').compareTo('${b['doDate'].toDate()}'));
+
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
+        _selectedWeek =
+            AthleteLineGraph.getWeekDay(latestData.last['doDate']).toInt();
+        defaultWeek = _selectedWeek;
       });
     });
   }
@@ -161,7 +192,30 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   padding: const EdgeInsets.all(10),
                                 ),
                                 Text('ช่วงเวลาที่ต้องการแสดงกราฟ'),
-                                cupertino
+                                CupertinoSlider(
+                                  max: 52,
+                                  min: 1,
+                                  divisions: 52,
+                                  activeColor: Colors.green[300],
+                                  value: _selectedWeek.toDouble(),
+                                  onChanged: (values) {
+                                    setState(() {
+                                      _selectedWeek = values.floor();
+                                      print(_selectedWeek.toString());
+                                      isDefault[0] = false;
+                                    });
+                                  },
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: '${_selectedWeek.toString()} ',
+                                      ),
+                                      TextSpan(text: 'สัปดาห์'),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                             actions: [
@@ -214,6 +268,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                   } else {
                     isDefault[0] = true;
                     _selectedQuestionnaire = <bool>[true, true];
+                    _selectedWeek = defaultWeek;
                   }
                 });
               },
@@ -256,6 +311,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                     return AthleteLineGraph(
                       healthResultDataList: healthDataList,
                       physicalResultDataList: physicalDataList,
+                      selectedWeek: _selectedWeek,
                     );
                   } else {
                     return const Center(
@@ -264,10 +320,6 @@ class _AthleteGraphState extends State<AthleteGraph> {
                   }
                 },
               ),
-        // AthleteLineGraph(
-        //   healthResultDataList: cleanedHealthDataList,
-        //   physicalResultDataList: cleanedPhysicalDataList,
-        // ),
       ],
     );
   }

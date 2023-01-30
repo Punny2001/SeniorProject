@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 class AthleteLineGraph extends StatelessWidget {
   final List<Map<String, dynamic>> healthResultDataList;
   final List<Map<String, dynamic>> physicalResultDataList;
+  final int selectedWeek;
 
   const AthleteLineGraph({
     Key key,
     this.healthResultDataList,
     this.physicalResultDataList,
+    this.selectedWeek,
   }) : super(key: key);
 
   static double getWeekDay(Timestamp timestamp) {
@@ -83,9 +85,9 @@ class AthleteLineGraph extends StatelessWidget {
     return Expanded(
       child: LineChart(
         LineChartData(
-          minX: getWeekDay(Timestamp.now()) - 12 < 0
-              ? getWeekDay(Timestamp.now()) - getWeekDay(Timestamp.now())
-              : getWeekDay(Timestamp.now()) - 12,
+          minX: getWeekDay(Timestamp.now()) - selectedWeek.toDouble() > 0
+              ? getWeekDay(Timestamp.now()) - selectedWeek.toDouble()
+              : 0,
           maxX: getWeekDay(Timestamp.now()),
           minY: 0,
           maxY: 100,
@@ -97,7 +99,7 @@ class AthleteLineGraph extends StatelessWidget {
             bottomTitles: AxisTitles(
               axisNameSize: w * 0.1,
               axisNameWidget: Text(
-                'วันที่',
+                'สัปดาห์ ',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: h * 0.025,
