@@ -1,6 +1,5 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +13,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:seniorapp/decoration/authentication/textfield_login.dart';
 import 'package:seniorapp/decoration/padding.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class Register extends StatefulWidget {
   const Register({Key key}) : super(key: key);
@@ -29,6 +29,7 @@ class _RegisterState extends State<Register> {
   final _usernameController = TextEditingController();
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
+  bool _pdpaCheck = false;
   String _selectedSport;
   String _selectedStaff;
   int _selectedDept;
@@ -44,6 +45,7 @@ class _RegisterState extends State<Register> {
   String _selectedGender;
   int age;
   String token;
+  String pdpaPath = 'assets/PDPA_final_draft.pdf';
 
   void getToken() async {
     await FirebaseMessaging.instance.getToken().then((tok) {
@@ -748,9 +750,26 @@ class _RegisterState extends State<Register> {
                               ],
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Checkbox(
+                                value: _pdpaCheck,
+                                activeColor: Colors.white,
+                                checkColor: Color.fromARGB(255, 113, 157, 242),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _pdpaCheck = value;
+                                  });
+                                },
+                              ),
+                              TextButton(
+                                onPressed: () {},
+                                child: Text('ข้อตกลงการใช้งาน'),
+                              ),
+                            ],
                           ),
+                          PaddingDecorate(15),
 
                           /// Sign Up button
                           ElevatedButton(
