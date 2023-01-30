@@ -1,5 +1,6 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _usernameController = TextEditingController();
@@ -121,15 +123,15 @@ class _RegisterState extends State<Register> {
                     topRight: Radius.circular(50),
                   ),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.only(top: 300.0),
+                child: Padding(
+                  padding: EdgeInsets.only(top: h),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 170.0),
               child: Container(
-                margin: const EdgeInsets.all(42),
+                margin: EdgeInsets.all(w * 0.1),
                 decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 113, 157, 242)),
                 child: Column(
@@ -143,21 +145,21 @@ class _RegisterState extends State<Register> {
                             'Email',
                             style: textCustom(),
                           ),
-                          PaddingDecorate(10),
+                          PaddingDecorate(5),
                           TextFormField(
                             validator: (value) {
                               if (value.isEmpty) {
-                                return 'register_page.username_required'.tr();
+                                return 'Email address is required';
                               } else {
                                 return null;
                               }
                             },
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            controller: _usernameController,
+                            controller: _emailController,
                             decoration: textdecorate_login(
-                              Icons.account_circle,
-                              'register_page.username_description'.tr(),
+                              Icons.email,
+                              'Email Address',
                             ),
                           ),
                           PaddingDecorate(15),
@@ -167,9 +169,7 @@ class _RegisterState extends State<Register> {
                             'register_page.password'.tr(),
                             style: textCustom(),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(5),
                           TextFormField(
                             validator: (value) {
                               if (value.isEmpty) {
@@ -236,16 +236,13 @@ class _RegisterState extends State<Register> {
                           Text(
                             'register_page.password_description'.tr(),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(15),
+                          ////
                           Text(
                             'register_page.confirm_password'.tr(),
                             style: textCustom(),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(5),
                           TextFormField(
                             validator: (value) {
                               if (value.isEmpty) {
@@ -309,16 +306,12 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(15),
                           Text(
                             'register_page.username'.tr(),
                             style: textCustom(),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(5),
                           //////User container
                           TextFormField(
                             validator: (value) {
@@ -336,16 +329,12 @@ class _RegisterState extends State<Register> {
                               'register_page.username_description'.tr(),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(15),
                           Text(
                             'register_page.firstname'.tr(),
                             style: textCustom(),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(5),
                           TextFormField(
                             validator: (value) {
                               if (value.isEmpty) {
@@ -362,17 +351,13 @@ class _RegisterState extends State<Register> {
                               'register_page.firstname_description'.tr(),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(15),
                           ////// Lastname textbox
                           Text(
                             'register_page.lastname'.tr(),
                             style: textCustom(),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(5),
                           TextFormField(
                             validator: (value) {
                               if (value.isEmpty) {
@@ -389,18 +374,14 @@ class _RegisterState extends State<Register> {
                               'register_page.firstname_description'.tr(),
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(15),
 
                           /// BirthDate Picking
                           Text(
                             'register_page.birthdate'.tr(),
                             style: textCustom(),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(5),
                           DateTimePicker(
                             type: DateTimePickerType.date,
                             initialDate: DateTime.now(),
@@ -452,9 +433,7 @@ class _RegisterState extends State<Register> {
                               }
                             },
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 15),
-                          ),
+                          PaddingDecorate(15),
 
                           Text(
                             'Gender',
@@ -521,6 +500,7 @@ class _RegisterState extends State<Register> {
                               }
                             },
                           ),
+                          PaddingDecorate(15),
                           Text(
                             'Department',
                             style: textCustom(),
@@ -578,7 +558,7 @@ class _RegisterState extends State<Register> {
                               }
                             },
                           ),
-
+                          PaddingDecorate(10),
                           Visibility(
                             visible: isAthlete,
                             child: //Athlete
@@ -589,9 +569,7 @@ class _RegisterState extends State<Register> {
                                   'register_page.sportType'.tr(),
                                   style: textCustom(),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 15),
-                                ),
+                                PaddingDecorate(5),
                                 DropdownButtonFormField2<String>(
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
@@ -645,7 +623,7 @@ class _RegisterState extends State<Register> {
                                     }
                                   },
                                 ),
-                                PaddingDecorate(20),
+                                PaddingDecorate(15),
 
                                 /// Weight & Height
                                 Text(
@@ -670,9 +648,6 @@ class _RegisterState extends State<Register> {
                                       _selectedWeight = value;
                                     });
                                   },
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 40),
                                 ),
                                 PaddingDecorate(10),
                                 Text(
@@ -838,123 +813,133 @@ class _RegisterState extends State<Register> {
       print(uid);
       isAthleteCheck();
       if (validate) {
-        if (passwordConfirm() && _selectedDepartment == 'Athlete') {
-          await FirebaseAuth.instance.currentUser
-              .updatePassword(_passwordController.text.trim());
-          await FirebaseAuth.instance.currentUser
-              .updateProfile(displayName: _usernameController.text.trim())
-              .then((value2) async {
-            String uid = FirebaseAuth.instance.currentUser.uid;
+        await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _emailController.text.trim(),
+                password: _passwordController.text.trim())
+            .then((value) async {
+          await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: _emailController.text.trim(),
+                  password: _passwordController.text.trim())
+              .then((value) async {
+            if (passwordConfirm() && _selectedDepartment == 'Athlete') {
+              await FirebaseAuth.instance.currentUser
+                  .updateProfile(displayName: _usernameController.text.trim())
+                  .then((value2) async {
+                String uid = FirebaseAuth.instance.currentUser.uid;
 
-            String athlete_no = 'A';
-            String split;
-            int latestID;
-            NumberFormat format = NumberFormat('0000000000');
-            await FirebaseFirestore.instance
-                .collection('Athlete')
-                .orderBy('athlete_no', descending: true)
-                .limit(1)
-                .get()
-                .then((QuerySnapshot querySnapshot) {
-              if (querySnapshot.size == 0) {
-                athlete_no += format.format(1);
-              } else {
-                querySnapshot.docs
-                    .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
-                  Map data = queryDocumentSnapshot.data();
-                  split = data['athlete_no'].toString().split('A')[1];
-                  latestID = int.parse(split) + 1;
-                  athlete_no += format.format(latestID);
+                String athlete_no = 'A';
+                String split;
+                int latestID;
+                NumberFormat format = NumberFormat('0000000000');
+                await FirebaseFirestore.instance
+                    .collection('Athlete')
+                    .orderBy('athlete_no', descending: true)
+                    .limit(1)
+                    .get()
+                    .then((QuerySnapshot querySnapshot) {
+                  if (querySnapshot.size == 0) {
+                    athlete_no += format.format(1);
+                  } else {
+                    querySnapshot.docs
+                        .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+                      Map data = queryDocumentSnapshot.data();
+                      split = data['athlete_no'].toString().split('A')[1];
+                      latestID = int.parse(split) + 1;
+                      athlete_no += format.format(latestID);
+                    });
+                  }
                 });
-              }
-            });
 
-            Athlete athleteModel = Athlete(
-                token: token,
-                athlete_no: athlete_no,
-                username: _usernameController.text.trim(),
-                firstname: _firstnameController.text.trim(),
-                lastname: _lastnameController.text.trim(),
-                sportType: _selectedSport,
-                birthdate: _birthdate,
-                department: 'Athlete',
-                weight: _selectedWeight,
-                height: _selectedHeight,
-                email: email,
-                gender: _selectedGender,
-                age: age);
+                Athlete athleteModel = Athlete(
+                    token: token,
+                    athlete_no: athlete_no,
+                    username: _usernameController.text.trim(),
+                    firstname: _firstnameController.text.trim(),
+                    lastname: _lastnameController.text.trim(),
+                    sportType: _selectedSport,
+                    birthdate: _birthdate,
+                    department: 'Athlete',
+                    weight: _selectedWeight,
+                    height: _selectedHeight,
+                    email: email,
+                    gender: _selectedGender,
+                    age: age);
 
-            Map<String, dynamic> data = athleteModel.toMap();
+                Map<String, dynamic> data = athleteModel.toMap();
 
-            await FirebaseFirestore.instance
-                .collection('Athlete')
-                .doc(uid)
-                .set(data)
-                .then(
-                  (value) => print('Insert data to Firestore successfully'),
-                );
-          }).then((value) {
-            FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/athletePageChoosing', (route) => false);
+                await FirebaseFirestore.instance
+                    .collection('Athlete')
+                    .doc(uid)
+                    .set(data)
+                    .then(
+                      (value) => print('Insert data to Firestore successfully'),
+                    );
+              }).then((value) {
+                FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/athletePageChoosing', (route) => false);
+              });
+            } else if (passwordConfirm() && _selectedDepartment == 'Staff') {
+              await FirebaseAuth.instance.currentUser
+                  .updateProfile(displayName: _usernameController.text.trim())
+                  .then((value2) async {
+                String staff_no = 'S';
+                String split;
+                int latestID;
+                NumberFormat format = NumberFormat('0000000000');
+                await FirebaseFirestore.instance
+                    .collection('Staff')
+                    .orderBy('staff_no', descending: true)
+                    .limit(1)
+                    .get()
+                    .then((QuerySnapshot querySnapshot) {
+                  if (querySnapshot.size == 0) {
+                    staff_no += format.format(1);
+                  } else {
+                    querySnapshot.docs
+                        .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
+                      Map data = queryDocumentSnapshot.data();
+                      split = data['staff_no'].toString().split('S')[1];
+                      latestID = int.parse(split) + 1;
+                      staff_no += format.format(latestID);
+                    });
+                  }
+                });
+
+                Staff staffModel = Staff(
+                    token: token,
+                    staff_no: staff_no,
+                    username: _usernameController.text.trim(),
+                    firstname: _firstnameController.text.trim(),
+                    lastname: _lastnameController.text.trim(),
+                    birthdate: _birthdate,
+                    department: 'Staff',
+                    staffType: _selectedStaff,
+                    email: email,
+                    gender: _selectedGender,
+                    age: age);
+
+                Map<String, dynamic> data = staffModel.toMap();
+
+                await FirebaseFirestore.instance
+                    .collection('Staff')
+                    .doc(uid)
+                    .set(data)
+                    .then(
+                      (value) => print('Insert data to Firestore successfully'),
+                    );
+              }).then(
+                (value) {
+                  FirebaseMessaging.instance.subscribeToTopic('Staff');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      '/staffPageChoosing', (route) => false);
+                },
+              );
+            }
           });
-        } else if (passwordConfirm() && _selectedDepartment == 'Staff') {
-          await FirebaseAuth.instance.currentUser
-              .updateProfile(displayName: _usernameController.text.trim())
-              .then((value2) async {
-            String staff_no = 'S';
-            String split;
-            int latestID;
-            NumberFormat format = NumberFormat('0000000000');
-            await FirebaseFirestore.instance
-                .collection('Staff')
-                .orderBy('staff_no', descending: true)
-                .limit(1)
-                .get()
-                .then((QuerySnapshot querySnapshot) {
-              if (querySnapshot.size == 0) {
-                staff_no += format.format(1);
-              } else {
-                querySnapshot.docs
-                    .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
-                  Map data = queryDocumentSnapshot.data();
-                  split = data['staff_no'].toString().split('S')[1];
-                  latestID = int.parse(split) + 1;
-                  staff_no += format.format(latestID);
-                });
-              }
-            });
-
-            Staff staffModel = Staff(
-                token: token,
-                staff_no: staff_no,
-                username: _usernameController.text.trim(),
-                firstname: _firstnameController.text.trim(),
-                lastname: _lastnameController.text.trim(),
-                birthdate: _birthdate,
-                department: 'Staff',
-                staffType: _selectedStaff,
-                email: email,
-                gender: _selectedGender,
-                age: age);
-
-            Map<String, dynamic> data = staffModel.toMap();
-
-            await FirebaseFirestore.instance
-                .collection('Staff')
-                .doc(uid)
-                .set(data)
-                .then(
-                  (value) => print('Insert data to Firestore successfully'),
-                );
-          }).then(
-            (value) {
-              FirebaseMessaging.instance.subscribeToTopic('Staff');
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/staffPageChoosing', (route) => false);
-            },
-          );
-        }
+        });
       }
     } on FirebaseAuthException catch (error) {
       if (error.code == 'invalid-email') {

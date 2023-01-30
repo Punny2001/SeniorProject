@@ -8,8 +8,8 @@ class AthleteLineGraph extends StatelessWidget {
 
   const AthleteLineGraph({
     Key key,
-    @required this.healthResultDataList,
-    @required this.physicalResultDataList,
+    this.healthResultDataList,
+    this.physicalResultDataList,
   }) : super(key: key);
 
   static double getWeekDay(Timestamp timestamp) {
@@ -90,8 +90,8 @@ class AthleteLineGraph extends StatelessWidget {
           minY: 0,
           maxY: 100,
           lineBarsData: [
-            getHealthChart,
-            getPhysicalChart,
+            if (healthResultDataList != null) getHealthChart,
+            if (physicalResultDataList != null) getPhysicalChart,
           ],
           titlesData: FlTitlesData(
             bottomTitles: AxisTitles(
