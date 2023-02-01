@@ -13,7 +13,6 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:seniorapp/decoration/authentication/textfield_login.dart';
 import 'package:seniorapp/decoration/padding.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 class Register extends StatefulWidget {
   const Register({Key key}) : super(key: key);

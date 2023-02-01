@@ -1137,6 +1137,7 @@ class _IllnessReportState extends State<IllnessReport> {
       'caseFinished': true,
       'caseFinishedDateTime': DateTime.now(),
       'adviceMessage': _messageController.text,
+      'messageReceived': false,
     }).then((value) {
       print('Updated data successfully');
     });
