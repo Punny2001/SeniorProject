@@ -7,25 +7,21 @@ class AthleteLineGraph extends StatelessWidget {
   final List<Map<String, dynamic>> physicalResultDataList;
   final int selectedWeek;
 
-  const AthleteLineGraph({
+  AthleteLineGraph({
     Key key,
     this.healthResultDataList,
     this.physicalResultDataList,
     this.selectedWeek,
   }) : super(key: key);
 
-  static double getWeekDay(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
-    int week_days;
+  final DateTime now = DateTime.now();
+  static final DateTime firstJan = DateTime(DateTime.now().year, 1, 1);
 
-    if (dateTime.month == 12 && dateTime.day == 31) {
-      week_days = 52;
-    } else {
-      int days = dateTime.month * dateTime.day;
-      week_days = (days / 7).floor() + 1;
-    }
-
-    return week_days.toDouble();
+  // get week between first date and now
+  static double getWeekDay(DateTime from, DateTime to) {
+    from = DateTime.utc(from.year, from.month, from.day);
+    to = DateTime.utc(to.year, to.month, to.day);
+    return (to.difference(from).inDays / 7).ceil().toDouble();
   }
 
   LineChartBarData get getHealthChart => LineChartBarData(
@@ -34,7 +30,9 @@ class AthleteLineGraph extends StatelessWidget {
         belowBarData: BarAreaData(show: false),
         spots: [
           for (int i = 0; i < healthResultDataList.length; i++)
-            FlSpot(getWeekDay(healthResultDataList[i]['doDate']),
+            FlSpot(
+                getWeekDay(
+                    firstJan, (healthResultDataList[i]['doDate']).toDate()),
                 healthResultDataList[i]['totalPoint'].toDouble()),
         ],
       );
@@ -44,51 +42,25 @@ class AthleteLineGraph extends StatelessWidget {
         belowBarData: BarAreaData(show: false),
         spots: [
           for (int i = 0; i < physicalResultDataList.length; i++)
-            FlSpot(getWeekDay(physicalResultDataList[i]['doDate']),
+            FlSpot(
+                getWeekDay(
+                    firstJan, (physicalResultDataList[i]['doDate']).toDate()),
                 physicalResultDataList[i]['totalPoint'].toDouble()),
         ],
       );
 
-  // Widget bottomTitleWidgets(double value, TitleMeta meta) {
-  //   const style = TextStyle(
-  //     color: Color(0xff72719b),
-  //     fontWeight: FontWeight.bold,
-  //     fontSize: 16,
-  //   );
-  //   Widget text;
-  //   switch (value.toInt()) {
-  //     case 2:
-  //       text = const Text('SEPT', style: style);
-  //       break;
-  //     case 7:
-  //       text = const Text('OCT', style: style);
-  //       break;
-  //     case 12:
-  //       text = const Text('DEC', style: style);
-  //       break;
-  //     default:
-  //       text = const Text('');
-  //       break;
-  //   }
-
-  //   return SideTitleWidget(
-  //     axisSide: meta.axisSide,
-  //     space: 10,
-  //     child: text,
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
+    print(healthResultDataList);
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Expanded(
       child: LineChart(
         LineChartData(
-          minX: getWeekDay(Timestamp.now()) - selectedWeek.toDouble() > 0
-              ? getWeekDay(Timestamp.now()) - selectedWeek.toDouble()
+          minX: getWeekDay(firstJan, now) - selectedWeek.toDouble() > 0
+              ? getWeekDay(firstJan, now) - selectedWeek.toDouble()
               : 0,
-          maxX: getWeekDay(Timestamp.now()),
+          maxX: getWeekDay(firstJan, now),
           minY: 0,
           maxY: 100,
           lineBarsData: [

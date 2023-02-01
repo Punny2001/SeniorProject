@@ -17,7 +17,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
   final String uid = FirebaseAuth.instance.currentUser.uid;
   bool isLoading = true;
   Timer _timer;
-  int _selectedWeek;
+  int _selectedWeek = 5;
 
   List<bool> _selectedQuestionnaire = <bool>[true, true];
   final List<bool> isDefault = <bool>[true];
@@ -54,8 +54,10 @@ class _AthleteGraphState extends State<AthleteGraph> {
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
-    data.sort((a, b) =>
-        ('${a['doDate'].toDate()}').compareTo('${b['doDate'].toDate()}'));
+    data.sort((a, b) => ('${a['doDate']}').compareTo('${b['doDate']}'));
+    data.forEach((element) {
+      print(element['doDate']);
+    });
     if (_selectedQuestionnaire[0] == false) {
       data.removeWhere((element) => element['questionnaireType'] == 'Physical');
     }
@@ -93,8 +95,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
-        _selectedWeek =
-            AthleteLineGraph.getWeekDay(latestData.last['doDate']).toInt();
+        _selectedWeek = AthleteLineGraph.getWeekDay(
+                AthleteLineGraph.firstJan, (latestData.last['doDate']).toDate())
+            .toInt();
         defaultWeek = _selectedWeek;
       });
     });

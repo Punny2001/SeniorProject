@@ -330,9 +330,8 @@ class _AthleteHistoryState extends State<AthleteMentalHistory> {
                                                         ),
                                                         children: [
                                                           TextSpan(
-                                                            text: find_questnaireNo(
-                                                                mentalResultData
-                                                                    .questionnaireNo),
+                                                            text: (index + 1)
+                                                                .toString(),
                                                             style: const TextStyle(
                                                                 fontWeight:
                                                                     FontWeight

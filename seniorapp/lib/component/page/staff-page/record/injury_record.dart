@@ -1437,7 +1437,7 @@ class _InjuryReportState extends State<InjuryReport> {
       'caseFinished': true,
       'caseFinishedDateTime': DateTime.now(),
       'adviceMessage': _messageController.text,
-      'messageRecieved': false,
+      'messageReceived': false,
     }).then((value) {
       print('Updated data successfully');
     });
