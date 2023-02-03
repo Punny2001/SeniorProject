@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -29,11 +28,14 @@ class AthleteLineGraph extends StatelessWidget {
         color: Colors.purple[200],
         belowBarData: BarAreaData(show: false),
         spots: [
-          for (int i = 0; i < healthResultDataList.length; i++)
-            FlSpot(
-                getWeekDay(
-                    firstJan, (healthResultDataList[i]['doDate']).toDate()),
-                healthResultDataList[i]['totalPoint'].toDouble()),
+          for (int i = (healthResultDataList.length) - 1; i >= 0; i--)
+            if (getWeekDay(
+                    firstJan, healthResultDataList[i]['doDate'].toDate()) >=
+                getWeekDay(firstJan, now) - selectedWeek.toDouble())
+              FlSpot(
+                  getWeekDay(
+                      firstJan, (healthResultDataList[i]['doDate']).toDate()),
+                  healthResultDataList[i]['totalPoint'].toDouble()),
         ],
       );
 
@@ -41,11 +43,14 @@ class AthleteLineGraph extends StatelessWidget {
         isCurved: true,
         belowBarData: BarAreaData(show: false),
         spots: [
-          for (int i = 0; i < physicalResultDataList.length; i++)
-            FlSpot(
-                getWeekDay(
-                    firstJan, (physicalResultDataList[i]['doDate']).toDate()),
-                physicalResultDataList[i]['totalPoint'].toDouble()),
+          for (int i = (physicalResultDataList.length) - 1; i >= 0; i--)
+            if (getWeekDay(
+                    firstJan, physicalResultDataList[i]['doDate'].toDate()) >=
+                getWeekDay(firstJan, now) - selectedWeek.toDouble())
+              FlSpot(
+                  getWeekDay(
+                      firstJan, (physicalResultDataList[i]['doDate']).toDate()),
+                  physicalResultDataList[i]['totalPoint'].toDouble()),
         ],
       );
 
@@ -55,46 +60,61 @@ class AthleteLineGraph extends StatelessWidget {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Expanded(
-      child: LineChart(
-        LineChartData(
-          minX: getWeekDay(firstJan, now) - selectedWeek.toDouble() > 0
-              ? getWeekDay(firstJan, now) - selectedWeek.toDouble()
-              : 0,
-          maxX: getWeekDay(firstJan, now),
-          minY: 0,
-          maxY: 100,
-          lineBarsData: [
-            if (healthResultDataList != null) getHealthChart,
-            if (physicalResultDataList != null) getPhysicalChart,
-          ],
-          titlesData: FlTitlesData(
-            bottomTitles: AxisTitles(
-              axisNameSize: w * 0.1,
-              axisNameWidget: Text(
-                'สัปดาห์ ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: h * 0.025,
+      child: Container(
+        padding: EdgeInsets.only(top: h * 0.01, right: w * 0.05),
+        child: LineChart(
+          LineChartData(
+            gridData: FlGridData(verticalInterval: 1),
+            minX: getWeekDay(firstJan, now) - selectedWeek.toDouble() > 0.0
+                ? getWeekDay(firstJan, now) - selectedWeek.toDouble()
+                : 1.0,
+            maxX: getWeekDay(firstJan, now),
+            minY: 0.0,
+            maxY: 100.0,
+            lineBarsData: [
+              if (healthResultDataList != null) getHealthChart,
+              if (physicalResultDataList != null) getPhysicalChart,
+            ],
+            titlesData: FlTitlesData(
+              rightTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: false,
                 ),
               ),
-              sideTitles: SideTitles(
-                // getTitlesWidget: bottomTitleWidgets,
-                showTitles: true,
-                reservedSize: w * 0.1,
-              ),
-            ),
-            leftTitles: AxisTitles(
-              axisNameSize: w * 0.1,
-              axisNameWidget: Text(
-                'คะแนน',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: h * 0.025,
+              topTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: false,
                 ),
               ),
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: w * 0.1,
+              bottomTitles: AxisTitles(
+                axisNameSize: w * 0.1,
+                axisNameWidget: Text(
+                  'สัปดาห์ ',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: h * 0.025,
+                  ),
+                ),
+                sideTitles: SideTitles(
+                  interval: 1,
+                  // getTitlesWidget: bottomTitleWidgets,
+                  showTitles: true,
+                  reservedSize: w * 0.1,
+                ),
+              ),
+              leftTitles: AxisTitles(
+                axisNameSize: w * 0.1,
+                axisNameWidget: Text(
+                  'คะแนน',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: h * 0.025,
+                  ),
+                ),
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: w * 0.1,
+                ),
               ),
             ),
           ),

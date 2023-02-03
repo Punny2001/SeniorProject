@@ -21,7 +21,6 @@ class _AthleteGraphState extends State<AthleteGraph> {
 
   List<bool> _selectedQuestionnaire = <bool>[true, true];
   final List<bool> isDefault = <bool>[true];
-  int defaultWeek;
 
   List<Map<String, dynamic>> latestData = [];
 
@@ -53,10 +52,37 @@ class _AthleteGraphState extends State<AthleteGraph> {
     });
   }
 
+  // List<Map<String, dynamic>> findMax(List<Map<String, dynamic>> dataList) {
+  //   DateTime currentDate;
+  //   int currentWeek;
+  //   int nextWeek;
+  //   int nextScore;
+  //   int maxScore;
+  //   List<Map<String, dynamic>> tempList;
+  //   for (int i = 0; i < (dataList.length) - 1; i++) {
+  //     maxScore = dataList[i]['totalPoint'];
+  //     nextScore = dataList[i + 1]['totalPoint'];
+  //     currentWeek = AthleteLineGraph.getWeekDay(
+  //             AthleteLineGraph.firstJan, dataList[i]['doDate'].toDate())
+  //         .toInt();
+  //     nextWeek = AthleteLineGraph.getWeekDay(
+  //             AthleteLineGraph.firstJan, dataList[i + 1]['doDate'].toDate())
+  //         .toInt();
+  //     if (currentWeek == nextWeek && maxScore <= nextScore) {
+  //       maxScore = nextScore;
+  //     } else if (currentWeek != nextWeek) {
+  //       dataList.where((element) => element['totalPoint'] == maxScore);
+  //       print(
+  //           'Data: ${dataList.where((element) => element['totalPoint'] == maxScore && AthleteLineGraph.getWeekDay(AthleteLineGraph.firstJan, dataList[i]['doDate'].toDate()).toInt() == currentWeek)}');
+  //     }
+  //   }
+  //   return tempList;
+  // }
+
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
-    data.sort((a, b) => ('${a['doDate']}').compareTo('${b['doDate']}'));
+    data.sort((a, b) => ('${b['doDate']}').compareTo('${a['doDate']}'));
     data.forEach((element) {
-      print(element['doDate']);
+      print(element['doDate'].toDate());
     });
     if (_selectedQuestionnaire[0] == false) {
       data.removeWhere((element) => element['questionnaireType'] == 'Physical');
@@ -95,10 +121,6 @@ class _AthleteGraphState extends State<AthleteGraph> {
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
-        _selectedWeek = AthleteLineGraph.getWeekDay(
-                AthleteLineGraph.firstJan, (latestData.last['doDate']).toDate())
-            .toInt();
-        defaultWeek = _selectedWeek;
       });
     });
   }
@@ -152,14 +174,12 @@ class _AthleteGraphState extends State<AthleteGraph> {
                       builder: (BuildContext context) {
                         return StatefulBuilder(builder: (context, setState) {
                           return AlertDialog(
-                            title: Container(
-                              child: const Text('ตัวกรอง'),
-                            ),
+                            title: const Text('ตัวกรอง'),
                             content: Column(
                               children: [
                                 const Text('ประเภทของแบบสอบถาม'),
                                 const Padding(
-                                  padding: const EdgeInsets.all(5),
+                                  padding: EdgeInsets.all(5),
                                 ),
                                 ToggleButtons(
                                   borderRadius: const BorderRadius.all(
@@ -177,9 +197,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                     minHeight: h * 0.05,
                                     minWidth: w * 0.3,
                                   ),
-                                  children: [
-                                    const Text('การบาดเจ็บ'),
-                                    const Text('การเจ็บป่วย')
+                                  children: const [
+                                    Text('การบาดเจ็บ'),
+                                    Text('การเจ็บป่วย')
                                   ],
                                   isSelected: _selectedQuestionnaire,
                                   onPressed: (int index) {
@@ -192,9 +212,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   },
                                 ),
                                 const Padding(
-                                  padding: const EdgeInsets.all(10),
+                                  padding: EdgeInsets.all(10),
                                 ),
-                                Text('ช่วงเวลาที่ต้องการแสดงกราฟ'),
+                                const Text('ช่วงเวลาที่ต้องการแสดงกราฟ'),
                                 CupertinoSlider(
                                   max: 52,
                                   min: 1,
@@ -204,7 +224,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   onChanged: (values) {
                                     setState(() {
                                       _selectedWeek = values.floor();
-                                      print(_selectedWeek.toString());
+                                      // print(_selectedWeek.toString());
                                       isDefault[0] = false;
                                     });
                                   },
@@ -215,7 +235,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       TextSpan(
                                         text: '${_selectedWeek.toString()} ',
                                       ),
-                                      TextSpan(text: 'สัปดาห์'),
+                                      const TextSpan(text: 'สัปดาห์ '),
                                     ],
                                   ),
                                 ),
@@ -228,7 +248,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   color: Colors.green[300],
                                   child: const Text(
                                     'ใช้งาน',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white),
                                   ),
@@ -246,7 +266,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
               ),
             ),
             ToggleButtons(
-              children: [const Text('ค่าเริ่มต้น')],
+              children: const [Text('ค่าเริ่มต้น')],
               isSelected: isDefault,
               borderRadius: const BorderRadius.all(
                 Radius.circular(8),
@@ -271,7 +291,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                   } else {
                     isDefault[0] = true;
                     _selectedQuestionnaire = <bool>[true, true];
-                    _selectedWeek = defaultWeek;
+                    _selectedWeek = 5;
                   }
                 });
               },
@@ -279,8 +299,12 @@ class _AthleteGraphState extends State<AthleteGraph> {
           ],
         ),
         isLoading
-            ? Center(
-                child: CupertinoActivityIndicator(),
+            ? Container(
+                height: h * 0.8,
+                width: w,
+                child: const Center(
+                  child: CupertinoActivityIndicator(),
+                ),
               )
             : StreamBuilder(
                 stream: getData(),
@@ -318,7 +342,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                     );
                   } else {
                     return const Center(
-                      child: const CircularProgressIndicator(),
+                      child: CircularProgressIndicator(),
                     );
                   }
                 },
