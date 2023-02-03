@@ -219,7 +219,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                 children: [
                                   const Text('จัดเรียงโดย'),
                                   const Padding(
-                                    padding: const EdgeInsets.all(5),
+                                    padding: EdgeInsets.all(5),
                                   ),
                                   ToggleButtons(
                                     borderRadius: const BorderRadius.all(
@@ -237,9 +237,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minHeight: h * 0.05,
                                       minWidth: w * 0.3,
                                     ),
-                                    children: [
-                                      const Text('วันที่'),
-                                      const Text('คะแนน')
+                                    children: const [
+                                      Text('วันที่'),
+                                      Text('คะแนน')
                                     ],
                                     isSelected: _selectedOrder,
                                     onPressed: (int index) {
@@ -255,7 +255,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                     },
                                   ),
                                   const Padding(
-                                    padding: const EdgeInsets.all(5),
+                                    padding: EdgeInsets.all(5),
                                   ),
                                   ToggleButtons(
                                     borderRadius: const BorderRadius.all(
@@ -273,9 +273,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minHeight: h * 0.05,
                                       minWidth: w * 0.3,
                                     ),
-                                    children: [
-                                      const Text('มาก => น้อย'),
-                                      const Text('น้อย => มาก')
+                                    children: const [
+                                      Text('มาก => น้อย'),
+                                      Text('น้อย => มาก')
                                     ],
                                     isSelected: _selectedOrderType,
                                     onPressed: (int index) {
@@ -295,7 +295,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                   ),
                                   const Text('ประเภทของแบบสอบถาม'),
                                   const Padding(
-                                    padding: const EdgeInsets.all(5),
+                                    padding: EdgeInsets.all(5),
                                   ),
                                   ToggleButtons(
                                     borderRadius: const BorderRadius.all(
@@ -313,9 +313,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                       minHeight: h * 0.05,
                                       minWidth: w * 0.3,
                                     ),
-                                    children: [
-                                      const Text('การบาดเจ็บ'),
-                                      const Text('การเจ็บป่วย')
+                                    children: const [
+                                      Text('การบาดเจ็บ'),
+                                      Text('การเจ็บป่วย')
                                     ],
                                     isSelected: _selectedQuestionnaire,
                                     onPressed: (int index) {
@@ -328,7 +328,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                     },
                                   ),
                                   const Padding(
-                                    padding: const EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(10),
                                   ),
                                   const Text('ช่วงคะแนน'),
                                   const Padding(
@@ -365,7 +365,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                     color: Colors.green[300],
                                     child: const Text(
                                       'ใช้งาน',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white),
                                     ),
@@ -383,7 +383,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                 ),
               ),
               ToggleButtons(
-                children: [const Text('ค่าเริ่มต้น')],
+                children: const [Text('ค่าเริ่มต้น')],
                 isSelected: isDefault,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(8),
@@ -807,13 +807,13 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                               );
                             } else {
                               return const Center(
-                                child: const CircularProgressIndicator(),
+                                child: CircularProgressIndicator(),
                               );
                             }
                           },
                         )
                       : const Center(
-                          child: const Text(
+                          child: Text(
                             'ไม่มีบันทึกที่คุณสร้างไว้',
                             textAlign: TextAlign.center,
                             style: TextStyle(

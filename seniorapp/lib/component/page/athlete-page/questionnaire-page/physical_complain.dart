@@ -95,7 +95,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     });
   }
 
-  final body_part = const [
+  static final body_part = const [
     {
       'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด',
       'answerText': [
@@ -112,7 +112,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     }
   ];
 
-  final body_injured = [
+  static final body_injured = [
     {
       'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด',
       'ร่างกายส่วนหัวถึงลำตัว': [

@@ -77,7 +77,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     });
   }
 
-  final health_symp = [
+  static final health_symp = [
     {
       'questionText': 'โปรดเลือกปัญหาสุขภาพที่สำคัญที่สุด',
       'answerText': [
