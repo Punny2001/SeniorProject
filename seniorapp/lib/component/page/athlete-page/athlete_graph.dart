@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/graph-page/line_graph.dart';
-import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
+import 'package:seniorapp/component/page/athlete-page/questionnaire-page/physical_complain.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteGraph extends StatefulWidget {
@@ -22,6 +22,8 @@ class _AthleteGraphState extends State<AthleteGraph> {
   Timer _timer;
   int _selectedWeek = 5;
   final TextEditingController _healthSearch = TextEditingController();
+
+  String bodyChosing;
   String healthChoosing;
 
   RangeValues _currentRangeValues = const RangeValues(0, 100);
@@ -29,6 +31,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
   final List<bool> isDefault = <bool>[true];
 
   bool isHealthCheck = false;
+  bool isPhysicalCheck = false;
 
   List<Map<String, dynamic>> latestData = [];
 
@@ -59,6 +62,39 @@ class _AthleteGraphState extends State<AthleteGraph> {
     'ไข้ ',
     'ไอ',
   ];
+
+  var physicalList = {
+    'ร่างกายส่วนหัวถึงลำตัว': [
+      'ใบหน้า',
+      'ศีรษะ',
+      'คอ / กระดูกสันหลังส่วนคอ',
+      'กระดูกสันหลังทรวงอก / หลังส่วนบน',
+      'กระดูกอก / ซี่โครง',
+      'กระดูกสันหลังส่วนเอว / หลังส่วนล่าง',
+      'หน้าท้อง',
+      'กระดูกเชิงกราน / กระดูกสันหลังส่วนกระเบ็นเหน็บ / ก้น',
+    ],
+    'ร่างกายส่วนแขนถึงนิ้วมือ': [
+      'ไหล่ / กระดูกไหปลาร้า',
+      'ต้นแขน',
+      'ข้อศอก',
+      'ปลายแขน',
+      'ข้อมือ',
+      'มือ',
+      'นิ้ว',
+      'นิ้วหัวแม่มือ',
+    ],
+    'ร่างกายส่วนสะโพกถึงนิ้วเท้า': [
+      'สะโพก',
+      'ขาหนีบ',
+      'ต้นขา',
+      'เข่า',
+      'ขาส่วนล่าง',
+      'เอ็นร้อยหวาย',
+      'ข้อเท้า',
+      'เท้า / นิ้วเท้า',
+    ]
+  };
 
   void choose_filter() {
     setState(() {});
@@ -343,7 +379,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       isHealthCheck = value;
                                     });
                                   },
-                                  title: Text('ระบุปัญหาสุขภาพ'),
+                                  title: const Text('ระบุปัญหาสุขภาพ'),
                                   controlAffinity:
                                       ListTileControlAffinity.leading,
                                 ),
@@ -363,7 +399,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       .toList(),
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: isHealthCheck == true
+                                        ? Colors.white
+                                        : Colors.grey[350],
                                     hintText: 'โปรดเลือกปัญหาสุขภาพ',
                                     focusedErrorBorder:
                                         const OutlineInputBorder(
@@ -388,6 +426,96 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                     ),
                                   ),
                                   onChanged: isHealthCheck == true
+                                      ? (value) {
+                                          healthChoosing = value;
+                                        }
+                                      : null,
+                                  searchController: _healthSearch,
+                                  searchInnerWidget: Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 20,
+                                      right: 20,
+                                      bottom: 10,
+                                      top: 10,
+                                    ),
+                                    child: TextFormField(
+                                      controller: _healthSearch,
+                                      decoration: InputDecoration(
+                                        border: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(20),
+                                          ),
+                                        ),
+                                        suffixIcon: IconButton(
+                                          onPressed: () =>
+                                              _healthSearch.clear(),
+                                          icon: const Icon(Icons.close),
+                                        ),
+                                        hintText: 'ค้นหา ...',
+                                      ),
+                                    ),
+                                  ),
+                                  searchMatchFn: (item, searchValue) {
+                                    return (item.value.toString().contains(
+                                          searchValue,
+                                        ));
+                                  },
+                                ),
+                                CheckboxListTile(
+                                  value: isPhysicalCheck,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      isPhysicalCheck = value;
+                                    });
+                                  },
+                                  title: const Text('ระบุอาการบาดเจ็บ'),
+                                  controlAffinity:
+                                      ListTileControlAffinity.leading,
+                                ),
+                                DropdownButtonFormField2(
+                                  
+                                  isExpanded: true,
+                                  selectedItemHighlightColor: Colors.grey[300],
+                                  value: bodyChosing,
+                                  items: physicalList.keys
+                                      .map(
+                                        (body) => DropdownMenuItem(
+                                          child: Text(
+                                            body,
+                                          ),
+                                          value: body,
+                                        ),
+                                      )
+                                      .toList(),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: isPhysicalCheck == true
+                                        ? Colors.white
+                                        : Colors.grey[350],
+                                    hintText: 'โปรดเลือกอวัยวะ',
+                                    focusedErrorBorder:
+                                        const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    errorBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.blueGrey[100],
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.blueGrey[100],
+                                      ),
+                                    ),
+                                  ),
+                                  onChanged: isPhysicalCheck == true
                                       ? (value) {
                                           healthChoosing = value;
                                         }

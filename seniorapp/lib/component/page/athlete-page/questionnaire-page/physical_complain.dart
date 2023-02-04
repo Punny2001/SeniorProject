@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class PhysicalQuestionnaire extends StatefulWidget {
+  static List physicalList;
+
   @override
   State<StatefulWidget> createState() {
     return _PhysicalQuestionnaire();
