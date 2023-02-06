@@ -54,6 +54,16 @@ class AthleteLineGraph extends StatelessWidget {
         ],
       );
 
+  double getMinX() {
+    return getWeekDay(firstJan, now) - selectedWeek.toDouble() > 0.0
+        ? getWeekDay(firstJan, now) - selectedWeek.toDouble()
+        : 1.0;
+  }
+
+  double getMaxX() {
+    return getWeekDay(firstJan, now);
+  }
+
   @override
   Widget build(BuildContext context) {
     print(healthResultDataList);
@@ -61,14 +71,12 @@ class AthleteLineGraph extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
     return Expanded(
       child: Container(
-        padding: EdgeInsets.only(top: h * 0.01, right: w * 0.05),
+        padding: EdgeInsets.only(top: h * 0.05, right: w * 0.05),
         child: LineChart(
           LineChartData(
-            gridData: FlGridData(verticalInterval: 1),
-            minX: getWeekDay(firstJan, now) - selectedWeek.toDouble() > 0.0
-                ? getWeekDay(firstJan, now) - selectedWeek.toDouble()
-                : 1.0,
-            maxX: getWeekDay(firstJan, now),
+            gridData: FlGridData(verticalInterval: 1, horizontalInterval: 10),
+            minX: getMinX(),
+            maxX: getMaxX(),
             minY: 0.0,
             maxY: 100.0,
             lineBarsData: [
@@ -97,7 +105,6 @@ class AthleteLineGraph extends StatelessWidget {
                 ),
                 sideTitles: SideTitles(
                   interval: 1,
-                  // getTitlesWidget: bottomTitleWidgets,
                   showTitles: true,
                   reservedSize: w * 0.1,
                 ),
@@ -114,6 +121,7 @@ class AthleteLineGraph extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: w * 0.1,
+                  interval: 10,
                 ),
               ),
             ),
