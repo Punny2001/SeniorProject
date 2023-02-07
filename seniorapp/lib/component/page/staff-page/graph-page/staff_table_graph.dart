@@ -1,8 +1,32 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class StaffTableGraph extends StatelessWidget {
-  const StaffTableGraph({Key key}) : super(key: key);
+  final List<Map<String, dynamic>> healthResultDataList;
+  final List<Map<String, dynamic>> physicalResultDataList;
+  const StaffTableGraph({
+    Key key,
+    this.healthResultDataList,
+    this.physicalResultDataList,
+  }) : super(key: key);
+
+  int countNumberOfAthlete(List<Map<String, dynamic>> inputList) {
+    Set targetSet = Set<String>();
+    inputList.forEach((element) {
+      targetSet.add(element['athleteUID']);
+    });
+    return targetSet.length;
+  }
+
+  int countNumberOfAllAthlete() {
+    Set targetSet = Set<String>();
+    healthResultDataList.forEach((element) {
+      targetSet.add(element['athleteUID']);
+    });
+    physicalResultDataList.forEach((element) {
+      targetSet.add(element['athleteUID']);
+    });
+    return targetSet.length;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,37 +40,84 @@ class StaffTableGraph extends StatelessWidget {
         left: w * 0.05,
       ),
       child: Table(
-        border: TableBorder(
+        border: const TableBorder(
           top: BorderSide(width: 1),
           bottom: BorderSide(width: 1),
           right: BorderSide(width: 1),
           left: BorderSide(width: 1),
           horizontalInside: BorderSide(width: 1),
           verticalInside: BorderSide(width: 1),
-          borderRadius: BorderRadius.all(Radius.circular(1)),
         ),
         children: [
           TableRow(
             children: [
-              Text('All Problems'),
-              Text('Athlete Number'),
-              Text('Number of Cases'),
+              get_text(h: h, stringText: '', isBold: true),
+              get_text(h: h, stringText: 'Number of Athletes', isBold: true),
+              get_text(h: h, stringText: 'Number of Cases', isBold: true),
             ],
           ),
           TableRow(
             children: [
-              Text('Injury'),
-              Text('1'),
-              Text('1'),
+              get_text(h: h, stringText: 'All Problems', isBold: true),
+              get_text(
+                  h: h,
+                  stringText: (countNumberOfAthlete(healthResultDataList) +
+                          countNumberOfAthlete(physicalResultDataList))
+                      .toString(),
+                  isBold: false),
+              get_text(
+                h: h,
+                stringText: (healthResultDataList.length +
+                        physicalResultDataList.length)
+                    .toString(),
+                isBold: false,
+              )
+            ],
+          ),
+          TableRow(
+            children: [
+              get_text(h: h, stringText: 'Injury', isBold: true),
+              get_text(
+                  h: h,
+                  stringText:
+                      countNumberOfAthlete(physicalResultDataList).toString(),
+                  isBold: false),
+              get_text(
+                h: h,
+                stringText: physicalResultDataList.length.toString(),
+                isBold: false,
+              )
             ],
           ),
           TableRow(children: [
-            Text('Illness'),
-            Text('1'),
-            Text('1'),
+            get_text(h: h, stringText: 'Illness', isBold: true),
+            get_text(
+                h: h,
+                stringText:
+                    countNumberOfAthlete(healthResultDataList).toString(),
+                isBold: false),
+            get_text(
+              h: h,
+              stringText: healthResultDataList.length.toString(),
+              isBold: false,
+            )
           ])
         ],
       ),
     );
   }
+}
+
+Text get_text({double h, String stringText, bool isBold}) {
+  Text text = Text(
+    stringText,
+    textAlign: TextAlign.center,
+    style: TextStyle(
+      height: 1.5,
+      wordSpacing: 1.0,
+      fontSize: h * 0.025,
+      fontWeight: isBold == true ? FontWeight.bold : FontWeight.normal,
+    ),
+  );
+  return text;
 }

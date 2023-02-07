@@ -17,6 +17,20 @@ class _StaffGraphState extends State<StaffGraph> {
   List<Map<String, dynamic>> latestData = [];
   Timer _timer;
 
+  List<Map<String, dynamic>> athleteData = [];
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  getAthleteData() {
+    firestore.collection('Athlete').get().then((document) {
+      int index = 0;
+      document.docs.forEach((snapshot) {
+        athleteData.add(snapshot.data());
+        athleteData[index]['athleteUID'] = snapshot.reference.id;
+        index += 1;
+      });
+    });
+  }
+
   void choose_filter() {
     setState(() {});
   }
@@ -60,6 +74,7 @@ class _StaffGraphState extends State<StaffGraph> {
     setState(() {
       isLoading = true;
     });
+    getAthleteData();
     getLatestHealthDataWeek();
     getLatestPhysicalDataWeek();
     latestData.sort((a, b) =>
@@ -120,7 +135,10 @@ class _StaffGraphState extends State<StaffGraph> {
                       }
                     });
 
-                    return StaffTableGraph();
+                    return StaffTableGraph(
+                      healthResultDataList: healthDataList,
+                      physicalResultDataList: physicalDataList,
+                    );
                   } else {
                     return const Center(
                       child: CircularProgressIndicator(),

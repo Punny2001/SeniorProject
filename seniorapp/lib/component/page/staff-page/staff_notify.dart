@@ -191,9 +191,11 @@ class _StaffCaseState extends State<StaffNotify> {
                                       }
                                     });
 
-                                    healthData = HealthResultData.fromMap(data);
-                                    physicalData =
-                                        PhysicalResultData.fromMap(data);
+                                    // healthData = HealthResultData.fromMap(data);
+                                    // physicalData =
+                                    //     PhysicalResultData.fromMap(data);
+
+                                    // print(healthData);
 
                                     return Card(
                                       elevation: 5,
@@ -237,8 +239,8 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 ),
                                                                 children: [
                                                                   TextSpan(
-                                                                    text: healthData
-                                                                        .questionnaireType,
+                                                                    text: data[
+                                                                        'questionnaireType'],
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             18,
@@ -260,8 +262,8 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 ),
                                                                 children: [
                                                                   TextSpan(
-                                                                    text: healthData
-                                                                        .healthSymptom,
+                                                                    text: data[
+                                                                        'healthSymptom'],
                                                                     style:
                                                                         TextStyle(
                                                                       fontWeight:
@@ -285,8 +287,8 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 children: [
                                                                   TextSpan(
                                                                     text: formatDate(
-                                                                        healthData
-                                                                            .doDate,
+                                                                        data['doDate']
+                                                                            .toDate(),
                                                                         'Staff'),
                                                                     style: TextStyle(
                                                                         fontWeight:
@@ -309,8 +311,8 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                     text: DateFormat
                                                                             .Hms()
                                                                         .format(
-                                                                      healthData
-                                                                          .doDate,
+                                                                      data['doDate']
+                                                                          .toDate(),
                                                                     ),
                                                                     style: TextStyle(
                                                                         fontWeight:
@@ -330,14 +332,14 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                   .center,
                                                           children: [
                                                             Text(
-                                                              '${healthData.totalPoint}',
+                                                              '${data['totalPoint']}',
                                                               style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
                                                                   color: score_color(
-                                                                      healthData
-                                                                          .totalPoint),
+                                                                      data[
+                                                                          'totalPoint']),
                                                                   fontSize:
                                                                       h * 0.05),
                                                             ),
@@ -384,8 +386,8 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 ),
                                                                 children: [
                                                                   TextSpan(
-                                                                    text: physicalData
-                                                                        .questionnaireType,
+                                                                    text: data[
+                                                                        'questionnaireType'],
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             18,
@@ -407,8 +409,8 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 ),
                                                                 children: [
                                                                   TextSpan(
-                                                                    text: physicalData
-                                                                        .bodyPart,
+                                                                    text: data[
+                                                                        'bodyPart'],
                                                                     style: TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
@@ -430,8 +432,8 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                   TextSpan(
                                                                     text:
                                                                         formatDate(
-                                                                      physicalData
-                                                                          .doDate,
+                                                                      data['doDate']
+                                                                          .toDate(),
                                                                       'Staff',
                                                                     ),
                                                                     style: TextStyle(
@@ -455,9 +457,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                     text: DateFormat
                                                                             .Hms()
                                                                         .format(
-                                                                      physicalData
-                                                                          .doDate,
-                                                                    ),
+                                                                            data['doDate'].toDate()),
                                                                     style: TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
@@ -476,14 +476,14 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                   .center,
                                                           children: [
                                                             Text(
-                                                              '${physicalData.totalPoint}',
+                                                              '${data['totalPoint']}',
                                                               style: TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
                                                                   color: score_color(
-                                                                      physicalData
-                                                                          .totalPoint),
+                                                                      data[
+                                                                          'totalPoint']),
                                                                   fontSize:
                                                                       h * 0.05),
                                                             ),
