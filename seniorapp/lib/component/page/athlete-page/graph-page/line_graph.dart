@@ -23,36 +23,31 @@ class AthleteLineGraph extends StatelessWidget {
     return (to.difference(from).inDays / 7).ceil().toDouble();
   }
 
-  LineChartBarData get getHealthChart => LineChartBarData(
-        isCurved: true,
-        color: Colors.purple[200],
-        belowBarData: BarAreaData(show: false),
-        spots: [
-          for (int i = (healthResultDataList.length) - 1; i >= 0; i--)
-            if (getWeekDay(
-                    firstJan, healthResultDataList[i]['doDate'].toDate()) >=
-                getWeekDay(firstJan, now) - selectedWeek.toDouble())
-              FlSpot(
-                  getWeekDay(
-                      firstJan, (healthResultDataList[i]['doDate']).toDate()),
-                  healthResultDataList[i]['totalPoint'].toDouble()),
-        ],
-      );
+  ScatterSpot getHealthChart(Map<String, dynamic> healthResultDataList) {
+    ScatterSpot spot;
 
-  LineChartBarData get getPhysicalChart => LineChartBarData(
-        isCurved: true,
-        belowBarData: BarAreaData(show: false),
-        spots: [
-          for (int i = (physicalResultDataList.length) - 1; i >= 0; i--)
-            if (getWeekDay(
-                    firstJan, physicalResultDataList[i]['doDate'].toDate()) >=
-                getWeekDay(firstJan, now) - selectedWeek.toDouble())
-              FlSpot(
-                  getWeekDay(
-                      firstJan, (physicalResultDataList[i]['doDate']).toDate()),
-                  physicalResultDataList[i]['totalPoint'].toDouble()),
-        ],
-      );
+    spot = ScatterSpot(
+      getWeekDay(firstJan, (healthResultDataList['doDate']).toDate()),
+      healthResultDataList['totalPoint'].toDouble(),
+      show: true,
+      color: Colors.purple,
+    );
+
+    return spot;
+  }
+
+  ScatterSpot getPhysicalChart(Map<String, dynamic> physicalResultDataList) {
+    ScatterSpot spot;
+
+    spot = ScatterSpot(
+      getWeekDay(firstJan, (physicalResultDataList['doDate']).toDate()),
+      physicalResultDataList['totalPoint'].toDouble(),
+      show: true,
+      color: Colors.blue,
+    );
+
+    return spot;
+  }
 
   double getMinX() {
     return getWeekDay(firstJan, now) - selectedWeek.toDouble() > 0.0
@@ -72,16 +67,29 @@ class AthleteLineGraph extends StatelessWidget {
     return Expanded(
       child: Container(
         padding: EdgeInsets.only(top: h * 0.05, right: w * 0.05),
-        child: LineChart(
-          LineChartData(
+        child: ScatterChart(
+          ScatterChartData(
+            scatterLabelSettings: ScatterLabelSettings(
+              getLabelFunction: (spotIndex, spot) {},
+            ),
             gridData: FlGridData(verticalInterval: 1, horizontalInterval: 10),
             minX: getMinX(),
             maxX: getMaxX(),
             minY: 0.0,
             maxY: 100.0,
-            lineBarsData: [
-              if (healthResultDataList != null) getHealthChart,
-              if (physicalResultDataList != null) getPhysicalChart,
+            scatterSpots: [
+              if (healthResultDataList != null)
+                for (int i = (healthResultDataList.length) - 1; i >= 0; i--)
+                  if (getWeekDay(firstJan,
+                          healthResultDataList[i]['doDate'].toDate()) >=
+                      getWeekDay(firstJan, now) - selectedWeek.toDouble())
+                    getHealthChart(healthResultDataList[i]),
+              if (physicalResultDataList != null)
+                for (int i = (physicalResultDataList.length) - 1; i >= 0; i--)
+                  if (getWeekDay(firstJan,
+                          physicalResultDataList[i]['doDate'].toDate()) >=
+                      getWeekDay(firstJan, now) - selectedWeek.toDouble())
+                    getPhysicalChart(physicalResultDataList[i]),
             ],
             titlesData: FlTitlesData(
               rightTitles: AxisTitles(

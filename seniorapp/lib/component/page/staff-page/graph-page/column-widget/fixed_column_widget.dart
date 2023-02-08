@@ -26,6 +26,7 @@ class FixedColumnTable extends StatelessWidget {
     return DataTable(
       columnSpacing: 10,
       headingRowColor: MaterialStateProperty.all(Colors.blue[200]),
+      dataRowColor: MaterialStateProperty.all(Colors.blue[50]),
       showBottomBorder: true,
       decoration: BoxDecoration(
         border: Border(
