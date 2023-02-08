@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class StaffTableGraph extends StatelessWidget {
+class StaffSummaryTableGraph extends StatelessWidget {
   final List<Map<String, dynamic>> healthResultDataList;
   final List<Map<String, dynamic>> physicalResultDataList;
-  const StaffTableGraph({
+  const StaffSummaryTableGraph({
     Key key,
     this.healthResultDataList,
     this.physicalResultDataList,
@@ -19,12 +19,14 @@ class StaffTableGraph extends StatelessWidget {
 
   int countNumberOfAllAthlete() {
     Set targetSet = Set<String>();
+
     healthResultDataList.forEach((element) {
       targetSet.add(element['athleteUID']);
     });
     physicalResultDataList.forEach((element) {
       targetSet.add(element['athleteUID']);
     });
+
     return targetSet.length;
   }
 
@@ -41,6 +43,7 @@ class StaffTableGraph extends StatelessWidget {
       ),
       child: Table(
         border: const TableBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
           top: BorderSide(width: 1),
           bottom: BorderSide(width: 1),
           right: BorderSide(width: 1),
@@ -61,9 +64,7 @@ class StaffTableGraph extends StatelessWidget {
               get_text(h: h, stringText: 'All Problems', isBold: true),
               get_text(
                   h: h,
-                  stringText: (countNumberOfAthlete(healthResultDataList) +
-                          countNumberOfAthlete(physicalResultDataList))
-                      .toString(),
+                  stringText: (countNumberOfAllAthlete()).toString(),
                   isBold: false),
               get_text(
                 h: h,
@@ -115,7 +116,7 @@ Text get_text({double h, String stringText, bool isBold}) {
     style: TextStyle(
       height: 1.5,
       wordSpacing: 1.0,
-      fontSize: h * 0.025,
+      fontSize: h * 0.02,
       fontWeight: isBold == true ? FontWeight.bold : FontWeight.normal,
     ),
   );

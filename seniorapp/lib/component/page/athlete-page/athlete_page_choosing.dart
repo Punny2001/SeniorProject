@@ -31,12 +31,12 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   List<Map<String, dynamic>> unreceivedMessageHealth = [];
   List<Map<String, dynamic>> unreceivedMessagePhysical = [];
 
-  final List<Widget> _athletePageList = const <Widget>[
-    AthleteHomePage(),
-    AthleteMentalHistory(),
-    AthleteHistory(),
-    AthleteGraph(),
-    AthleteNotify(),
+  final List<Widget> _athletePageList = <Widget>[
+    const AthleteHomePage(),
+    const AthleteMentalHistory(),
+    const AthleteHistory(),
+    AthleteGraph(uid: FirebaseAuth.instance.currentUser.uid, isStaff: false),
+    const AthleteNotify(),
   ];
 
   void _onPageTap(int index) {

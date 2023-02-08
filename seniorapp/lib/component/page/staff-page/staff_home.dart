@@ -18,12 +18,13 @@ class _StaffHomePageState extends State<StaffHomePage> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        padding: EdgeInsets.only(bottom: h * 0.01),
-        width: w,
-        height: h,
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(bottom: h * 0.01),
+      width: w,
+      height: h,
+      child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             // CarouselSlider(

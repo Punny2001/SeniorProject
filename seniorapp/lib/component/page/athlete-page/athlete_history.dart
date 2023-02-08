@@ -455,9 +455,12 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                 itemBuilder: (context, index) {
                                   Map<String, dynamic> data = mappedData[index];
 
+                                  print(data['doDate']);
+
                                   healthData = HealthResultData.fromMap(data);
                                   physicalData =
                                       PhysicalResultData.fromMap(data);
+                                  print(healthData.doDate);
                                   return GestureDetector(
                                     child: Card(
                                       shape: RoundedRectangleBorder(

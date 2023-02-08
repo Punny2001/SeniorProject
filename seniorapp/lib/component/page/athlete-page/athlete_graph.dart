@@ -9,14 +9,16 @@ import 'package:seniorapp/component/page/athlete-page/graph-page/line_graph.dart
 import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteGraph extends StatefulWidget {
-  const AthleteGraph({Key key}) : super(key: key);
+  AthleteGraph({Key key, this.uid, this.isStaff}) : super(key: key);
+
+  final String uid;
+  final bool isStaff;
 
   @override
   State<AthleteGraph> createState() => _AthleteGraphState();
 }
 
 class _AthleteGraphState extends State<AthleteGraph> {
-  final String uid = FirebaseAuth.instance.currentUser.uid;
   bool isLoading = true;
   Timer _timer;
   int _selectedWeek = 5;
@@ -108,7 +110,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
   getLatestHealthDataWeek() {
     FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid)
+        .where('athleteUID', isEqualTo: widget.uid)
         .get()
         .then((snapshot) {
       setState(() {
@@ -120,7 +122,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
   getLatestPhysicalDataWeek() {
     FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid)
+        .where('athleteUID', isEqualTo: widget.uid)
         .get()
         .then((snapshot) {
       setState(() {
@@ -191,14 +193,24 @@ class _AthleteGraphState extends State<AthleteGraph> {
   Stream<List<QuerySnapshot>> getData() {
     Stream healthQuestionnaire = FirebaseFirestore.instance
         .collection('HealthQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid, isNull: false)
+        .where('athleteUID', isEqualTo: widget.uid, isNull: false)
         .snapshots();
     Stream physicalQuestionnaire = FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid, isNull: false)
+        .where('athleteUID', isEqualTo: widget.uid, isNull: false)
         .snapshots();
 
     return StreamZip([healthQuestionnaire, physicalQuestionnaire]);
+  }
+
+  Color getColors(int shade) {
+    Color colors;
+    if (widget.isStaff == true) {
+      colors = Colors.blue[shade];
+    } else {
+      colors = Colors.green[shade];
+    }
+    return colors;
   }
 
   @override
@@ -251,13 +263,15 @@ class _AthleteGraphState extends State<AthleteGraph> {
                     color: Colors.black,
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green.shade300,
+                    primary: widget.isStaff ? getColors(200) : getColors(300),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(
                         Radius.circular(8),
                       ),
-                      side: BorderSide(color: Colors.green[800]),
+                      side: BorderSide(
+                        color: widget.isStaff ? getColors(700) : getColors(800),
+                      ),
                     ),
                   ),
                   label: Text(
@@ -295,9 +309,13 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       textStyle: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),
-                                      fillColor: Colors.green[300],
+                                      fillColor: widget.isStaff
+                                          ? getColors(200)
+                                          : getColors(300),
                                       borderColor: Colors.grey,
-                                      selectedBorderColor: Colors.green[800],
+                                      selectedBorderColor: widget.isStaff
+                                          ? getColors(700)
+                                          : getColors(800),
                                       selectedColor: Colors.white,
                                       color: Colors.green,
                                       constraints: BoxConstraints(
@@ -331,7 +349,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       max: 52,
                                       min: 1,
                                       divisions: 52,
-                                      activeColor: Colors.green[300],
+                                      activeColor: widget.isStaff
+                                          ? getColors(200)
+                                          : getColors(300),
                                       value: _selectedWeek.toDouble(),
                                       onChanged: (values) {
                                         setState(() {
@@ -364,8 +384,12 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       min: 0,
                                       max: 100,
                                       divisions: 5,
-                                      activeColor: Colors.green[300],
-                                      inactiveColor: Colors.green[100],
+                                      activeColor: widget.isStaff
+                                          ? getColors(200)
+                                          : getColors(300),
+                                      inactiveColor: widget.isStaff
+                                          ? getColors(50)
+                                          : getColors(100),
                                       labels: RangeLabels(
                                         _currentRangeValues.start
                                             .round()
@@ -513,8 +537,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       dropdownPadding:
                                           EdgeInsets.only(bottom: h * 0.5),
                                       isExpanded: true,
-                                      selectedItemHighlightColor:
-                                          Colors.grey[300],
+                                      selectedItemHighlightColor: widget.isStaff
+                                          ? getColors(200)
+                                          : getColors(300),
                                       value: bodyChoosing,
                                       items: physicalList.keys
                                           .map(
@@ -690,7 +715,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                 SizedBox(
                                   width: w,
                                   child: RaisedButton(
-                                    color: Colors.green[300],
+                                    color: widget.isStaff
+                                        ? getColors(200)
+                                        : getColors(300),
                                     child: const Text(
                                       'ใช้งาน',
                                       style: TextStyle(
@@ -720,7 +747,8 @@ class _AthleteGraphState extends State<AthleteGraph> {
                   ),
                   CupertinoSwitch(
                     value: isDefault,
-                    activeColor: Colors.green.shade300,
+                    activeColor:
+                        widget.isStaff ? getColors(200) : getColors(300),
                     onChanged: (bool value) {
                       setState(() {
                         if (isDefault == false) {
