@@ -1,21 +1,16 @@
+import 'dart:async' show Stream, StreamController, Timer;
+
+import 'package:async/async.dart' show StreamZip;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_questionnaire.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
-import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
-import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
-import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
-
-import 'dart:async' show Stream, StreamController, Timer;
-import 'package:async/async.dart' show StreamZip;
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
@@ -37,7 +32,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
   List<bool> _selectedOrder = <bool>[true, false];
   List<bool> _selectedQuestionnaire = <bool>[true, true];
   List<bool> _selectedOrderType = <bool>[true, false];
-  final List<bool> isDefault = <bool>[true];
+  bool isDefault = true;
   RangeValues _currentRangeValues = const RangeValues(0, 100);
   int data_length = 10;
 
@@ -187,7 +182,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
@@ -261,7 +256,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                               i++) {
                                             _selectedOrder[i] = i == index;
                                           }
-                                          isDefault[0] = false;
+                                          isDefault = false;
                                         });
                                       },
                                     ),
@@ -297,7 +292,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                               i++) {
                                             _selectedOrderType[i] = i == index;
                                           }
-                                          isDefault[0] = false;
+                                          isDefault = false;
                                         });
                                       },
                                     ),
@@ -334,7 +329,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                         setState(() {
                                           _selectedQuestionnaire[index] =
                                               !_selectedQuestionnaire[index];
-                                          isDefault[0] = false;
+                                          isDefault = false;
                                         });
                                       },
                                     ),
@@ -363,7 +358,7 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                       onChanged: (RangeValues values) {
                                         setState(() {
                                           _currentRangeValues = values;
-                                          isDefault[0] = false;
+                                          isDefault = false;
                                         });
                                       },
                                     ),
@@ -393,38 +388,33 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                     },
                   ),
                 ),
-                ToggleButtons(
-                  children: [const Text('Default')],
-                  isSelected: isDefault,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: h * 0.02,
-                  ),
-                  fillColor: Colors.blue[200],
-                  borderColor: Colors.grey,
-                  selectedBorderColor: Colors.blue[700],
-                  selectedColor: Colors.black,
-                  color: Colors.blue,
-                  constraints: BoxConstraints(
-                    minHeight: h * 0.05,
-                    minWidth: w * 0.3,
-                  ),
-                  onPressed: (int index) {
-                    setState(() {
-                      if (isDefault[0] == true) {
-                        isDefault[0] = false;
-                      } else {
-                        isDefault[0] = true;
-                        _selectedOrder = <bool>[true, false];
-                        _selectedQuestionnaire = <bool>[true, true];
-                        _selectedOrderType = <bool>[true, false];
-                        _currentRangeValues = const RangeValues(0, 100);
-                      }
-                    });
-                  },
+                Row(
+                  children: [
+                    const Text(
+                      'Default',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    CupertinoSwitch(
+                        value: isDefault,
+                        activeColor: Colors.blue[200],
+                        onChanged: (bool value) {
+                          setState(() {
+                            setState(() {
+                              if (isDefault == true) {
+                                isDefault = false;
+                              } else {
+                                isDefault = true;
+                                _selectedOrder = <bool>[true, false];
+                                _selectedQuestionnaire = <bool>[true, true];
+                                _selectedOrderType = <bool>[true, false];
+                                _currentRangeValues = const RangeValues(0, 100);
+                              }
+                            });
+                          });
+                        }),
+                  ],
                 ),
               ],
             ),

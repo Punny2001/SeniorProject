@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/history/finished_case.dart';
 import 'package:seniorapp/component/page/staff-page/history/staff_history.dart';
-import 'package:seniorapp/decoration/padding.dart';
 
 class ChooseHistory extends StatefulWidget {
   const ChooseHistory({Key key}) : super(key: key);
@@ -12,9 +11,9 @@ class ChooseHistory extends StatefulWidget {
 }
 
 class _ChooseHistoryState extends State<ChooseHistory> {
-  Map<String, Widget> _historyType = <String, Widget>{
-    'finishedCase': StaffFinishedCase(),
-    'medicalRecord': StaffHistory(),
+  final Map<String, Widget> _historyType = <String, Widget>{
+    'finishedCase': const StaffFinishedCase(),
+    'medicalRecord': const StaffHistory(),
   };
   String _selectedHist = 'finishedCase';
 
@@ -25,7 +24,7 @@ class _ChooseHistoryState extends State<ChooseHistory> {
 
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 10),
         child: Column(
           children: [
             CupertinoSlidingSegmentedControl(

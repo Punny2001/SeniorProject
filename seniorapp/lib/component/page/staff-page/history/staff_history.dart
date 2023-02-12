@@ -1,4 +1,4 @@
-import 'dart:async' show Stream, StreamController, Timer;
+import 'dart:async' show Stream, Timer;
 
 import 'package:async/async.dart' show StreamZip;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +11,7 @@ import 'package:seniorapp/component/page/staff-page/history/history_details/inju
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
+import 'package:seniorapp/decoration/padding.dart';
 
 class StaffHistory extends StatefulWidget {
   const StaffHistory({Key key}) : super(key: key);
@@ -25,8 +26,7 @@ class _StaffReportState extends State<StaffHistory> {
   int illnessSize;
   int injurySize;
   bool isLoading = false;
-  List<bool> isDefault = [true];
-  List<bool> _selectedOrder = <bool>[true, false];
+  bool isDefault = true;
   List<bool> _selectedReport = <bool>[true, true];
   List<bool> _selectedOrderType = <bool>[true, false];
 
@@ -131,7 +131,7 @@ class _StaffReportState extends State<StaffHistory> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   padding: EdgeInsets.only(
@@ -205,7 +205,7 @@ class _StaffReportState extends State<StaffHistory> {
                                     //           i++) {
                                     //         _selectedOrder[i] = i == index;
                                     //       }
-                                    //       isDefault[0] = false;
+                                    //       isDefault = false;
                                     //     });
                                     //   },
                                     // ),
@@ -241,7 +241,7 @@ class _StaffReportState extends State<StaffHistory> {
                                               i++) {
                                             _selectedOrderType[i] = i == index;
                                           }
-                                          isDefault[0] = false;
+                                          isDefault = false;
                                         });
                                       },
                                     ),
@@ -278,7 +278,7 @@ class _StaffReportState extends State<StaffHistory> {
                                         setState(() {
                                           _selectedReport[index] =
                                               !_selectedReport[index];
-                                          isDefault[0] = false;
+                                          isDefault = false;
                                         });
                                       },
                                     ),
@@ -311,39 +311,34 @@ class _StaffReportState extends State<StaffHistory> {
                     },
                   ),
                 ),
-                ToggleButtons(
-                  children: [Text('Default')],
-                  isSelected: isDefault,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                  textStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: h * 0.02,
-                  ),
-                  fillColor: Colors.blue[200],
-                  borderColor: Colors.grey,
-                  selectedBorderColor: Colors.blue[700],
-                  selectedColor: Colors.black,
-                  color: Colors.blue,
-                  constraints: BoxConstraints(
-                    minHeight: h * 0.05,
-                    minWidth: w * 0.3,
-                  ),
-                  onPressed: (int index) {
-                    setState(() {
-                      if (isDefault[0] == true) {
-                        isDefault[0] = false;
-                      } else {
-                        isDefault[0] = true;
-                        _selectedReport = <bool>[true, true];
-                        _selectedOrderType = <bool>[true, false];
-                      }
-                    });
-                  },
+                Row(
+                  children: [
+                    const Text(
+                      'Default',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    CupertinoSwitch(
+                      value: isDefault,
+                      activeColor: Colors.blue[200],
+                      onChanged: (bool value) {
+                        setState(() {
+                          if (isDefault == true) {
+                            isDefault = false;
+                          } else {
+                            isDefault = true;
+                            _selectedReport = <bool>[true, true];
+                            _selectedOrderType = <bool>[true, false];
+                          }
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
+            PaddingDecorate(5),
             Expanded(
               child: isLoading
                   ? Center(

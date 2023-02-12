@@ -127,7 +127,6 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
                         fontFamily: 'Nunito',
                         fontSize: h * 0.025,
                         fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
                       ),
                     ),
                     RichText(

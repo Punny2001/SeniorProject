@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class StaffSummaryTableGraph extends StatelessWidget {
   final List<Map<String, dynamic>> healthResultDataList;
@@ -34,103 +35,14 @@ class StaffSummaryTableGraph extends StatelessWidget {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+
     return Container(
       padding: EdgeInsets.only(
-        top: h * 0.05,
+        top: h * 0.03,
         bottom: h * 0.05,
         right: w * 0.05,
-        left: w * 0.05,
+        left: w * 0.03,
       ),
-      // child: Row(
-      //   children: [
-      //     DataTable(
-      //       columnSpacing: 1,
-      //       headingRowColor: MaterialStateProperty.all(Colors.blue[200]),
-      //       dataRowColor: MaterialStateProperty.all(Colors.blue[200]),
-      //       columns: [
-      //         DataColumn(label: Text('')),
-      //       ],
-      //       rows: [
-      //         DataRow(cells: [
-      //           DataCell(
-      //               get_text(h: h, stringText: 'All Problems', isBold: true)),
-      //         ]),
-      //         DataRow(cells: [
-      //           DataCell(
-      //             get_text(h: h, stringText: 'Illness', isBold: true),
-      //           ),
-      //         ]),
-      //         DataRow(cells: [
-      //           DataCell(get_text(h: h, stringText: 'Illness', isBold: true)),
-      //         ])
-      //       ],
-      //     ),
-      //     DataTable(
-      //       headingRowColor: MaterialStateProperty.all(Colors.blue[200]),
-      //       dataRowColor: MaterialStateProperty.all(Colors.blue[200]),
-      //       columns: [
-      //         DataColumn(
-      //           label: get_text(
-      //               h: h, stringText: 'Number of Athletes', isBold: true),
-      //         ),
-      //         DataColumn(
-      //           label: get_text(
-      //               h: h, stringText: 'Number of Cases', isBold: true),
-      //         ),
-      //       ],
-      //       rows: [
-      //         DataRow(
-      //           cells: [
-      //             DataCell(
-      //               get_text(
-      //                   h: h,
-      //                   stringText: (countNumberOfAllAthlete()).toString(),
-      //                   isBold: false),
-      //             ),
-      //             DataCell(get_text(
-      //               h: h,
-      //               stringText: (healthResultDataList.length +
-      //                       physicalResultDataList.length)
-      //                   .toString(),
-      //               isBold: false,
-      //             )),
-      //           ],
-      //         ),
-      //         DataRow(cells: [
-      //           DataCell(
-      //             get_text(
-      //                 h: h,
-      //                 stringText: countNumberOfAthlete(physicalResultDataList)
-      //                     .toString(),
-      //                 isBold: false),
-      //           ),
-      //           DataCell(get_text(
-      //             h: h,
-      //             stringText: physicalResultDataList.length.toString(),
-      //             isBold: false,
-      //           )),
-      //         ]),
-      //         DataRow(cells: [
-      //           DataCell(
-      //             get_text(
-      //                 h: h,
-      //                 stringText: countNumberOfAthlete(healthResultDataList)
-      //                     .toString(),
-      //                 isBold: false),
-      //           ),
-      //           DataCell(
-      //             get_text(
-      //               h: h,
-      //               stringText: healthResultDataList.length.toString(),
-      //               isBold: false,
-      //             ),
-      //           ),
-      //         ])
-      //       ],
-      //     )
-      //   ],
-      // )
-
       child: Table(
         border: const TableBorder(
           borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -144,55 +56,116 @@ class StaffSummaryTableGraph extends StatelessWidget {
         children: [
           TableRow(
             children: [
-              get_text(h: h, stringText: '', isBold: true),
-              get_text(h: h, stringText: 'Number of Athletes', isBold: true),
-              get_text(h: h, stringText: 'Number of Cases', isBold: true),
+              SizedBox(
+                child: get_text(h: h, stringText: '', isBold: true),
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.075,
+                child: get_text(
+                    h: h, stringText: 'Number of Athletes', isBold: true),
+                color: Colors.blue[200],
+              ),
+              Container(
+                height: h * 0.075,
+                alignment: Alignment.center,
+                child:
+                    get_text(h: h, stringText: 'Number of Cases', isBold: true),
+                color: Colors.blue[200],
+              ),
             ],
           ),
           TableRow(
             children: [
-              get_text(h: h, stringText: 'All Problems', isBold: true),
-              get_text(
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(h: h, stringText: 'All Problems', isBold: true),
+                color: Colors.blue[200],
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(
+                    h: h,
+                    stringText: (countNumberOfAllAthlete()).toString(),
+                    isBold: false),
+                color: Colors.blue[50],
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(
                   h: h,
-                  stringText: (countNumberOfAllAthlete()).toString(),
-                  isBold: false),
-              get_text(
-                h: h,
-                stringText: (healthResultDataList.length +
-                        physicalResultDataList.length)
-                    .toString(),
-                isBold: false,
-              )
+                  stringText: (healthResultDataList.length +
+                          physicalResultDataList.length)
+                      .toString(),
+                  isBold: false,
+                ),
+                color: Colors.blue[50],
+              ),
             ],
           ),
           TableRow(
             children: [
-              get_text(h: h, stringText: 'Injury', isBold: true),
-              get_text(
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(h: h, stringText: 'Injury', isBold: true),
+                color: Colors.blue[200],
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(
+                    h: h,
+                    stringText:
+                        countNumberOfAthlete(physicalResultDataList).toString(),
+                    isBold: false),
+                color: Colors.blue[50],
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(
                   h: h,
-                  stringText:
-                      countNumberOfAthlete(physicalResultDataList).toString(),
-                  isBold: false),
-              get_text(
-                h: h,
-                stringText: physicalResultDataList.length.toString(),
-                isBold: false,
-              )
+                  stringText: physicalResultDataList.length.toString(),
+                  isBold: false,
+                ),
+                color: Colors.blue[50],
+              ),
             ],
           ),
-          TableRow(children: [
-            get_text(h: h, stringText: 'Illness', isBold: true),
-            get_text(
-                h: h,
-                stringText:
-                    countNumberOfAthlete(healthResultDataList).toString(),
-                isBold: false),
-            get_text(
-              h: h,
-              stringText: healthResultDataList.length.toString(),
-              isBold: false,
-            )
-          ])
+          TableRow(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(h: h, stringText: 'Illness', isBold: true),
+                color: Colors.blue[200],
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(
+                    h: h,
+                    stringText:
+                        countNumberOfAthlete(healthResultDataList).toString(),
+                    isBold: false),
+                color: Colors.blue[50],
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: h * 0.05,
+                child: get_text(
+                  h: h,
+                  stringText: healthResultDataList.length.toString(),
+                  isBold: false,
+                ),
+                color: Colors.blue[50],
+              ),
+            ],
+          )
         ],
       ),
     );

@@ -212,7 +212,7 @@ class MentalReportDetail extends StatelessWidget {
                 style: TextStyle(
                   fontSize: h * 0.03,
                   fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.underline,
+                  fontFamily: ''
                 ),
               ),
               PaddingDecorate(10),
