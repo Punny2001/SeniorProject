@@ -748,6 +748,7 @@ class _StaffGraphState extends State<StaffGraph> {
             ),
           ],
         ),
+        PaddingDecorate(5),
         isLoading
             ? const Expanded(
                 child: Center(
@@ -786,6 +787,7 @@ class _StaffGraphState extends State<StaffGraph> {
                     return Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
                             'Summary Data Between \n${formatDate(dateRange.start, 'StaffShort')} - ${formatDate(dateRange.end, 'StaffShort')}',
@@ -799,8 +801,7 @@ class _StaffGraphState extends State<StaffGraph> {
                             healthResultDataList: healthDataList,
                             physicalResultDataList: physicalDataList,
                           ),
-                          SizedBox(
-                            height: h / pixRatio,
+                          Expanded(
                             child: SingleChildScrollView(
                               scrollDirection: Axis.vertical,
                               child: Row(

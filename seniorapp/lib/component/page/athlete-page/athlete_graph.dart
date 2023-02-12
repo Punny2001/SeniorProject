@@ -30,7 +30,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
   final TextEditingController _bodyPartSearch = TextEditingController();
 
   bool inDateFormat = false;
-  int selectedYear = DateTime.now().year;
+  FixedExtentScrollController scrollController;
+  int selectedYearIndex;
+  int selectYear = DateTime.now().year;
 
   String bodyChoosing;
   String bodyPartChoosing;
@@ -138,10 +140,10 @@ class _AthleteGraphState extends State<AthleteGraph> {
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
+    data.retainWhere((element) =>
+        element['doDate'].toDate().year == year[selectedYearIndex]);
     data.sort((a, b) => ('${b['doDate']}').compareTo('${a['doDate']}'));
-    data.forEach((element) {
-      print(element['doDate'].toDate());
-    });
+
     if (_selectedQuestionnaire[0] == false) {
       data.removeWhere((element) => element['questionnaireType'] == 'Physical');
     }
@@ -220,6 +222,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
     for (int i = 1900; i <= DateTime.now().year; i++) {
       year.add(i);
     }
+    selectedYearIndex = year.length - 1;
+    scrollController =
+        FixedExtentScrollController(initialItem: selectedYearIndex);
     latestData.sort((a, b) =>
         ('${a['doDate'].toDate()}').compareTo('${b['doDate'].toDate()}'));
 
@@ -232,6 +237,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
 
   @override
   void dispose() {
+    scrollController.dispose();
     _timer.cancel();
     super.dispose();
   }
@@ -347,29 +353,50 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      const Text('ช่วงปีที่ต้องการแสดง'),
                                       CupertinoButton(
-                                        child: Text(selectedYear.toString()),
-                                        onPressed: () => _showDialog(
-                                          CupertinoPicker(
-                                            itemExtent: 32,
-                                            onSelectedItemChanged:
-                                                (int selectedItem) {
-                                              setState(() {
-                                                selectedYear = selectedItem;
-                                              });
-                                            },
-                                            children: List<Widget>.generate(
-                                                year.length, (index) {
-                                              return Center(
-                                                child: Text(
-                                                  year[index].toString(),
-                                                ),
-                                              );
-                                            }),
+                                          child: Text(
+                                            'ปี $selectYear',
+                                            style: TextStyle(
+                                              color: Colors.green[300],
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                          onPressed: () {
+                                            scrollController.dispose();
+                                            scrollController =
+                                                FixedExtentScrollController(
+                                                    initialItem:
+                                                        selectedYearIndex);
+                                            _showDialog(
+                                              CupertinoPicker(
+                                                itemExtent: 32,
+                                                scrollController:
+                                                    scrollController,
+                                                onSelectedItemChanged:
+                                                    (int index) {
+                                                  setState(() {
+                                                    selectedYearIndex = index;
+                                                  });
+                                                  selectYear =
+                                                      year[selectedYearIndex];
+                                                  if (selectYear !=
+                                                      DateTime.now().year) {
+                                                    isDefault = false;
+                                                  } else if (selectYear ==
+                                                      DateTime.now().year) {
+                                                    isDefault = true;
+                                                  }
+                                                },
+                                                useMagnifier: true,
+                                                children: List<Widget>.generate(
+                                                    year.length, (index) {
+                                                  return Center(
+                                                    child:
+                                                        Text('${year[index]}'),
+                                                  );
+                                                }),
+                                              ),
+                                            );
+                                          }),
                                     ],
                                   ),
                                   CupertinoSlider(
@@ -783,6 +810,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                           isHealthCheck = false;
                           isPhysicalCheck = false;
                           isDefault = false;
+                          selectedYearIndex = year.length - 1;
                         }
                         isDefault = value;
                       });

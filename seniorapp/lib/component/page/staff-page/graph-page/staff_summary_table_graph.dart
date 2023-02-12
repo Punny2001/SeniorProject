@@ -41,7 +41,7 @@ class StaffSummaryTableGraph extends StatelessWidget {
         top: h * 0.03,
         bottom: h * 0.05,
         right: w * 0.05,
-        left: w * 0.03,
+        left: w * 0.05,
       ),
       child: Table(
         border: const TableBorder(
