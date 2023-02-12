@@ -9,6 +9,11 @@ String formatDate(DateTime dateTime, String userType) {
       initializeDateFormatting();
       return DateFormat.yMMMMd().format(dateTime);
       break;
+    case 'StaffShort':
+      Intl.defaultLocale = 'en';
+      initializeDateFormatting();
+      return DateFormat.yMMMd().format(dateTime);
+      break;
     case 'Athlete':
       {
         Intl.defaultLocale = 'th';

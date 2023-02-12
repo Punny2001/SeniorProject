@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/fixed_column_widget.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/scrollable_column_widget.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/staff_summary_table_graph.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
 class StaffGraph extends StatefulWidget {
@@ -20,8 +21,12 @@ class _StaffGraphState extends State<StaffGraph> {
   bool isLoading = true;
   List<Map<String, dynamic>> latestData = [];
   Timer _timer;
+  DateTime now = DateTime.now();
+  DateTimeRange dateRange = DateTimeRange(
+    start: DateTime.now().add(const Duration(days: -7)),
+    end: DateTime.now(),
+  );
 
-  int _selectedWeek = 5;
   final TextEditingController _healthSearch = TextEditingController();
   final TextEditingController _bodySearch = TextEditingController();
   final TextEditingController _bodyPartSearch = TextEditingController();
@@ -142,10 +147,13 @@ class _StaffGraphState extends State<StaffGraph> {
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
+    data.retainWhere((element) =>
+        element['doDate']
+            .toDate()
+            .isBefore(dateRange.end.add(const Duration(days: 1))) &&
+        element['doDate'].toDate().isAfter(dateRange.start));
     data.sort((a, b) => ('${b['doDate']}').compareTo('${a['doDate']}'));
-    data.forEach((element) {
-      print(element['doDate'].toDate());
-    });
+
     if (_selectedQuestionnaire[0] == false) {
       data.removeWhere((element) => element['questionnaireType'] == 'Physical');
     }
@@ -180,6 +188,19 @@ class _StaffGraphState extends State<StaffGraph> {
     return StreamZip([healthQuestionnaire, physicalQuestionnaire]);
   }
 
+  Future pickDateRange() async {
+    DateTimeRange newDateRange = await showDateRangePicker(
+      context: context,
+      initialDateRange: dateRange,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(now.year + 1),
+    );
+    // if (newDateRange == null) return;
+    setState(() {
+      dateRange = newDateRange;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -209,6 +230,7 @@ class _StaffGraphState extends State<StaffGraph> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+    final pixRatio = MediaQuery.of(context).devicePixelRatio;
 
     return Column(
       children: [
@@ -307,30 +329,27 @@ class _StaffGraphState extends State<StaffGraph> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    CupertinoSlider(
-                                      max: 52,
-                                      min: 1,
-                                      divisions: 52,
-                                      activeColor: Colors.blue[200],
-                                      value: _selectedWeek.toDouble(),
-                                      onChanged: (values) {
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        DateTimeRange newDateRange =
+                                            await showDateRangePicker(
+                                          context: context,
+                                          initialDateRange: dateRange,
+                                          firstDate: DateTime(1900),
+                                          lastDate: DateTime(now.year + 1),
+                                        );
                                         setState(() {
-                                          _selectedWeek = values.floor();
-                                          // print(_selectedWeek.toString());
+                                          dateRange = newDateRange;
                                           isDefault = false;
                                         });
                                       },
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text:
-                                                '${_selectedWeek.toString()} ',
-                                          ),
-                                          const TextSpan(text: 'สัปดาห์ '),
-                                        ],
-                                      ),
+                                      child: Text(
+                                          '${formatDate(dateRange.start, 'StaffShort')} - ${formatDate(dateRange.end, 'StaffShort')}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.blue[300]),
                                     ),
                                     PaddingDecorate(10),
                                     const Text(
@@ -345,7 +364,7 @@ class _StaffGraphState extends State<StaffGraph> {
                                       max: 100,
                                       divisions: 5,
                                       activeColor: Colors.blue[200],
-                                      inactiveColor: Colors.green[100],
+                                      inactiveColor: Colors.grey[200],
                                       labels: RangeLabels(
                                         _currentRangeValues.start
                                             .round()
@@ -708,14 +727,17 @@ class _StaffGraphState extends State<StaffGraph> {
                         if (isDefault == false) {
                           _selectedQuestionnaire = <bool>[true, true];
                           _currentRangeValues = const RangeValues(0, 100);
-                          _selectedWeek = 5;
                           isHealthCheck = false;
                           healthChoosing = null;
                           isPhysicalCheck = false;
-                          isDefault = false;
+                          isDefault = true;
                           bodyChoosing = null;
                           bodyPartChoosing = null;
                           isBodySelected = false;
+                          dateRange = DateTimeRange(
+                            start: DateTime.now().add(const Duration(days: -7)),
+                            end: DateTime.now(),
+                          );
                         }
                         isDefault = value;
                       });
@@ -761,30 +783,33 @@ class _StaffGraphState extends State<StaffGraph> {
                       }
                     });
 
-                    return Column(
-                      children: [
-                        StaffSummaryTableGraph(
-                          healthResultDataList: healthDataList,
-                          physicalResultDataList: physicalDataList,
-                        ),
-                        SafeArea(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Row(
-                              children: [
-                                FixedColumnTable(
-                                  resultDataList: mappedData,
-                                  athleteList: athleteData,
-                                ),
-                                ScrollableColumnTable(
-                                  resultDataList: mappedData,
-                                  athleteList: athleteData,
-                                ),
-                              ],
+                    return Expanded(
+                      child: Column(
+                        children: [
+                          StaffSummaryTableGraph(
+                            healthResultDataList: healthDataList,
+                            physicalResultDataList: physicalDataList,
+                          ),
+                          SizedBox(
+                            height: h / pixRatio,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Row(
+                                children: [
+                                  FixedColumnTable(
+                                    resultDataList: mappedData,
+                                    athleteList: athleteData,
+                                  ),
+                                  ScrollableColumnTable(
+                                    resultDataList: mappedData,
+                                    athleteList: athleteData,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   } else {
                     return const Center(

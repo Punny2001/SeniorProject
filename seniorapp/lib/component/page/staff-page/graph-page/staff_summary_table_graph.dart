@@ -41,6 +41,96 @@ class StaffSummaryTableGraph extends StatelessWidget {
         right: w * 0.05,
         left: w * 0.05,
       ),
+      // child: Row(
+      //   children: [
+      //     DataTable(
+      //       columnSpacing: 1,
+      //       headingRowColor: MaterialStateProperty.all(Colors.blue[200]),
+      //       dataRowColor: MaterialStateProperty.all(Colors.blue[200]),
+      //       columns: [
+      //         DataColumn(label: Text('')),
+      //       ],
+      //       rows: [
+      //         DataRow(cells: [
+      //           DataCell(
+      //               get_text(h: h, stringText: 'All Problems', isBold: true)),
+      //         ]),
+      //         DataRow(cells: [
+      //           DataCell(
+      //             get_text(h: h, stringText: 'Illness', isBold: true),
+      //           ),
+      //         ]),
+      //         DataRow(cells: [
+      //           DataCell(get_text(h: h, stringText: 'Illness', isBold: true)),
+      //         ])
+      //       ],
+      //     ),
+      //     DataTable(
+      //       headingRowColor: MaterialStateProperty.all(Colors.blue[200]),
+      //       dataRowColor: MaterialStateProperty.all(Colors.blue[200]),
+      //       columns: [
+      //         DataColumn(
+      //           label: get_text(
+      //               h: h, stringText: 'Number of Athletes', isBold: true),
+      //         ),
+      //         DataColumn(
+      //           label: get_text(
+      //               h: h, stringText: 'Number of Cases', isBold: true),
+      //         ),
+      //       ],
+      //       rows: [
+      //         DataRow(
+      //           cells: [
+      //             DataCell(
+      //               get_text(
+      //                   h: h,
+      //                   stringText: (countNumberOfAllAthlete()).toString(),
+      //                   isBold: false),
+      //             ),
+      //             DataCell(get_text(
+      //               h: h,
+      //               stringText: (healthResultDataList.length +
+      //                       physicalResultDataList.length)
+      //                   .toString(),
+      //               isBold: false,
+      //             )),
+      //           ],
+      //         ),
+      //         DataRow(cells: [
+      //           DataCell(
+      //             get_text(
+      //                 h: h,
+      //                 stringText: countNumberOfAthlete(physicalResultDataList)
+      //                     .toString(),
+      //                 isBold: false),
+      //           ),
+      //           DataCell(get_text(
+      //             h: h,
+      //             stringText: physicalResultDataList.length.toString(),
+      //             isBold: false,
+      //           )),
+      //         ]),
+      //         DataRow(cells: [
+      //           DataCell(
+      //             get_text(
+      //                 h: h,
+      //                 stringText: countNumberOfAthlete(healthResultDataList)
+      //                     .toString(),
+      //                 isBold: false),
+      //           ),
+      //           DataCell(
+      //             get_text(
+      //               h: h,
+      //               stringText: healthResultDataList.length.toString(),
+      //               isBold: false,
+      //             ),
+      //           ),
+      //         ])
+      //       ],
+      //     )
+      //   ],
+      // )
+
       child: Table(
         border: const TableBorder(
           borderRadius: BorderRadius.all(Radius.circular(5)),
