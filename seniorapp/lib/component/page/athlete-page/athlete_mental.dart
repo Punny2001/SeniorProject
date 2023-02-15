@@ -8,6 +8,7 @@ import 'package:seniorapp/decoration/format_datetime.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
+import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteMentalHistory extends StatefulWidget {
   const AthleteMentalHistory({Key key}) : super(key: key);
@@ -18,7 +19,7 @@ class AthleteMentalHistory extends StatefulWidget {
 
 class _AthleteHistoryState extends State<AthleteMentalHistory> {
   List<bool> _selectedOrderType = <bool>[true, false];
-  final List<bool> isDefault = <bool>[true];
+  bool isDefault = true;
   Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
   String athlete_no;
@@ -110,7 +111,7 @@ class _AthleteHistoryState extends State<AthleteMentalHistory> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
@@ -186,7 +187,7 @@ class _AthleteHistoryState extends State<AthleteMentalHistory> {
                                             i++) {
                                           _selectedOrderType[i] = i == index;
                                         }
-                                        isDefault[0] = false;
+                                        isDefault = false;
                                       });
                                     },
                                   ),
@@ -219,40 +220,34 @@ class _AthleteHistoryState extends State<AthleteMentalHistory> {
                   },
                 ),
               ),
-              ToggleButtons(
-                children: const [Text('ค่าเริ่มต้น')],
-                isSelected: isDefault,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
-                ),
-                textStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: h * 0.02,
-                ),
-                fillColor: Colors.green[300],
-                borderColor: Colors.grey,
-                selectedBorderColor: Colors.green[800],
-                selectedColor: Colors.black,
-                color: Colors.green,
-                constraints: BoxConstraints(
-                  minHeight: h * 0.05,
-                  minWidth: w * 0.3,
-                ),
-                onPressed: (int index) {
-                  setState(() {
-                    if (isDefault[0] == true) {
-                      isDefault[0] = false;
-                    } else {
-                      isDefault[0] = true;
+              Row(
+                children: [
+                  const Text(
+                    'ค่าเริ่มต้น',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  CupertinoSwitch(
+                    value: isDefault,
+                    activeColor: Colors.green[300],
+                    onChanged: (bool value) {
+                      setState(() {
+                        if (isDefault == true) {
+                          isDefault = false;
+                        } else {
+                          isDefault = true;
 
-                      _selectedOrderType = <bool>[true, false];
-                    }
-                  });
-                },
+                          _selectedOrderType = <bool>[true, false];
+                        }
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),
-          // PaddingDecorate(1),
+          PaddingDecorate(5),
           Expanded(
             child: SizedBox(
               height: h,

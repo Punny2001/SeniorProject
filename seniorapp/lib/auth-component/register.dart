@@ -824,11 +824,8 @@ class _RegisterState extends State<Register> {
   Future signup() async {
     try {
       bool validate = _keyForm.currentState.validate();
-      String uid = FirebaseAuth.instance.currentUser.uid;
-      String email = FirebaseAuth.instance.currentUser.email.toString();
       age = AgeCalculator.age(_birthdate).years;
 
-      print(uid);
       isAthleteCheck();
       if (validate) {
         await FirebaseAuth.instance
@@ -881,7 +878,7 @@ class _RegisterState extends State<Register> {
                     department: 'Athlete',
                     weight: _selectedWeight,
                     height: _selectedHeight,
-                    email: email,
+                    email: _emailController.text.trim(),
                     gender: _selectedGender,
                     age: age);
 
@@ -925,6 +922,7 @@ class _RegisterState extends State<Register> {
                     });
                   }
                 });
+                String uid = FirebaseAuth.instance.currentUser.uid;
 
                 Staff staffModel = Staff(
                     token: token,
@@ -935,7 +933,7 @@ class _RegisterState extends State<Register> {
                     birthdate: _birthdate,
                     department: 'Staff',
                     staffType: _selectedStaff,
-                    email: email,
+                    email: _emailController.text.trim(),
                     gender: _selectedGender,
                     age: age);
 

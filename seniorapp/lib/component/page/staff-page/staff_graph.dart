@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/fixed_column_widget.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/scrollable_column_widget.dart';
+import 'package:seniorapp/component/page/staff-page/graph-page/find_athlete_graph.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/staff_summary_table_graph.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
@@ -152,7 +153,7 @@ class _StaffGraphState extends State<StaffGraph> {
             .toDate()
             .isBefore(dateRange.end.add(const Duration(days: 1))) &&
         element['doDate'].toDate().isAfter(dateRange.start));
-    data.sort((a, b) => ('${b['doDate']}').compareTo('${a['doDate']}'));
+    data.sort((a, b) => ('${b['totalPoint']}').compareTo('${a['totalPoint']}'));
 
     if (_selectedQuestionnaire[0] == false) {
       data.removeWhere((element) => element['questionnaireType'] == 'Physical');
@@ -335,6 +336,9 @@ class _StaffGraphState extends State<StaffGraph> {
                                         firstDate: DateTime(1900),
                                         lastDate: DateTime(now.year + 1),
                                       );
+                                      if (newDateRange == null) {
+                                        return;
+                                      }
                                       setState(() {
                                         dateRange = newDateRange;
                                         isDefault = false;
@@ -342,7 +346,7 @@ class _StaffGraphState extends State<StaffGraph> {
                                     },
                                     child: Text(
                                         '${formatDate(dateRange.start, 'StaffShort')} - ${formatDate(dateRange.end, 'StaffShort')}',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         )),
                                     style: ElevatedButton.styleFrom(
@@ -396,7 +400,7 @@ class _StaffGraphState extends State<StaffGraph> {
                                     ],
                                   ),
                                   PaddingDecorate(10),
-                                  Text(
+                                  const Text(
                                     'เลือกปัญหาเฉพาะ',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -800,6 +804,23 @@ class _StaffGraphState extends State<StaffGraph> {
                           StaffSummaryTableGraph(
                             healthResultDataList: healthDataList,
                             physicalResultDataList: physicalDataList,
+                          ),
+                          CupertinoButton(
+                            alignment: Alignment.centerRight,
+                            child: const Text(
+                              'View Specific Athlete Graph',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    FindAthleteGraph(
+                                  athleteList: athleteData,
+                                ),
+                              ),
+                            ),
                           ),
                           Expanded(
                             child: SingleChildScrollView(

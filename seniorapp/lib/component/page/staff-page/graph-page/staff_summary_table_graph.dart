@@ -39,7 +39,6 @@ class StaffSummaryTableGraph extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(
         top: h * 0.03,
-        bottom: h * 0.05,
         right: w * 0.05,
         left: w * 0.05,
       ),

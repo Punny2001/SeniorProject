@@ -10,6 +10,7 @@ import 'package:seniorapp/decoration/format_datetime.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
+import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class AthleteHistory extends StatefulWidget {
@@ -23,7 +24,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
   List<bool> _selectedOrder = <bool>[true, false];
   List<bool> _selectedQuestionnaire = <bool>[true, true];
   List<bool> _selectedOrderType = <bool>[true, false];
-  final List<bool> isDefault = <bool>[true];
+  bool isDefault = true;
   RangeValues _currentRangeValues = const RangeValues(0, 100);
   Timer _timer;
   String uid = FirebaseAuth.instance.currentUser.uid;
@@ -177,7 +178,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
@@ -208,216 +209,209 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                   ),
                   onPressed: () {
                     showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(builder: (context, setState) {
-                            return AlertDialog(
-                              title: Container(
-                                child: const Text('ตัวกรอง'),
-                              ),
-                              content: Column(
-                                children: [
-                                  const Text('จัดเรียงโดย'),
-                                  const Padding(
-                                    padding: EdgeInsets.all(5),
+                      context: context,
+                      builder: (BuildContext context) {
+                        return StatefulBuilder(builder: (context, setState) {
+                          return AlertDialog(
+                            title: Container(
+                              child: const Text('ตัวกรอง'),
+                            ),
+                            content: Column(
+                              children: [
+                                const Text('จัดเรียงโดย'),
+                                const Padding(
+                                  padding: EdgeInsets.all(5),
+                                ),
+                                ToggleButtons(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8),
                                   ),
-                                  ToggleButtons(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    fillColor: Colors.green[300],
-                                    borderColor: Colors.grey,
-                                    selectedBorderColor: Colors.green[800],
-                                    selectedColor: Colors.white,
-                                    color: Colors.green,
-                                    constraints: BoxConstraints(
-                                      minHeight: h * 0.05,
-                                      minWidth: w * 0.3,
-                                    ),
-                                    children: const [
-                                      Text('วันที่'),
-                                      Text('คะแนน')
-                                    ],
-                                    isSelected: _selectedOrder,
-                                    onPressed: (int index) {
-                                      setState(() {
-                                        // The button that is tapped is set to true, and the others to false.
-                                        for (int i = 0;
-                                            i < _selectedOrder.length;
-                                            i++) {
-                                          _selectedOrder[i] = i == index;
-                                        }
-                                        isDefault[0] = false;
-                                      });
-                                    },
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(5),
+                                  fillColor: Colors.green[300],
+                                  borderColor: Colors.grey,
+                                  selectedBorderColor: Colors.green[800],
+                                  selectedColor: Colors.white,
+                                  color: Colors.green,
+                                  constraints: BoxConstraints(
+                                    minHeight: h * 0.05,
+                                    minWidth: w * 0.3,
                                   ),
-                                  ToggleButtons(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    fillColor: Colors.green[300],
-                                    borderColor: Colors.grey,
-                                    selectedBorderColor: Colors.green[800],
-                                    selectedColor: Colors.white,
-                                    color: Colors.green,
-                                    constraints: BoxConstraints(
-                                      minHeight: h * 0.05,
-                                      minWidth: w * 0.3,
-                                    ),
-                                    children: const [
-                                      Text('มาก => น้อย'),
-                                      Text('น้อย => มาก')
-                                    ],
-                                    isSelected: _selectedOrderType,
-                                    onPressed: (int index) {
-                                      setState(() {
-                                        // The button that is tapped is set to true, and the others to false.
-                                        for (int i = 0;
-                                            i < _selectedOrderType.length;
-                                            i++) {
-                                          _selectedOrderType[i] = i == index;
-                                        }
-                                        isDefault[0] = false;
-                                      });
-                                    },
+                                  children: const [
+                                    Text('วันที่'),
+                                    Text('คะแนน')
+                                  ],
+                                  isSelected: _selectedOrder,
+                                  onPressed: (int index) {
+                                    setState(() {
+                                      // The button that is tapped is set to true, and the others to false.
+                                      for (int i = 0;
+                                          i < _selectedOrder.length;
+                                          i++) {
+                                        _selectedOrder[i] = i == index;
+                                      }
+                                      isDefault = false;
+                                    });
+                                  },
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(5),
+                                ),
+                                ToggleButtons(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8),
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(10),
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const Text('ประเภทของแบบสอบถาม'),
-                                  const Padding(
-                                    padding: EdgeInsets.all(5),
+                                  fillColor: Colors.green[300],
+                                  borderColor: Colors.grey,
+                                  selectedBorderColor: Colors.green[800],
+                                  selectedColor: Colors.white,
+                                  color: Colors.green,
+                                  constraints: BoxConstraints(
+                                    minHeight: h * 0.05,
+                                    minWidth: w * 0.3,
                                   ),
-                                  ToggleButtons(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    fillColor: Colors.green[300],
-                                    borderColor: Colors.grey,
-                                    selectedBorderColor: Colors.green[800],
-                                    selectedColor: Colors.white,
-                                    color: Colors.green,
-                                    constraints: BoxConstraints(
-                                      minHeight: h * 0.05,
-                                      minWidth: w * 0.3,
-                                    ),
-                                    children: const [
-                                      Text('การบาดเจ็บ'),
-                                      Text('การเจ็บป่วย')
-                                    ],
-                                    isSelected: _selectedQuestionnaire,
-                                    onPressed: (int index) {
-                                      // All buttons are selectable.
-                                      setState(() {
-                                        _selectedQuestionnaire[index] =
-                                            !_selectedQuestionnaire[index];
-                                        isDefault[0] = false;
-                                      });
-                                    },
+                                  children: const [
+                                    Text('มาก => น้อย'),
+                                    Text('น้อย => มาก')
+                                  ],
+                                  isSelected: _selectedOrderType,
+                                  onPressed: (int index) {
+                                    setState(() {
+                                      // The button that is tapped is set to true, and the others to false.
+                                      for (int i = 0;
+                                          i < _selectedOrderType.length;
+                                          i++) {
+                                        _selectedOrderType[i] = i == index;
+                                      }
+                                      isDefault = false;
+                                    });
+                                  },
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(10),
+                                ),
+                                const Text('ประเภทของแบบสอบถาม'),
+                                const Padding(
+                                  padding: EdgeInsets.all(5),
+                                ),
+                                ToggleButtons(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8),
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(10),
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const Text('ช่วงคะแนน'),
-                                  const Padding(
-                                    padding: EdgeInsets.all(5),
+                                  fillColor: Colors.green[300],
+                                  borderColor: Colors.grey,
+                                  selectedBorderColor: Colors.green[800],
+                                  selectedColor: Colors.white,
+                                  color: Colors.green,
+                                  constraints: BoxConstraints(
+                                    minHeight: h * 0.05,
+                                    minWidth: w * 0.3,
                                   ),
-                                  RangeSlider(
-                                    values: _currentRangeValues,
-                                    min: 0,
-                                    max: 100,
-                                    divisions: 5,
-                                    activeColor: Colors.green[300],
-                                    inactiveColor: Colors.green[100],
-                                    labels: RangeLabels(
-                                      _currentRangeValues.start
-                                          .round()
-                                          .toString(),
-                                      _currentRangeValues.end
-                                          .round()
-                                          .toString(),
-                                    ),
-                                    onChanged: (RangeValues values) {
-                                      setState(() {
-                                        _currentRangeValues = values;
-                                        isDefault[0] = false;
-                                      });
-                                    },
+                                  children: const [
+                                    Text('การบาดเจ็บ'),
+                                    Text('การเจ็บป่วย')
+                                  ],
+                                  isSelected: _selectedQuestionnaire,
+                                  onPressed: (int index) {
+                                    // All buttons are selectable.
+                                    setState(() {
+                                      _selectedQuestionnaire[index] =
+                                          !_selectedQuestionnaire[index];
+                                      isDefault = false;
+                                    });
+                                  },
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(10),
+                                ),
+                                const Text('ช่วงคะแนน'),
+                                const Padding(
+                                  padding: EdgeInsets.all(5),
+                                ),
+                                RangeSlider(
+                                  values: _currentRangeValues,
+                                  min: 0,
+                                  max: 100,
+                                  divisions: 5,
+                                  activeColor: Colors.green[300],
+                                  inactiveColor: Colors.green[100],
+                                  labels: RangeLabels(
+                                    _currentRangeValues.start
+                                        .round()
+                                        .toString(),
+                                    _currentRangeValues.end.round().toString(),
                                   ),
-                                ],
-                              ),
-                              actions: [
-                                SizedBox(
-                                  width: w,
-                                  child: RaisedButton(
-                                    color: Colors.green[300],
-                                    child: const Text(
-                                      'ใช้งาน',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      choose_filter();
-                                    },
-                                  ),
+                                  onChanged: (RangeValues values) {
+                                    setState(() {
+                                      _currentRangeValues = values;
+                                      isDefault = false;
+                                    });
+                                  },
                                 ),
                               ],
-                            );
-                          });
+                            ),
+                            actions: [
+                              SizedBox(
+                                width: w,
+                                child: RaisedButton(
+                                  color: Colors.green[300],
+                                  child: const Text(
+                                    'ใช้งาน',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    choose_filter();
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
                         });
+                      },
+                    );
                   },
                 ),
               ),
-              ToggleButtons(
-                children: const [Text('ค่าเริ่มต้น')],
-                isSelected: isDefault,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(8),
-                ),
-                textStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: h * 0.02,
-                ),
-                fillColor: Colors.green[300],
-                borderColor: Colors.grey,
-                selectedBorderColor: Colors.green[800],
-                selectedColor: Colors.black,
-                color: Colors.green,
-                constraints: BoxConstraints(
-                  minHeight: h * 0.05,
-                  minWidth: w * 0.3,
-                ),
-                onPressed: (int index) {
-                  setState(() {
-                    if (isDefault[0] == true) {
-                      isDefault[0] = false;
-                    } else {
-                      isDefault[0] = true;
-                      _selectedOrder = <bool>[true, false];
-                      _selectedQuestionnaire = <bool>[true, true];
-                      _selectedOrderType = <bool>[true, false];
-                      _currentRangeValues = const RangeValues(0, 100);
-                    }
-                  });
-                },
+              Row(
+                children: [
+                  const Text(
+                    'ค่าเริ่มต้น',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  CupertinoSwitch(
+                    value: isDefault,
+                    activeColor: Colors.green[300],
+                    onChanged: (bool value) {
+                      setState(() {
+                        if (isDefault == true) {
+                          isDefault = false;
+                        } else {
+                          isDefault = true;
+                          _selectedOrder = <bool>[true, false];
+                          _selectedQuestionnaire = <bool>[true, true];
+                          _selectedOrderType = <bool>[true, false];
+                          _currentRangeValues = const RangeValues(0, 100);
+                        }
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           ),
-          // PaddingDecorate(1),
+          PaddingDecorate(5),
           Expanded(
             child: SizedBox(
               height: h,
