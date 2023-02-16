@@ -13,6 +13,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:seniorapp/decoration/authentication/textfield_login.dart';
 import 'package:seniorapp/decoration/padding.dart';
+import 'package:seniorapp/pdpa.dart';
 
 class Register extends StatefulWidget {
   const Register({Key key}) : super(key: key);
@@ -44,7 +45,6 @@ class _RegisterState extends State<Register> {
   String _selectedGender;
   int age;
   String token;
-  String pdpaPath = 'assets/PDPA_final_draft.pdf';
 
   void getToken() async {
     await FirebaseMessaging.instance.getToken().then((tok) {
@@ -57,6 +57,7 @@ class _RegisterState extends State<Register> {
   @override
   void initState() {
     super.initState();
+
     getToken();
   }
 
@@ -372,7 +373,7 @@ class _RegisterState extends State<Register> {
                             controller: _lastnameController,
                             decoration: textdecorate_login(
                               Icons.perm_identity,
-                              'register_page.firstname_description'.tr(),
+                              'register_page.lastname_description'.tr(),
                             ),
                           ),
                           PaddingDecorate(15),
@@ -749,30 +750,50 @@ class _RegisterState extends State<Register> {
                               ],
                             ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Checkbox(
-                                value: _pdpaCheck,
-                                activeColor: Colors.white,
-                                checkColor: Color.fromARGB(255, 113, 157, 242),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _pdpaCheck = value;
-                                  });
-                                },
-                              ),
-                              TextButton(
-                                onPressed: () {},
-                                child: Text('ข้อตกลงการใช้งาน'),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Checkbox(
+                          //       value: _pdpaCheck,
+                          //       activeColor: Colors.white,
+                          //       checkColor: Color.fromARGB(255, 113, 157, 242),
+                          //       onChanged: (value) {
+                          //         setState(() {
+                          //           _pdpaCheck = value;
+                          //         });
+                          //       },
+                          //     ),
+                          //     TextButton(
+                          //       onPressed: () {
+                          //         Navigator.of(context).push(
+                          //           MaterialPageRoute(
+                          //             builder: (context) => const PDPAWidget(),
+                          //           ),
+                          //         );
+                          //       },
+                          //       child: const Text(
+                          //         'ข้อตกลงการใช้งาน',
+                          //         style: TextStyle(
+                          //           color: Colors.black,
+                          //           fontWeight: FontWeight.bold,
+                          //           decoration: TextDecoration.underline,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                           PaddingDecorate(15),
 
                           /// Sign Up button
                           ElevatedButton(
-                            onPressed: () => signup(),
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => PDPAWidget(
+                                  signUp: signup,
+                                ),
+                              ),
+                            ),
+                            // onPressed: () => signup(),
                             child: Text(
                               'register_page.signup_button'.tr(),
                               style: TextStyle(
@@ -821,7 +842,7 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  Future signup() async {
+  Future<void> signup() async {
     try {
       bool validate = _keyForm.currentState.validate();
       age = AgeCalculator.age(_birthdate).years;
@@ -880,7 +901,8 @@ class _RegisterState extends State<Register> {
                     height: _selectedHeight,
                     email: _emailController.text.trim(),
                     gender: _selectedGender,
-                    age: age);
+                    age: age,
+                    pdpaAgreement: true);
 
                 Map<String, dynamic> data = athleteModel.toMap();
 
@@ -925,17 +947,19 @@ class _RegisterState extends State<Register> {
                 String uid = FirebaseAuth.instance.currentUser.uid;
 
                 Staff staffModel = Staff(
-                    token: token,
-                    staff_no: staff_no,
-                    username: _usernameController.text.trim(),
-                    firstname: _firstnameController.text.trim(),
-                    lastname: _lastnameController.text.trim(),
-                    birthdate: _birthdate,
-                    department: 'Staff',
-                    staffType: _selectedStaff,
-                    email: _emailController.text.trim(),
-                    gender: _selectedGender,
-                    age: age);
+                  token: token,
+                  staff_no: staff_no,
+                  username: _usernameController.text.trim(),
+                  firstname: _firstnameController.text.trim(),
+                  lastname: _lastnameController.text.trim(),
+                  birthdate: _birthdate,
+                  department: 'Staff',
+                  staffType: _selectedStaff,
+                  email: _emailController.text.trim(),
+                  gender: _selectedGender,
+                  age: age,
+                  pdpaAgreement: true,
+                );
 
                 Map<String, dynamic> data = staffModel.toMap();
 

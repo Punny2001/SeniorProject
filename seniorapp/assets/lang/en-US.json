@@ -34,8 +34,8 @@
         "firstname_description" : "Firstname",
         "firstname_required" : "Firstname is required",
 
-        "lastname" : "lastname",
-        "lastname_description" : "lastname",
+        "lastname" : "Lastname",
+        "lastname_description" : "Lastname",
         "lastname_required" : "Lastname is required",
 
         "birthdate" : "Date of birth",

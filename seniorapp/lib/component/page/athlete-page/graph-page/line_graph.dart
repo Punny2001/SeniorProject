@@ -66,7 +66,8 @@ class AthleteLineGraph extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
     return Expanded(
       child: Container(
-        padding: EdgeInsets.only(top: h * 0.05, right: w * 0.05),
+        padding:
+            EdgeInsets.only(top: h * 0.05, right: w * 0.05, bottom: h * 0.03),
         child: ScatterChart(
           ScatterChartData(
             scatterLabelSettings: ScatterLabelSettings(

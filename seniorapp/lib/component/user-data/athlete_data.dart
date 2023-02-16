@@ -16,6 +16,8 @@ class Athlete {
   final String email;
   final String gender;
   final int age;
+  final bool pdpaAgreement;
+
   Athlete({
     @required this.token,
     @required this.athlete_no,
@@ -30,6 +32,7 @@ class Athlete {
     @required this.email,
     @required this.gender,
     @required this.age,
+    @required this.pdpaAgreement,
   });
 
   Athlete copyWith({
@@ -46,6 +49,7 @@ class Athlete {
     String email,
     String gender,
     int age,
+    bool pdpaAgreement,
   }) {
     return Athlete(
       token: token ?? this.token,
@@ -61,6 +65,7 @@ class Athlete {
       email: email ?? this.email,
       gender: gender ?? this.gender,
       age: age ?? this.age,
+      pdpaAgreement: pdpaAgreement ?? this.pdpaAgreement,
     );
   }
 
@@ -80,6 +85,7 @@ class Athlete {
     result.addAll({'email': email});
     result.addAll({'gender': gender});
     result.addAll({'age': age});
+    result.addAll({'pdpaAgreement': pdpaAgreement});
 
     return result;
   }
@@ -99,6 +105,7 @@ class Athlete {
       email: map['email'] ?? '',
       gender: map['gender'] ?? '',
       age: map['age']?.toInt() ?? 0,
+      pdpaAgreement: map['pdpaAgreement'] ?? false,
     );
   }
 
@@ -109,7 +116,7 @@ class Athlete {
 
   @override
   String toString() {
-    return 'Athlete(token: $token, athlete_no: $athlete_no, username: $username, firstname: $firstname, lastname: $lastname, sportType: $sportType, birthdate: $birthdate, department: $department, weight: $weight, height: $height, email: $email, gender: $gender, age: $age)';
+    return 'Athlete(token: $token, athlete_no: $athlete_no, username: $username, firstname: $firstname, lastname: $lastname, sportType: $sportType, birthdate: $birthdate, department: $department, weight: $weight, height: $height, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement)';
   }
 
   @override
@@ -129,7 +136,8 @@ class Athlete {
         other.height == height &&
         other.email == email &&
         other.gender == gender &&
-        other.age == age;
+        other.age == age &&
+        other.pdpaAgreement == pdpaAgreement;
   }
 
   @override
@@ -146,6 +154,7 @@ class Athlete {
         height.hashCode ^
         email.hashCode ^
         gender.hashCode ^
-        age.hashCode;
+        age.hashCode ^
+        pdpaAgreement.hashCode;
   }
 }

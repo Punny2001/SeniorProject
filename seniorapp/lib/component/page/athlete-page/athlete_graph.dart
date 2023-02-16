@@ -325,8 +325,8 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                     minWidth: w * 0.3,
                                   ),
                                   children: const [
-                                    Text('การบาดเจ็บ'),
-                                    Text('การเจ็บป่วย')
+                                    Text('อาการบาดเจ็บ'),
+                                    Text('อาการเจ็บป่วย')
                                   ],
                                   isSelected: _selectedQuestionnaire,
                                   onPressed: (int index) {
@@ -351,48 +351,48 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CupertinoButton(
-                                        child: Text(
-                                          'ปี $selectYear',
-                                          style: TextStyle(
-                                            color: Colors.green[300],
-                                          ),
+                                      child: Text(
+                                        'ปี $selectYear',
+                                        style: TextStyle(
+                                          color: widget.isStaff
+                                              ? Colors.blue[200]
+                                              : Colors.green[300],
                                         ),
-                                        onPressed: () {
-                                          scrollController.dispose();
-                                          scrollController =
-                                              FixedExtentScrollController(
-                                                  initialItem:
-                                                      selectedYearIndex);
-                                          _showDialog(
-                                            CupertinoPicker(
-                                              itemExtent: 32,
-                                              scrollController:
-                                                  scrollController,
-                                              onSelectedItemChanged:
-                                                  (int index) {
-                                                setState(() {
-                                                  selectedYearIndex = index;
-                                                });
-                                                selectYear =
-                                                    year[selectedYearIndex];
-                                                if (selectYear !=
-                                                    DateTime.now().year) {
-                                                  isDefault = false;
-                                                } else if (selectYear ==
-                                                    DateTime.now().year) {
-                                                  isDefault = true;
-                                                }
-                                              },
-                                              useMagnifier: true,
-                                              children: List<Widget>.generate(
-                                                  year.length, (index) {
-                                                return Center(
-                                                  child: Text('${year[index]}'),
-                                                );
-                                              }),
-                                            ),
-                                          );
-                                        }),
+                                      ),
+                                      onPressed: () {
+                                        scrollController.dispose();
+                                        scrollController =
+                                            FixedExtentScrollController(
+                                                initialItem: selectedYearIndex);
+                                        _showDialog(
+                                          CupertinoPicker(
+                                            itemExtent: 32,
+                                            scrollController: scrollController,
+                                            onSelectedItemChanged: (int index) {
+                                              setState(() {
+                                                selectedYearIndex = index;
+                                              });
+                                              selectYear =
+                                                  year[selectedYearIndex];
+                                              if (selectYear !=
+                                                  DateTime.now().year) {
+                                                isDefault = false;
+                                              } else if (selectYear ==
+                                                  DateTime.now().year) {
+                                                isDefault = true;
+                                              }
+                                            },
+                                            useMagnifier: true,
+                                            children: List<Widget>.generate(
+                                                year.length, (index) {
+                                              return Center(
+                                                child: Text('${year[index]}'),
+                                              );
+                                            }),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ],
                                 ),
                                 CupertinoSlider(
@@ -809,6 +809,47 @@ class _AthleteGraphState extends State<AthleteGraph> {
                   },
                 ),
               ],
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton.icon(
+              onPressed: () {
+                setState(() {
+                  _selectedQuestionnaire = [true, false];
+                  isDefault = false;
+                });
+              },
+              icon: const Icon(
+                Icons.circle,
+                color: Colors.blue,
+              ),
+              label: const Text(
+                'อาการบาดเจ็บ',
+                style: TextStyle(
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () {
+                setState(() {
+                  _selectedQuestionnaire = [false, true];
+                  isDefault = false;
+                });
+              },
+              icon: const Icon(
+                Icons.circle,
+                color: Colors.purple,
+              ),
+              label: const Text(
+                'อาการเจ็บป่วย',
+                style: TextStyle(
+                  color: Colors.purple,
+                ),
+              ),
             ),
           ],
         ),

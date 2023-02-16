@@ -1,58 +1,311 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:path_provider/path_provider.dart';
 
-class PDPA_Widget extends StatefulWidget {
-  final String path;
-  const PDPA_Widget({
+import 'package:seniorapp/decoration/padding.dart';
+
+class PDPAWidget extends StatefulWidget {
+  final VoidCallback signUp;
+  const PDPAWidget({
     Key key,
-    @required this.path,
+    @required this.signUp,
   }) : super(key: key);
 
-  static Future<File> loadPdpa(String asset, String filename) async {
-    Completer<File> completer = Completer();
-    var dir = await getApplicationDocumentsDirectory();
-    File file = File("${dir.path}/$filename");
-    var data = await rootBundle.load(asset);
-    var bytes = data.buffer.asUint8List();
-    await file.writeAsBytes(bytes, flush: true);
-    completer.complete(file);
-    return completer.future;
-  }
-
   @override
-  State<PDPA_Widget> createState() => _PDPA_WidgetState();
+  State<PDPAWidget> createState() => _PDPAWidgetState();
 }
 
-class _PDPA_WidgetState extends State<PDPA_Widget> {
+class _PDPAWidgetState extends State<PDPAWidget> {
   int currentPage = 0;
+  int pages = 0;
 
   @override
   Widget build(BuildContext context) {
+    final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          PDFView(
-            filePath: widget.path,
-            fitPolicy: FitPolicy.BOTH,
-            enableSwipe: true,
-            swipeHorizontal: true,
-            pageSnap: true,
-            onPageChanged: (int page, int total) {
-              print('page change: $page/$total');
-              setState(() {
-                currentPage = page;
-              });
-            },
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        primary: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              child: Ink(
+                decoration: ShapeDecoration(
+                  shape: const CircleBorder(),
+                  color: Colors.blue[200],
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios),
+                  alignment: Alignment.centerRight,
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/images/mahidol_logo.png',
+                width: w / 5,
+                fit: BoxFit.fitHeight,
+              ),
+              PaddingDecorate(10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'ประกาศความเป็นส่วนตัวด้านข้อมูลของผู้ใช้งานแอปพลิเคชั่น\n\n',
+                    style: header,
+                  ),
+                  const Text(
+                    ' ในฐานะของผู้พัฒนาแอปพลิเคชั่น ได้คำนึงถึงความสำคัญอย่างยิ่งกับการคุ้มครองข้อมูลส่วนบุคคลของท่านและเพื่อให้ท่านมั่นใจว่าเราจะให้ความคุ้มครองและปฏิบัติต่อข้อมูลส่วนบุคคลของท่านโดยสอดคล้องกับกฎหมายว่าด้วยการคุ้มครองข้อมูลส่วนบุคคล เราจึงได้กำหนดประกาศความเป็นส่วนตัวเกี่ยวกับข้อมูลส่วนบุคคลเพื่อแจ้งให้ท่านในฐานะของผู้ใช้งานแอปพลิเคชั่นทราบรายละเอียดการดำเนินการกับข้อมูลส่วนบุคคล ไม่ว่าจะเป็นการเก็บรวบรวม ใช้ และเปิดเผย ตลอดจนแจ้งให้ท่านทราบถึงสิทธิในข้อมูลส่วนบุคคลของท่านและช่องทางการติดต่อกับผู้พัฒนา ดังต่อไปนี้\n',
+                    textAlign: TextAlign.justify,
+                  ),
+                  Text(
+                    '1. การเก็บรวบรวมข้อมูลส่วนบุคคล\n',
+                    style: header,
+                  ),
+                  const Text(
+                      ' ผู้พัฒนาแอปพลิเคชั่น จะเก็บรวบรวมข้อมูลส่วนบุคคลของท่าน โดยการสอบถามข้อมูลจากท่านโดยตรง จากแอปพลิเคชั่นทั้งนี้ เราอาจดำเนินการเก็บรวบรวมข้อมูลส่วนบุคคลของท่าน ซึ่งเป็นข้อมูลส่วนบุคคลทั่วไป ดังนี้\n'),
+                  const Text(
+                    '-  ข้อมูลที่ใช้ระบุตัวตน (Identify Data) เช่น คำนำหน้า ชื่อ-นามสุกล เป็นต้น\n-   ข้อมูลติดต่อ (Contact Data) เช่น อีเมล เป็นต้น\n-  ข้อมูลอาการบาดเจ็บ เช่น อาการบาดเจ็บทางร่างกาย ปัญหาสุขภาพ เป็นต้น\n- ข้อมูลกีฬาและประเภทกีฬา เช่น แบตมินตัน หมากรุก เป็นต้น\n- ข้อมูลการดูแลรักษาสุขภาพ เช่น คำแนะนำของแพทย์ เป็นต้น\n\n',
+                    textAlign: TextAlign.justify,
+                  ),
+                  Text(
+                    '2. วัตถุประสงค์ในการเก็บรวบรวม ใช้ และเปิดเผยข้อมูลส่วนบุคคล\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ผู้พัฒนาแอปพลิเคชั่นอาจมีการเก็บรวบรวม ใช้ และเปิดเผยข้อมูลส่วนบุคคลของท่านเพื่อวัตถุประสงค์ต่างๆโดยอาศัยฐานทางกฎหมาย ดังต่อไปนี้\n'),
+                  Container(
+                    child: Table(
+                      border: TableBorder.all(
+                        width: 1,
+                      ),
+                      defaultVerticalAlignment:
+                          TableCellVerticalAlignment.middle,
+                      columnWidths: {
+                        0: FlexColumnWidth(w * 0.1),
+                        1: FlexColumnWidth(w * 0.3),
+                        2: FlexColumnWidth(w * 0.3),
+                        3: FlexColumnWidth(w * 0.3),
+                      },
+                      children: [
+                        TableRow(
+                          children: [
+                            Text(
+                              'ข้อ',
+                              style: header,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              'วัตถุประสงค์',
+                              style: header,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              'ประเภทข้อมูลส่วนบุคคล',
+                              style: header,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              'ฐานทางกฎหมาย',
+                              style: header,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            tableText('1'),
+                            tableText(
+                                'เพื่อใช้ในการสมัครเข้าใช้งานแอปพลิเคชั่นและจัดเก็บเป็นฐานข้อมูลของผู้ใช้งานแอปพลิเคชั่น'),
+                            tableText(
+                                'ข้อมูลที่จะระบุตัวตน ข้อมูลติดต่ออาการบาดเจ็บ'),
+                            tableText(
+                                'การปฏิบัติตามสัญญา\n(Contractual Basis)'),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            tableText('2'),
+                            tableText(
+                                'เพื่อบริหารจัดการและอำนวยความสะดวกให้กับผู้ใช้งาน เช่น การออกแบบแอปพลิเคชั่นให้เหมาะสมต่อการใช้งาน'),
+                            tableText('ข้อมูลที่ใช้ระบุตัวตน ข้อมูลติดต่อ'),
+                            tableText(
+                                'การปฏิบัติตามสัญญา\n(Contractual Basis)'),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            tableText('3'),
+                            tableText(
+                                'เพื่อประโยชน์โดยชอบด้วยกฎหมาย เช่น การวิเคราะห์ข้อมูลเพื่อปรับปรุงคุณภาพของแอปพลิเคชั่น ทั้งนี้เราจะดำเนินการทำให้ข้อมูลส่วนบุคคลไม่สามารถระบุตัวตนได้ก่อนนำข้อมูลดังกล่าวมาทำการวิเคราะห์'),
+                            tableText(
+                                'ข้อมูลที่ใช้ระบุตัวตน ข้อมูลติดต่ออาการบาดเจ็บ ข้อมูลการดูแลสุขภาพ'),
+                            tableText(
+                                'ความจำเป็นเพื่อประโยชน์โดยชอบด้วยกฎหมาย\n(Legitimate Interests)'),
+                          ],
+                        ),
+                        TableRow(
+                          children: [
+                            tableText('4'),
+                            tableText(
+                                'เพื่อการปฎิบัติตามกฎหมายที่เกี่ยวข้อง เช่น มีการร้องขอหรือเหตุจำเป็นที่ส่งผลต่อข้อมูลไปยังหน่วยงานของรัฐหรือหน่วยงานที่มีอำนาจในกระบวนการตรวจสอบตามกฎหมาย'),
+                            tableText('ข้อมูลที่ใช้ระบุตัวตนข้อมูลติดต่อ'),
+                            tableText('ฐานกฎหมาย\n(Legal Obligation)'),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Text(
+                    '\n\n3. ระยะเวลาในการเก็บรวบรวมข้อมูลส่วนบุคคล\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ผู้พัฒนาแอปพลิเคชั่นจะเก็บรักษาข้อมูลส่วนบุคคลของท่านเป็นระยะเวลาเท่าที่จำเป็นเพื่อวัตถุประสงค์ในการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลซึ่งได้ระบุไว้ตามวัตถุประสงค์ข้างต้น หลักเกณฑ์ที่ใช้กำหนดระยะเวลาเก็บข้อมูลเป็นเวลา 5 ปีนับจากวันที่ท่านได้ทำการลงทะเบียนภายในแอปพลิเคชั่น อ้างอิงจากเอกสารของทางราชการ หลังจากนั้นจะลบหรือทำให้ข้อมูลส่วนบุคคลของท่านไม่สามารถระบุตัวตนได้ต่อไป\n'),
+                  const Text(
+                      'ทั้งนี้ ในข้อมูลบางส่วน อาจมีความจำเป็นต้องจัดเก็บข้อมูลบางประเภทตลอดไป เช่น ข้อมูลที่ใช้ระบุตัวตน ข้อมูลติดต่อ อาการบาดเจ็บ เป็นต้น\n\n'),
+                  Text(
+                    '4. การเปิดเผยข้อมูลไปยังหน่วยงานหรือองค์กรอื่น\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ภายในแอปพลิเคชั่นนั้นได้มีการใช้ Firebase ซึ่งเป็นเครื่องมือในการจัดเก็บข้อมูลเพื่อสะดวกต่อผู้พัฒนาแอปพลิเคชั่นโดยมิได้ส่งข้อมูลส่วนบุคคลของผู้ใช้งานแอปพลิเคชั่นไปให้ผู้ให้บริการดังกล่าวแต่อย่างใด\n\n'),
+                  Text(
+                    '5. สิทธิของท่านในฐานะเจ้าของข้อมูล\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ในฐานะที่ท่านเป็นเจ้าของข้อมูลส่วนบุคคล ท่านมีสิทธิตามที่กำหมดไว้โดยพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 โดยท่านสามารขอสิทธิต่างๆ ของท่านได้ตามช่องทางที่ผู้พัฒนากำหนดไว้ในข้อที่ 8. ซึ่งสิทธิต่างๆ มีรายละเอียดดังนี้\n'),
+                  Text(
+                    '5.1 สิทธิในการเพิกถอนความยินยอม (Right to withdraw Consent)\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ในกรณีที่ผู้พัฒนาแอปพลิเคชั่นขอความยินยอมจากท่าน เช่น ขอความยินยอมจากท่านเพื่อประชาสัมพันธ์และแจ้งข้อมูลข่าวสารเชิงการตลาดของแอปพลิเคชั่นให้กับผู้อื่น ท่านมีสิทธิเพิกถอนความยินยอมในการประมวลผลข้อมูลส่วนบุคคลที่ท่านได้ให้ความยินยอมกับผู้พัฒนาได้ เว้นแต่การเพิกถอนความยินยอมจะมีข้อจำกัดโดยกฎหมายหรือสัญญาที่ให้ประโยชน์แก่ท่าน ทั้งนี้การเพิกถอนความยินยอมจะไม่ส่งผลกระทบต่อการประมวลผลข้อมูลส่วนบุคคลที่ท่านได้ให้ความยินยอมไปแล้วโดยชอบด้วยกฎหมาย\n'),
+                  Text(
+                    '5.2 สิทธิในการขอเข้าถึงข้อมูลส่วนบุคคล (Right to Access)\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ท่านมีสิทธิขอขเ้าถึงและขอรับสำเนาข้อมูลของท่าน ซึ่งอยู่ในความรับผิดชอบของผู้พัฒนาแอปพลิเคชั่น รวมถึงของให้ผู้พัฒนาเปิดเผยการได้มาซึ่งข้อมูลดังกล่าวที่ท่านไม้ได้ให้ความยินยอมต่อผู้พัฒนาได้\n'),
+                  Text(
+                    '5.3 สิทธิในการขอมให้ส่งหรือโอนข้อมูลส่วนบุคคล (Data Portability Right)\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ท่านมีสิทธิขอให้ผู้พัฒนาแอปพลิเคชั่นโอนข้อมูลส่วนบุคคลของท่านที่ท่านได้ให้ไว้กับผู้พัฒนาไปยังหน่วยงานอื่นหรือองค์กรอื่นได้ตามที่กฎหมายกำหนด\n'),
+                  Text(
+                    '5.4 สิทธิในการคัดค้านการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคล (Right to Object)\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ท่านมีสิทธิในการคัดค้านการประมวลผลข้อมูลที่เกี่ยวกับท่านสำหรับกรณีการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลที่เกี่ยวกับตนได้ตามที่กฎหมายกำหนด\n'),
+                  Text(
+                    '5.5 สิทธิในการขอลบข้อมูลส่วนบุคคล (Erasure Right)\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ท่านมีสิทธิขอให้ผู้พัฒนาแอปพลิเคชั่นลบข้อมูลส่วนบุคคลของท่านตามที่กฎหมายกำหนด แต่ผู้พัฒนาอาจเก็บข้อมูลส่วนบุคคลของท่านด้วยระบบอิเล็กทรอนิกส์ ซึ่งอาจมีบางระบบที่ไม่สามารถลบข้อมูลได้ ในกรณีนี้ ทางผู้พัฒนาจะทำลายหรือทำให้ข้อมูลดังกล่าวกลายเป็นข้อมูลที่ไม่สามารถระบุตัวตนของท่านได้\n'),
+                  Text(
+                    '5.6 สิทธิในการขอให้ระงับการใช้ข้อมูลส่วนบุคคล (Right to Restrict Processing)\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ท่านมีสิทธิขอให้ผู้พัฒนาแอปพลิเคชั่นระงับการใช้ข้อมูลของท่านได้ตามที่กฎหมายกำหนด เช่น\n'),
+                  const Text(
+                      'ก. เมื่ออยู่ในช่วงเวลาที่ผู้พัฒนาทำการตรวจสอบตามคำร้องขอของท่านให้แก้ไขข้อมูลส่วนบุคคลของท่านให้ถูกต้อง สมบูรณ์และเป็นปัจจุบัน\n'),
+                  const Text(
+                      'ข. ข้อมูลส่วนบุคคลของท่านถูกเก็บรวบรวม ใช้ หรือเปิดเผยโดยมิชอบด้วยกฎหมาย\n'),
+                  const Text(
+                      'ค. ข้อมูลส่วนบุคคลของท่านหมดความจำเป็นในการเก็บรักษาไว้ตามวัตถุประสงค์ เราได้แจ้งไว้ในการเก็บรวบรวม แต่ท่านประสงค์ให้เราเก็บรักษาข้อมูลนั้นต่อไป เพื่อประกอบการใช้มิทธิตามกฎหมายของท่าน\n'),
+                  const Text(
+                      'ง. เมื่ออยู่ในช่วงเวลาที่อยู่ระหว่างการพิสูจน์ถึงเหตุอันชอบด้วยกฎหมายในการเก็บรวมรวบ ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของท่าน หรือตรวจสอบความจำเป็นในการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของท่านเพื่อประโยชน์สาธารณะ อันเนื่องมาจากการที่ท่านได้ใช้สิทธิคัดค้านการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของท่าน\n'),
+                  Text(
+                    '5.7 สิทธิในการขอแก้ไขข้อมูลส่วนบุคคลให้ถูกต้อง (Rectification Right)\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ในกรณีที่ท่านเห็นว่า ข้อมูลที่ผู้พัฒนาแอปพลิเคชั่นมีอยู่นั้น ไม่ถูกต้องหรือท่านมีการเปลี่ยนแปลงข้อมูลส่วนบุคคลของท่านเอง ท่านมีสิทธิขอให้ผู้พัฒนาแก้ไขข้อมูลส่วนบุคคลของท่านเพื่อให้ข้อมูลส่วนบุคคลดังกล่าวถูกต้องเป็นปัจจุบันสมบูรณ์และไม่ก่อให้เกิดความเข้าใจผิดทั้งนี้ตามกฎหมายบัญญัติและผู้พัฒนาอาจปฏิเสธการใช้สิทธิดังกล่าวข้างตันของเจ้าของข้อมูลส่วนบุคคลหรือผู้มีอำนาจกระทำแทนได้หากไม่ขัดต่อกฎหมาย\n\n'),
+                  Text(
+                    '6. การรักษาความมั่นคงปลอดภัยของข้อมูลส่วนบุคคล\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ผู้พัฒนาแอปพลิเคชั่น มีมาตรการในการรักษาความมั่นคงปลอยภัยข้อมูลส่วนบุคคลของท่านอย่างเหมาะสม ทั้งในเชิงเทคนิคและการบริหารจัดการ รวมถึงการกำหนดผู้มีสิทธิในการเข้าถึง เพื่อป้องกันไม่ให้ข้อมูลเสียหาย หรือมีการเข้าถึง ลบ ทำลาย ใช้ เปลี่ยนแปลง แก้ไข หรือเปิดเผยข้อมูลส่วนบุคคลโดยไม่ได้รับอนุญาต ซึ่งสอดคล้องกับนโยบายและแนวปฏิบัติด้านความมั่นคงปลอยภัยสารสนเทศ (Information Security Policy)\n\nนอกจากนี้ ผู้พัฒนาแอปพลิเคชั่นได้กำหนดนโยบายการคุ้มครองข้อมูลส่วนบุคคลขึ้น โดยประกาศให้ทราบกันโดยทั่วทั้งองค์กร พร้อมแนวทางปฏิบัติเพื่อให้เกิดความมั่นคงปลอดภัยในการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลโดยธำรงไว้ซึ่งความลับ (Confidentiality) ความถูกต้องครบถ้วน (Integrity) และสภาพพร้อมใช้งาน (Availability) ของข้อมูลส่วนบุคคล โดนผู้พัฒนาแอปพลิเคชั่นได้จัดให้มีการทบทวนนโยบายดังกล่าว รวมถึงประกาศนี้ในระยะเวลาตามที่เหมาะสม\n\n'),
+                  Text(
+                    '7. การแก้ไขเปลี่ยนแปลงแบบแจ้งฉบับนี้\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ผู้พัฒนาแอปพลิเคชั่นอาจแก้ไขปรับปรุงประกาศความเป็นส่วนตัวเกี่ยวกับข้อมูลส่วนบุคคลฉบับนี้เป็นครั้งคราว และเมื่อมีการแก้ไขเปลี่ยนแปลง เราจะประกาศให้ท่านทราบผ่านทางแอปพลิเคชั่น หรือ แจ้งให้ท่านทราบผ่านอีเมลของท่าน ทั้งนี้ หากจำเป็นต้องขอความยินยอมจากท่าน ผู้พัฒนาจะดำเนินการขอความยินยอมจากท่านเพิ่มเติม\n\n'),
+                  Text(
+                    '8. ช่องทางการติดต่อ\n',
+                    style: header,
+                  ),
+                  const Text(
+                      'ในกรณีที่มีข้อสงสัยหรือต้องการสอบถามรายละเอียดเพิ่มเติมเกี่ยวกับการคุ้มครองข้อมูลส่วนบุคคลของท่าน การเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลของท่าน หรือการใช้สิทธิของท่าน สามารถติดต่อผู้พัฒนาได้ดังนี้\n'),
+                  const Text(
+                      '1. นายกฤษณพงศ์ ปาลคำ\nEmail: Krissanapong.pal@student.mahidol.edu\n\n2. นายพงศกร พิบูลพงค์พันธ์\nEmail: Pongsakorn.pib@student.mahidol.edu\n\n3. นายรัฐกฤษฏิ์ ศรีปรัชญานันท์\nEmail: Rathakit.sri@student.mahidol.edu\n')
+                ],
+              ),
+              PaddingDecorate(30),
+              const Text('ท่านยอมรับข้อตกลงการใช้งานหรือไม่'),
+              PaddingDecorate(10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () => Navigator.popUntil(
+                      context,
+                      ModalRoute.withName('/login'),
+                    ),
+                    icon: const Icon(Icons.close_rounded),
+                    label: const Text('ปฏิเสธ'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red[200],
+                    ),
+                  ),
+                  PaddingDecorate(10),
+                  ElevatedButton.icon(
+                    onPressed: () => widget.signUp(),
+                    icon: const Icon(Icons.check_rounded),
+                    label: const Text('ปฏิเสธ'),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green[300],
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          
-        ],
+        ),
       ),
     );
   }
 }
+
+Container tableText(String inputText) {
+  Container text = Container(
+    padding: const EdgeInsets.all(5),
+    child: Text(
+      inputText,
+      textAlign: TextAlign.center,
+    ),
+  );
+  return text;
+}
+
+TextStyle get header => const TextStyle(
+      fontWeight: FontWeight.bold,
+    );

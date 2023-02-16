@@ -15,6 +15,8 @@ class Staff {
   final String email;
   final String gender;
   final int age;
+  final bool pdpaAgreement;
+
   Staff({
     @required this.token,
     @required this.staff_no,
@@ -27,6 +29,7 @@ class Staff {
     @required this.email,
     @required this.gender,
     @required this.age,
+    @required this.pdpaAgreement,
   });
 
   Staff copyWith({
@@ -41,6 +44,7 @@ class Staff {
     String email,
     String gender,
     int age,
+    bool pdpaAgreement,
   }) {
     return Staff(
       token: token ?? this.token,
@@ -54,6 +58,7 @@ class Staff {
       email: email ?? this.email,
       gender: gender ?? this.gender,
       age: age ?? this.age,
+      pdpaAgreement: pdpaAgreement ?? this.pdpaAgreement,
     );
   }
 
@@ -71,6 +76,7 @@ class Staff {
     result.addAll({'email': email});
     result.addAll({'gender': gender});
     result.addAll({'age': age});
+    result.addAll({'pdpaAgreement': pdpaAgreement});
 
     return result;
   }
@@ -88,6 +94,7 @@ class Staff {
       email: map['email'] ?? '',
       gender: map['gender'] ?? '',
       age: map['age']?.toInt() ?? 0,
+      pdpaAgreement: map['pdpaAgreement'] ?? false,
     );
   }
 
@@ -97,7 +104,7 @@ class Staff {
 
   @override
   String toString() {
-    return 'Staff(token: $token, staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, department: $department, email: $email, gender: $gender, age: $age)';
+    return 'Staff(token: $token, staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, department: $department, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement)';
   }
 
   @override
@@ -115,7 +122,8 @@ class Staff {
         other.department == department &&
         other.email == email &&
         other.gender == gender &&
-        other.age == age;
+        other.age == age &&
+        other.pdpaAgreement == pdpaAgreement;
   }
 
   @override
@@ -130,6 +138,7 @@ class Staff {
         department.hashCode ^
         email.hashCode ^
         gender.hashCode ^
-        age.hashCode;
+        age.hashCode ^
+        pdpaAgreement.hashCode;
   }
 }
