@@ -73,7 +73,7 @@ class _LoginState extends State<Login> {
               children: [
                 Image.asset(
                   'assets/images/mahidol_logo.png',
-                  width: w / 3,
+                  width: w / 5,
                   fit: BoxFit.fitHeight,
                 ),
                 PaddingDecorate(10),
