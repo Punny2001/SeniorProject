@@ -118,7 +118,7 @@ class _StaffCaseState extends State<StaffNotify> {
         _staff = Staff.fromMap(data);
       });
     });
-    _timer = Timer(Duration(seconds: 1), () {
+    _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
@@ -140,7 +140,7 @@ class _StaffCaseState extends State<StaffNotify> {
       backgroundColor: Colors.white,
       body: Container(
         child: isLoading
-            ? Center(
+            ? const Center(
                 child: CupertinoActivityIndicator(),
               )
             : healthSize + physicalSize != 0
@@ -170,8 +170,8 @@ class _StaffCaseState extends State<StaffNotify> {
                           switch (snapshot.connectionState) {
                             case (ConnectionState.waiting):
                               {
-                                return Center(
-                                  child: Text('Loading...'),
+                                return const Center(
+                                  child: const Text('Loading...'),
                                 );
                               }
                               break;
@@ -231,8 +231,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 text:
                                                                     'Problem type: ',
                                                                 style:
-                                                                    TextStyle(
-                                                                  fontSize: 18,
+                                                                    const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -241,9 +240,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                   TextSpan(
                                                                     text: data[
                                                                         'questionnaireType'],
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            18,
+                                                                    style: const TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
                                                                   ),
@@ -255,7 +252,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 text:
                                                                     'Health Symptom: ',
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -265,7 +262,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                     text: data[
                                                                         'healthSymptom'],
                                                                     style:
-                                                                        TextStyle(
+                                                                        const TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal,
@@ -279,7 +276,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 text:
                                                                     'Done on: ',
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -290,7 +287,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                         data['doDate']
                                                                             .toDate(),
                                                                         'Staff'),
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
                                                                   ),
@@ -301,7 +298,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                               TextSpan(
                                                                 text: 'Time: ',
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -314,7 +311,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                       data['doDate']
                                                                           .toDate(),
                                                                     ),
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
                                                                   ),
@@ -378,8 +375,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 text:
                                                                     'Problem type: ',
                                                                 style:
-                                                                    TextStyle(
-                                                                  fontSize: 18,
+                                                                    const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -388,9 +384,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                   TextSpan(
                                                                     text: data[
                                                                         'questionnaireType'],
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            18,
+                                                                    style: const TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
                                                                   ),
@@ -402,7 +396,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 text:
                                                                     'Injured body: ',
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -411,7 +405,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                   TextSpan(
                                                                     text: data[
                                                                         'bodyPart'],
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
                                                                   ),
@@ -423,7 +417,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                 text:
                                                                     'Done on: ',
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -436,7 +430,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                           .toDate(),
                                                                       'Staff',
                                                                     ),
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
                                                                   ),
@@ -447,7 +441,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                               TextSpan(
                                                                 text: 'Time: ',
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
@@ -458,7 +452,7 @@ class _StaffCaseState extends State<StaffNotify> {
                                                                             .Hms()
                                                                         .format(
                                                                             data['doDate'].toDate()),
-                                                                    style: TextStyle(
+                                                                    style: const TextStyle(
                                                                         fontWeight:
                                                                             FontWeight.normal),
                                                                   ),

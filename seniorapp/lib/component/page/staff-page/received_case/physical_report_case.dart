@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
@@ -10,6 +11,7 @@ import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class PhysicalReportCase extends StatefulWidget {
   PhysicalResultData physicalResultData;
@@ -48,7 +50,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
       isLoading = true;
     });
     _getAthleteData();
-    _timer = Timer(Duration(seconds: 1), () {
+    _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
@@ -169,11 +171,11 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
             Container(
               child: Ink(
                 decoration: ShapeDecoration(
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   color: Colors.blue[200],
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
+                  icon: const Icon(Icons.arrow_back_ios),
                   alignment: Alignment.centerRight,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
@@ -183,18 +185,18 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
         ),
       ),
       body: isLoading
-          ? Center(
+          ? const Center(
               child: CupertinoActivityIndicator(),
             )
           : Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 30,
                 right: 30,
               ),
               height: h,
               width: w,
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     Text(
@@ -219,11 +221,36 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
                                     '${athlete.firstname + ' ' + athlete.lastname} ',
+                              ),
+                            ],
+                          ),
+                        ),
+                        PaddingDecorate(5),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Phone No: ',
+                            style: TextStyle(
+                              fontSize: h * 0.02,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                text: athlete.phoneNo,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrlString('tel:${athlete.phoneNo}');
+                                  },
                               ),
                             ],
                           ),
@@ -239,7 +266,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text: '${athlete.gender} ',
@@ -258,7 +285,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text: '${athlete.age} years',
@@ -277,7 +304,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text: '${athlete.sportType}',
@@ -303,7 +330,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                 text:
                                     '${widget.physicalResultData.totalPoint} ',
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: 'points',
                                 style: TextStyle(
                                   color: Colors.black,
@@ -326,7 +353,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                             children: [
                               TextSpan(
                                 text: '${resultPhrase}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
@@ -344,7 +371,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
@@ -424,12 +451,12 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                 ),
                               );
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.create,
                             ),
-                            label: Text('Record new injury'),
+                            label: const Text('Record new injury'),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                     PaddingDecorate(10),
                   ],
                 ),

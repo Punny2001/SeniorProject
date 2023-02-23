@@ -39,7 +39,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
   String healthChoosing;
 
   RangeValues _currentRangeValues = const RangeValues(0, 100);
-  List<bool> _selectedQuestionnaire = <bool>[true, true];
+  List<bool> _selectedQuestionnaire = <bool>[true, false];
   bool isDefault = true;
 
   bool isHealthCheck = false;
@@ -330,7 +330,6 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   ],
                                   isSelected: _selectedQuestionnaire,
                                   onPressed: (int index) {
-                                    // All buttons are selectable.
                                     setState(() {
                                       _selectedQuestionnaire[index] =
                                           !_selectedQuestionnaire[index];
@@ -795,7 +794,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                   onChanged: (bool value) {
                     setState(() {
                       if (isDefault == false) {
-                        _selectedQuestionnaire = <bool>[true, true];
+                        _selectedQuestionnaire = <bool>[true, false];
                         _currentRangeValues = const RangeValues(0, 100);
                         _selectedWeek = 5;
                         isHealthCheck = false;

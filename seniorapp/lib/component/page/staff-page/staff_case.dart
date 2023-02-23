@@ -651,11 +651,14 @@ class _StaffCaseState extends State<StaffCase> {
                                                                           context)
                                                                       .push(
                                                                     MaterialPageRoute(
-                                                                      builder: (context) => IllnessReport(
-                                                                          healthData,
-                                                                          data[
-                                                                              'docID'],
-                                                                          athlete),
+                                                                      builder:
+                                                                          (context) =>
+                                                                              IllnessReport(
+                                                                        healthData,
+                                                                        data[
+                                                                            'docID'],
+                                                                        athlete,
+                                                                      ),
                                                                     ),
                                                                   );
                                                                 });

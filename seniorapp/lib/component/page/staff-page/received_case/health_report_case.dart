@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
@@ -10,6 +11,8 @@ import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class HealthReportCase extends StatefulWidget {
   HealthResultData healthResultData;
@@ -48,7 +51,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
       isLoading = true;
     });
     _getAthleteData();
-    _timer = Timer(Duration(seconds: 1), () {
+    _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
       });
@@ -166,35 +169,33 @@ class _HealthReportCaseState extends State<HealthReportCase> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(),
-                  color: Colors.blue[200],
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: const CircleBorder(),
+                color: Colors.blue[200],
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                alignment: Alignment.centerRight,
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
           ],
         ),
       ),
       body: isLoading
-          ? Center(
-              child: CupertinoActivityIndicator(),
+          ? const Center(
+              child: const CupertinoActivityIndicator(),
             )
           : Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 30,
                 right: 30,
               ),
               height: h,
               width: w,
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     Text(
@@ -219,11 +220,36 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
                                     '${athlete.firstname + ' ' + athlete.lastname} ',
+                              ),
+                            ],
+                          ),
+                        ),
+                        PaddingDecorate(5),
+                        RichText(
+                          text: TextSpan(
+                            text: 'Phone No: ',
+                            style: TextStyle(
+                              fontSize: h * 0.02,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            children: [
+                              TextSpan(
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                text: athlete.phoneNo,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    launchUrlString('tel:${athlete.phoneNo}');
+                                  },
                               ),
                             ],
                           ),
@@ -239,7 +265,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text: '${athlete.gender} ',
@@ -258,7 +284,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text: '${athlete.age} years',
@@ -277,7 +303,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text: '${athlete.sportType}',
@@ -302,7 +328,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 ),
                                 text: '${widget.healthResultData.totalPoint} ',
                               ),
-                              TextSpan(
+                              const TextSpan(
                                 text: 'points',
                                 style: TextStyle(
                                   color: Colors.black,
@@ -325,7 +351,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             children: [
                               TextSpan(
                                 text: '${resultPhrase}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
@@ -343,7 +369,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
@@ -423,12 +449,12 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 ),
                               );
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.create,
                             ),
-                            label: Text('Record new illness'),
+                            label: const Text('Record new illness'),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                     PaddingDecorate(10),
                   ],
                 ),

@@ -115,7 +115,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'NunitoSans'),
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      locale: context.locale,
+      locale: const Locale('en', 'US'),
       title: 'SIRA2022',
       initialRoute: initPage,
       routes: map,

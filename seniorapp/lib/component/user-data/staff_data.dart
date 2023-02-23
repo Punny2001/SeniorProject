@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Staff {
@@ -11,6 +10,7 @@ class Staff {
   final String lastname;
   final String staffType;
   final DateTime birthdate;
+  final String phoneNo;
   final String department;
   final String email;
   final String gender;
@@ -25,6 +25,7 @@ class Staff {
     @required this.lastname,
     @required this.staffType,
     @required this.birthdate,
+    @required this.phoneNo,
     @required this.department,
     @required this.email,
     @required this.gender,
@@ -40,6 +41,7 @@ class Staff {
     String lastname,
     String staffType,
     DateTime birthdate,
+    String phoneNo,
     String department,
     String email,
     String gender,
@@ -54,6 +56,7 @@ class Staff {
       lastname: lastname ?? this.lastname,
       staffType: staffType ?? this.staffType,
       birthdate: birthdate ?? this.birthdate,
+      phoneNo: phoneNo ?? this.phoneNo,
       department: department ?? this.department,
       email: email ?? this.email,
       gender: gender ?? this.gender,
@@ -72,6 +75,7 @@ class Staff {
     result.addAll({'lastname': lastname});
     result.addAll({'staffType': staffType});
     result.addAll({'birthdate': birthdate});
+    result.addAll({'phoneNo': phoneNo});
     result.addAll({'department': department});
     result.addAll({'email': email});
     result.addAll({'gender': gender});
@@ -90,6 +94,7 @@ class Staff {
       lastname: map['lastname'] ?? '',
       staffType: map['staffType'] ?? '',
       birthdate: DateTime.parse(map['birthdate'].toDate().toString()),
+      phoneNo: map['phoneNo'] ?? '',
       department: map['department'] ?? '',
       email: map['email'] ?? '',
       gender: map['gender'] ?? '',
@@ -104,7 +109,7 @@ class Staff {
 
   @override
   String toString() {
-    return 'Staff(token: $token, staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, department: $department, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement)';
+    return 'Staff(token: $token, staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, phoneNo: $phoneNo, department: $department, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement)';
   }
 
   @override
@@ -119,6 +124,7 @@ class Staff {
         other.lastname == lastname &&
         other.staffType == staffType &&
         other.birthdate == birthdate &&
+        other.phoneNo == phoneNo &&
         other.department == department &&
         other.email == email &&
         other.gender == gender &&
@@ -135,6 +141,7 @@ class Staff {
         lastname.hashCode ^
         staffType.hashCode ^
         birthdate.hashCode ^
+        phoneNo.hashCode ^
         department.hashCode ^
         email.hashCode ^
         gender.hashCode ^

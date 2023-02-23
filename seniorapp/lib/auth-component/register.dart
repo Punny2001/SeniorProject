@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:seniorapp/component/language.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
@@ -29,6 +28,7 @@ class _RegisterState extends State<Register> {
   final _usernameController = TextEditingController();
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
+  final _phoneNoController = TextEditingController();
   bool _pdpaCheck = false;
   String _selectedSport;
   String _selectedStaff;
@@ -95,7 +95,6 @@ class _RegisterState extends State<Register> {
                 ),
               ),
             ),
-            LanguageSign()
           ],
         ),
       ),
@@ -144,7 +143,7 @@ class _RegisterState extends State<Register> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Email',
+                            'Email (อีเมล)',
                             style: textCustom(),
                           ),
                           PaddingDecorate(5),
@@ -168,7 +167,7 @@ class _RegisterState extends State<Register> {
 
                           /// Password registration
                           Text(
-                            'register_page.password'.tr(),
+                            'Password (รหัสผ่าน)',
                             style: textCustom(),
                           ),
                           PaddingDecorate(5),
@@ -241,7 +240,7 @@ class _RegisterState extends State<Register> {
                           PaddingDecorate(15),
                           ////
                           Text(
-                            'register_page.confirm_password'.tr(),
+                            'Confirm Password \n(ยืนยันรหัสผ่าน)',
                             style: textCustom(),
                           ),
                           PaddingDecorate(5),
@@ -310,7 +309,7 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(15),
                           Text(
-                            'register_page.username'.tr(),
+                            'Username (ชื่อผู้ใช้งาน)',
                             style: textCustom(),
                           ),
                           PaddingDecorate(5),
@@ -333,7 +332,7 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(15),
                           Text(
-                            'register_page.firstname'.tr(),
+                            'Firstname (ชื่อจริง)',
                             style: textCustom(),
                           ),
                           PaddingDecorate(5),
@@ -356,7 +355,7 @@ class _RegisterState extends State<Register> {
                           PaddingDecorate(15),
                           ////// Lastname textbox
                           Text(
-                            'register_page.lastname'.tr(),
+                            'Lastname (นามสกุล)',
                             style: textCustom(),
                           ),
                           PaddingDecorate(5),
@@ -380,7 +379,7 @@ class _RegisterState extends State<Register> {
 
                           /// BirthDate Picking
                           Text(
-                            'register_page.birthdate'.tr(),
+                            'Date of Birth (วันเกิด)',
                             style: textCustom(),
                           ),
                           PaddingDecorate(5),
@@ -436,7 +435,33 @@ class _RegisterState extends State<Register> {
                             },
                           ),
                           PaddingDecorate(15),
-
+                          Text(
+                            'Phone No. (เบอร์โทร)',
+                            style: textCustom(),
+                          ),
+                          PaddingDecorate(5),
+                          TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please insert your phone number';
+                              }
+                              if (value.length != 10) {
+                                return 'Please insert all 10 numbers of your phone';
+                              } else {
+                                return null;
+                              }
+                            },
+                            maxLength: 10,
+                            keyboardType: TextInputType.phone,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: _phoneNoController,
+                            decoration: textdecorate_login(
+                              Icons.phone,
+                              'Phone number',
+                            ),
+                          ),
+                          PaddingDecorate(15),
                           Text(
                             'Gender',
                             style: textCustom(),
@@ -786,13 +811,18 @@ class _RegisterState extends State<Register> {
 
                           /// Sign Up button
                           ElevatedButton(
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => PDPAWidget(
-                                  signUp: signup,
-                                ),
-                              ),
-                            ),
+                            onPressed: () {
+                              bool validate = _keyForm.currentState.validate();
+                              if (validate == true) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => PDPAWidget(
+                                      signUp: signup,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
                             // onPressed: () => signup(),
                             child: Text(
                               'register_page.signup_button'.tr(),
@@ -896,6 +926,7 @@ class _RegisterState extends State<Register> {
                     lastname: _lastnameController.text.trim(),
                     sportType: _selectedSport,
                     birthdate: _birthdate,
+                    phoneNo: _phoneNoController.text.trim(),
                     department: 'Athlete',
                     weight: _selectedWeight,
                     height: _selectedHeight,
@@ -954,6 +985,7 @@ class _RegisterState extends State<Register> {
                   lastname: _lastnameController.text.trim(),
                   birthdate: _birthdate,
                   department: 'Staff',
+                  phoneNo: _phoneNoController.text.trim(),
                   staffType: _selectedStaff,
                   email: _emailController.text.trim(),
                   gender: _selectedGender,

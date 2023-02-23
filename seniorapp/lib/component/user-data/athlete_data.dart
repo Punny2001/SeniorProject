@@ -10,6 +10,7 @@ class Athlete {
   final String lastname;
   final String sportType;
   final DateTime birthdate;
+  final String phoneNo;
   final String department;
   final double weight;
   final double height;
@@ -26,6 +27,7 @@ class Athlete {
     @required this.lastname,
     @required this.sportType,
     @required this.birthdate,
+    @required this.phoneNo,
     @required this.department,
     @required this.weight,
     @required this.height,
@@ -43,6 +45,7 @@ class Athlete {
     String lastname,
     String sportType,
     DateTime birthdate,
+    String phoneNo,
     String department,
     double weight,
     double height,
@@ -59,6 +62,7 @@ class Athlete {
       lastname: lastname ?? this.lastname,
       sportType: sportType ?? this.sportType,
       birthdate: birthdate ?? this.birthdate,
+      phoneNo: phoneNo ?? this.phoneNo,
       department: department ?? this.department,
       weight: weight ?? this.weight,
       height: height ?? this.height,
@@ -79,6 +83,7 @@ class Athlete {
     result.addAll({'lastname': lastname});
     result.addAll({'sportType': sportType});
     result.addAll({'birthdate': birthdate});
+    result.addAll({'phoneNo': phoneNo});
     result.addAll({'department': department});
     result.addAll({'weight': weight});
     result.addAll({'height': height});
@@ -99,6 +104,7 @@ class Athlete {
       lastname: map['lastname'] ?? '',
       sportType: map['sportType'] ?? '',
       birthdate: DateTime.parse(map['birthdate'].toDate().toString()),
+      phoneNo: map['phoneNo'] ?? '',
       department: map['department'] ?? '',
       weight: map['weight']?.toDouble() ?? 0.0,
       height: map['height']?.toDouble() ?? 0.0,
@@ -116,7 +122,7 @@ class Athlete {
 
   @override
   String toString() {
-    return 'Athlete(token: $token, athlete_no: $athlete_no, username: $username, firstname: $firstname, lastname: $lastname, sportType: $sportType, birthdate: $birthdate, department: $department, weight: $weight, height: $height, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement)';
+    return 'Athlete(token: $token, athlete_no: $athlete_no, username: $username, firstname: $firstname, lastname: $lastname, sportType: $sportType, birthdate: $birthdate, phoneNo: $phoneNo, department: $department, weight: $weight, height: $height, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement)';
   }
 
   @override
@@ -131,6 +137,7 @@ class Athlete {
         other.lastname == lastname &&
         other.sportType == sportType &&
         other.birthdate == birthdate &&
+        other.phoneNo == phoneNo &&
         other.department == department &&
         other.weight == weight &&
         other.height == height &&
@@ -149,6 +156,7 @@ class Athlete {
         lastname.hashCode ^
         sportType.hashCode ^
         birthdate.hashCode ^
+        phoneNo.hashCode ^
         department.hashCode ^
         weight.hashCode ^
         height.hashCode ^
