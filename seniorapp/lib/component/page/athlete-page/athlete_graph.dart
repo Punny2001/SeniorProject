@@ -319,7 +319,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       ? getColors(700)
                                       : getColors(800),
                                   selectedColor: Colors.white,
-                                  color: Colors.green,
+                                  color: widget.isStaff
+                                      ? Colors.blue
+                                      : Colors.green,
                                   constraints: BoxConstraints(
                                     minHeight: h * 0.05,
                                     minWidth: w * 0.3,

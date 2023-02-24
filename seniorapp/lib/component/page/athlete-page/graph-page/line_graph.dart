@@ -1,19 +1,18 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class AthleteLineGraph extends StatelessWidget {
+class AthleteLineGraph extends StatefulWidget {
   final List<Map<String, dynamic>> healthResultDataList;
   final List<Map<String, dynamic>> physicalResultDataList;
   final int selectedWeek;
 
-  AthleteLineGraph({
+  const AthleteLineGraph({
     Key key,
     this.healthResultDataList,
     this.physicalResultDataList,
     this.selectedWeek,
   }) : super(key: key);
 
-  final DateTime now = DateTime.now();
   static final DateTime firstJan = DateTime(DateTime.now().year, 1, 1);
 
   // get week between first date and now
@@ -23,11 +22,20 @@ class AthleteLineGraph extends StatelessWidget {
     return (to.difference(from).inDays / 7).ceil().toDouble();
   }
 
+  @override
+  State<AthleteLineGraph> createState() => _AthleteLineGraphState();
+}
+
+class _AthleteLineGraphState extends State<AthleteLineGraph> {
+  final DateTime now = DateTime.now();
+  List<int> selectedSpots = [];
+
   ScatterSpot getHealthChart(Map<String, dynamic> healthResultDataList) {
     ScatterSpot spot;
 
     spot = ScatterSpot(
-      getWeekDay(firstJan, (healthResultDataList['doDate']).toDate()),
+      AthleteLineGraph.getWeekDay(
+          AthleteLineGraph.firstJan, (healthResultDataList['doDate']).toDate()),
       healthResultDataList['totalPoint'].toDouble(),
       show: true,
       color: Colors.purple,
@@ -40,7 +48,8 @@ class AthleteLineGraph extends StatelessWidget {
     ScatterSpot spot;
 
     spot = ScatterSpot(
-      getWeekDay(firstJan, (physicalResultDataList['doDate']).toDate()),
+      AthleteLineGraph.getWeekDay(AthleteLineGraph.firstJan,
+          (physicalResultDataList['doDate']).toDate()),
       physicalResultDataList['totalPoint'].toDouble(),
       show: true,
       color: Colors.blue,
@@ -50,18 +59,21 @@ class AthleteLineGraph extends StatelessWidget {
   }
 
   double getMinX() {
-    return getWeekDay(firstJan, now) - selectedWeek.toDouble() > 0.0
-        ? getWeekDay(firstJan, now) - selectedWeek.toDouble()
+    return AthleteLineGraph.getWeekDay(AthleteLineGraph.firstJan, now) -
+                widget.selectedWeek.toDouble() >
+            0.0
+        ? AthleteLineGraph.getWeekDay(AthleteLineGraph.firstJan, now) -
+            widget.selectedWeek.toDouble()
         : 1.0;
   }
 
   double getMaxX() {
-    return getWeekDay(firstJan, now);
+    return AthleteLineGraph.getWeekDay(AthleteLineGraph.firstJan, now);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(healthResultDataList);
+    print(widget.healthResultDataList);
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Expanded(
@@ -70,27 +82,101 @@ class AthleteLineGraph extends StatelessWidget {
             EdgeInsets.only(top: h * 0.05, right: w * 0.05, bottom: h * 0.03),
         child: ScatterChart(
           ScatterChartData(
-            scatterLabelSettings: ScatterLabelSettings(
-              getLabelFunction: (spotIndex, spot) {},
+            scatterTouchData: ScatterTouchData(
+              enabled: true,
+              handleBuiltInTouches: false,
+              touchCallback:
+                  (FlTouchEvent event, ScatterTouchResponse touchResponse) {
+                if (touchResponse == null ||
+                    touchResponse.touchedSpot == null) {
+                  return;
+                }
+                // Show tooltip if tap down detected
+                if (event is FlTapDownEvent) {
+                  final sectionIndex = touchResponse.touchedSpot.spotIndex;
+                  setState(() {
+                    selectedSpots.add(sectionIndex);
+                  });
+                  // Hide/clear tooltip if long press was ended or tap up detected
+                } else if (event is FlLongPressEnd || event is FlTapUpEvent) {
+                  setState(() {
+                    selectedSpots.clear();
+                  });
+                }
+              },
+              touchTooltipData: ScatterTouchTooltipData(
+                tooltipBgColor: Colors.black,
+                getTooltipItems: (ScatterSpot touchedBarSpot) {
+                  return ScatterTooltipItem(
+                    'สัปดาห์: ',
+                    textStyle: TextStyle(
+                      height: 1.2,
+                      color: Colors.grey[100],
+                    ),
+                    bottomMargin: 10,
+                    children: [
+                      TextSpan(
+                        text: '${touchedBarSpot.x.toInt()} \n',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                      TextSpan(
+                        text: '${widget.healthResultDataList} \n',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'คะแนน: ',
+                        style: TextStyle(
+                          height: 1.2,
+                          color: Colors.grey[100],
+                        ),
+                      ),
+                      TextSpan(
+                        text: touchedBarSpot.y.toInt().toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
+            showingTooltipIndicators: selectedSpots,
             gridData: FlGridData(verticalInterval: 1, horizontalInterval: 10),
             minX: getMinX(),
             maxX: getMaxX(),
             minY: 0.0,
             maxY: 100.0,
             scatterSpots: [
-              if (healthResultDataList != null)
-                for (int i = (healthResultDataList.length) - 1; i >= 0; i--)
-                  if (getWeekDay(firstJan,
-                          healthResultDataList[i]['doDate'].toDate()) >=
-                      getWeekDay(firstJan, now) - selectedWeek.toDouble())
-                    getHealthChart(healthResultDataList[i]),
-              if (physicalResultDataList != null)
-                for (int i = (physicalResultDataList.length) - 1; i >= 0; i--)
-                  if (getWeekDay(firstJan,
-                          physicalResultDataList[i]['doDate'].toDate()) >=
-                      getWeekDay(firstJan, now) - selectedWeek.toDouble())
-                    getPhysicalChart(physicalResultDataList[i]),
+              if (widget.healthResultDataList != null)
+                for (int i = (widget.healthResultDataList.length) - 1;
+                    i >= 0;
+                    i--)
+                  if (AthleteLineGraph.getWeekDay(AthleteLineGraph.firstJan,
+                          widget.healthResultDataList[i]['doDate'].toDate()) >=
+                      AthleteLineGraph.getWeekDay(
+                              AthleteLineGraph.firstJan, now) -
+                          widget.selectedWeek.toDouble())
+                    getHealthChart(widget.healthResultDataList[i]),
+              if (widget.physicalResultDataList != null)
+                for (int i = (widget.physicalResultDataList.length) - 1;
+                    i >= 0;
+                    i--)
+                  if (AthleteLineGraph.getWeekDay(
+                          AthleteLineGraph.firstJan,
+                          widget.physicalResultDataList[i]['doDate']
+                              .toDate()) >=
+                      AthleteLineGraph.getWeekDay(
+                              AthleteLineGraph.firstJan, now) -
+                          widget.selectedWeek.toDouble())
+                    getPhysicalChart(widget.physicalResultDataList[i]),
             ],
             titlesData: FlTitlesData(
               rightTitles: AxisTitles(
