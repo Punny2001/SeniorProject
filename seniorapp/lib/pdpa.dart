@@ -280,7 +280,7 @@ class _PDPAWidgetState extends State<PDPAWidget> {
                   ElevatedButton.icon(
                     onPressed: () => widget.signUp(),
                     icon: const Icon(Icons.check_rounded),
-                    label: const Text('ปฏิเสธ'),
+                    label: const Text('ยอมรับ'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.green[300],
                     ),

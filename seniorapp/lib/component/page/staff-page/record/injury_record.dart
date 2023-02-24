@@ -190,9 +190,7 @@ class _InjuryReportState extends State<InjuryReport> {
                               },
                             ),
                       //
-                      const Padding(
-                        padding: EdgeInsets.all(20),
-                      ),
+                      PaddingDecorate(20),
                       // Sport and Event
                       const Text(
                         'Sport and Event',
@@ -256,45 +254,31 @@ class _InjuryReportState extends State<InjuryReport> {
                         },
                       ),
                       //
-                      const Padding(
-                        padding: EdgeInsets.all(20),
-                      ),
+                      PaddingDecorate(20),
                       // Round, Heat, or Training
                       const Text(
                         'Round, Heat, or Training',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: textdecorate('Round, Heat, or Training'),
                         controller: _rhtController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Round, Heat, or Training is required';
-                          } else {
-                            return null;
-                          }
-                        },
                       ),
                       //
-                      const Padding(
-                        padding: EdgeInsets.all(20),
-                      ),
+                      PaddingDecorate(20),
                       // Date & Time
                       const Text(
                         'Date & Time',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       DateTimePicker(
-                        initialValue: _datetime.toString(),
+                        initialValue:
+                            widget.docID == null ? null : _datetime.toString(),
                         dateLabelText: 'Date',
                         timeLabelText: 'Time',
                         dateMask: 'MMMM d, yyyy hh:mm',
@@ -303,7 +287,32 @@ class _InjuryReportState extends State<InjuryReport> {
                         lastDate: DateTime.now(),
                         firstDate: DateTime(1900),
                         initialDate: DateTime.now(),
-                        decoration: textdecorate('Occured date & time'),
+                        decoration: InputDecoration(
+                          fillColor: Color.fromRGBO(217, 217, 217, 100),
+                          filled: true,
+                          hintText: 'Occured date & time',
+                          hintStyle: const TextStyle(fontFamily: 'OpenSans'),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.red,
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromRGBO(217, 217, 217, 100),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color.fromRGBO(217, 217, 217, 100),
+                            ),
+                          ),
+                        ),
                         onChanged: (value) {
                           setState(() {
                             _datetime = DateTime.parse(value);
@@ -318,18 +327,14 @@ class _InjuryReportState extends State<InjuryReport> {
                         },
                       ),
                       //
-                      const Padding(
-                        padding: EdgeInsets.all(20),
-                      ),
+                      PaddingDecorate(20),
                       // Injured Body Part
                       const Text(
                         'Injured body part',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       DropdownButtonFormField2<String>(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: textdecorate('Select body type'),
@@ -385,9 +390,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           }
                         },
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       Visibility(
                         visible: isHeadTrunkPart,
                         child: DropdownButtonFormField2<String>(
@@ -592,9 +595,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           },
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 10),
-                      ),
+                      PaddingDecorate(5),
                       FormField(
                         builder: (FormFieldState<bool> state) {
                           return Visibility(
@@ -656,16 +657,14 @@ class _InjuryReportState extends State<InjuryReport> {
                         },
                       ),
                       //
-                      PaddingDecorate(5),
+                      PaddingDecorate(20),
                       // Type of Injury
                       const Text(
                         'Type of Injury',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: textdecorate('Code'),
@@ -686,20 +685,8 @@ class _InjuryReportState extends State<InjuryReport> {
                           });
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please fill in the code of injury types';
-                          } else if (int.parse(value) == 0 ||
-                              int.parse(value) > 20) {
-                            return 'The code can be between 1-20';
-                          } else {
-                            return null;
-                          }
-                        },
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       DropdownButtonFormField2<String>(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: textdecorate('Select type of injury'),
@@ -752,17 +739,8 @@ class _InjuryReportState extends State<InjuryReport> {
                                 searchValue.toLowerCase(),
                               ));
                         },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select the type of injury';
-                          } else {
-                            return null;
-                          }
-                        },
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       Visibility(
                         visible: isVisibleOtherInjuryType,
                         child: TextFormField(
@@ -781,18 +759,14 @@ class _InjuryReportState extends State<InjuryReport> {
                         ),
                       ),
                       //
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(20),
                       // Cause of Injury
                       const Text(
                         'Cause of injury',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       TextFormField(
                         keyboardType: TextInputType.number,
                         decoration: textdecorate('Code'),
@@ -813,23 +787,8 @@ class _InjuryReportState extends State<InjuryReport> {
                           });
                         },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please fill in the code of cause of injury';
-                          } else if (int.parse(value) == 0 ||
-                              (int.parse(value) > 4 && int.parse(value) < 11) ||
-                              (int.parse(value) > 14 &&
-                                  int.parse(value) < 21) ||
-                              int.parse(value) > 24) {
-                            return 'The input code is invalid';
-                          } else {
-                            return null;
-                          }
-                        },
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       DropdownButtonFormField2<String>(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: textdecorate('Select cause of injury'),
@@ -884,17 +843,8 @@ class _InjuryReportState extends State<InjuryReport> {
                                 searchValue.toLowerCase(),
                               ));
                         },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Please select the cause of injury';
-                          } else {
-                            return null;
-                          }
-                        },
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       Visibility(
                         visible: isVisibleOtherInjuryCause,
                         child: TextFormField(
@@ -903,28 +853,17 @@ class _InjuryReportState extends State<InjuryReport> {
                           autovalidateMode: isVisibleOtherInjuryCause
                               ? AutovalidateMode.onUserInteraction
                               : AutovalidateMode.disabled,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please fill in your cause of injury';
-                            } else {
-                              return null;
-                            }
-                          },
                         ),
                       ),
                       //
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(20),
                       // Absence in days
                       const Text(
                         'Absence in days',
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       TextFormField(
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         keyboardType: TextInputType.number,
@@ -941,9 +880,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           }
                         },
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(20),
                       const Text(
                         'Advice Message',
                         style: TextStyle(
@@ -951,9 +888,7 @@ class _InjuryReportState extends State<InjuryReport> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
+                      PaddingDecorate(5),
                       TextFormField(
                         maxLines: 10,
                         keyboardType: TextInputType.text,

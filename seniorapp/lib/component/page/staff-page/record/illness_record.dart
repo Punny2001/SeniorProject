@@ -7,7 +7,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:seniorapp/component/message_data.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
@@ -234,13 +233,8 @@ class _IllnessReportState extends State<IllnessReport> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: textdecorate('Diagnosis'),
                   controller: _diagnosisController,
-                  onChanged: (value) {},
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Diagnosis is required';
-                    } else {
-                      return null;
-                    }
+                  onChanged: (value) {
+                    _diagnosisController.text = value;
                   },
                 ),
                 PaddingDecorate(20),
@@ -252,7 +246,8 @@ class _IllnessReportState extends State<IllnessReport> {
                   padding: EdgeInsets.all(10),
                 ),
                 DateTimePicker(
-                  initialValue: _occuredDate.toString(),
+                  initialValue:
+                      widget.docID == null ? null : _occuredDate.toString(),
                   dateLabelText: 'Occured Date',
                   dateMask: 'MMMM d, yyyy',
                   decoration: textdecorate('Occured date'),
@@ -299,9 +294,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please fill in the code of affected system';
-                    } else if (int.parse(value) == 0 || int.parse(value) > 12) {
+                    if (int.parse(value) == 0 || int.parse(value) > 12) {
                       return 'The code can be between 1-12';
                     } else {
                       return null;
@@ -361,13 +354,6 @@ class _IllnessReportState extends State<IllnessReport> {
                     return (item.value.toString().toLowerCase().contains(
                           searchValue.toLowerCase(),
                         ));
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select the affected systems';
-                    } else {
-                      return null;
-                    }
                   },
                 ),
                 const Padding(
@@ -475,7 +461,6 @@ class _IllnessReportState extends State<IllnessReport> {
                             _mainSymptomSearch.clear();
                           });
                           chkRepeat();
-                          _mainSymptomListKey.currentState.validate();
                         },
                         searchController: _mainSymptomSearch,
                         searchInnerWidget: Padding(
@@ -565,10 +550,10 @@ class _IllnessReportState extends State<IllnessReport> {
                           for (var item in mainSymptoms)
                             Card(
                               elevation: 0,
-                              color: Colors.green.shade100,
+                              color: Colors.blue[200],
                               shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(
-                                  const Radius.circular(30),
+                                  Radius.circular(30),
                                 ),
                               ),
                               child: Container(
@@ -630,15 +615,6 @@ class _IllnessReportState extends State<IllnessReport> {
                     });
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please fill in the code of cause of illness';
-                    } else if (int.parse(value) < 1 || int.parse(value) > 6) {
-                      return 'The input code is invalid';
-                    } else {
-                      return null;
-                    }
-                  },
                 ),
                 const Padding(
                   padding: EdgeInsets.all(10),
@@ -697,13 +673,6 @@ class _IllnessReportState extends State<IllnessReport> {
                           searchValue.toLowerCase(),
                         ));
                   },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select the cause of injury';
-                    } else {
-                      return null;
-                    }
-                  },
                 ),
                 const Padding(
                   padding: EdgeInsets.all(10),
@@ -716,13 +685,6 @@ class _IllnessReportState extends State<IllnessReport> {
                     autovalidateMode: isVisibleOtherIllnessCause
                         ? AutovalidateMode.onUserInteraction
                         : AutovalidateMode.disabled,
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please fill in your cause of illness';
-                      } else {
-                        return null;
-                      }
-                    },
                   ),
                 ),
                 const Padding(
@@ -788,7 +750,8 @@ class _IllnessReportState extends State<IllnessReport> {
                 primary: Colors.blue.shade200),
             onPressed: () {
               bool isValidate = _illnessKey.currentState.validate();
-              if (isValidate) {
+              bool addingValidate = _mainSymptomListKey.currentState.validate();
+              if (isValidate && addingValidate) {
                 if (widget.docID != null) {
                   updateData(widget.docID);
                 }
@@ -1076,58 +1039,6 @@ class _IllnessReportState extends State<IllnessReport> {
       });
     }
   }
-
-  // Future<void> saveMessage() async {
-  //   var uid = FirebaseAuth.instance.currentUser.uid;
-  //   String staff_no;
-  //   FirebaseFirestore.instance
-  //       .collection('Staff')
-  //       .doc(uid)
-  //       .get()
-  //       .then((snapshot) {
-  //     Map data = snapshot.data();
-  //     staff_no = data['staff_no'];
-  //   });
-  //   bool isValidate = _illnessKey.currentState.validate();
-  //   String message_no = 'M';
-  //   String split;
-  //   int latestID;
-  //   NumberFormat format = NumberFormat('0000000000');
-  //   await FirebaseFirestore.instance
-  //       .collection('Message')
-  //       .orderBy('messageNo', descending: true)
-  //       .limit(1)
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     if (querySnapshot.size == 0) {
-  //       message_no += format.format(1);
-  //     } else {
-  //       querySnapshot.docs
-  //           .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
-  //         Map data = queryDocumentSnapshot.data();
-  //         split = data['messageNo'].toString().split('M')[1];
-  //         latestID = int.parse(split) + 1;
-  //         message_no += format.format(latestID);
-  //       });
-  //     }
-  //   });
-
-  //   if (isValidate) {
-  //     MessageData messageModel = MessageData(
-  //         messageNo: message_no,
-  //         staffUID: uid,
-  //         athleteNo: _athleteNo.text.trim(),
-  //         messageDateTime: DateTime.now(),
-  //         messageDescription: _messageController.text.trim());
-
-  //     Map<String, dynamic> data = messageModel.toMap();
-
-  //     final collectionReference =
-  //         FirebaseFirestore.instance.collection('Message');
-  //     DocumentReference docReference = collectionReference.doc();
-  //     docReference.set(data);
-  //   }
-  // }
 
   Future<void> updateData(String docID) async {
     await FirebaseFirestore.instance

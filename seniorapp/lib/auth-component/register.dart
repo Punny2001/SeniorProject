@@ -29,12 +29,22 @@ class _RegisterState extends State<Register> {
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
   final _phoneNoController = TextEditingController();
-  bool _pdpaCheck = false;
+
+  final _emailFocusNode = FocusNode();
+  final _passwordFocusNode = FocusNode();
+  final _confirmPasswordFocusNode = FocusNode();
+  final _usernameFocusNode = FocusNode();
+  final _firstnameFocusNode = FocusNode();
+  final _lastnameFocusNode = FocusNode();
+  final _phoneNoFocusNode = FocusNode();
+  final _genderFocusNode = FocusNode();
+  final _birthdateFocusNode = FocusNode();
+
   String _selectedSport;
   String _selectedStaff;
   int _selectedDept;
   bool _passwordhide = true;
-  final bool _confirmPasswordhide = true;
+  bool _confirmPasswordhide = true;
   DateTime _birthdate;
   final _keyForm = GlobalKey<FormState>();
   bool isAthlete = false;
@@ -148,8 +158,13 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(5),
                           TextFormField(
+                            focusNode: _emailFocusNode,
                             validator: (value) {
                               if (value.isEmpty) {
+                                if (!_emailFocusNode.hasFocus) {
+                                  _emailFocusNode.requestFocus();
+                            
+                                }
                                 return 'Email address is required';
                               } else {
                                 return null;
@@ -172,11 +187,18 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(5),
                           TextFormField(
+                            focusNode: _passwordFocusNode,
                             validator: (value) {
                               if (value.isEmpty) {
+                                if (!_passwordFocusNode.hasFocus) {
+                                  _passwordFocusNode.requestFocus();
+                                }
                                 return 'register_page.password_required'.tr();
                               }
                               if (value.length < 8) {
+                                if (!_passwordFocusNode.hasFocus) {
+                                  _passwordFocusNode.requestFocus();
+                                }
                                 return 'register_page.password_length_error'
                                     .tr();
                               } else {
@@ -245,11 +267,18 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(5),
                           TextFormField(
+                            focusNode: _confirmPasswordFocusNode,
                             validator: (value) {
                               if (value.isEmpty) {
+                                if (!_confirmPasswordFocusNode.hasFocus) {
+                                  _confirmPasswordFocusNode.requestFocus();
+                                }
                                 return 'register_page.confirmpassword_required'
                                     .tr();
                               } else if (!passwordConfirm()) {
+                                if (!_confirmPasswordFocusNode.hasFocus) {
+                                  _confirmPasswordFocusNode.requestFocus();
+                                }
                                 return 'register_page.confirmpassword_notmatch'
                                     .tr();
                               } else {
@@ -294,14 +323,15 @@ class _RegisterState extends State<Register> {
                               ),
                               suffixIcon: IconButton(
                                 icon: Icon(
-                                  _passwordhide
+                                  _confirmPasswordhide
                                       ? Icons.visibility
                                       : Icons.visibility_off,
                                   color: Colors.black,
                                 ),
                                 onPressed: () {
                                   setState(() {
-                                    _passwordhide = !_passwordhide;
+                                    _confirmPasswordhide =
+                                        !_confirmPasswordhide;
                                   });
                                 },
                               ),
@@ -315,8 +345,12 @@ class _RegisterState extends State<Register> {
                           PaddingDecorate(5),
                           //////User container
                           TextFormField(
+                            focusNode: _usernameFocusNode,
                             validator: (value) {
                               if (value.isEmpty) {
+                                if (!_usernameFocusNode.hasFocus) {
+                                  _usernameFocusNode.requestFocus();
+                                }
                                 return 'register_page.username_required'.tr();
                               } else {
                                 return null;
@@ -337,8 +371,12 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(5),
                           TextFormField(
+                            focusNode: _firstnameFocusNode,
                             validator: (value) {
                               if (value.isEmpty) {
+                                if (!_firstnameFocusNode.hasFocus) {
+                                  _firstnameFocusNode.requestFocus();
+                                }
                                 return 'register_page.firstname_required'.tr();
                               } else {
                                 return null;
@@ -360,8 +398,12 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(5),
                           TextFormField(
+                            focusNode: _lastnameFocusNode,
                             validator: (value) {
                               if (value.isEmpty) {
+                                if (!_lastnameFocusNode.hasFocus) {
+                                  _lastnameFocusNode.requestFocus();
+                                }
                                 return 'register_page.lastname_required'.tr();
                               } else {
                                 return null;
@@ -384,6 +426,7 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(5),
                           DateTimePicker(
+                            focusNode: _birthdateFocusNode,
                             type: DateTimePickerType.date,
                             initialDate: DateTime.now(),
                             firstDate: DateTime(1900),
@@ -428,6 +471,9 @@ class _RegisterState extends State<Register> {
                             dateMask: 'MMMM d, yyyy',
                             validator: (value) {
                               if (value.isEmpty) {
+                                if (!_birthdateFocusNode.hasFocus) {
+                                  _birthdateFocusNode.requestFocus();
+                                }
                                 return 'register_page.birthdate_required'.tr();
                               } else {
                                 return null;
@@ -441,11 +487,18 @@ class _RegisterState extends State<Register> {
                           ),
                           PaddingDecorate(5),
                           TextFormField(
+                            focusNode: _phoneNoFocusNode,
                             validator: (value) {
                               if (value.isEmpty) {
+                                if (!_phoneNoFocusNode.hasFocus) {
+                                  _phoneNoFocusNode.requestFocus();
+                                }
                                 return 'Please insert your phone number';
                               }
                               if (value.length != 10) {
+                                if (!_phoneNoFocusNode.hasFocus) {
+                                  _phoneNoFocusNode.requestFocus();
+                                }
                                 return 'Please insert all 10 numbers of your phone';
                               } else {
                                 return null;
@@ -472,10 +525,19 @@ class _RegisterState extends State<Register> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   state.hasError
-                                      ? Text(
-                                          state.errorText,
-                                          style: const TextStyle(
-                                              color: Colors.red),
+                                      ? Focus(
+                                          focusNode: _genderFocusNode,
+                                          onFocusChange: (bool value) {
+                                            if (!_genderFocusNode.hasFocus) {
+                                              _genderFocusNode.requestFocus();
+                                            }
+                                          },
+                                          child: Text(
+                                            state.errorText,
+                                            style: const TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
                                         )
                                       : Container(),
                                   RadioListTile(
@@ -1041,5 +1103,6 @@ class _RegisterState extends State<Register> {
     'Doctor',
     'Physical Therapist',
     'Psychologist',
+    'Sport Scientist'
   ];
 }

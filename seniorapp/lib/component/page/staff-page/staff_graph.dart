@@ -153,7 +153,6 @@ class _StaffGraphState extends State<StaffGraph> {
             .toDate()
             .isBefore(dateRange.end.add(const Duration(days: 1))) &&
         element['doDate'].toDate().isAfter(dateRange.start));
-    data.sort((a, b) => ('${b['totalPoint']}').compareTo('${a['totalPoint']}'));
 
     if (_selectedQuestionnaire[0] == false) {
       data.removeWhere((element) => element['questionnaireType'] == 'Physical');
@@ -175,6 +174,7 @@ class _StaffGraphState extends State<StaffGraph> {
     data.removeWhere(
         (element) => element['totalPoint'] > _currentRangeValues.end);
 
+    data.sort((a, b) => b['totalPoint'].compareTo(a['totalPoint']));
     return data;
   }
 
