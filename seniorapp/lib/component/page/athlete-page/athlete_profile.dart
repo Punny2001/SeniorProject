@@ -69,14 +69,16 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 ),
               ),
             ),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => AthletePersonal(
-                email: athData.email,
-                firstname: athData.firstname,
-                lastname: athData.lastname,
-                ath_no: athData.athlete_no,
-              ),
-            )),
+            // onTap: () => Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => AthletePersonal(
+            //       email: athData.email,
+            //       firstname: athData.firstname,
+            //       lastname: athData.lastname,
+            //       ath_no: athData.athlete_no,
+            //     ),
+            //   ),
+            // ),
           ),
           GestureDetector(
             child: Card(

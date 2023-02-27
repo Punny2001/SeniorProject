@@ -32,17 +32,15 @@ class _StaffPersonalState extends State<StaffPersonal> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(),
-                  color: Colors.blue.shade200,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: const CircleBorder(),
+                color: Colors.blue.shade200,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                alignment: Alignment.centerRight,
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
           ],
@@ -54,7 +52,7 @@ class _StaffPersonalState extends State<StaffPersonal> {
         width: w,
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: h * 0.6,
               child: LayoutBuilder(builder: (context, constraints) {
                 double innerHeight = constraints.maxHeight;
@@ -77,7 +75,7 @@ class _StaffPersonalState extends State<StaffPersonal> {
                                 spreadRadius: 2,
                                 blurRadius: 10,
                                 color: Colors.black.withOpacity(0.1),
-                                offset: Offset(0, 10))
+                                offset: const Offset(0, 10))
                           ],
                         ),
                       ),
@@ -102,10 +100,10 @@ class _StaffPersonalState extends State<StaffPersonal> {
                                         spreadRadius: 2,
                                         blurRadius: 10,
                                         color: Colors.black.withOpacity(0.1),
-                                        offset: Offset(0, 10))
+                                        offset: const Offset(0, 10))
                                   ],
                                   shape: BoxShape.circle,
-                                  image: DecorationImage(
+                                  image: const DecorationImage(
                                       fit: BoxFit.cover,
                                       image: NetworkImage(
                                         "https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
@@ -128,7 +126,7 @@ class _StaffPersonalState extends State<StaffPersonal> {
                                   ),
                                   color: Colors.blue.shade200,
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.edit,
                                   color: Colors.white,
                                 ),
@@ -138,24 +136,24 @@ class _StaffPersonalState extends State<StaffPersonal> {
                     ),
                     Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 140,
                         ),
                         Text(
                           widget.firstname + ' ' + widget.lastname,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontFamily: 'Nunito',
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
                         Text(
                           'ID : ' + widget.staff_no,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontFamily: 'Nunito',
                             fontSize: 19,
@@ -163,7 +161,7 @@ class _StaffPersonalState extends State<StaffPersonal> {
                         ),
                         Text(
                           'Email : ' + widget.email,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontFamily: 'Nunito',
                             fontSize: 19,

@@ -184,10 +184,6 @@ class _StaffCaseState extends State<StaffCase> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-
-    print('health size: $healthSize');
-    print('physical size: $physicalSize');
-
     return Column(
       children: [
         Row(
@@ -455,9 +451,7 @@ class _StaffCaseState extends State<StaffCase> {
                               switch (data['questionnaireType']) {
                                 case 'Health':
                                   {
-                                    print(data);
                                     healthData = HealthResultData.fromMap(data);
-                                    print(healthData);
                                     return Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(50),
@@ -629,6 +623,10 @@ class _StaffCaseState extends State<StaffCase> {
                                                                 elevation: 0,
                                                               ),
                                                               onPressed: () {
+                                                                healthData =
+                                                                    HealthResultData
+                                                                        .fromMap(
+                                                                            data);
                                                                 FirebaseFirestore
                                                                     .instance
                                                                     .collection(
@@ -645,8 +643,6 @@ class _StaffCaseState extends State<StaffCase> {
                                                                       athlete =
                                                                       Athlete.fromMap(
                                                                           athleteData);
-                                                                  print(
-                                                                      athlete);
                                                                   Navigator.of(
                                                                           context)
                                                                       .push(
@@ -712,7 +708,6 @@ class _StaffCaseState extends State<StaffCase> {
                                   {
                                     physicalData =
                                         PhysicalResultData.fromMap(data);
-                                    print(physicalData);
                                     return Card(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(50),
@@ -883,6 +878,10 @@ class _StaffCaseState extends State<StaffCase> {
                                                                 elevation: 0,
                                                               ),
                                                               onPressed: () {
+                                                                physicalData =
+                                                                    PhysicalResultData
+                                                                        .fromMap(
+                                                                            data);
                                                                 FirebaseFirestore
                                                                     .instance
                                                                     .collection(

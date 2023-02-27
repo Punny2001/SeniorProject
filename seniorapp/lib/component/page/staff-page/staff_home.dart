@@ -145,7 +145,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: w,
                     child: GestureDetector(
                       child: Card(
@@ -187,7 +187,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       ),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: w,
                     child: GestureDetector(
                       child: Card(

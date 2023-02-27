@@ -8,11 +8,10 @@ import 'package:seniorapp/component/page/athlete-page/history-details/physical_r
 import 'package:seniorapp/component/result-data/health_result_data.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
-import 'package:seniorapp/decoration/format_datetime.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
-import 'package:seniorapp/decoration/textfield_normal.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class AthleteNotify extends StatefulWidget {
   const AthleteNotify({Key key}) : super(key: key);
@@ -192,9 +191,6 @@ class _AthleteNotifyState extends State<AthleteNotify> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-
-    print('health size: $healthSize');
-    print('physical size: $physicalSize');
 
     return Container(
       color: Colors.white,
@@ -451,60 +447,63 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                       child: CupertinoActivityIndicator(),
                     )
                   : healthSize + physicalSize != 0
-                      ? Container(
-                          child: StreamBuilder(
-                            stream: getData(),
-                            builder: (BuildContext context, snapshot) {
-                              if (snapshot.hasData) {
-                                List<QuerySnapshot> querySnapshot =
-                                    snapshot.data.toList();
+                      ? StreamBuilder(
+                          stream: getData(),
+                          builder: (BuildContext context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CupertinoActivityIndicator(),
+                              );
+                            }
+                            if (snapshot.hasData) {
+                              List<QuerySnapshot> querySnapshot =
+                                  snapshot.data.toList();
 
-                                List<QueryDocumentSnapshot> documentSnapshot =
-                                    [];
-                                querySnapshot.forEach((query) {
-                                  documentSnapshot.addAll(query.docs);
-                                });
+                              List<QueryDocumentSnapshot> documentSnapshot = [];
+                              querySnapshot.forEach((query) {
+                                documentSnapshot.addAll(query.docs);
+                              });
 
-                                int index = 0;
-                                List<Map<String, dynamic>> mappedData = [];
-                                for (QueryDocumentSnapshot doc
-                                    in documentSnapshot) {
-                                  mappedData.add(doc.data());
-                                  mappedData[index]['docID'] = doc.reference.id;
-                                  index += 1;
-                                }
-
-                                // mappedData = add_filter(mappedData);
-                                if (mappedData.length >= 10) {
-                                  mappedData.removeRange(10, mappedData.length);
-                                }
-
-                                return ListView.builder(
-                                  itemCount: mappedData.length,
-                                  itemBuilder: (context, index) {
-                                    Map<String, dynamic> data =
-                                        mappedData[index];
-                                    healthData = HealthResultData.fromMap(data);
-                                    physicalData =
-                                        PhysicalResultData.fromMap(data);
-                                    if (data['caseFinished'] == true) {
-                                      return _showFinishedHistory(data, h, w);
-                                    } else {
-                                      return const SizedBox();
-                                    }
-                                  },
-                                );
-                              } else {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
+                              int index = 0;
+                              List<Map<String, dynamic>> mappedData = [];
+                              for (QueryDocumentSnapshot doc
+                                  in documentSnapshot) {
+                                mappedData.add(doc.data());
+                                mappedData[index]['docID'] = doc.reference.id;
+                                index += 1;
                               }
-                            },
-                          ),
+
+                              // mappedData = add_filter(mappedData);
+                              mappedData.sort(
+                                (a, b) => (b['caseFinishedDateTime'].toDate())
+                                    .compareTo(
+                                  a['caseFinishedDateTime'].toDate(),
+                                ),
+                              );
+
+                              return ListView.builder(
+                                itemCount: mappedData.length,
+                                itemBuilder: (context, index) {
+                                  Map<String, dynamic> data = mappedData[index];
+
+                                  if (data['caseFinished'] == true) {
+                                    return _showFinishedHistory(data, h, w);
+                                  } else {
+                                    return const SizedBox();
+                                  }
+                                },
+                              );
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                          },
                         )
                       : const Center(
                           child: Text(
-                            'ไม่มีบันทึกที่คุณสร้างไว้',
+                            'ไม่มีการแจ้งเตือน',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 50,
@@ -520,9 +519,12 @@ class _AthleteNotifyState extends State<AthleteNotify> {
   }
 
   Column _showFinishedHistory(Map<String, dynamic> data, double h, double w) {
-    staffData.retainWhere(
-        (element) => element['staffUID'] == data['staff_uid_received']);
-    Staff _currentStaff = Staff.fromMap(staffData[0]);
+    Staff _currentStaff;
+    for (int i = 0; i < staffData.length; i++) {
+      if (data['staff_uid_received'] == staffData[i]['staffUID']) {
+        _currentStaff = Staff.fromMap(staffData[i]);
+      }
+    }
     return Column(
       children: [
         GestureDetector(
@@ -551,9 +553,9 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                 ),
                               ),
                               Text(
-                                  'ข้อมูล ${healthData.questionnaireNo} รายงานเสร็จสิ้น'),
-                              healthData.adviceMessage != '' ||
-                                      healthData.adviceMessage != null
+                                  'ข้อมูล ${data['questionnaireNo']} รายงานเสร็จสิ้น'),
+                              data['adviceMessage'] != '' ||
+                                      data['adviceMessage'] != null
                                   ? Text.rich(
                                       TextSpan(
                                         children: [
@@ -563,7 +565,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           TextSpan(
-                                            text: healthData.adviceMessage,
+                                            text: data['adviceMessage'],
                                           ),
                                         ],
                                       ),
@@ -581,15 +583,15 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  '${healthData.totalPoint}',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: score_color(healthData.totalPoint),
-                                      fontSize: h * 0.05),
+                                IconButton(
+                                  onPressed: () {
+                                    launchUrlString(
+                                        'tel:${_currentStaff.phoneNo}');
+                                  },
+                                  icon: const Icon(Icons.phone),
                                 ),
                                 const Text(
-                                  'คะแนน',
+                                  'ติดต่อสตาฟ',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -618,9 +620,9 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                 ),
                               ),
                               Text(
-                                  'ข้อมูล ${physicalData.questionnaireNo} รายงานเสร็จสิ้น'),
-                              physicalData.adviceMessage != '' ||
-                                      physicalData.adviceMessage != null
+                                  'ข้อมูล ${data['questionnaireNo']} รายงานเสร็จสิ้น'),
+                              data['adviceMessage'] != '' ||
+                                      data['adviceMessage'] != null
                                   ? Text.rich(
                                       TextSpan(
                                         children: [
@@ -630,7 +632,7 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                                                 fontWeight: FontWeight.bold),
                                           ),
                                           TextSpan(
-                                            text: physicalData.adviceMessage,
+                                            text: data['adviceMessage'],
                                           ),
                                         ],
                                       ),
@@ -648,16 +650,15 @@ class _AthleteNotifyState extends State<AthleteNotify> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text(
-                                  '${physicalData.totalPoint}',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          score_color(physicalData.totalPoint),
-                                      fontSize: h * 0.05),
+                                IconButton(
+                                  onPressed: () {
+                                    launchUrlString(
+                                        'tel:${_currentStaff.phoneNo}');
+                                  },
+                                  icon: const Icon(Icons.phone),
                                 ),
                                 const Text(
-                                  'คะแนน',
+                                  'ติดต่อสตาฟ',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),

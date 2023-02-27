@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/staff_personal.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
-import 'package:seniorapp/decoration/padding.dart';
 
 class StaffProfile extends StatefulWidget {
   const StaffProfile({Key key}) : super(key: key);
@@ -16,6 +15,16 @@ class StaffProfile extends StatefulWidget {
 class _StaffProfileState extends State<StaffProfile> {
   String uid = FirebaseAuth.instance.currentUser.uid;
   Staff stfData;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +80,16 @@ class _StaffProfileState extends State<StaffProfile> {
                 ),
               ),
             ),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => StaffPersonal(
-                email: stfData.email,
-                firstname: stfData.firstname,
-                lastname: stfData.lastname,
-                staff_no: stfData.staff_no,
-              ),
-            )),
+            //   onTap: () => Navigator.of(context).push(
+            //     MaterialPageRoute(
+            //       builder: (context) => StaffPersonal(
+            //         email: stfData.email,
+            //         firstname: stfData.firstname,
+            //         lastname: stfData.lastname,
+            //         staff_no: stfData.staff_no,
+            //       ),
+            //     ),
+            //   ),
           ),
           GestureDetector(
             child: Card(

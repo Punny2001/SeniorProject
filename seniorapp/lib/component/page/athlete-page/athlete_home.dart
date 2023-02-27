@@ -16,6 +16,16 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
   final String username = FirebaseAuth.instance.currentUser.displayName;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;

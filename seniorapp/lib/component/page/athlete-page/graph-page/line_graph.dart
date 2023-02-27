@@ -92,16 +92,16 @@ class _AthleteLineGraphState extends State<AthleteLineGraph> {
                   return;
                 }
                 // Show tooltip if tap down detected
-                if (event is FlTapDownEvent) {
+                if (event is FlTapUpEvent) {
                   final sectionIndex = touchResponse.touchedSpot.spotIndex;
                   setState(() {
-                    selectedSpots.add(sectionIndex);
+                    if (selectedSpots.contains(sectionIndex)) {
+                      selectedSpots.remove(sectionIndex);
+                    } else {
+                      selectedSpots.add(sectionIndex);
+                    }
                   });
                   // Hide/clear tooltip if long press was ended or tap up detected
-                } else if (event is FlLongPressEnd || event is FlTapUpEvent) {
-                  setState(() {
-                    selectedSpots.clear();
-                  });
                 }
               },
               touchTooltipData: ScatterTouchTooltipData(
@@ -117,13 +117,6 @@ class _AthleteLineGraphState extends State<AthleteLineGraph> {
                     children: [
                       TextSpan(
                         text: '${touchedBarSpot.x.toInt()} \n',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontStyle: FontStyle.normal,
-                        ),
-                      ),
-                      TextSpan(
-                        text: '${widget.healthResultDataList} \n',
                         style: const TextStyle(
                           color: Colors.white,
                           fontStyle: FontStyle.normal,

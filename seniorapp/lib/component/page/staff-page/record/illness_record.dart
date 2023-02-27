@@ -257,7 +257,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   initialDate: DateTime.now(),
                   onChanged: (value) {
                     setState(() {
-                      _occuredDate = DateTime.parse(value);
+                      _occuredDate = DateTime.tryParse(value);
                     });
                   },
                   validator: (value) {
@@ -294,8 +294,13 @@ class _IllnessReportState extends State<IllnessReport> {
                   },
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
-                    if (int.parse(value) == 0 || int.parse(value) > 12) {
-                      return 'The code can be between 1-12';
+                    if (value.isNotEmpty) {
+                      if (int.tryParse(value) == 0 ||
+                          int.tryParse(value) > 12) {
+                        return 'The code can be between 1-12';
+                      } else {
+                        return null;
+                      }
                     } else {
                       return null;
                     }
@@ -398,7 +403,7 @@ class _IllnessReportState extends State<IllnessReport> {
                         ],
                         controller: _codeMainSymptom,
                         onChanged: (value) {
-                          print(int.parse(value));
+                          print(int.tryParse(value));
                           checkOtherSymptom(value);
                           setState(() {
                             _selectedMainSymptom =
@@ -413,8 +418,8 @@ class _IllnessReportState extends State<IllnessReport> {
                             if (valueAdded == false) {
                               return 'Please add at least 1 main symptom';
                             } else if (value.isNotEmpty &&
-                                (int.parse(value) == 0 ||
-                                    int.parse(value) > 12)) {
+                                (int.tryParse(value) == 0 ||
+                                    int.tryParse(value) > 12)) {
                               return 'The input code is invalid';
                             } else {
                               return null;
@@ -423,8 +428,8 @@ class _IllnessReportState extends State<IllnessReport> {
                             if (value.isEmpty || value == null) {
                               return null;
                             } else if (value.isNotEmpty &&
-                                (int.parse(value) == 0 ||
-                                    int.parse(value) > 12)) {
+                                (int.tryParse(value) == 0 ||
+                                    int.tryParse(value) > 12)) {
                               return 'The input code is invalid';
                             } else if (isRepeat == true) {
                               return 'This symptom is already selected';
@@ -755,9 +760,10 @@ class _IllnessReportState extends State<IllnessReport> {
                 if (widget.docID != null) {
                   updateData(widget.docID);
                 }
-                // saveMessage();
+                if (widget.athlete != null) {
+                  sendPushMessage(widget.athlete.token, staff);
+                }
                 saveIllnessReport();
-                sendPushMessage(widget.athlete.token, staff);
               }
             },
             child: const Text(
@@ -914,8 +920,8 @@ class _IllnessReportState extends State<IllnessReport> {
         selectedMainSymptom: _selectedMainSymptom,
         selectedMainSymptomCode: _codeMainSymptom.text);
     if (addingValidator) {
-      if (int.parse(_codeMainSymptom.text) != 0 &&
-          int.parse(_codeMainSymptom.text) <= 12 &&
+      if (int.tryParse(_codeMainSymptom.text) != 0 &&
+          int.tryParse(_codeMainSymptom.text) <= 12 &&
           _selectedMainSymptom.isNotEmpty) {
         if (mainSymptoms.every((element) =>
             element.selectedMainSymptomCode !=
@@ -968,7 +974,7 @@ class _IllnessReportState extends State<IllnessReport> {
 
     for (var item in mainSymptoms) {
       getMainSymptomVal.add(item.selectedMainSymptom);
-      getMainSymptomCode.add(int.parse(item.selectedMainSymptomCode));
+      getMainSymptomCode.add(int.tryParse(item.selectedMainSymptomCode));
     }
 
     String report_no = 'ILR';
@@ -988,7 +994,7 @@ class _IllnessReportState extends State<IllnessReport> {
             .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
           Map data = queryDocumentSnapshot.data();
           split = data['report_no'].toString().split('ILR')[1];
-          latestID = int.parse(split) + 1;
+          latestID = int.tryParse(split) + 1;
           report_no += format.format(latestID);
         });
       }
@@ -1005,11 +1011,11 @@ class _IllnessReportState extends State<IllnessReport> {
           diagnosis: _diagnosisController.text.trim(),
           occured_date: _occuredDate,
           affected_system: _selectedAffected,
-          affected_system_code: int.parse(_codeAffectedSystem.text.trim()),
+          affected_system_code: int.tryParse(_codeAffectedSystem.text.trim()),
           mainSymptoms: getMainSymptomVal,
           mainSymptomsCode: getMainSymptomCode,
           illness_cause: _selectedIllnessCause,
-          illness_cause_code: int.parse(_codeIllnessCause.text.trim()),
+          illness_cause_code: int.tryParse(_codeIllnessCause.text.trim()),
           no_day: _absenceDayController.text.trim(),
           doDate: DateTime.now());
 

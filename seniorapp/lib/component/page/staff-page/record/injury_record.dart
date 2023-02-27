@@ -49,6 +49,12 @@ class _InjuryReportState extends State<InjuryReport> {
   final _injuryCauseSearch = TextEditingController();
   final _messageController = TextEditingController();
 
+  final _athleteFocusNode = FocusNode();
+  final _sporteventFocusNode = FocusNode();
+  final _occuredDateTimeFocusNode = FocusNode();
+  final _injuredPartFocusNode = FocusNode();
+  final _absenceDayFocusNode = FocusNode();
+
   DateTime _datetime;
   String _selectedSport;
   String _selectedBodyType;
@@ -98,7 +104,6 @@ class _InjuryReportState extends State<InjuryReport> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.docID);
     if (widget.physicalResultData != null) {
       _athleteNo.text = widget.physicalResultData.athleteNo;
       _selectedSport = widget.athlete.sportType;
@@ -178,11 +183,15 @@ class _InjuryReportState extends State<InjuryReport> {
                           : TextFormField(
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
+                              focusNode: _athleteFocusNode,
                               decoration: textdecorate('Athlete No.'),
                               controller: _athleteNo,
                               onChanged: (value) {},
                               validator: (value) {
                                 if (value.isEmpty) {
+                                  if (!_athleteFocusNode.hasFocus) {
+                                    _athleteFocusNode.requestFocus();
+                                  }
                                   return 'Athlete No. is required';
                                 } else {
                                   return null;
@@ -201,6 +210,7 @@ class _InjuryReportState extends State<InjuryReport> {
                         padding: EdgeInsets.all(10),
                       ),
                       DropdownButtonFormField2<String>(
+                        focusNode: _sporteventFocusNode,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: textdecorate('Select sport and event'),
                         items: sortedSport(sportList)
@@ -247,6 +257,9 @@ class _InjuryReportState extends State<InjuryReport> {
                         },
                         validator: (value) {
                           if (value == null) {
+                            if (!_sporteventFocusNode.hasFocus) {
+                              _sporteventFocusNode.requestFocus();
+                            }
                             return 'Please select the sport and event';
                           } else {
                             return null;
@@ -277,6 +290,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       ),
                       PaddingDecorate(5),
                       DateTimePicker(
+                        focusNode: _occuredDateTimeFocusNode,
                         initialValue:
                             widget.docID == null ? null : _datetime.toString(),
                         dateLabelText: 'Date',
@@ -315,11 +329,14 @@ class _InjuryReportState extends State<InjuryReport> {
                         ),
                         onChanged: (value) {
                           setState(() {
-                            _datetime = DateTime.parse(value);
+                            _datetime = DateTime.tryParse(value);
                           });
                         },
                         validator: (value) {
                           if (value.isEmpty) {
+                            if (!_occuredDateTimeFocusNode.hasFocus) {
+                              _occuredDateTimeFocusNode.requestFocus();
+                            }
                             return 'Date and Time is required';
                           } else {
                             return null;
@@ -336,6 +353,7 @@ class _InjuryReportState extends State<InjuryReport> {
                       ),
                       PaddingDecorate(5),
                       DropdownButtonFormField2<String>(
+                        focusNode: _injuredPartFocusNode,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         decoration: textdecorate('Select body type'),
                         items: _bodyType
@@ -384,6 +402,9 @@ class _InjuryReportState extends State<InjuryReport> {
                         },
                         validator: (value) {
                           if (value == null) {
+                            if (!_injuredPartFocusNode.hasFocus) {
+                              _injuredPartFocusNode.requestFocus();
+                            }
                             return 'Please select the type of body';
                           } else {
                             return null;
@@ -918,9 +939,11 @@ class _InjuryReportState extends State<InjuryReport> {
                 if (widget.docID != null) {
                   updateData(widget.docID);
                 }
+                if (widget.athlete != null) {
+                  sendPushMessage(widget.athlete.token, staff);
+                }
                 // saveMessage();
                 saveInjuryReport();
-                sendPushMessage(widget.athlete.token, staff);
               }
             },
             child: const Text(
@@ -1151,14 +1174,12 @@ class _InjuryReportState extends State<InjuryReport> {
               .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
             Map data = queryDocumentSnapshot.data();
             split = data['report_no'].toString().split('IJR')[1];
-            latestID = int.parse(split) + 1;
+            latestID = int.tryParse(split) + 1;
             report_no += format.format(latestID);
           });
         }
       });
-      print(bodyType);
       if (bodyType == 1) {
-        print(bodyType);
         InjuryReportData injuryReportModel = InjuryReportData(
             caseUid: widget.docID,
             report_no: report_no,
@@ -1168,11 +1189,11 @@ class _InjuryReportState extends State<InjuryReport> {
             sport_event: _selectedSport,
             round_heat_training: _rhtController.text.trim(),
             injuryDateTime: _datetime,
-            injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+            injuryBodyCode: int.tryParse(_codeBodyPart.text.trim()),
             injuryBody: _selectedBodyHTPart,
-            injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
+            injuryTypeCode: int.tryParse(_codeInjuryType.text.trim()),
             injuryType: _selectedInjuryType,
-            injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
+            injuryCauseCode: int.tryParse(_codeInjuryCause.text.trim()),
             injuryCause: _selectedInjuryCause,
             no_day: _absenceDayController.text.trim(),
             doDate: DateTime.now());
@@ -1212,11 +1233,11 @@ class _InjuryReportState extends State<InjuryReport> {
             sport_event: _selectedSport,
             round_heat_training: _rhtController.text.trim(),
             injuryDateTime: _datetime,
-            injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+            injuryBodyCode: int.tryParse(_codeBodyPart.text.trim()),
             injuryBody: _selectedBodyUpperPart + ', ' + _selectedSideString,
-            injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
+            injuryTypeCode: int.tryParse(_codeInjuryType.text.trim()),
             injuryType: _selectedInjuryType,
-            injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
+            injuryCauseCode: int.tryParse(_codeInjuryCause.text.trim()),
             injuryCause: _selectedInjuryCause,
             no_day: _absenceDayController.text.trim(),
             doDate: DateTime.now());
@@ -1256,11 +1277,11 @@ class _InjuryReportState extends State<InjuryReport> {
             sport_event: _selectedSport,
             round_heat_training: _rhtController.text,
             injuryDateTime: _datetime,
-            injuryBodyCode: int.parse(_codeBodyPart.text.trim()),
+            injuryBodyCode: int.tryParse(_codeBodyPart.text.trim()),
             injuryBody: _selectedBodyLowerPart + ', ' + _selectedSideString,
-            injuryTypeCode: int.parse(_codeInjuryType.text.trim()),
+            injuryTypeCode: int.tryParse(_codeInjuryType.text.trim()),
             injuryType: _selectedInjuryType,
-            injuryCauseCode: int.parse(_codeInjuryCause.text.trim()),
+            injuryCauseCode: int.tryParse(_codeInjuryCause.text.trim()),
             injuryCause: _selectedInjuryCause,
             no_day: _absenceDayController.text.trim(),
             doDate: DateTime.now());
@@ -1294,41 +1315,6 @@ class _InjuryReportState extends State<InjuryReport> {
     }
   }
 
-  // Future<void> saveMessage() async {
-  //   var uid = FirebaseAuth.instance.currentUser.uid;
-  //   String staff_no;
-  //   FirebaseFirestore.instance
-  //       .collection('Staff')
-  //       .doc(uid)
-  //       .get()
-  //       .then((snapshot) {
-  //     Map data = snapshot.data();
-  //     staff_no = data['staff_no'];
-  //   });
-  //   bool isValidate = _injuryKey.currentState.validate();
-  //   String message_no = 'M';
-  //   String split;
-  //   int latestID;
-  //   NumberFormat format = NumberFormat('0000000000');
-  //   await FirebaseFirestore.instance
-  //       .collection('Message')
-  //       .orderBy('messageNo', descending: true)
-  //       .limit(1)
-  //       .get()
-  //       .then((QuerySnapshot querySnapshot) {
-  //     if (querySnapshot.size == 0) {
-  //       message_no += format.format(1);
-  //     } else {
-  //       querySnapshot.docs
-  //           .forEach((QueryDocumentSnapshot queryDocumentSnapshot) {
-  //         Map data = queryDocumentSnapshot.data();
-  //         split = data['messageNo'].toString().split('M')[1];
-  //         latestID = int.parse(split) + 1;
-  //         message_no += format.format(latestID);
-  //       });
-  //     }
-  //   });
-  // }
 
   void sendPushMessage(String token, Staff staff) async {
     print(token);

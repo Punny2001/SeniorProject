@@ -67,8 +67,12 @@ class _RegisterState extends State<Register> {
   @override
   void initState() {
     super.initState();
-
     getToken();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -163,7 +167,6 @@ class _RegisterState extends State<Register> {
                               if (value.isEmpty) {
                                 if (!_emailFocusNode.hasFocus) {
                                   _emailFocusNode.requestFocus();
-                            
                                 }
                                 return 'Email address is required';
                               } else {
@@ -953,7 +956,7 @@ class _RegisterState extends State<Register> {
               .then((value) async {
             if (passwordConfirm() && _selectedDepartment == 'Athlete') {
               await FirebaseAuth.instance.currentUser
-                  .updateProfile(displayName: _usernameController.text.trim())
+                  .updateDisplayName(_usernameController.text.trim())
                   .then((value2) async {
                 String uid = FirebaseAuth.instance.currentUser.uid;
 
@@ -1013,7 +1016,7 @@ class _RegisterState extends State<Register> {
               });
             } else if (passwordConfirm() && _selectedDepartment == 'Staff') {
               await FirebaseAuth.instance.currentUser
-                  .updateProfile(displayName: _usernameController.text.trim())
+                  .updateDisplayName(_usernameController.text.trim())
                   .then((value2) async {
                 String staff_no = 'S';
                 String split;

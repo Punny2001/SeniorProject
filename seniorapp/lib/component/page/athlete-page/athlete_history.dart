@@ -170,9 +170,6 @@ class _AthleteHistoryState extends State<AthleteHistory> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
 
-    print('health size: $healthSize');
-    print('physical size: $physicalSize');
-
     return Container(
       color: Colors.white,
       child: Column(
@@ -213,9 +210,7 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                       builder: (BuildContext context) {
                         return StatefulBuilder(builder: (context, setState) {
                           return AlertDialog(
-                            title: Container(
-                              child: const Text('ตัวกรอง'),
-                            ),
+                            title: const Text('ตัวกรอง'),
                             content: Column(
                               children: [
                                 const Text('จัดเรียงโดย'),
@@ -449,12 +444,9 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                                 itemBuilder: (context, index) {
                                   Map<String, dynamic> data = mappedData[index];
 
-                                  print(data['doDate']);
-
                                   healthData = HealthResultData.fromMap(data);
                                   physicalData =
                                       PhysicalResultData.fromMap(data);
-                                  print(healthData.doDate);
                                   return GestureDetector(
                                     child: Card(
                                       shape: RoundedRectangleBorder(
