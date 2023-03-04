@@ -231,7 +231,6 @@ class _StaffGraphState extends State<StaffGraph> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
-    final pixRatio = MediaQuery.of(context).devicePixelRatio;
 
     return Column(
       children: [
