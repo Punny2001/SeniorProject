@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
+import 'package:seniorapp/component/page/staff-page/received_case/appointment.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
@@ -435,28 +436,61 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                           ),
                         ],
                       ),
-                    widget.physicalResultData.caseFinished == false
-                        ? ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.blue[300],
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => InjuryReport(
-                                      widget.physicalResultData,
-                                      widget.docID,
-                                      athlete),
+                    Row(
+                      children: [
+                        widget.physicalResultData.caseFinished == false
+                            ? ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.blue[300],
                                 ),
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.create,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => InjuryReport(
+                                          widget.physicalResultData,
+                                          widget.docID,
+                                          athlete),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.create,
+                                ),
+                                label: const Text('Record new injury'),
+                              )
+                            : const SizedBox(),
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            elevation: 0,
+                            side: BorderSide(
+                              width: 1,
+                              color: Colors.blue[200],
                             ),
-                            label: const Text('Record new injury'),
-                          )
-                        : const SizedBox(),
+                          ),
+                          onPressed: () {
+                            showCupertinoDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AppointmentPage(
+                                    data: widget.physicalResultData.toMap(),
+                                  );
+                                });
+                          },
+                          icon: Icon(
+                            Icons.calendar_month,
+                            color: Colors.blue[200],
+                          ),
+                          label: Text(
+                            'Appointment',
+                            style: TextStyle(
+                              color: Colors.blue[200],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     PaddingDecorate(10),
                   ],
                 ),

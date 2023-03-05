@@ -13,14 +13,14 @@ import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
 import 'package:url_launcher/url_launcher_string.dart';
 
-class AthleteNotify extends StatefulWidget {
-  const AthleteNotify({Key key}) : super(key: key);
+class AthleteCaseNotify extends StatefulWidget {
+  const AthleteCaseNotify({Key key}) : super(key: key);
 
   @override
-  _AthleteNotifyState createState() => _AthleteNotifyState();
+  _AthleteCaseNotifyState createState() => _AthleteCaseNotifyState();
 }
 
-class _AthleteNotifyState extends State<AthleteNotify> {
+class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
   final firestore = FirebaseFirestore.instance;
   List<bool> _selectedOrder = <bool>[true, false];
   List<bool> _selectedQuestionnaire = <bool>[true, true];
