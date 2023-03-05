@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:date_time_picker/date_time_picker.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/appointment.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
@@ -29,9 +32,13 @@ class HealthReportCase extends StatefulWidget {
 }
 
 class _HealthReportCaseState extends State<HealthReportCase> {
+  bool isTexting = false;
   Athlete athlete;
   Timer _timer;
   bool isLoading = false;
+  DateTime _datetime;
+  final _keyForm = GlobalKey<FormState>();
+  final _detailController = TextEditingController();
   void _getAthleteData() {
     FirebaseFirestore.instance
         .collection('Athlete')
@@ -158,7 +165,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
     }
 
     List<String> answerTextList = find_answer(_questions);
-    print(answerTextList);
+    print(_datetime);
 
     return Scaffold(
       appBar: AppBar(
@@ -441,6 +448,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             ? ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.blue[300],
+                                  elevation: 0,
                                 ),
                                 onPressed: () {
                                   Navigator.push(
@@ -473,9 +481,134 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text('Appointment'),
-                                    content: AppointmentPage(),
-                                  );
+                                      title: Text(
+                                        'Appointment',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      content: Form(
+                                        key: _keyForm,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text('Choose a date'),
+                                            PaddingDecorate(5),
+                                            DateTimePicker(
+                                              locale: Locale('en'),
+                                              use24HourFormat: false,
+                                              dateMask: 'MMMM d, yyyy hh:mm a',
+                                              dateLabelText: 'Date',
+                                              timeLabelText: 'Time',
+                                              icon: const Icon(Icons.event),
+                                              type: DateTimePickerType.dateTime,
+                                              lastDate: DateTime(
+                                                  DateTime.now().year + 1),
+                                              firstDate: DateTime.now(),
+                                              initialDate: DateTime.now(),
+                                              decoration: InputDecoration(
+                                                fillColor: Color.fromRGBO(
+                                                    217, 217, 217, 100),
+                                                filled: true,
+                                                hintText: 'Occured date & time',
+                                                hintStyle: const TextStyle(
+                                                    fontFamily: 'OpenSans'),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        217, 217, 217, 100),
+                                                  ),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color.fromRGBO(
+                                                        217, 217, 217, 100),
+                                                  ),
+                                                ),
+                                              ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _datetime =
+                                                      DateTime.tryParse(value);
+                                                  DateFormat.Hm()
+                                                      .format(_datetime);
+                                                });
+                                              },
+                                              validator: (value) {
+                                                if (value.isEmpty) {
+                                                  return 'Date and Time is required';
+                                                } else {
+                                                  return null;
+                                                }
+                                              },
+                                            ),
+                                            PaddingDecorate(10),
+                                            const Text('Detail'),
+                                            PaddingDecorate(5),
+                                            Container(
+                                              constraints: BoxConstraints(
+                                                maxHeight: 100,
+                                              ),
+                                              child: SingleChildScrollView(
+                                                child: TextFormField(
+                                                  validator: (value) {
+                                                    if (value.isEmpty) {
+                                                      return 'Please insert the detail';
+                                                    } else {
+                                                      return null;
+                                                    }
+                                                  },
+                                                  autovalidateMode:
+                                                      AutovalidateMode
+                                                          .onUserInteraction,
+                                                  maxLines: null,
+                                                  keyboardType:
+                                                      TextInputType.multiline,
+                                                  controller: _detailController,
+                                                  decoration: textdecorate(
+                                                      'Appointment Detail ...'),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actionsAlignment:
+                                          MainAxisAlignment.center,
+                                      actions: [
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.red[300],
+                                          ),
+                                          onPressed: () {
+                                            _datetime = null;
+                                            _detailController.clear();
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Cancel'),
+                                        ),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.green,
+                                          ),
+                                          onPressed: () {},
+                                          child: Text('Accept'),
+                                        ),
+                                      ]);
                                 });
                           },
                           icon: Icon(
