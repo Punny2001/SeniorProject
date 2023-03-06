@@ -3,19 +3,20 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/appointment_data.dart';
 
-import 'package:seniorapp/component/result-data/health_result_data.dart';
-import 'package:seniorapp/component/result-data/physical_result_data.dart';
+import 'package:seniorapp/component/appointment_data.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class AppointmentPage extends StatefulWidget {
-  Map<String, dynamic> data;
-  AppointmentPage({
+  final Map<String, dynamic> data;
+  final String docID;
+  const AppointmentPage({
     Key key,
     this.data,
+    this.docID,
   }) : super(key: key);
+
   @override
   _AppointmentPageState createState() => _AppointmentPageState();
 }
@@ -26,121 +27,122 @@ class _AppointmentPageState extends State<AppointmentPage> {
   final _detailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    print(widget.data['athleteUID']);
-    return AlertDialog(
-        title: const Text(
-          'Appointment',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Form(
-          key: _keyForm,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Choose a date'),
-              PaddingDecorate(5),
-              DateTimePicker(
-                locale: Locale('en'),
-                use24HourFormat: false,
-                dateMask: 'MMMM d, yyyy hh:mm a',
-                dateLabelText: 'Date',
-                timeLabelText: 'Time',
-                icon: const Icon(Icons.event),
-                type: DateTimePickerType.dateTime,
-                lastDate: DateTime(DateTime.now().year + 1),
-                firstDate: DateTime.now(),
-                initialDate: DateTime.now(),
-                decoration: const InputDecoration(
-                  fillColor: Color.fromRGBO(217, 217, 217, 100),
-                  filled: true,
-                  hintText: 'Occured date & time',
-                  hintStyle: TextStyle(fontFamily: 'OpenSans'),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.red,
-                    ),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.red,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(217, 217, 217, 100),
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromRGBO(217, 217, 217, 100),
-                    ),
-                  ),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _datetime = DateTime.tryParse(value);
-                  });
-                },
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Date and Time is required';
-                  } else {
-                    return null;
-                  }
-                },
-              ),
-              PaddingDecorate(10),
-              const Text('Detail'),
-              PaddingDecorate(5),
-              Container(
-                constraints: const BoxConstraints(
-                  maxHeight: 100,
-                ),
-                child: SingleChildScrollView(
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please insert the detail';
-                      } else {
-                        return null;
-                      }
-                    },
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline,
-                    controller: _detailController,
-                    decoration: textdecorate('Appointment Detail ...'),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        actionsAlignment: MainAxisAlignment.center,
-        actions: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.red[300],
+    return Visibility(
+      child: AlertDialog(
+          title: const Text(
+            'Appointment',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
             ),
-            onPressed: () {
-              _datetime = null;
-              _detailController.clear();
-              Navigator.of(context).pop();
-            },
-            child: const Text('Cancel'),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Colors.green,
+          content: Form(
+            key: _keyForm,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Choose a date'),
+                PaddingDecorate(5),
+                DateTimePicker(
+                  locale: const Locale('en'),
+                  use24HourFormat: false,
+                  dateMask: 'MMMM d, yyyy hh:mm a',
+                  dateLabelText: 'Date',
+                  timeLabelText: 'Time',
+                  icon: const Icon(Icons.event),
+                  type: DateTimePickerType.dateTime,
+                  lastDate: DateTime(DateTime.now().year + 1),
+                  firstDate: DateTime.now(),
+                  initialDate: DateTime.now(),
+                  decoration: const InputDecoration(
+                    fillColor: Color.fromRGBO(217, 217, 217, 100),
+                    filled: true,
+                    hintText: 'Occured date & time',
+                    hintStyle: TextStyle(fontFamily: 'OpenSans'),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(217, 217, 217, 100),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color.fromRGBO(217, 217, 217, 100),
+                      ),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _datetime = DateTime.tryParse(value);
+                    });
+                  },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Date and Time is required';
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                PaddingDecorate(10),
+                const Text('Detail'),
+                PaddingDecorate(5),
+                Container(
+                  constraints: const BoxConstraints(
+                    maxHeight: 100,
+                  ),
+                  child: SingleChildScrollView(
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please insert the detail';
+                        } else {
+                          return null;
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      controller: _detailController,
+                      decoration: textdecorate('Appointment Detail ...'),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            onPressed: () {
-              save_appointment();
-            },
-            child: const Text('Accept'),
           ),
-        ]);
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red[300],
+              ),
+              onPressed: () {
+                _datetime = null;
+                _detailController.clear();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.green,
+              ),
+              onPressed: () {
+                save_appointment();
+              },
+              child: const Text('Accept'),
+            ),
+          ]),
+    );
   }
 
   Future<void> save_appointment() async {
@@ -171,14 +173,16 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
     if (isValidate) {
       AppointmentData appointmentDataModel = AppointmentData(
+        caseID: widget.docID,
         apppointmentNo: appointNo,
         appointDate: _datetime,
         detail: _detailController.text,
         doDate: DateTime.now(),
         staffUID: uid,
         athleteUID: widget.data['athleteUID'],
-        appointStatus: false,
-        receivedDate: DateTime(1900, 1, 1),
+        appointStatus: null,
+        receivedDate: DateTime(1900),
+        receivedStatus: null,
       );
 
       Map<String, dynamic> data = appointmentDataModel.toMap();

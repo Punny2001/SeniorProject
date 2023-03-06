@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seniorapp/decoration/authentication/textfield_login.dart';
-import 'package:seniorapp/decoration/authentication/page_title_bar.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
 class Login extends StatefulWidget {

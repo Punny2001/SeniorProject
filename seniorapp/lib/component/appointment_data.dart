@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class AppointmentData {
+  final String caseID;
   final String apppointmentNo;
   final DateTime appointDate;
   final String detail;
@@ -14,6 +15,7 @@ class AppointmentData {
   final bool receivedStatus;
 
   AppointmentData({
+    @required this.caseID,
     @required this.apppointmentNo,
     @required this.appointDate,
     @required this.detail,
@@ -26,6 +28,7 @@ class AppointmentData {
   });
 
   AppointmentData copyWith({
+    String caseID,
     String apppointmentNo,
     DateTime appointDate,
     String detail,
@@ -37,6 +40,7 @@ class AppointmentData {
     bool receivedStatus,
   }) {
     return AppointmentData(
+      caseID: caseID ?? this.caseID,
       apppointmentNo: apppointmentNo ?? this.apppointmentNo,
       appointDate: appointDate ?? this.appointDate,
       detail: detail ?? this.detail,
@@ -52,6 +56,7 @@ class AppointmentData {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
+    result.addAll({'caseID': caseID});
     result.addAll({'apppointmentNo': apppointmentNo});
     result.addAll({'appointDate': appointDate});
     result.addAll({'detail': detail});
@@ -67,6 +72,7 @@ class AppointmentData {
 
   factory AppointmentData.fromMap(Map<String, dynamic> map) {
     return AppointmentData(
+      caseID: map['caseID'] ?? '',
       apppointmentNo: map['apppointmentNo'] ?? '',
       appointDate: DateTime.parse(map['appointDate'].toDate().toString()),
       detail: map['detail'] ?? '',
@@ -86,7 +92,7 @@ class AppointmentData {
 
   @override
   String toString() {
-    return 'AppointmentData(apppointmentNo: $apppointmentNo, appointDate: $appointDate, detail: $detail, doDate: $doDate, staffUID: $staffUID, athleteUID: $athleteUID, appointStatus: $appointStatus, receivedDate: $receivedDate, receivedStatus: $receivedStatus)';
+    return 'AppointmentData(caseID: $caseID, apppointmentNo: $apppointmentNo, appointDate: $appointDate, detail: $detail, doDate: $doDate, staffUID: $staffUID, athleteUID: $athleteUID, appointStatus: $appointStatus, receivedDate: $receivedDate, receivedStatus: $receivedStatus)';
   }
 
   @override
@@ -94,6 +100,7 @@ class AppointmentData {
     if (identical(this, other)) return true;
 
     return other is AppointmentData &&
+        other.caseID == caseID &&
         other.apppointmentNo == apppointmentNo &&
         other.appointDate == appointDate &&
         other.detail == detail &&
@@ -107,7 +114,8 @@ class AppointmentData {
 
   @override
   int get hashCode {
-    return apppointmentNo.hashCode ^
+    return caseID.hashCode ^
+        apppointmentNo.hashCode ^
         appointDate.hashCode ^
         detail.hashCode ^
         doDate.hashCode ^

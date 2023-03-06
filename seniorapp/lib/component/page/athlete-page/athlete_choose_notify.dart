@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/notify-page/athlete_appoint_notify.dart';
 import 'package:seniorapp/component/page/athlete-page/notify-page/athlete_notify.dart';
+import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteChooseNotify extends StatefulWidget {
   const AthleteChooseNotify({Key key}) : super(key: key);
@@ -53,6 +54,7 @@ class _AthleteChooseNotifyState extends State<AthleteChooseNotify> {
                 ),
               },
             ),
+            PaddingDecorate(5),
             Expanded(
               child: _notifyType[_selectedNotify],
             )

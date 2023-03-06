@@ -31,6 +31,19 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
   Athlete athlete;
   Timer _timer;
   bool isLoading = false;
+  Map<String, dynamic> latestAppointment;
+  void _getAppointmentData() {
+    FirebaseFirestore.instance
+        .collection('AppointmentRecord')
+        .where('caseID', isEqualTo: widget.docID)
+        .get()
+        .then((snapshot) {
+      setState(() {
+        latestAppointment = snapshot.docs.first.data();
+      });
+    });
+  }
+
   void _getAthleteData() {
     FirebaseFirestore.instance
         .collection('Athlete')
@@ -50,6 +63,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
     setState(() {
       isLoading = true;
     });
+    _getAppointmentData();
     _getAthleteData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
@@ -460,32 +474,37 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                 label: const Text('Record new injury'),
                               )
                             : const SizedBox(),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            elevation: 0,
-                            side: BorderSide(
-                              width: 1,
+                        Visibility(
+                          visible: latestAppointment['appointStatus'] == null ||
+                              latestAppointment['appointStatus'] == false,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              elevation: 0,
+                              side: BorderSide(
+                                width: 1,
+                                color: Colors.blue[200],
+                              ),
+                            ),
+                            onPressed: () {
+                              showCupertinoDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AppointmentPage(
+                                      data: widget.physicalResultData.toMap(),
+                                      docID: widget.docID,
+                                    );
+                                  });
+                            },
+                            icon: Icon(
+                              Icons.calendar_month,
                               color: Colors.blue[200],
                             ),
-                          ),
-                          onPressed: () {
-                            showCupertinoDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AppointmentPage(
-                                    data: widget.physicalResultData.toMap(),
-                                  );
-                                });
-                          },
-                          icon: Icon(
-                            Icons.calendar_month,
-                            color: Colors.blue[200],
-                          ),
-                          label: Text(
-                            'Appointment',
-                            style: TextStyle(
-                              color: Colors.blue[200],
+                            label: Text(
+                              'Appointment',
+                              style: TextStyle(
+                                color: Colors.blue[200],
+                              ),
                             ),
                           ),
                         ),

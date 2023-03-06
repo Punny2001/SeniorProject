@@ -48,11 +48,11 @@ class _StaffProfileState extends State<StaffProfile> {
             Container(
               child: Ink(
                 decoration: ShapeDecoration(
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   color: Colors.blue.shade200,
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
+                  icon: const Icon(Icons.arrow_back_ios),
                   alignment: Alignment.centerRight,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
@@ -71,9 +71,9 @@ class _StaffProfileState extends State<StaffProfile> {
                 padding: EdgeInsets.only(left: w * 0.05),
                 width: w,
                 height: h / 10,
-                child: Text(
+                child: const Text(
                   'Personal Information',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -99,7 +99,7 @@ class _StaffProfileState extends State<StaffProfile> {
                 padding: EdgeInsets.only(left: w * 0.05),
                 width: w,
                 height: h / 10,
-                child: Text(
+                child: const Text(
                   'Delete Account',
                   style: TextStyle(
                     fontSize: 18,
@@ -113,13 +113,13 @@ class _StaffProfileState extends State<StaffProfile> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Delete Account'),
+                      title: const Text('Delete Account'),
                       content: Container(
                         height: h / 5,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Center(
+                            const Center(
                               child: Text(
                                 'Are you sure to delete this account?',
                               ),
@@ -144,8 +144,8 @@ class _StaffProfileState extends State<StaffProfile> {
                                       );
                                     });
                                   },
-                                  icon: Icon(Icons.check_rounded),
-                                  label: Text('Accept'),
+                                  icon: const Icon(Icons.check_rounded),
+                                  label: const Text('Accept'),
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.green[900],
                                   ),
@@ -154,8 +154,8 @@ class _StaffProfileState extends State<StaffProfile> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  icon: Icon(Icons.close_rounded),
-                                  label: Text('Decline'),
+                                  icon: const Icon(Icons.close_rounded),
+                                  label: const Text('Decline'),
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.red[900],
                                   ),
@@ -177,9 +177,9 @@ class _StaffProfileState extends State<StaffProfile> {
                 padding: EdgeInsets.only(left: w * 0.05),
                 width: w,
                 height: h / 10,
-                child: Text(
+                child: const Text(
                   'Log Out',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

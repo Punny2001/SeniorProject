@@ -23,9 +23,10 @@ class HealthReportCase extends StatefulWidget {
   String docID;
 
   HealthReportCase({
+    Key key,
     @required this.healthResultData,
     @required this.docID,
-  });
+  }) : super(key: key);
 
   @override
   State<HealthReportCase> createState() => _HealthReportCaseState();
@@ -36,6 +37,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
   Athlete athlete;
   Timer _timer;
   bool isLoading = false;
+  Map<String, dynamic> latestAppointment;
 
   void _getAthleteData() {
     FirebaseFirestore.instance
@@ -44,9 +46,20 @@ class _HealthReportCaseState extends State<HealthReportCase> {
         .get()
         .then((snapshot) {
       Map data = snapshot.data();
-
       setState(() {
         athlete = Athlete.fromMap(data);
+      });
+    });
+  }
+
+  void _getAppointmentData() {
+    FirebaseFirestore.instance
+        .collection('AppointmentRecord')
+        .where('caseID', isEqualTo: widget.docID)
+        .get()
+        .then((snapshot) {
+      setState(() {
+        latestAppointment = snapshot.docs.first.data();
       });
     });
   }
@@ -56,6 +69,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
     setState(() {
       isLoading = true;
     });
+    _getAppointmentData();
     _getAthleteData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
@@ -470,21 +484,28 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             elevation: 0,
                             side: BorderSide(
                               width: 1,
-                              color: Colors.blue[200],
+                              color: latestAppointment['appointStatus'] != true
+                                  ? Colors.blue[200]
+                                  : Colors.grey[800],
                             ),
                           ),
-                          onPressed: () {
-                            showCupertinoDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AppointmentPage(
-                                    data: widget.healthResultData.toMap(),
-                                  );
-                                });
-                          },
+                          onPressed: latestAppointment['appointStatus'] != true
+                              ? () {
+                                  showCupertinoDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AppointmentPage(
+                                          data: widget.healthResultData.toMap(),
+                                          docID: widget.docID,
+                                        );
+                                      });
+                                }
+                              : null,
                           icon: Icon(
                             Icons.calendar_month,
-                            color: Colors.blue[200],
+                            color: latestAppointment['appointStatus'] != true
+                                ? Colors.blue[200]
+                                : Colors.grey[800],
                           ),
                           label: Text(
                             'Appointment',

@@ -734,9 +734,9 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
   Future<void> updateReadMessage(String docID, String collection) async {
     print('docID: $docID');
     print('collection: $collection');
-    await FirebaseFirestore.instance
-        .collection(collection)
-        .doc(docID)
-        .update({'messageReceived': true});
+    await FirebaseFirestore.instance.collection(collection).doc(docID).update({
+      'messageReceived': true,
+      'messageReceivedDateTime': DateTime.now(),
+    });
   }
 }

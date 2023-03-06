@@ -164,80 +164,115 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'สตาฟ: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        '${_currentStaff.firstname} ${_currentStaff.lastname}',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
+                                        Container(
+                                          padding: const EdgeInsets.only(
+                                            left: 10,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'สตาฟ: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'วันที่นัด: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: formatDate(
-                                                        data['appointDate']
-                                                            .toDate(),
-                                                        'Athlete'),
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          '${_currentStaff.firstname} ${_currentStaff.lastname}',
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'รายละเอียด',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
+                                                  ],
                                                 ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data['detail'],
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
                                               ),
-                                            ),
-                                          ],
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'วันที่นัด: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatDate(
+                                                          data['appointDate']
+                                                              .toDate(),
+                                                          'Athlete'),
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'รายละเอียด: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data['detail'],
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            ElevatedButton.icon(
-                                              onPressed: () {},
-                                              icon: Icon(Icons.close),
-                                              label: SizedBox(),
-                                            ),
-                                            ElevatedButton.icon(
-                                              onPressed: () {},
-                                              icon: Icon(Icons.check),
-                                              label: SizedBox(),
-                                            ),
-                                          ],
+                                        Visibility(
+                                          visible:
+                                              data['receivedStatus'] == null,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              ElevatedButton.icon(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    updateData(
+                                                        data['docID'], false);
+                                                    sendPushFailedMessage(
+                                                      _currentStaff.token,
+                                                      _currentStaff,
+                                                      data,
+                                                    );
+                                                  });
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: Colors.red[300],
+                                                ),
+                                                icon: const Icon(Icons.close),
+                                                label: const Text('ปฏิเสธ'),
+                                              ),
+                                              ElevatedButton.icon(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    updateData(
+                                                        data['docID'], true);
+                                                    sendPushSuccessMessage(
+                                                      _currentStaff.token,
+                                                      _currentStaff,
+                                                      data,
+                                                    );
+                                                  });
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: Colors.green[400],
+                                                ),
+                                                icon: const Icon(Icons.check),
+                                                label: const Text('ตกลง'),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -269,7 +304,7 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
   }
 
   void sendPushSuccessMessage(
-      String token, Athlete athlete, Map<String, dynamic> data) async {
+      String token, Staff staff, Map<String, dynamic> data) async {
     print(token);
     try {
       await http.post(
@@ -302,7 +337,7 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
   }
 
   void sendPushFailedMessage(
-      String token, Athlete athlete, Map<String, dynamic> data) async {
+      String token, Staff staff, Map<String, dynamic> data) async {
     print(token);
     try {
       await http.post(
@@ -334,5 +369,14 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
     }
   }
 
-  Future<void> updateData(String type, String docID) async {}
+  Future<void> updateData(String docID, bool status) async {
+    await FirebaseFirestore.instance
+        .collection('AppointmentRecord')
+        .doc(docID)
+        .update({
+      'receivedStatus': true,
+      'receivedDate': DateTime.now(),
+      'appointStatus': status,
+    });
+  }
 }
