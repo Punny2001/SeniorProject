@@ -176,6 +176,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
               ),
             ),
             onTap: () {
+              FirebaseMessaging.instance.unsubscribeFromTopic('Athlete');
               FirebaseMessaging.instance.deleteToken();
               FirebaseAuth.instance.signOut();
               Navigator.of(context).pushNamedAndRemoveUntil(

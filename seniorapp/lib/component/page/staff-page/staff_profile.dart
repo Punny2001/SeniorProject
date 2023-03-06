@@ -187,6 +187,7 @@ class _StaffProfileState extends State<StaffProfile> {
               ),
             ),
             onTap: () {
+              FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
               FirebaseMessaging.instance.deleteToken();
               FirebaseAuth.instance.signOut();
               Navigator.of(context).pushNamedAndRemoveUntil(

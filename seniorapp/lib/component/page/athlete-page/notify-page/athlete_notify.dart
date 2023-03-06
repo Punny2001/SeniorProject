@@ -61,6 +61,8 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
         .get()
         .then(
       (snapshot) {
+        snapshot.docs
+            .removeWhere((element) => element['caseFinished'] == false);
         setState(() {
           healthSize = snapshot.docs.length;
         });
@@ -75,6 +77,8 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
         .get()
         .then(
       (snapshot) {
+        snapshot.docs
+            .removeWhere((element) => element['caseFinished'] == false);
         setState(() {
           physicalSize = snapshot.docs.length;
         });
@@ -191,6 +195,7 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+    print(healthSize + physicalSize);
 
     return Container(
       color: Colors.white,

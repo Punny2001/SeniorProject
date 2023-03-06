@@ -29,7 +29,7 @@ class _AthleteChooseNotifyState extends State<AthleteChooseNotify> {
           children: [
             CupertinoSlidingSegmentedControl(
               backgroundColor: Colors.green[300],
-              thumbColor: Colors.blue[200],
+              thumbColor: Colors.green[200],
               groupValue: _selectedNotify,
               onValueChanged: (value) {
                 if (value != null) {
@@ -40,13 +40,13 @@ class _AthleteChooseNotifyState extends State<AthleteChooseNotify> {
               },
               children: const {
                 'caseNotify': Text(
-                  'Finished Case',
+                  'เคสที่เสร็จสิ้น',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 'appointmentNotify': Text(
-                  'Appointment',
+                  'การนัดหมาย',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                   ),
