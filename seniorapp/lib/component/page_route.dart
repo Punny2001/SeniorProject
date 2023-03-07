@@ -10,7 +10,7 @@ import 'package:seniorapp/component/page/athlete-page/questionnaire-page/health_
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/mental_questionnaire.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/physical_complain.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
-import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
+import 'package:seniorapp/component/page/staff-page/notify-page/staff_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/page/staff-page/staff_profile.dart';
 

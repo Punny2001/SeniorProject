@@ -195,7 +195,6 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    print(healthSize + physicalSize);
 
     return Container(
       color: Colors.white,

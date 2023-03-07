@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/staff-page/choose_history.dart';
 import 'package:seniorapp/component/page/staff-page/staff_case.dart';
+import 'package:seniorapp/component/page/staff-page/staff_choose_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_graph.dart';
-import 'package:seniorapp/component/page/staff-page/staff_notify.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 
 class StaffPageChoosing extends StatefulWidget {
@@ -109,7 +109,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     const StaffCase(),
     const ChooseHistory(),
     const StaffGraph(),
-    const StaffNotify(),
+    const StaffChooseNotifyPage(),
   ];
 
   void _onPageTap(index) {
