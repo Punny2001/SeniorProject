@@ -95,10 +95,11 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
         list.retainWhere((element) =>
             element['caseFinished'] == true &&
             element['messageReceived'] == false);
-
-        setState(() {
-          unreceivedPhysicalSize = list.length;
-        });
+        if (mounted) {
+          setState(() {
+            unreceivedPhysicalSize = list.length;
+          });
+        }
       },
     );
   }
@@ -114,10 +115,11 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
         list.retainWhere((element) =>
             element['caseFinished'] == true &&
             element['messageReceived'] == false);
-
-        setState(() {
-          unreceivedHealthSize = list.length;
-        });
+        if (mounted) {
+          setState(() {
+            unreceivedHealthSize = list.length;
+          });
+        }
       },
     );
   }

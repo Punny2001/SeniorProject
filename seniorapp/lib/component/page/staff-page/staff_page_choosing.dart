@@ -45,9 +45,11 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             size += 1;
           }
         });
-        setState(() {
-          healthSize = size;
-        });
+        if (mounted) {
+          setState(() {
+            healthSize = size;
+          });
+        }
       },
     );
   }
@@ -65,9 +67,11 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             size += 1;
           }
         });
-        setState(() {
-          physicalSize = size;
-        });
+        if (mounted) {
+          setState(() {
+            physicalSize = size;
+          });
+        }
       },
     );
   }
@@ -81,9 +85,12 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       (snapshot) {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
         list.removeWhere((element) => element['caseFinished'] == true);
-        setState(() {
-          unfinishedPhysical = list.length;
-        });
+
+        if (mounted) {
+          setState(() {
+            unfinishedPhysical = list.length;
+          });
+        }
       },
     );
   }
@@ -97,9 +104,11 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       (snapshot) {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
         list.removeWhere((element) => element['caseFinished'] == true);
-        setState(() {
-          unfinishedHealth = list.length;
-        });
+        if (mounted) {
+          setState(() {
+            unfinishedHealth = list.length;
+          });
+        }
       },
     );
   }

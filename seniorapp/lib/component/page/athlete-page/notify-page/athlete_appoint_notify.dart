@@ -373,10 +373,23 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
     await FirebaseFirestore.instance
         .collection('AppointmentRecord')
         .doc(docID)
-        .update({
-      'receivedStatus': true,
-      'receivedDate': DateTime.now(),
-      'appointStatus': status,
+        .get()
+        .then((snapshot) async {
+      Map<String, dynamic> data = snapshot.data();
+      if (data['receivedStatus'] == false) {
+        await FirebaseFirestore.instance
+            .collection('AppointmentRecord')
+            .doc(docID)
+            .update({
+          'receivedStatus': true,
+          'receivedDate': DateTime.now(),
+          'appointStatus': status,
+        });
+      } else {
+        setState(() {
+          print('Received status is already exists');
+        });
+      }
     });
   }
 }

@@ -39,7 +39,11 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
         .get()
         .then((snapshot) {
       setState(() {
-        latestAppointment = snapshot.docs.first.data();
+        if (snapshot.docs.isNotEmpty) {
+          latestAppointment = snapshot.docs.first.data();
+        } else {
+          print("This case doesn't have any appointment");
+        }
       });
     });
   }
@@ -475,30 +479,41 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                               )
                             : const SizedBox(),
                         Visibility(
-                          visible: latestAppointment['appointStatus'] == null ||
-                              latestAppointment['appointStatus'] == false,
+                          visible: latestAppointment == null ||
+                              latestAppointment['appointStatus'] != true,
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.white,
                               elevation: 0,
                               side: BorderSide(
                                 width: 1,
-                                color: Colors.blue[200],
+                                color: latestAppointment == null ||
+                                        latestAppointment['appointStatus'] !=
+                                            true
+                                    ? Colors.blue[200]
+                                    : Colors.grey[800],
                               ),
                             ),
-                            onPressed: () {
-                              showCupertinoDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AppointmentPage(
-                                      data: widget.physicalResultData.toMap(),
-                                      docID: widget.docID,
-                                    );
-                                  });
-                            },
+                            onPressed: latestAppointment == null ||
+                                    latestAppointment['appointStatus'] != true
+                                ? () {
+                                    showCupertinoDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AppointmentPage(
+                                            data: widget.physicalResultData
+                                                .toMap(),
+                                            docID: widget.docID,
+                                          );
+                                        });
+                                  }
+                                : null,
                             icon: Icon(
                               Icons.calendar_month,
-                              color: Colors.blue[200],
+                              color: latestAppointment == null ||
+                                      latestAppointment['appointStatus'] != true
+                                  ? Colors.blue[200]
+                                  : Colors.grey[800],
                             ),
                             label: Text(
                               'Appointment',

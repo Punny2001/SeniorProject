@@ -542,8 +542,7 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Container(
-                          padding: EdgeInsets.only(left: w * 0.03),
+                        SizedBox(
                           width: w * 0.7,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -582,27 +581,6 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
                           badgeContent: const Text('  '),
                           showBadge:
                               data['messageReceived'] == false ? true : false,
-                          child: SizedBox(
-                            width: w * 0.2,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    launchUrlString(
-                                        'tel:${_currentStaff.phoneNo}');
-                                  },
-                                  icon: const Icon(Icons.phone),
-                                ),
-                                const Text(
-                                  'ติดต่อสตาฟ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                         )
                       ],
                     )
@@ -733,9 +711,25 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
   Future<void> updateReadMessage(String docID, String collection) async {
     print('docID: $docID');
     print('collection: $collection');
-    await FirebaseFirestore.instance.collection(collection).doc(docID).update({
-      'messageReceived': true,
-      'messageReceivedDateTime': DateTime.now(),
+    await FirebaseFirestore.instance
+        .collection(collection)
+        .doc(docID)
+        .get()
+        .then((snapshot) async {
+      Map<String, dynamic> data = snapshot.data();
+      if (data['messageReceived'] == false) {
+        await FirebaseFirestore.instance
+            .collection(collection)
+            .doc(docID)
+            .update({
+          'messageReceived': true,
+          'messageReceivedDateTime': DateTime.now(),
+        });
+      } else {
+        setState(() {
+          print('Message is already received');
+        });
+      }
     });
   }
 }

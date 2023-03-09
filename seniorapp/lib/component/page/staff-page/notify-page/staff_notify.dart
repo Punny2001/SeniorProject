@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
+import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class StaffNotify extends StatefulWidget {
@@ -497,35 +498,35 @@ class _StaffCaseState extends State<StaffNotify> {
                                                     ],
                                                   ),
                                           ),
-                                          Container(
-                                            color: Colors.blue[200],
-                                            width: w,
-                                            height: h * 0.055,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                updateData(
-                                                  data['questionnaireType'],
-                                                  data['docID'],
-                                                );
-                                                print(athleteToken);
-                                                sendPushMessage(
-                                                    athleteToken,
-                                                    _staff,
-                                                    data['questionnaireNo']);
-                                                widget.refreshNotification;
-                                                setState(() {
-                                                  getHealthSize();
-                                                  getPhysicalSize();
-                                                });
-                                              },
+                                          GestureDetector(
+                                            onTap: () {
+                                              updateData(
+                                                data['questionnaireType'],
+                                                data['docID'],
+                                              );
+                                              sendPushMessage(
+                                                  athleteToken,
+                                                  _staff,
+                                                  data['questionnaireNo']);
+                                              widget.refreshNotification;
+                                              setState(() {
+                                                getHealthSize();
+                                                getPhysicalSize();
+                                              });
+                                            },
+                                            child: Container(
+                                              color: Colors.blue[200],
+                                              width: w,
+                                              height: h * 0.055,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                children: const [
-                                                  Icon(
+                                                children: [
+                                                  const Icon(
                                                     Icons.add_circle_rounded,
                                                   ),
-                                                  Text(
+                                                  PaddingDecorate(5),
+                                                  const Text(
                                                     'Add a case',
                                                   ),
                                                 ],
@@ -602,13 +603,26 @@ class _StaffCaseState extends State<StaffNotify> {
           await FirebaseFirestore.instance
               .collection('HealthQuestionnaireResult')
               .doc(docID)
-              .update({
-            'caseReceived': true,
-            'staff_no_received': _staff.staff_no,
-            'staff_uid_received': uid,
-            'caseReceivedDateTime': DateTime.now(),
-          }).then((value) {
-            print('Updated data successfully');
+              .get()
+              .then((snapshot) async {
+            Map<String, dynamic> data = snapshot.data();
+            if (data['caseReceived'] == false) {
+              await FirebaseFirestore.instance
+                  .collection('HealthQuestionnaireResult')
+                  .doc(docID)
+                  .update({
+                'caseReceived': true,
+                'staff_no_received': _staff.staff_no,
+                'staff_uid_received': uid,
+                'caseReceivedDateTime': DateTime.now(),
+              }).then((value) {
+                print('Updated data successfully');
+              });
+            } else {
+              setState(() {
+                print('This case is already received');
+              });
+            }
           });
         }
         break;
@@ -617,13 +631,26 @@ class _StaffCaseState extends State<StaffNotify> {
           await FirebaseFirestore.instance
               .collection('PhysicalQuestionnaireResult')
               .doc(docID)
-              .update({
-            'caseReceived': true,
-            'staff_no_received': _staff.staff_no,
-            'staff_uid_received': uid,
-            'caseReceivedDateTime': DateTime.now(),
-          }).then((value) {
-            print('Updated data successfully');
+              .get()
+              .then((snapshot) async {
+            Map<String, dynamic> data = snapshot.data();
+            if (data['caseReceived'] == false) {
+              await FirebaseFirestore.instance
+                  .collection('PhysicalQuestionnaireResult')
+                  .doc(docID)
+                  .update({
+                'caseReceived': true,
+                'staff_no_received': _staff.staff_no,
+                'staff_uid_received': uid,
+                'caseReceivedDateTime': DateTime.now(),
+              }).then((value) {
+                print('Updated data successfully');
+              });
+            } else {
+              setState(() {
+                print('This case is already received');
+              });
+            }
           });
         }
         break;

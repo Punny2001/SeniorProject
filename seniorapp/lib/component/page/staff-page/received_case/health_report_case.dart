@@ -59,7 +59,11 @@ class _HealthReportCaseState extends State<HealthReportCase> {
         .get()
         .then((snapshot) {
       setState(() {
-        latestAppointment = snapshot.docs.first.data();
+        if (snapshot.docs.isNotEmpty) {
+          latestAppointment = snapshot.docs.first.data();
+        } else {
+          print("This case doesn't have any appointment");
+        }
       });
     });
   }
@@ -478,39 +482,48 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 label: const Text('Record new illness'),
                               )
                             : const SizedBox(),
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            elevation: 0,
-                            side: BorderSide(
-                              width: 1,
-                              color: latestAppointment['appointStatus'] != true
+                        Visibility(
+                          visible: latestAppointment == null ||
+                              latestAppointment['appointStatus'] != true,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              elevation: 0,
+                              side: BorderSide(
+                                width: 1,
+                                color: latestAppointment == null ||
+                                        latestAppointment['appointStatus'] !=
+                                            true
+                                    ? Colors.blue[200]
+                                    : Colors.grey[800],
+                              ),
+                            ),
+                            onPressed: latestAppointment == null ||
+                                    latestAppointment['appointStatus'] != true
+                                ? () {
+                                    showCupertinoDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AppointmentPage(
+                                            data:
+                                                widget.healthResultData.toMap(),
+                                            docID: widget.docID,
+                                          );
+                                        });
+                                  }
+                                : null,
+                            icon: Icon(
+                              Icons.calendar_month,
+                              color: latestAppointment == null ||
+                                      latestAppointment['appointStatus'] != true
                                   ? Colors.blue[200]
                                   : Colors.grey[800],
                             ),
-                          ),
-                          onPressed: latestAppointment['appointStatus'] != true
-                              ? () {
-                                  showCupertinoDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AppointmentPage(
-                                          data: widget.healthResultData.toMap(),
-                                          docID: widget.docID,
-                                        );
-                                      });
-                                }
-                              : null,
-                          icon: Icon(
-                            Icons.calendar_month,
-                            color: latestAppointment['appointStatus'] != true
-                                ? Colors.blue[200]
-                                : Colors.grey[800],
-                          ),
-                          label: Text(
-                            'Appointment',
-                            style: TextStyle(
-                              color: Colors.blue[200],
+                            label: Text(
+                              'Appointment',
+                              style: TextStyle(
+                                color: Colors.blue[200],
+                              ),
                             ),
                           ),
                         ),
