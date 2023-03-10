@@ -123,805 +123,778 @@ class _InjuryReportState extends State<InjuryReport> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: const CircleBorder(),
-                  color: Colors.blue.shade200,
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: const CircleBorder(),
+                color: Colors.blue.shade200,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                alignment: Alignment.centerRight,
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
           ],
         ),
       ),
-      body: isLoading == true
-          ? const Center(
-              child: CupertinoActivityIndicator(),
-            )
-          : Container(
-              padding: EdgeInsets.only(
-                  left: w * 0.1, right: w * 0.1, bottom: h * 0.015),
-              width: w,
-              height: h,
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Form(
-                  key: _injuryKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // Athlete No.
-                      const Text(
-                        'Athlete No.',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const Padding(padding: EdgeInsets.all(10)),
-                      widget.physicalResultData != null
-                          ? TextFormField(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              decoration: textdecorate('Athlete No.'),
-                              readOnly: true,
-                              controller: _athleteNo,
-                              onChanged: (value) {},
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Athlete No. is required';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            )
-                          : TextFormField(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              focusNode: _athleteFocusNode,
-                              decoration: textdecorate('Athlete No.'),
-                              controller: _athleteNo,
-                              onChanged: (value) {},
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  if (!_athleteFocusNode.hasFocus) {
-                                    _athleteFocusNode.requestFocus();
-                                  }
-                                  return 'Athlete No. is required';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                      //
-                      PaddingDecorate(20),
-                      // Sport and Event
-                      const Text(
-                        'Sport and Event',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
-                      DropdownButtonFormField2<String>(
-                        focusNode: _sporteventFocusNode,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: textdecorate('Select sport and event'),
-                        items: sortedSport(sportList)
-                            .map((sport) => DropdownMenuItem(
-                                  child: Text(sport),
-                                  value: sport,
-                                ))
-                            .toList(),
-                        value: _selectedSport,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedSport = value;
-                            _sportSearch.clear();
-                          });
-                        },
-                        searchController: _sportSearch,
-                        searchInnerWidget: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                            bottom: 10,
-                            top: 10,
-                          ),
-                          child: TextFormField(
-                            controller: _sportSearch,
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () => _sportSearch.clear(),
-                                icon: const Icon(Icons.close),
-                              ),
-                              hintText: 'Search ...',
-                            ),
-                          ),
-                        ),
-                        searchMatchFn: (item, searchValue) {
-                          return (item.value.toString().toLowerCase().contains(
-                                searchValue.toLowerCase(),
-                              ));
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            if (!_sporteventFocusNode.hasFocus) {
-                              _sporteventFocusNode.requestFocus();
-                            }
-                            return 'Please select the sport and event';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      //
-                      PaddingDecorate(20),
-                      // Round, Heat, or Training
-                      const Text(
-                        'Round, Heat, or Training',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      PaddingDecorate(5),
-                      TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: textdecorate('Round, Heat, or Training'),
-                        controller: _rhtController,
-                      ),
-                      //
-                      PaddingDecorate(20),
-                      // Date & Time
-                      const Text(
-                        'Date & Time',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      PaddingDecorate(5),
-                      DateTimePicker(
-                        focusNode: _occuredDateTimeFocusNode,
-                        initialValue:
-                            widget.docID == null ? null : _datetime.toString(),
-                        dateLabelText: 'Date',
-                        timeLabelText: 'Time',
-                        dateMask: 'MMMM d, yyyy hh:mm',
-                        icon: const Icon(Icons.event),
-                        type: DateTimePickerType.dateTime,
-                        lastDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        initialDate: DateTime.now(),
-                        decoration: InputDecoration(
-                          fillColor: Color.fromRGBO(217, 217, 217, 100),
-                          filled: true,
-                          hintText: 'Occured date & time',
-                          hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.red,
-                            ),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.red,
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromRGBO(217, 217, 217, 100),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color.fromRGBO(217, 217, 217, 100),
-                            ),
-                          ),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            _datetime = DateTime.tryParse(value);
-                          });
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            if (!_occuredDateTimeFocusNode.hasFocus) {
-                              _occuredDateTimeFocusNode.requestFocus();
-                            }
-                            return 'Date and Time is required';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      //
-                      PaddingDecorate(20),
-                      // Injured Body Part
-                      const Text(
-                        'Injured body part',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      PaddingDecorate(5),
-                      DropdownButtonFormField2<String>(
-                        focusNode: _injuredPartFocusNode,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: textdecorate('Select body type'),
-                        items: _bodyType
-                            .map((bodyType) => DropdownMenuItem(
-                                  child: Text(bodyType),
-                                  value: bodyType,
-                                ))
-                            .toList(),
-                        value: _selectedBodyType,
-                        onChanged: (value) {
-                          checkBodyType(value);
-                          setState(() {
-                            _selectedBodyType = value;
-                            hasSide = false;
-                            _bodyTypeSearch.clear();
-                          });
-                        },
-                        searchController: _bodyTypeSearch,
-                        searchInnerWidget: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                            bottom: 10,
-                            top: 10,
-                          ),
-                          child: TextFormField(
-                            controller: _bodyTypeSearch,
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () => _bodyTypeSearch.clear(),
-                                icon: const Icon(Icons.close),
-                              ),
-                              hintText: 'Search ...',
-                            ),
-                          ),
-                        ),
-                        searchMatchFn: (item, searchValue) {
-                          return (item.value.toString().toLowerCase().contains(
-                                searchValue.toLowerCase(),
-                              ));
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            if (!_injuredPartFocusNode.hasFocus) {
-                              _injuredPartFocusNode.requestFocus();
-                            }
-                            return 'Please select the type of body';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      PaddingDecorate(5),
-                      Visibility(
-                        visible: isHeadTrunkPart,
-                        child: DropdownButtonFormField2<String>(
+      body: SizedBox(
+        width: w,
+        height: h,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Container(
+            padding: EdgeInsets.only(
+                left: w * 0.1, right: w * 0.1, bottom: h * 0.015),
+            child: Form(
+              key: _injuryKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // Athlete No.
+                  const Text(
+                    'Athlete No.',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.all(10)),
+                  widget.physicalResultData != null
+                      ? TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration:
-                              textdecorate('Select head and trunk part'),
-                          dropdownMaxHeight: h / 2,
-                          items: _bodyHeadPart
-                              .map((key, value) {
-                                return MapEntry(
-                                    key,
-                                    DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ));
-                              })
-                              .values
-                              .toList(),
-                          value: _selectedBodyHTPart,
-                          onChanged: (value) {
-                            onChangedMethodBodyPartValue(value);
-                            setState(() {
-                              _selectedBodyHTPart = value;
-                              hasSide = false;
-                              _headtrunkSearch.clear();
-                            });
-                          },
-                          searchController: _headtrunkSearch,
-                          searchInnerWidget: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 20,
-                              right: 20,
-                              bottom: 10,
-                              top: 10,
-                            ),
-                            child: TextFormField(
-                              controller: _headtrunkSearch,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () => _headtrunkSearch.clear(),
-                                  icon: const Icon(Icons.close),
-                                ),
-                                hintText: 'Search ...',
-                              ),
-                            ),
-                          ),
-                          searchMatchFn: (item, searchValue) {
-                            return (item.value
-                                .toString()
-                                .toLowerCase()
-                                .contains(
-                                  searchValue.toLowerCase(),
-                                ));
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return 'Please select the part of body';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                      ),
-                      Visibility(
-                        visible: isUpperPart,
-                        child: DropdownButtonFormField2<String>(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration:
-                              textdecorate('Select upper extremity part'),
-                          dropdownMaxHeight: h / 2,
-                          items: _bodyUpperPart
-                              .map((key, value) {
-                                return MapEntry(
-                                    key,
-                                    DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ));
-                              })
-                              .values
-                              .toList(),
-                          value: _selectedBodyUpperPart,
-                          onChanged: (value) {
-                            onChangedMethodBodyPartValue(value);
-                            setState(() {
-                              _selectedBodyUpperPart = value;
-                              hasSide = true;
-                              _upperbodySearch.clear();
-                            });
-                          },
-                          searchController: _upperbodySearch,
-                          searchInnerWidget: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 20,
-                              right: 20,
-                              bottom: 10,
-                              top: 10,
-                            ),
-                            child: TextFormField(
-                              controller: _upperbodySearch,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () => _upperbodySearch.clear(),
-                                  icon: const Icon(Icons.close),
-                                ),
-                                hintText: 'Search ...',
-                              ),
-                            ),
-                          ),
-                          searchMatchFn: (item, searchValue) {
-                            return (item.value
-                                .toString()
-                                .toLowerCase()
-                                .contains(
-                                  searchValue.toLowerCase(),
-                                ));
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return 'Please select the part of body';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                      ),
-                      Visibility(
-                        visible: isLowerPart,
-                        child: DropdownButtonFormField2<String>(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          decoration:
-                              textdecorate('Select lower extremity part'),
-                          dropdownMaxHeight: h / 2,
-                          items: _bodyLowerPart
-                              .map((key, value) {
-                                return MapEntry(
-                                    key,
-                                    DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    ));
-                              })
-                              .values
-                              .toList(),
-                          value: _selectedBodyLowerPart,
-                          onChanged: (value) {
-                            onChangedMethodBodyPartValue(value);
-                            setState(() {
-                              _selectedBodyLowerPart = value;
-                              hasSide = true;
-                              _lowerbodySearch.clear();
-                            });
-                          },
-                          searchController: _lowerbodySearch,
-                          searchInnerWidget: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 20,
-                              right: 20,
-                              bottom: 10,
-                              top: 10,
-                            ),
-                            child: TextFormField(
-                              controller: _lowerbodySearch,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(20),
-                                  ),
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () => _lowerbodySearch.clear(),
-                                  icon: const Icon(Icons.close),
-                                ),
-                                hintText: 'Search ...',
-                              ),
-                            ),
-                          ),
-                          searchMatchFn: (item, searchValue) {
-                            return (item.value
-                                .toString()
-                                .toLowerCase()
-                                .contains(
-                                  searchValue.toLowerCase(),
-                                ));
-                          },
-                          validator: (value) {
-                            if (value == null) {
-                              return 'Please select the part of body';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                      ),
-                      PaddingDecorate(5),
-                      FormField(
-                        builder: (FormFieldState<bool> state) {
-                          return Visibility(
-                            visible: hasSide,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                state.hasError
-                                    ? Text(
-                                        state.errorText,
-                                        style:
-                                            const TextStyle(color: Colors.red),
-                                      )
-                                    : Container(),
-                                RadioListTile(
-                                  value: 1,
-                                  title: const Text('Left'),
-                                  groupValue: _selectedSide,
-                                  onChanged: (value) {
-                                    state.setValue(true);
-                                    setState(() {
-                                      _selectedSide = value;
-                                    });
-                                  },
-                                ),
-                                RadioListTile(
-                                  value: 2,
-                                  title: const Text('Right'),
-                                  groupValue: _selectedSide,
-                                  onChanged: (value) {
-                                    state.setValue(true);
-                                    setState(() {
-                                      _selectedSide = value;
-                                    });
-                                  },
-                                ),
-                                RadioListTile(
-                                  value: 3,
-                                  title: const Text('Both'),
-                                  groupValue: _selectedSide,
-                                  onChanged: (value) {
-                                    state.setValue(true);
-                                    setState(() {
-                                      _selectedSide = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (value != true && hasSide == true) {
-                            return 'Please select the side of body part';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      //
-                      PaddingDecorate(20),
-                      // Type of Injury
-                      const Text(
-                        'Type of Injury',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      PaddingDecorate(5),
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: textdecorate('Code'),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        ],
-                        controller: _codeInjuryType,
-                        onSaved: (value) {
-                          setState(() {
-                            _codeInjuryType.text = value;
-                          });
-                        },
-                        onChanged: (value) {
-                          checkOtherType(value);
-                          setState(() {
-                            _selectedInjuryType = onChangedMethodTypeKey(value);
-                            // print(_codeInjuryType.text);
-                          });
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                      ),
-                      PaddingDecorate(5),
-                      DropdownButtonFormField2<String>(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: textdecorate('Select type of injury'),
-                        items: _injuryType
-                            .map((key, value) {
-                              return MapEntry(
-                                  key,
-                                  DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  ));
-                            })
-                            .values
-                            .toList(),
-                        value: _selectedInjuryType,
-                        onChanged: (value) {
-                          checkOtherType(value);
-                          onChangedMethodTypeValue(value);
-                          setState(() {
-                            _selectedInjuryType = value;
-                            _injuryTypeSearch.clear();
-                          });
-                        },
-                        searchController: _injuryTypeSearch,
-                        searchInnerWidget: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                            bottom: 10,
-                            top: 10,
-                          ),
-                          child: TextFormField(
-                            controller: _injuryTypeSearch,
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
-                              ),
-                              suffixIcon: IconButton(
-                                onPressed: () => _injuryTypeSearch.clear(),
-                                icon: const Icon(Icons.close),
-                              ),
-                              hintText: 'Search ...',
-                            ),
-                          ),
-                        ),
-                        searchMatchFn: (item, searchValue) {
-                          return (item.value.toString().toLowerCase().contains(
-                                searchValue.toLowerCase(),
-                              ));
-                        },
-                      ),
-                      PaddingDecorate(5),
-                      Visibility(
-                        visible: isVisibleOtherInjuryType,
-                        child: TextFormField(
-                          decoration: textdecorate('Your type of injury'),
-                          controller: _otherInjuryType,
-                          autovalidateMode: isVisibleOtherInjuryType
-                              ? AutovalidateMode.onUserInteraction
-                              : AutovalidateMode.disabled,
+                          decoration: textdecorate('Athlete No.'),
+                          readOnly: true,
+                          controller: _athleteNo,
+                          onChanged: (value) {},
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Please fill in your type of injury';
+                              return 'Athlete No. is required';
+                            } else {
+                              return null;
+                            }
+                          },
+                        )
+                      : TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          focusNode: _athleteFocusNode,
+                          decoration: textdecorate('Athlete No.'),
+                          controller: _athleteNo,
+                          onChanged: (value) {},
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              if (!_athleteFocusNode.hasFocus) {
+                                _athleteFocusNode.requestFocus();
+                              }
+                              return 'Athlete No. is required';
                             } else {
                               return null;
                             }
                           },
                         ),
+                  //
+                  PaddingDecorate(20),
+                  // Sport and Event
+                  const Text(
+                    'Sport and Event',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  DropdownButtonFormField2<String>(
+                    focusNode: _sporteventFocusNode,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Select sport and event'),
+                    items: sortedSport(sportList)
+                        .map((sport) => DropdownMenuItem(
+                              child: Text(sport),
+                              value: sport,
+                            ))
+                        .toList(),
+                    value: _selectedSport,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedSport = value;
+                        _sportSearch.clear();
+                      });
+                    },
+                    searchController: _sportSearch,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
                       ),
-                      //
-                      PaddingDecorate(20),
-                      // Cause of Injury
-                      const Text(
-                        'Cause of injury',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                      child: TextFormField(
+                        controller: _sportSearch,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _sportSearch.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
+                        ),
                       ),
-                      PaddingDecorate(5),
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: textdecorate('Code'),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        ],
-                        controller: _codeInjuryCause,
-                        onSaved: (value) {
-                          setState(() {
-                            _codeInjuryCause.text = value;
-                          });
-                        },
-                        onChanged: (value) {
-                          checkOtherCause(value);
-                          setState(() {
-                            _selectedInjuryCause =
-                                onChangedMethodCauseKey(value);
-                          });
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        if (!_sporteventFocusNode.hasFocus) {
+                          _sporteventFocusNode.requestFocus();
+                        }
+                        return 'Please select the sport and event';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  //
+                  PaddingDecorate(20),
+                  // Round, Heat, or Training
+                  const Text(
+                    'Round, Heat, or Training',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  PaddingDecorate(5),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Round, Heat, or Training'),
+                    controller: _rhtController,
+                  ),
+                  //
+                  PaddingDecorate(20),
+                  // Date & Time
+                  const Text(
+                    'Date & Time',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  PaddingDecorate(5),
+                  DateTimePicker(
+                    focusNode: _occuredDateTimeFocusNode,
+                    initialValue:
+                        widget.docID == null ? null : _datetime.toString(),
+                    dateLabelText: 'Date',
+                    timeLabelText: 'Time',
+                    dateMask: 'MMMM d, yyyy hh:mm',
+                    icon: const Icon(Icons.event),
+                    type: DateTimePickerType.dateTime,
+                    lastDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    initialDate: DateTime.now(),
+                    decoration: const InputDecoration(
+                      fillColor: Color.fromRGBO(217, 217, 217, 100),
+                      filled: true,
+                      hintText: 'Occured date & time',
+                      hintStyle: TextStyle(fontFamily: 'OpenSans'),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                        ),
                       ),
-                      PaddingDecorate(5),
-                      DropdownButtonFormField2<String>(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: textdecorate('Select cause of injury'),
-                        dropdownMaxHeight: h / 2,
-                        items: _causeOfInjury
-                            .map((key, value) {
-                              return MapEntry(
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(217, 217, 217, 100),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromRGBO(217, 217, 217, 100),
+                        ),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        _datetime = DateTime.tryParse(value);
+                      });
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        if (!_occuredDateTimeFocusNode.hasFocus) {
+                          _occuredDateTimeFocusNode.requestFocus();
+                        }
+                        return 'Date and Time is required';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  //
+                  PaddingDecorate(20),
+                  // Injured Body Part
+                  const Text(
+                    'Injured body part',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  PaddingDecorate(5),
+                  DropdownButtonFormField2<String>(
+                    focusNode: _injuredPartFocusNode,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Select body type'),
+                    items: _bodyType
+                        .map((bodyType) => DropdownMenuItem(
+                              child: Text(bodyType),
+                              value: bodyType,
+                            ))
+                        .toList(),
+                    value: _selectedBodyType,
+                    onChanged: (value) {
+                      checkBodyType(value);
+                      setState(() {
+                        _selectedBodyType = value;
+                        hasSide = false;
+                        _bodyTypeSearch.clear();
+                      });
+                    },
+                    searchController: _bodyTypeSearch,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: TextFormField(
+                        controller: _bodyTypeSearch,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _bodyTypeSearch.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
+                        ),
+                      ),
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        if (!_injuredPartFocusNode.hasFocus) {
+                          _injuredPartFocusNode.requestFocus();
+                        }
+                        return 'Please select the type of body';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  PaddingDecorate(5),
+                  Visibility(
+                    visible: isHeadTrunkPart,
+                    child: DropdownButtonFormField2<String>(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: textdecorate('Select head and trunk part'),
+                      dropdownMaxHeight: h / 2,
+                      items: _bodyHeadPart
+                          .map((key, value) {
+                            return MapEntry(
                                 key,
                                 DropdownMenuItem(
                                   value: value,
                                   child: Text(value),
-                                ),
-                              );
-                            })
-                            .values
-                            .toList(),
-                        value: _selectedInjuryCause,
-                        onChanged: (value) {
-                          checkOtherCause(value);
-                          onChangedMethodCauseValue(value);
-                          setState(() {
-                            _selectedInjuryCause = value;
-                            _injuryCauseSearch.clear();
-                          });
-                        },
-                        searchController: _injuryCauseSearch,
-                        searchInnerWidget: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                            bottom: 10,
-                            top: 10,
+                                ));
+                          })
+                          .values
+                          .toList(),
+                      value: _selectedBodyHTPart,
+                      onChanged: (value) {
+                        onChangedMethodBodyPartValue(value);
+                        setState(() {
+                          _selectedBodyHTPart = value;
+                          hasSide = false;
+                          _headtrunkSearch.clear();
+                        });
+                      },
+                      searchController: _headtrunkSearch,
+                      searchInnerWidget: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          bottom: 10,
+                          top: 10,
+                        ),
+                        child: TextFormField(
+                          controller: _headtrunkSearch,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () => _headtrunkSearch.clear(),
+                              icon: const Icon(Icons.close),
+                            ),
+                            hintText: 'Search ...',
                           ),
-                          child: TextFormField(
-                            controller: _injuryCauseSearch,
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
-                                ),
+                        ),
+                      ),
+                      searchMatchFn: (item, searchValue) {
+                        return (item.value.toString().toLowerCase().contains(
+                              searchValue.toLowerCase(),
+                            ));
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select the part of body';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: isUpperPart,
+                    child: DropdownButtonFormField2<String>(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: textdecorate('Select upper extremity part'),
+                      dropdownMaxHeight: h / 2,
+                      items: _bodyUpperPart
+                          .map((key, value) {
+                            return MapEntry(
+                                key,
+                                DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ));
+                          })
+                          .values
+                          .toList(),
+                      value: _selectedBodyUpperPart,
+                      onChanged: (value) {
+                        onChangedMethodBodyPartValue(value);
+                        setState(() {
+                          _selectedBodyUpperPart = value;
+                          hasSide = true;
+                          _upperbodySearch.clear();
+                        });
+                      },
+                      searchController: _upperbodySearch,
+                      searchInnerWidget: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          bottom: 10,
+                          top: 10,
+                        ),
+                        child: TextFormField(
+                          controller: _upperbodySearch,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
                               ),
-                              suffixIcon: IconButton(
-                                onPressed: () => _injuryCauseSearch.clear(),
-                                icon: const Icon(Icons.close),
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () => _upperbodySearch.clear(),
+                              icon: const Icon(Icons.close),
+                            ),
+                            hintText: 'Search ...',
+                          ),
+                        ),
+                      ),
+                      searchMatchFn: (item, searchValue) {
+                        return (item.value.toString().toLowerCase().contains(
+                              searchValue.toLowerCase(),
+                            ));
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select the part of body';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: isLowerPart,
+                    child: DropdownButtonFormField2<String>(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: textdecorate('Select lower extremity part'),
+                      dropdownMaxHeight: h / 2,
+                      items: _bodyLowerPart
+                          .map((key, value) {
+                            return MapEntry(
+                                key,
+                                DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                ));
+                          })
+                          .values
+                          .toList(),
+                      value: _selectedBodyLowerPart,
+                      onChanged: (value) {
+                        onChangedMethodBodyPartValue(value);
+                        setState(() {
+                          _selectedBodyLowerPart = value;
+                          hasSide = true;
+                          _lowerbodySearch.clear();
+                        });
+                      },
+                      searchController: _lowerbodySearch,
+                      searchInnerWidget: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
+                          bottom: 10,
+                          top: 10,
+                        ),
+                        child: TextFormField(
+                          controller: _lowerbodySearch,
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
                               ),
-                              hintText: 'Search ...',
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () => _lowerbodySearch.clear(),
+                              icon: const Icon(Icons.close),
+                            ),
+                            hintText: 'Search ...',
+                          ),
+                        ),
+                      ),
+                      searchMatchFn: (item, searchValue) {
+                        return (item.value.toString().toLowerCase().contains(
+                              searchValue.toLowerCase(),
+                            ));
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Please select the part of body';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  PaddingDecorate(5),
+                  FormField(
+                    builder: (FormFieldState<bool> state) {
+                      return Visibility(
+                        visible: hasSide,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            state.hasError
+                                ? Text(
+                                    state.errorText,
+                                    style: const TextStyle(color: Colors.red),
+                                  )
+                                : Container(),
+                            RadioListTile(
+                              value: 1,
+                              title: const Text('Left'),
+                              groupValue: _selectedSide,
+                              onChanged: (value) {
+                                state.setValue(true);
+                                setState(() {
+                                  _selectedSide = value;
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              value: 2,
+                              title: const Text('Right'),
+                              groupValue: _selectedSide,
+                              onChanged: (value) {
+                                state.setValue(true);
+                                setState(() {
+                                  _selectedSide = value;
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              value: 3,
+                              title: const Text('Both'),
+                              groupValue: _selectedSide,
+                              onChanged: (value) {
+                                state.setValue(true);
+                                setState(() {
+                                  _selectedSide = value;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value != true && hasSide == true) {
+                        return 'Please select the side of body part';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  //
+                  PaddingDecorate(20),
+                  // Type of Injury
+                  const Text(
+                    'Type of Injury',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  PaddingDecorate(5),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: textdecorate('Code'),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    controller: _codeInjuryType,
+                    onSaved: (value) {
+                      setState(() {
+                        _codeInjuryType.text = value;
+                      });
+                    },
+                    onChanged: (value) {
+                      checkOtherType(value);
+                      setState(() {
+                        _selectedInjuryType = onChangedMethodTypeKey(value);
+                        // print(_codeInjuryType.text);
+                      });
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
+                  PaddingDecorate(5),
+                  DropdownButtonFormField2<String>(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Select type of injury'),
+                    items: _injuryType
+                        .map((key, value) {
+                          return MapEntry(
+                              key,
+                              DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ));
+                        })
+                        .values
+                        .toList(),
+                    value: _selectedInjuryType,
+                    onChanged: (value) {
+                      checkOtherType(value);
+                      onChangedMethodTypeValue(value);
+                      setState(() {
+                        _selectedInjuryType = value;
+                        _injuryTypeSearch.clear();
+                      });
+                    },
+                    searchController: _injuryTypeSearch,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: TextFormField(
+                        controller: _injuryTypeSearch,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
                             ),
                           ),
-                        ),
-                        searchMatchFn: (item, searchValue) {
-                          return (item.value.toString().toLowerCase().contains(
-                                searchValue.toLowerCase(),
-                              ));
-                        },
-                      ),
-                      PaddingDecorate(5),
-                      Visibility(
-                        visible: isVisibleOtherInjuryCause,
-                        child: TextFormField(
-                          decoration: textdecorate('Your cause of injury'),
-                          controller: _otherInjuryCause,
-                          autovalidateMode: isVisibleOtherInjuryCause
-                              ? AutovalidateMode.onUserInteraction
-                              : AutovalidateMode.disabled,
+                          suffixIcon: IconButton(
+                            onPressed: () => _injuryTypeSearch.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
                         ),
                       ),
-                      //
-                      PaddingDecorate(20),
-                      // Absence in days
-                      const Text(
-                        'Absence in days',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      PaddingDecorate(5),
-                      TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        ],
-                        decoration: textdecorateinday('Absence in days'),
-                        controller: _absenceDayController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Absence days are required';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      PaddingDecorate(20),
-                      const Text(
-                        'Advice Message',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      PaddingDecorate(5),
-                      TextFormField(
-                        maxLines: 10,
-                        keyboardType: TextInputType.text,
-                        controller: _messageController,
-                        decoration: textdecorate('Description...'),
-                      ),
-                      //
-                    ],
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
+                    },
                   ),
-                ),
+                  PaddingDecorate(5),
+                  Visibility(
+                    visible: isVisibleOtherInjuryType,
+                    child: TextFormField(
+                      decoration: textdecorate('Your type of injury'),
+                      controller: _otherInjuryType,
+                      autovalidateMode: isVisibleOtherInjuryType
+                          ? AutovalidateMode.onUserInteraction
+                          : AutovalidateMode.disabled,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please fill in your type of injury';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  //
+                  PaddingDecorate(20),
+                  // Cause of Injury
+                  const Text(
+                    'Cause of injury',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  PaddingDecorate(5),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: textdecorate('Code'),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    controller: _codeInjuryCause,
+                    onSaved: (value) {
+                      setState(() {
+                        _codeInjuryCause.text = value;
+                      });
+                    },
+                    onChanged: (value) {
+                      checkOtherCause(value);
+                      setState(() {
+                        _selectedInjuryCause = onChangedMethodCauseKey(value);
+                      });
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
+                  PaddingDecorate(5),
+                  DropdownButtonFormField2<String>(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Select cause of injury'),
+                    dropdownMaxHeight: h / 2,
+                    items: _causeOfInjury
+                        .map((key, value) {
+                          return MapEntry(
+                            key,
+                            DropdownMenuItem(
+                              value: value,
+                              child: Text(value),
+                            ),
+                          );
+                        })
+                        .values
+                        .toList(),
+                    value: _selectedInjuryCause,
+                    onChanged: (value) {
+                      checkOtherCause(value);
+                      onChangedMethodCauseValue(value);
+                      setState(() {
+                        _selectedInjuryCause = value;
+                        _injuryCauseSearch.clear();
+                      });
+                    },
+                    searchController: _injuryCauseSearch,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: TextFormField(
+                        controller: _injuryCauseSearch,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _injuryCauseSearch.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
+                        ),
+                      ),
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
+                    },
+                  ),
+                  PaddingDecorate(5),
+                  Visibility(
+                    visible: isVisibleOtherInjuryCause,
+                    child: TextFormField(
+                      decoration: textdecorate('Your cause of injury'),
+                      controller: _otherInjuryCause,
+                      autovalidateMode: isVisibleOtherInjuryCause
+                          ? AutovalidateMode.onUserInteraction
+                          : AutovalidateMode.disabled,
+                    ),
+                  ),
+                  //
+                  PaddingDecorate(20),
+                  // Absence in days
+                  const Text(
+                    'Absence in days',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  PaddingDecorate(5),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    decoration: textdecorateinday('Absence in days'),
+                    controller: _absenceDayController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Absence days are required';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  PaddingDecorate(20),
+                  const Text(
+                    'Advice Message',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  PaddingDecorate(5),
+                  TextFormField(
+                    maxLines: 10,
+                    keyboardType: TextInputType.text,
+                    controller: _messageController,
+                    decoration: textdecorate('Description...'),
+                  ),
+                  //
+                ],
               ),
             ),
+          ),
+        ),
+      ),
       bottomNavigationBar: Container(
         padding:
             EdgeInsets.only(left: w * 0.2, right: w * 0.2, bottom: h * 0.03),
@@ -1314,7 +1287,6 @@ class _InjuryReportState extends State<InjuryReport> {
       }
     }
   }
-
 
   void sendPushMessage(String token, Staff staff) async {
     print(token);

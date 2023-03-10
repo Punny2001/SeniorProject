@@ -361,6 +361,20 @@ class _StaffCaseState extends State<StaffCase> {
                                     });
                                   },
                                 ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      _currentRangeValues.start
+                                          .ceil()
+                                          .toString(),
+                                    ),
+                                    Text(
+                                      _currentRangeValues.end.ceil().toString(),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                             actions: [

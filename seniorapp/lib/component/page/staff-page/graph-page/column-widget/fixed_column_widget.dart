@@ -15,7 +15,7 @@ class FixedColumnTable extends StatelessWidget {
     String name;
     athleteList.forEach((element) {
       if (element['athleteUID'] == resultData['athleteUID']) {
-        name = element['firstname'] + ' ' + element['lastname'];
+        name = element['firstname'] + '\n' + element['lastname'];
       }
     });
     return name;
@@ -28,7 +28,7 @@ class FixedColumnTable extends StatelessWidget {
       headingRowColor: MaterialStateProperty.all(Colors.blue[200]),
       dataRowColor: MaterialStateProperty.all(Colors.blue[50]),
       showBottomBorder: true,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           right: BorderSide(
             color: Colors.grey,
@@ -36,7 +36,7 @@ class FixedColumnTable extends StatelessWidget {
           ),
         ),
       ),
-      columns: [
+      columns: const [
         DataColumn(
           label: Text(
             'Athlete Name',

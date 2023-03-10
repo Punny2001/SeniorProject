@@ -24,17 +24,15 @@ class _StaffPersonnelGraphState extends State<StaffPersonnelGraph> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(),
-                  color: Colors.blue.shade200,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: const CircleBorder(),
+                color: Colors.blue.shade200,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                alignment: Alignment.centerRight,
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
           ],

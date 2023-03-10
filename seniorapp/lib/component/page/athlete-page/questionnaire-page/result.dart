@@ -13,7 +13,8 @@ class Result extends StatelessWidget {
   final String healthPart;
   final Function previousPage;
 
-  Result({
+  const Result({
+    Key key,
     this.resultScore,
     this.resetHandler,
     this.insertHandler,
@@ -21,10 +22,12 @@ class Result extends StatelessWidget {
     this.bodyPart,
     this.healthPart,
     this.previousPage,
-  });
+  }) : super(key: key);
 
   String resultPhrase(String type, int resultScore) {
-    var resultText = 'Hello';
+    print(type);
+    print(resultScore);
+    String resultText = 'Hello';
     switch (type) {
       case 'Health':
         {
@@ -32,10 +35,10 @@ class Result extends StatelessWidget {
             resultText = 'ระบบบันทึกข้อมูลเรียบร้อย ขอบคุณที่ให้ความร่วมมือ';
           } else if (resultScore <= 50) {
             resultText =
-                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ในขณะเดียวกัน ท่านควรเฝ้าระวังอาการ${healthPart}เป็นระยะเวลา 3-5 วัน หากอาการรุนแรงขึ้นให้รีบแจ้งกลับมาทางทีมแพทย์เป็นการเร่งด่วน';
+                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ในขณะเดียวกัน ท่านควรเฝ้าระวังอาการ$healthPartเป็นระยะเวลา 3-5 วัน หากอาการรุนแรงขึ้นให้รีบแจ้งกลับมาทางทีมแพทย์เป็นการเร่งด่วน';
           } else if (resultScore <= 75) {
             resultText =
-                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ในขณะเดียวกัน ท่านควรเฝ้าดูอาการ${healthPart}เป็นระยะเวลา 3-5 วัน  โดยมีการใช้ยาสามัญประจำบ้านร่วมด้วย หากอาการรุนแรงขึ้นให้รีบแจ้งกลับมาทางทีมแพทย์เป็นการเร่งด่วน';
+                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ในขณะเดียวกัน ท่านควรเฝ้าดูอาการ$healthPartเป็นระยะเวลา 3-5 วัน  โดยมีการใช้ยาสามัญประจำบ้านร่วมด้วย หากอาการรุนแรงขึ้นให้รีบแจ้งกลับมาทางทีมแพทย์เป็นการเร่งด่วน';
           } else {
             resultText =
                 'ระบบจะทำการรีบนัดหมายแพทย์ให้ท่านหรือให้ท่านนัดหมายแพทย์เพื่อทำการรักษาโดยด่วน ในขณะเดียวกัน หากท่านมีอาการอยู่ใน UCEP ท่านควรทำตามในส่วนนี้ ';
@@ -49,13 +52,13 @@ class Result extends StatelessWidget {
             resultText = 'ระบบบันทึกข้อมูลเรียบร้อย ขอบคุณที่ให้ความร่วมมือ';
           } else if (resultScore <= 50) {
             resultText =
-                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ในขณะเดียวกัน ท่านควรลดการใช้งานในบริเวณ${bodyPart}เป็นระยะเวลา 3-5 วัน';
+                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ในขณะเดียวกัน ท่านควรลดการใช้งานในบริเวณ$bodyPartเป็นระยะเวลา 3-5 วัน';
           } else if (resultScore <= 75) {
             resultText =
-                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ในขณะเดียวกัน ให้ท่านประคบเย็นพร้อมทั้งพันกระชับในส่วน${bodyPart}และลดการใช้งานในบริเวณ${bodyPart}เป็นระยะเวลา 5-7 วัน';
+                'ระบบจะทำการนัดหมายแพทย์ให้ท่าน ในขณะเดียวกัน ให้ท่านประคบเย็นพร้อมทั้งพันกระชับในส่วน$bodyPartและลดการใช้งานในบริเวณ$bodyPartเป็นระยะเวลา 5-7 วัน';
           } else {
             resultText =
-                'ระบบจะทำการรีบนัดหมายแพทย์ให้ท่านหรือให้ท่านนัดหมายแพทย์เพื่อทำการรักษาโดยด่วน ในขณะเดียวกัน ให้ท่านประคบเย็นพร้อมทั้งพันกระชับในส่วน${bodyPart}และลดการใช้งานในบริเวณ${bodyPart}ไม่ต่ำกว่า 7 วัน';
+                'ระบบจะทำการรีบนัดหมายแพทย์ให้ท่านหรือให้ท่านนัดหมายแพทย์เพื่อทำการรักษาโดยด่วน ในขณะเดียวกัน ให้ท่านประคบเย็นพร้อมทั้งพันกระชับในส่วน$bodyPartและลดการใช้งานในบริเวณ$bodyPartไม่ต่ำกว่า 7 วัน';
           }
           print('result text: $resultText');
         }
@@ -73,7 +76,7 @@ class Result extends StatelessWidget {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
-    final String ucepUrl =
+    const String ucepUrl =
         'https://www.nhso.go.th/page/coverage_rights_emergency_patients';
 
     return Container(
@@ -183,7 +186,7 @@ class Result extends StatelessWidget {
           return RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-                text: 'อาการบาดเจ็บบริเวณ${bodyPart}ของท่านอยู่ในระดับ ',
+                text: 'อาการบาดเจ็บบริเวณ$bodyPartของท่านอยู่ในระดับ ',
                 style: TextStyle(
                   fontSize: h * 0.03,
                   color: Colors.black,
@@ -218,7 +221,7 @@ class Result extends StatelessWidget {
           return RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-                text: 'ท่านมีปัญหาสุขภาพ${healthPart}อยู่ในระดับ ',
+                text: 'ท่านมีปัญหาสุขภาพ$healthPartอยู่ในระดับ ',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: h * 0.03,
@@ -237,7 +240,7 @@ class Result extends StatelessWidget {
         }
         break;
       case 'Mental':
-        return RichText(text: TextSpan(text: ''));
+        return RichText(text: const TextSpan(text: ''));
         //   if (resultScore == 0) {
         //     return RichText(
         //       text: TextSpan(

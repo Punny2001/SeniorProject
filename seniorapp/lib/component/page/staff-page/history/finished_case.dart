@@ -108,9 +108,11 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
         .get()
         .then(
       (snapshot) {
-        setState(() {
-          healthSize = snapshot.docs.length;
-        });
+        if (mounted) {
+          setState(() {
+            healthSize = snapshot.docs.length;
+          });
+        }
       },
     );
   }
@@ -122,9 +124,11 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
         .get()
         .then(
       (snapshot) {
-        setState(() {
-          physicalSize = snapshot.docs.length;
-        });
+        if (mounted) {
+          setState(() {
+            physicalSize = snapshot.docs.length;
+          });
+        }
       },
     );
   }

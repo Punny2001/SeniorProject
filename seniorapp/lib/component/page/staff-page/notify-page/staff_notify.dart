@@ -73,9 +73,11 @@ class _StaffCaseState extends State<StaffNotify> {
             size += 1;
           }
         });
-        setState(() {
-          healthSize = size;
-        });
+        if (mounted) {
+          setState(() {
+            healthSize = size;
+          });
+        }
       },
     );
   }
@@ -93,9 +95,11 @@ class _StaffCaseState extends State<StaffNotify> {
             size += 1;
           }
         });
-        setState(() {
-          physicalSize = size;
-        });
+        if (mounted) {
+          setState(() {
+            physicalSize = size;
+          });
+        }
       },
     );
   }
@@ -114,10 +118,12 @@ class _StaffCaseState extends State<StaffNotify> {
         .doc(uid)
         .get()
         .then((snapshot) {
-      setState(() {
-        Map data = snapshot.data();
-        _staff = Staff.fromMap(data);
-      });
+      if (mounted) {
+        setState(() {
+          Map data = snapshot.data();
+          _staff = Staff.fromMap(data);
+        });
+      }
     });
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {

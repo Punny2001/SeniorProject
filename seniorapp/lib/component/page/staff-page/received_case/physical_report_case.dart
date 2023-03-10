@@ -87,7 +87,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
   @override
   Widget build(BuildContext context) {
     String resultPhrase =
-        result.resultPhrase('physical', widget.physicalResultData.totalPoint);
+        result.resultPhrase('Physical', widget.physicalResultData.totalPoint);
     resultPhrase =
         resultPhrase.replaceAll('null', widget.physicalResultData.bodyPart);
     final _questions = [
@@ -250,31 +250,31 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                           ),
                         ),
                         PaddingDecorate(5),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Phone No: ',
-                            style: TextStyle(
-                              fontSize: h * 0.02,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                text: athlete.phoneNo,
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    launchUrlString('tel:${athlete.phoneNo}');
-                                  },
-                              ),
-                            ],
-                          ),
-                        ),
-                        PaddingDecorate(5),
+                        // RichText(
+                        //   text: TextSpan(
+                        //     text: 'Phone No: ',
+                        //     style: TextStyle(
+                        //       fontSize: h * 0.02,
+                        //       fontWeight: FontWeight.bold,
+                        //       color: Colors.black,
+                        //     ),
+                        //     children: [
+                        //       TextSpan(
+                        //         style: const TextStyle(
+                        //           fontWeight: FontWeight.normal,
+                        //           color: Colors.blue,
+                        //           decoration: TextDecoration.underline,
+                        //         ),
+                        //         text: athlete.phoneNo,
+                        //         recognizer: TapGestureRecognizer()
+                        //           ..onTap = () {
+                        //             launchUrlString('tel:${athlete.phoneNo}');
+                        //           },
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // PaddingDecorate(5),
                         RichText(
                           text: TextSpan(
                             text: 'Gender: ',
@@ -326,7 +326,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                text: '${athlete.sportType}',
+                                text: athlete.sportType,
                               ),
                             ],
                           ),
@@ -371,7 +371,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                text: '${resultPhrase}',
+                                text: resultPhrase,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
@@ -418,7 +418,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: w * 0.5,
                                 child: Text(
                                   answerTextList[i],
@@ -455,29 +455,32 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                         ],
                       ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        widget.physicalResultData.caseFinished == false
-                            ? ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.blue[300],
+                        Visibility(
+                          visible:
+                              widget.physicalResultData.caseFinished == false,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.blue[300],
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => InjuryReport(
+                                      widget.physicalResultData,
+                                      widget.docID,
+                                      athlete),
                                 ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => InjuryReport(
-                                          widget.physicalResultData,
-                                          widget.docID,
-                                          athlete),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.create,
-                                ),
-                                label: const Text('Record new injury'),
-                              )
-                            : const SizedBox(),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.create,
+                            ),
+                            label: const Text('Record new injury'),
+                          ),
+                        ),
                         Visibility(
                           visible: latestAppointment == null ||
                               latestAppointment['appointStatus'] != true,

@@ -88,12 +88,12 @@ class _HealthReportCaseState extends State<HealthReportCase> {
     super.dispose();
   }
 
-  Result result = Result();
+  Result result = const Result();
 
   @override
   Widget build(BuildContext context) {
     String resultPhrase =
-        result.resultPhrase('health', widget.healthResultData.totalPoint);
+        result.resultPhrase('Health', widget.healthResultData.totalPoint);
     resultPhrase =
         resultPhrase.replaceAll('null', widget.healthResultData.healthSymptom);
     final _questions = [
@@ -180,6 +180,8 @@ class _HealthReportCaseState extends State<HealthReportCase> {
       return answerText;
     }
 
+    const String ucepUrl =
+        'https://www.nhso.go.th/page/coverage_rights_emergency_patients';
     List<String> answerTextList = find_answer(_questions);
 
     return Scaffold(
@@ -208,7 +210,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
       ),
       body: isLoading
           ? const Center(
-              child: const CupertinoActivityIndicator(),
+              child: CupertinoActivityIndicator(),
             )
           : Container(
               padding: const EdgeInsets.only(
@@ -329,7 +331,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                text: '${athlete.sportType}',
+                                text: athlete.sportType,
                               ),
                             ],
                           ),
@@ -373,11 +375,25 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             ),
                             children: [
                               TextSpan(
-                                text: '${resultPhrase}',
+                                text: resultPhrase,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
+                              widget.healthResultData.totalPoint >= 75
+                                  ? TextSpan(
+                                      text: 'คลิกที่นี่',
+                                      style: const TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          launch(ucepUrl);
+                                        },
+                                    )
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
@@ -420,7 +436,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Container(
+                              SizedBox(
                                 width: w * 0.5,
                                 child: Text(
                                   answerTextList[i],
@@ -459,29 +475,31 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        widget.healthResultData.caseFinished == false
-                            ? ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.blue[300],
-                                  elevation: 0,
+                        Visibility(
+                          visible:
+                              widget.healthResultData.caseFinished == false,
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.blue[300],
+                              elevation: 0,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => IllnessReport(
+                                      widget.healthResultData,
+                                      widget.docID,
+                                      athlete),
                                 ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => IllnessReport(
-                                          widget.healthResultData,
-                                          widget.docID,
-                                          athlete),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.create,
-                                ),
-                                label: const Text('Record new illness'),
-                              )
-                            : const SizedBox(),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.create,
+                            ),
+                            label: const Text('Record new illness'),
+                          ),
+                        ),
                         Visibility(
                           visible: latestAppointment == null ||
                               latestAppointment['appointStatus'] != true,

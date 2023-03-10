@@ -101,643 +101,647 @@ class _IllnessReportState extends State<IllnessReport> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: const CircleBorder(),
-                  color: Colors.blue.shade200,
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: const CircleBorder(),
+                color: Colors.blue.shade200,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                alignment: Alignment.centerRight,
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
           ],
         ),
       ),
-      body: Container(
-        padding:
-            EdgeInsets.only(left: w * 0.1, right: w * 0.1, bottom: h * 0.015),
+      body: SizedBox(
         width: w,
         height: h,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: _illnessKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                const Text(
-                  'Athlete no.',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                PaddingDecorate(10),
-                widget.healthResultData != null
-                    ? TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: textdecorate('Athlete No.'),
-                        readOnly: true,
-                        controller: _athleteNo,
-                        onChanged: (value) {},
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Athlete No. is required';
-                          } else {
-                            return null;
-                          }
-                        },
-                      )
-                    : TextFormField(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: textdecorate('Athlete No.'),
-                        controller: _athleteNo,
-                        onChanged: (value) {},
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Athlete No. is required';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                PaddingDecorate(20),
-                const Text(
-                  'Sport and Event',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                DropdownButtonFormField2<String>(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: textdecorate('Select sport and event'),
-                  items: sortedSport(sportList)
-                      .map((sport) => DropdownMenuItem(
-                            child: Text(sport),
-                            value: sport,
-                          ))
-                      .toList(),
-                  value: _selectedSport,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedSport = value;
-                      _sportSearch.clear();
-                    });
-                  },
-                  searchController: _sportSearch,
-                  searchInnerWidget: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      bottom: 10,
-                      top: 10,
-                    ),
-                    child: TextFormField(
-                      controller: _sportSearch,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        suffixIcon: IconButton(
-                          onPressed: () => _sportSearch.clear(),
-                          icon: const Icon(Icons.close),
-                        ),
-                        hintText: 'Search ...',
-                      ),
-                    ),
+          child: Container(
+            padding: EdgeInsets.only(
+                left: w * 0.1, right: w * 0.1, bottom: h * 0.015),
+            child: Form(
+              key: _illnessKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text(
+                    'Athlete no.',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  searchMatchFn: (item, searchValue) {
-                    return (item.value.toString().toLowerCase().contains(
-                          searchValue.toLowerCase(),
-                        ));
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select the sport and event';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                PaddingDecorate(20),
-                const Text(
-                  'Diagnosis',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                PaddingDecorate(10),
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: textdecorate('Diagnosis'),
-                  controller: _diagnosisController,
-                  onChanged: (value) {
-                    _diagnosisController.text = value;
-                  },
-                ),
-                PaddingDecorate(20),
-                const Text(
-                  'Occured Date',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                DateTimePicker(
-                  initialValue:
-                      widget.docID == null ? null : _occuredDate.toString(),
-                  dateLabelText: 'Occured Date',
-                  dateMask: 'MMMM d, yyyy',
-                  decoration: textdecorate('Occured date'),
-                  type: DateTimePickerType.date,
-                  lastDate: DateTime.now(),
-                  firstDate: DateTime(1900),
-                  initialDate: DateTime.now(),
-                  onChanged: (value) {
-                    setState(() {
-                      _occuredDate = DateTime.tryParse(value);
-                    });
-                  },
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Occured date is required';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                PaddingDecorate(20),
-                const Text(
-                  'Affected System',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                PaddingDecorate(10),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: textdecorate('Code'),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                  controller: _codeAffectedSystem,
-                  onSaved: (value) {
-                    setState(() {
-                      _codeAffectedSystem.text = value;
-                    });
-                  },
-                  onChanged: (value) {
-                    checkOtherAffectedSystem(value);
-                    setState(() {
-                      _selectedAffected = onChangedMethodAffectedKey(value);
-                    });
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value.isNotEmpty) {
-                      if (int.tryParse(value) == 0 ||
-                          int.tryParse(value) > 12) {
-                        return 'The code can be between 1-12';
-                      } else {
-                        return null;
-                      }
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                PaddingDecorate(10),
-                DropdownButtonFormField2<String>(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: textdecorate('Select affected systems'),
-                  items: _affectedList
-                      .map((key, value) {
-                        return MapEntry(
-                            key,
-                            DropdownMenuItem(
-                              value: value,
-                              child: Text(value),
-                            ));
-                      })
-                      .values
-                      .toList(),
-                  value: _selectedAffected,
-                  dropdownMaxHeight: h / 2,
-                  onChanged: (value) {
-                    checkOtherAffectedSystem(value);
-                    onChangedMethodAffectedValue(value);
-                    setState(() {
-                      _selectedAffected = value;
-                      _affectedSearch.clear();
-                    });
-                  },
-                  searchController: _affectedSearch,
-                  searchInnerWidget: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      bottom: 10,
-                      top: 10,
-                    ),
-                    child: TextFormField(
-                      controller: _affectedSearch,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
+                  PaddingDecorate(10),
+                  widget.healthResultData != null
+                      ? TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: textdecorate('Athlete No.'),
+                          readOnly: true,
+                          controller: _athleteNo,
+                          onChanged: (value) {},
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Athlete No. is required';
+                            } else {
+                              return null;
+                            }
+                          },
+                        )
+                      : TextFormField(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: textdecorate('Athlete No.'),
+                          controller: _athleteNo,
+                          onChanged: (value) {},
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Athlete No. is required';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                  PaddingDecorate(20),
+                  const Text(
+                    'Sport and Event',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  DropdownButtonFormField2<String>(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Select sport and event'),
+                    items: sortedSport(sportList)
+                        .map((sport) => DropdownMenuItem(
+                              child: Text(sport),
+                              value: sport,
+                            ))
+                        .toList(),
+                    value: _selectedSport,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedSport = value;
+                        _sportSearch.clear();
+                      });
+                    },
+                    searchController: _sportSearch,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: TextFormField(
+                        controller: _sportSearch,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
                           ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _sportSearch.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
                         ),
-                        suffixIcon: IconButton(
-                          onPressed: () => _affectedSearch.clear(),
-                          icon: const Icon(Icons.close),
-                        ),
-                        hintText: 'Search ...',
                       ),
                     ),
-                  ),
-                  searchMatchFn: (item, searchValue) {
-                    return (item.value.toString().toLowerCase().contains(
-                          searchValue.toLowerCase(),
-                        ));
-                  },
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                Visibility(
-                  visible: isVisibleOtherAffectedSystem,
-                  child: TextFormField(
-                    decoration: textdecorate('Your affected system'),
-                    controller: _otherAffectedSystem,
-                    autovalidateMode: isVisibleOtherAffectedSystem
-                        ? AutovalidateMode.onUserInteraction
-                        : AutovalidateMode.disabled,
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
+                    },
                     validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please fill in your affected system';
+                      if (value == null) {
+                        return 'Please select the sport and event';
                       } else {
                         return null;
                       }
                     },
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                const Text(
-                  'Main Symptom(s)',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                Form(
-                  key: _mainSymptomListKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        decoration: textdecorate('Code'),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                        ],
-                        controller: _codeMainSymptom,
-                        onChanged: (value) {
-                          print(int.tryParse(value));
-                          checkOtherSymptom(value);
-                          setState(() {
-                            _selectedMainSymptom =
-                                onChangedMethodSymptomKey(value);
-                          });
-                          chkRepeat();
-                          _mainSymptomListKey.currentState.validate();
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (value) {
-                          if (mainSymptoms.isEmpty) {
-                            if (valueAdded == false) {
-                              return 'Please add at least 1 main symptom';
-                            } else if (value.isNotEmpty &&
-                                (int.tryParse(value) == 0 ||
-                                    int.tryParse(value) > 12)) {
-                              return 'The input code is invalid';
+                  PaddingDecorate(20),
+                  const Text(
+                    'Diagnosis',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  PaddingDecorate(10),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Diagnosis'),
+                    controller: _diagnosisController,
+                    onChanged: (value) {
+                      _diagnosisController.text = value;
+                    },
+                  ),
+                  PaddingDecorate(20),
+                  const Text(
+                    'Occured Date',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  DateTimePicker(
+                    initialValue:
+                        widget.docID == null ? null : _occuredDate.toString(),
+                    dateLabelText: 'Occured Date',
+                    dateMask: 'MMMM d, yyyy',
+                    decoration: textdecorate('Occured date'),
+                    type: DateTimePickerType.date,
+                    lastDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    initialDate: DateTime.now(),
+                    onChanged: (value) {
+                      setState(() {
+                        _occuredDate = DateTime.tryParse(value);
+                      });
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Occured date is required';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  PaddingDecorate(20),
+                  const Text(
+                    'Affected System',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  PaddingDecorate(10),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: textdecorate('Code'),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    controller: _codeAffectedSystem,
+                    onSaved: (value) {
+                      setState(() {
+                        _codeAffectedSystem.text = value;
+                      });
+                    },
+                    onChanged: (value) {
+                      checkOtherAffectedSystem(value);
+                      setState(() {
+                        _selectedAffected = onChangedMethodAffectedKey(value);
+                      });
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) {
+                      if (value.isNotEmpty) {
+                        if (int.tryParse(value) == 0 ||
+                            int.tryParse(value) > 12) {
+                          return 'The code can be between 1-12';
+                        } else {
+                          return null;
+                        }
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  PaddingDecorate(10),
+                  DropdownButtonFormField2<String>(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Select affected systems'),
+                    items: _affectedList
+                        .map((key, value) {
+                          return MapEntry(
+                              key,
+                              DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              ));
+                        })
+                        .values
+                        .toList(),
+                    value: _selectedAffected,
+                    dropdownMaxHeight: h / 2,
+                    onChanged: (value) {
+                      checkOtherAffectedSystem(value);
+                      onChangedMethodAffectedValue(value);
+                      setState(() {
+                        _selectedAffected = value;
+                        _affectedSearch.clear();
+                      });
+                    },
+                    searchController: _affectedSearch,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
+                      ),
+                      child: TextFormField(
+                        controller: _affectedSearch,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _affectedSearch.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
+                        ),
+                      ),
+                    ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  Visibility(
+                    visible: isVisibleOtherAffectedSystem,
+                    child: TextFormField(
+                      decoration: textdecorate('Your affected system'),
+                      controller: _otherAffectedSystem,
+                      autovalidateMode: isVisibleOtherAffectedSystem
+                          ? AutovalidateMode.onUserInteraction
+                          : AutovalidateMode.disabled,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please fill in your affected system';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  const Text(
+                    'Main Symptom(s)',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  Form(
+                    key: _mainSymptomListKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          keyboardType: TextInputType.number,
+                          decoration: textdecorate('Code'),
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
+                          controller: _codeMainSymptom,
+                          onChanged: (value) {
+                            checkOtherSymptom(value);
+                            setState(() {
+                              _selectedMainSymptom =
+                                  onChangedMethodSymptomKey(value);
+                            });
+                            chkRepeat();
+                            _mainSymptomListKey.currentState.validate();
+                          },
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (value) {
+                            if (mainSymptoms.isEmpty) {
+                              if (valueAdded == false) {
+                                return 'Please add at least 1 main symptom';
+                              } else if (value.isNotEmpty &&
+                                  (int.tryParse(value) == 0 ||
+                                      int.tryParse(value) > 12)) {
+                                return 'The input code is invalid';
+                              } else {
+                                return null;
+                              }
+                            } else if (mainSymptoms.isNotEmpty) {
+                              if (value.isEmpty || value == null) {
+                                return null;
+                              } else if (value.isNotEmpty &&
+                                  (int.tryParse(value) == 0 ||
+                                      int.tryParse(value) > 12)) {
+                                return 'The input code is invalid';
+                              } else if (isRepeat == true) {
+                                return 'This symptom is already selected';
+                              }
                             } else {
                               return null;
                             }
-                          } else if (mainSymptoms.isNotEmpty) {
-                            if (value.isEmpty || value == null) {
-                              return null;
-                            } else if (value.isNotEmpty &&
-                                (int.tryParse(value) == 0 ||
-                                    int.tryParse(value) > 12)) {
-                              return 'The input code is invalid';
-                            } else if (isRepeat == true) {
-                              return 'This symptom is already selected';
-                            }
-                          } else {
                             return null;
-                          }
-                        },
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(10),
-                      ),
-                      DropdownButtonFormField2<String>(
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        decoration: textdecorate('Select main symptom(s)'),
-                        items: _mainSymptomList
-                            .map((key, value) {
-                              return MapEntry(
-                                  key,
-                                  DropdownMenuItem(
-                                    value: value,
-                                    child: Text(value),
-                                  ));
-                            })
-                            .values
-                            .toList(),
-                        value: _selectedMainSymptom,
-                        dropdownMaxHeight: h / 2,
-                        onChanged: (value) {
-                          checkOtherSymptom(value);
-                          onChangedMethodSymptomValue(value);
-                          setState(() {
-                            _selectedMainSymptom = value;
-                            _mainSymptomSearch.clear();
-                          });
-                          chkRepeat();
-                        },
-                        searchController: _mainSymptomSearch,
-                        searchInnerWidget: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20,
-                            right: 20,
-                            bottom: 10,
-                            top: 10,
-                          ),
-                          child: TextFormField(
-                            controller: _mainSymptomSearch,
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
+                          },
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.all(10),
+                        ),
+                        DropdownButtonFormField2<String>(
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: textdecorate('Select main symptom(s)'),
+                          items: _mainSymptomList
+                              .map((key, value) {
+                                return MapEntry(
+                                    key,
+                                    DropdownMenuItem(
+                                      value: value,
+                                      child: Text(value),
+                                    ));
+                              })
+                              .values
+                              .toList(),
+                          value: _selectedMainSymptom,
+                          dropdownMaxHeight: h / 2,
+                          onChanged: (value) {
+                            checkOtherSymptom(value);
+                            onChangedMethodSymptomValue(value);
+                            setState(() {
+                              _selectedMainSymptom = value;
+                              _mainSymptomSearch.clear();
+                            });
+                            chkRepeat();
+                          },
+                          searchController: _mainSymptomSearch,
+                          searchInnerWidget: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 20,
+                              right: 20,
+                              bottom: 10,
+                              top: 10,
+                            ),
+                            child: TextFormField(
+                              controller: _mainSymptomSearch,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
                                 ),
+                                suffixIcon: IconButton(
+                                  onPressed: () => _mainSymptomSearch.clear(),
+                                  icon: const Icon(Icons.close),
+                                ),
+                                hintText: 'Search ...',
                               ),
-                              suffixIcon: IconButton(
-                                onPressed: () => _mainSymptomSearch.clear(),
-                                icon: const Icon(Icons.close),
-                              ),
-                              hintText: 'Search ...',
                             ),
                           ),
-                        ),
-                        searchMatchFn: (item, searchValue) {
-                          return (item.value.toString().toLowerCase().contains(
-                                searchValue.toLowerCase(),
-                              ));
-                        },
-                        validator: (value) {
-                          if (mainSymptoms.isEmpty && valueAdded == false) {
-                            return 'Please add at least 1 main symptom';
-                          }
-                          if (isRepeat == true && mainSymptoms.isNotEmpty) {
-                            return 'This symptom is already selected';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
-                      Visibility(
-                        visible: isVisibleOtherMainSymptom,
-                        child: Column(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(10),
-                            ),
-                            TextFormField(
-                              decoration: textdecorate('Your main symptom(s)'),
-                              controller: _otherMainSymptom,
-                              autovalidateMode: isVisibleOtherMainSymptom
-                                  ? AutovalidateMode.onUserInteraction
-                                  : AutovalidateMode.disabled,
-                              validator: (value) {
-                                if (value.isEmpty) {
-                                  return 'Please fill in your main symptom';
-                                } else {
-                                  return null;
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: IconButton(
-                          onPressed: () {
-                            if (_selectedMainSymptom.isNotEmpty) {
-                              addMainSymptomList();
-                              setState(() {
-                                _selectedMainSymptom = null;
-                                _codeMainSymptom.clear();
-                              });
+                          searchMatchFn: (item, searchValue) {
+                            return (item.value
+                                .toString()
+                                .toLowerCase()
+                                .contains(
+                                  searchValue.toLowerCase(),
+                                ));
+                          },
+                          validator: (value) {
+                            if (mainSymptoms.isEmpty && valueAdded == false) {
+                              return 'Please add at least 1 main symptom';
+                            }
+                            if (isRepeat == true && mainSymptoms.isNotEmpty) {
+                              return 'This symptom is already selected';
+                            } else {
+                              return null;
                             }
                           },
-                          icon: const Icon(Icons.add_circle_outline),
                         ),
-                        alignment: Alignment.centerRight,
-                      ),
+                        Visibility(
+                          visible: isVisibleOtherMainSymptom,
+                          child: Column(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(10),
+                              ),
+                              TextFormField(
+                                decoration:
+                                    textdecorate('Your main symptom(s)'),
+                                controller: _otherMainSymptom,
+                                autovalidateMode: isVisibleOtherMainSymptom
+                                    ? AutovalidateMode.onUserInteraction
+                                    : AutovalidateMode.disabled,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Please fill in your main symptom';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          child: IconButton(
+                            onPressed: () {
+                              if (_selectedMainSymptom.isNotEmpty) {
+                                addMainSymptomList();
+                                setState(() {
+                                  _selectedMainSymptom = null;
+                                  _codeMainSymptom.clear();
+                                });
+                              }
+                            },
+                            icon: const Icon(Icons.add_circle_outline),
+                          ),
+                          alignment: Alignment.centerRight,
+                        ),
+                      ],
+                    ),
+                  ),
+                  mainSymptoms.isNotEmpty
+                      ? Column(
+                          children: <Widget>[
+                            for (var item in mainSymptoms)
+                              Card(
+                                elevation: 0,
+                                color: Colors.blue[200],
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(30),
+                                  ),
+                                ),
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 10,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      Text(item.selectedMainSymptomCode),
+                                      Text(item.selectedMainSymptom),
+                                      IconButton(
+                                        alignment: Alignment.centerRight,
+                                        icon: const Icon(Icons.close),
+                                        onPressed: () {
+                                          setState(() {
+                                            mainSymptoms.remove(item);
+                                            isAdded();
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                          ],
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.all(0),
+                        ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  const Text(
+                    'Cause of illness',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: textdecorate('Code'),
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                     ],
+                    controller: _codeIllnessCause,
+                    onSaved: (value) {
+                      setState(() {
+                        _codeIllnessCause.text = value;
+                      });
+                    },
+                    onChanged: (value) {
+                      checkOtherCause(value);
+                      setState(() {
+                        _selectedIllnessCause = onChangedMethodCauseKey(value);
+                      });
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
-                ),
-                mainSymptoms.isNotEmpty
-                    ? Column(
-                        children: <Widget>[
-                          for (var item in mainSymptoms)
-                            Card(
-                              elevation: 0,
-                              color: Colors.blue[200],
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                              ),
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 10,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Text(item.selectedMainSymptomCode),
-                                    Text(item.selectedMainSymptom),
-                                    IconButton(
-                                      alignment: Alignment.centerRight,
-                                      icon: const Icon(Icons.close),
-                                      onPressed: () {
-                                        setState(() {
-                                          mainSymptoms.remove(item);
-                                          isAdded();
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  DropdownButtonFormField2<String>(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    decoration: textdecorate('Select cause of illness'),
+                    items: _causeIllnessList
+                        .map((key, value) {
+                          return MapEntry(
+                            key,
+                            DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
                             ),
-                        ],
-                      )
-                    : const Padding(
-                        padding: EdgeInsets.all(0),
+                          );
+                        })
+                        .values
+                        .toList(),
+                    value: _selectedIllnessCause,
+                    onChanged: (value) {
+                      checkOtherCause(value);
+                      onChangedMethodCauseValue(value);
+                      setState(() {
+                        _selectedIllnessCause = value;
+                        _illnessCauseSearch.clear();
+                      });
+                    },
+                    dropdownMaxHeight: h / 3,
+                    searchController: _illnessCauseSearch,
+                    searchInnerWidget: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                        top: 10,
                       ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                const Text(
-                  'Cause of illness',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: textdecorate('Code'),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                  controller: _codeIllnessCause,
-                  onSaved: (value) {
-                    setState(() {
-                      _codeIllnessCause.text = value;
-                    });
-                  },
-                  onChanged: (value) {
-                    checkOtherCause(value);
-                    setState(() {
-                      _selectedIllnessCause = onChangedMethodCauseKey(value);
-                    });
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                DropdownButtonFormField2<String>(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: textdecorate('Select cause of illness'),
-                  items: _causeIllnessList
-                      .map((key, value) {
-                        return MapEntry(
-                          key,
-                          DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                      child: TextFormField(
+                        controller: _illnessCauseSearch,
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
                           ),
-                        );
-                      })
-                      .values
-                      .toList(),
-                  value: _selectedIllnessCause,
-                  onChanged: (value) {
-                    checkOtherCause(value);
-                    onChangedMethodCauseValue(value);
-                    setState(() {
-                      _selectedIllnessCause = value;
-                      _illnessCauseSearch.clear();
-                    });
-                  },
-                  dropdownMaxHeight: h / 3,
-                  searchController: _illnessCauseSearch,
-                  searchInnerWidget: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      bottom: 10,
-                      top: 10,
+                          suffixIcon: IconButton(
+                            onPressed: () => _illnessCauseSearch.clear(),
+                            icon: const Icon(Icons.close),
+                          ),
+                          hintText: 'Search ...',
+                        ),
+                      ),
                     ),
+                    searchMatchFn: (item, searchValue) {
+                      return (item.value.toString().toLowerCase().contains(
+                            searchValue.toLowerCase(),
+                          ));
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  Visibility(
+                    visible: isVisibleOtherIllnessCause,
                     child: TextFormField(
-                      controller: _illnessCauseSearch,
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
-                          ),
-                        ),
-                        suffixIcon: IconButton(
-                          onPressed: () => _illnessCauseSearch.clear(),
-                          icon: const Icon(Icons.close),
-                        ),
-                        hintText: 'Search ...',
-                      ),
+                      decoration: textdecorate('Your cause of illness'),
+                      controller: _otherIllnessCause,
+                      autovalidateMode: isVisibleOtherIllnessCause
+                          ? AutovalidateMode.onUserInteraction
+                          : AutovalidateMode.disabled,
                     ),
                   ),
-                  searchMatchFn: (item, searchValue) {
-                    return (item.value.toString().toLowerCase().contains(
-                          searchValue.toLowerCase(),
-                        ));
-                  },
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                Visibility(
-                  visible: isVisibleOtherIllnessCause,
-                  child: TextFormField(
-                    decoration: textdecorate('Your cause of illness'),
-                    controller: _otherIllnessCause,
-                    autovalidateMode: isVisibleOtherIllnessCause
-                        ? AutovalidateMode.onUserInteraction
-                        : AutovalidateMode.disabled,
+                  const Padding(
+                    padding: EdgeInsets.all(10),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                const Text(
-                  'Absence in days',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                  decoration: textdecorateinday('Absence in days'),
-                  controller: _absenceDayController,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Absence days are required';
-                    } else {
-                      return null;
-                    }
-                  },
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(20),
-                ),
-                const Text(
-                  'Advice Message',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  const Text(
+                    'Absence in days',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                ),
-                TextFormField(
-                  maxLines: 10,
-                  keyboardType: TextInputType.text,
-                  controller: _messageController,
-                  decoration: textdecorate('Description...'),
-                ),
-              ],
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    decoration: textdecorateinday('Absence in days'),
+                    controller: _absenceDayController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Absence days are required';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(20),
+                  ),
+                  const Text(
+                    'Advice Message',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(10),
+                  ),
+                  TextFormField(
+                    maxLines: 10,
+                    keyboardType: TextInputType.text,
+                    controller: _messageController,
+                    decoration: textdecorate('Description...'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
