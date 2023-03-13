@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/customer_support.dart';
 import 'package:seniorapp/component/page/staff-page/staff_personal.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 
@@ -73,7 +74,7 @@ class _StaffProfileState extends State<StaffProfile> {
                 height: h / 10,
                 child: const Text(
                   'Personal Information',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -90,6 +91,30 @@ class _StaffProfileState extends State<StaffProfile> {
             //       ),
             //     ),
             //   ),
+          ),
+          GestureDetector(
+            child: Card(
+              elevation: 1,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: w * 0.05),
+                width: w,
+                height: h / 10,
+                child: const Text(
+                  'Customer Support',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return const CustomerSupportPage(userType: 'Staff');
+              }));
+            },
           ),
           GestureDetector(
             child: Card(
@@ -179,7 +204,7 @@ class _StaffProfileState extends State<StaffProfile> {
                 height: h / 10,
                 child: const Text(
                   'Log Out',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),

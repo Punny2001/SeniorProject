@@ -66,6 +66,7 @@ dependencies:
   flutter_local_notifications: ^13.0.0
   fl_chart: ^0.55.2
   month_year_picker: ^0.2.0+3
+  flutter_email_sender: ^5.2.0
 
   
 dev_dependencies:

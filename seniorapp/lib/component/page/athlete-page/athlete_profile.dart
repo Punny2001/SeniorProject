@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/customer_support.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/component/page/athlete-page/profile-page/athlete_personal.dart';
 import 'package:seniorapp/decoration/padding.dart';
@@ -37,11 +38,11 @@ class _AthleteProfileState extends State<AthleteProfile> {
             Container(
               child: Ink(
                 decoration: ShapeDecoration(
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   color: Colors.green.shade300,
                 ),
                 child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
+                  icon: const Icon(Icons.arrow_back_ios),
                   alignment: Alignment.centerRight,
                   onPressed: () => Navigator.of(context).pop(),
                 ),
@@ -60,7 +61,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 padding: EdgeInsets.only(left: w * 0.05),
                 width: w,
                 height: h / 10,
-                child: Text(
+                child: const Text(
                   'ข้อมูลส่วนตัว',
                   style: TextStyle(
                     fontSize: 18,
@@ -88,7 +89,31 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 padding: EdgeInsets.only(left: w * 0.05),
                 width: w,
                 height: h / 10,
-                child: Text(
+                child: const Text(
+                  'ช่วยเหลือ',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (BuildContext context) {
+                return const CustomerSupportPage(userType: 'Athlete');
+              }));
+            },
+          ),
+          GestureDetector(
+            child: Card(
+              elevation: 1,
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: w * 0.05),
+                width: w,
+                height: h / 10,
+                child: const Text(
                   'ลบบัญชี',
                   style: TextStyle(
                     fontSize: 18,
@@ -102,13 +127,13 @@ class _AthleteProfileState extends State<AthleteProfile> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('ลบบัญชี'),
+                      title: const Text('ลบบัญชี'),
                       content: Container(
                         height: h / 5,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Center(
+                            const Center(
                               child: Text(
                                 'คุณแน่ใจจะลบบัญชีใช่หรือไม่?',
                               ),
@@ -133,8 +158,8 @@ class _AthleteProfileState extends State<AthleteProfile> {
                                       );
                                     });
                                   },
-                                  icon: Icon(Icons.check_rounded),
-                                  label: Text('ตกลง'),
+                                  icon: const Icon(Icons.check_rounded),
+                                  label: const Text('ตกลง'),
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.green[900],
                                   ),
@@ -143,8 +168,8 @@ class _AthleteProfileState extends State<AthleteProfile> {
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  icon: Icon(Icons.close_rounded),
-                                  label: Text('ปฏิเสธ'),
+                                  icon: const Icon(Icons.close_rounded),
+                                  label: const Text('ปฏิเสธ'),
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.red[900],
                                   ),
@@ -166,7 +191,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 padding: EdgeInsets.only(left: w * 0.05),
                 width: w,
                 height: h / 10,
-                child: Text(
+                child: const Text(
                   'ลงชื่อออก',
                   style: TextStyle(
                     fontSize: 18,
