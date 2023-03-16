@@ -24,7 +24,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
       width: w,
       height: h,
       child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             // CarouselSlider(
@@ -131,7 +131,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
             //   ],
             // ),
             SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
                   Container(
@@ -224,7 +224,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              IllnessReport(null, null, null),
+                              const IllnessReport(null, null, null),
                         ),
                       ),
                     ),
