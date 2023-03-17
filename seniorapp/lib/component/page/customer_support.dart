@@ -37,7 +37,9 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
             Ink(
               decoration: ShapeDecoration(
                 shape: const CircleBorder(),
-                color: Colors.blue.shade200,
+                color: widget.userType == 'Staff'
+                    ? Colors.blue[200]
+                    : Colors.green[300],
               ),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
@@ -150,7 +152,7 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
           width: MediaQuery.of(context).size.width / 2,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Colors.blue[300],
+              primary: Colors.green[300],
             ),
             onPressed: () {
               sendEmail(text.text, uid)
