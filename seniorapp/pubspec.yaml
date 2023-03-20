@@ -67,6 +67,7 @@ dependencies:
   fl_chart: ^0.55.2
   month_year_picker: ^0.2.0+3
   flutter_email_sender: ^5.2.0
+  mailer: ^5.1.0
 
   
 dev_dependencies:
