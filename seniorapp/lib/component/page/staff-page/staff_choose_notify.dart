@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/staff-page/history/finished_case.dart';
-import 'package:seniorapp/component/page/staff-page/history/staff_history.dart';
 import 'package:seniorapp/component/page/staff-page/notify-page/staff_appointment_notify.dart';
 import 'package:seniorapp/component/page/staff-page/notify-page/staff_notify.dart';
 import 'package:seniorapp/decoration/padding.dart';

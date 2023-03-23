@@ -245,7 +245,7 @@ class HealthReportDetail extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        SizedBox(
+                        Container(
                           width: w * 0.5,
                           child: Text(
                             answerTextList[i],

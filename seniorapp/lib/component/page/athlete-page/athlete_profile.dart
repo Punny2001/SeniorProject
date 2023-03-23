@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/customer_support.dart';
+import 'package:seniorapp/component/profile.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/component/page/athlete-page/profile-page/athlete_personal.dart';
 import 'package:seniorapp/decoration/padding.dart';
@@ -70,16 +71,13 @@ class _AthleteProfileState extends State<AthleteProfile> {
                 ),
               ),
             ),
-            // onTap: () => Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => AthletePersonal(
-            //       email: athData.email,
-            //       firstname: athData.firstname,
-            //       lastname: athData.lastname,
-            //       ath_no: athData.athlete_no,
-            //     ),
-            //   ),
-            // ),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                  athlete: athData,
+                ),
+              ),
+            ),
           ),
           GestureDetector(
             child: Card(

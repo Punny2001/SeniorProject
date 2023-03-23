@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,9 +43,18 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
         .where('staffUID', isEqualTo: uid)
         .get()
         .then((snapshot) {
-      setState(() {
-        appointmentSize = snapshot.docs.length;
+      int size = 0;
+      snapshot.docs.forEach((element) {
+        if (element['receivedStatus'] == true &&
+            element['staffReadStatus'] == false) {
+          size += 1;
+        }
       });
+      if (mounted) {
+        setState(() {
+          appointmentSize = size;
+        });
+      }
     });
   }
 
@@ -100,6 +110,7 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
 
   @override
   Widget build(BuildContext context) {
+    print(appointmentSize);
     Staff _currentAthlete;
 
     final w = MediaQuery.of(context).size.width;
@@ -132,6 +143,14 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
                           index += 1;
                         }
 
+                        mappedData.retainWhere(
+                            (element) => element['receivedStatus'] == true);
+
+                        mappedData.sort(
+                          (a, b) => ('${b['doDate'].toDate()}')
+                              .compareTo('${a['doDate'].toDate()}'),
+                        );
+
                         switch (snapshot.connectionState) {
                           case (ConnectionState.waiting):
                             {
@@ -154,111 +173,96 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
                                           Staff.fromMap(athleteData[i]);
                                     }
                                   }
-                                  return Card(
-                                    elevation: 5,
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                            left: 10,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text.rich(
-                                                TextSpan(
-                                                  text: 'Athlete: ',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text:
-                                                          '${_currentAthlete.firstname} ${_currentAthlete.lastname}',
-                                                      style: const TextStyle(
-                                                          fontWeight: FontWeight
-                                                              .normal),
+                                  return GestureDetector(
+                                    onTap: () => setState(() {
+                                      updateData(data['docID']);
+                                    }),
+                                    child: Card(
+                                      elevation: 5,
+                                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.only(
+                                              left: 10,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: 'Athlete: ',
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text.rich(
-                                                TextSpan(
-                                                  text: 'Appointed Date: ',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text: formatDate(
-                                                          data['appointDate']
-                                                              .toDate(),
-                                                          'Staff'),
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal,
+                                                    children: [
+                                                      TextSpan(
+                                                        text:
+                                                            '${_currentAthlete.firstname} ${_currentAthlete.lastname}',
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text.rich(
-                                                TextSpan(
-                                                  text: 'Detail: ',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
+                                                    ],
                                                   ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text: _getDetail(data[
-                                                          'appointStatus']),
-                                                      style: const TextStyle(
-                                                          fontWeight: FontWeight
-                                                              .normal),
+                                                ),
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: 'Appointed Date: ',
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                  ],
+                                                    children: [
+                                                      TextSpan(
+                                                        text: formatDate(
+                                                            data['appointDate']
+                                                                .toDate(),
+                                                            'Staff'),
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: 'Detail: ',
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    children: [
+                                                      TextSpan(
+                                                        text: _getDetail(data[
+                                                            'appointStatus']),
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                        Visibility(
-                                          visible:
-                                              data['receivedStatus'] == null,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              ElevatedButton.icon(
-                                                onPressed: () {
-                                                  setState(() {});
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: Colors.red[300],
-                                                ),
-                                                icon: const Icon(Icons.close),
-                                                label: const Text('ปฏิเสธ'),
-                                              ),
-                                              ElevatedButton.icon(
-                                                onPressed: () {
-                                                  setState(() {});
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: Colors.green[400],
-                                                ),
-                                                icon: const Icon(Icons.check),
-                                                label: const Text('ตกลง'),
-                                              ),
-                                            ],
+                                          Badge(
+                                            showBadge:
+                                                data['staffReadStatus'] ==
+                                                    false,
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -287,14 +291,13 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
     );
   }
 
-  Future<void> updateData(String docID, bool status) async {
+  Future<void> updateData(String docID) async {
     await FirebaseFirestore.instance
         .collection('AppointmentRecord')
         .doc(docID)
         .update({
-      'receivedStatus': true,
-      'receivedDate': DateTime.now(),
-      'appointStatus': status,
+      'staffReadStatus': true,
+      'staffReadDate': DateTime.now(),
     });
   }
 }

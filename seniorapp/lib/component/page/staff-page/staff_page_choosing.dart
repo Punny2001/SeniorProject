@@ -30,7 +30,29 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int notificationCount;
   int index;
   int unfinishedCaseCount = 0;
+  int appointmentSize = 0;
   Staff staff;
+
+  getAppointmentSize() {
+    FirebaseFirestore.instance
+        .collection('AppointmentRecord')
+        .where('staffUID', isEqualTo: uid)
+        .get()
+        .then((snapshot) {
+      int size = 0;
+      snapshot.docs.forEach((element) {
+        if (element['receivedStatus'] == true &&
+            element['staffReadStatus'] == false) {
+          size += 1;
+        }
+      });
+      if (mounted) {
+        setState(() {
+          appointmentSize = size;
+        });
+      }
+    });
+  }
 
   getHealthSize() {
     FirebaseFirestore.instance
@@ -130,8 +152,9 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   void _getNotificationCount() {
     getHealthSize();
     getPhysicalSize();
+    getAppointmentSize();
     setState(() {
-      notificationCount = healthSize + physicalSize;
+      notificationCount = healthSize + physicalSize + appointmentSize;
     });
   }
 
@@ -174,8 +197,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     if (Platform.isIOS) {
       requestPermission();
     }
-    getHealthSize();
-    getPhysicalSize();
     FirebaseFirestore.instance
         .collection('Staff')
         .doc(uid)

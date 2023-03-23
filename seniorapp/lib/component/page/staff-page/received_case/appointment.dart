@@ -174,7 +174,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
     if (isValidate) {
       AppointmentData appointmentDataModel = AppointmentData(
         caseID: widget.docID,
-        apppointmentNo: appointNo,
+        appointmentNo: appointNo,
         appointDate: _datetime,
         detail: _detailController.text,
         doDate: DateTime.now(),
@@ -182,7 +182,9 @@ class _AppointmentPageState extends State<AppointmentPage> {
         athleteUID: widget.data['athleteUID'],
         appointStatus: null,
         receivedDate: DateTime(1900),
-        receivedStatus: null,
+        receivedStatus: false,
+        staffReadDate: DateTime(1900),
+        staffReadStatus: false,
       );
 
       Map<String, dynamic> data = appointmentDataModel.toMap();
@@ -197,7 +199,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
               return AlertDialog(
                 title: const Text('Making appointment success'),
                 content: Text(
-                    'Your appointment number ${appointNo} is successfully reserved!!'),
+                    'Your appointment number $appointNo is successfully reserved!!'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () => Navigator.of(context)

@@ -509,15 +509,16 @@ class _StaffCaseState extends State<StaffNotify> {
                                               updateData(
                                                 data['questionnaireType'],
                                                 data['docID'],
-                                              );
-                                              sendPushMessage(
-                                                  athleteToken,
-                                                  _staff,
-                                                  data['questionnaireNo']);
-                                              widget.refreshNotification;
-                                              setState(() {
-                                                getHealthSize();
-                                                getPhysicalSize();
+                                              ).then((value) {
+                                                sendPushMessage(
+                                                    athleteToken,
+                                                    _staff,
+                                                    data['questionnaireNo']);
+                                              }).then((value) {
+                                                setState(() {
+                                                  getHealthSize();
+                                                  getPhysicalSize();
+                                                });
                                               });
                                             },
                                             child: Container(

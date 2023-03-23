@@ -393,7 +393,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                           launch(ucepUrl);
                                         },
                                     )
-                                  : const SizedBox(),
+                                  : const TextSpan(),
                             ],
                           ),
                         ),

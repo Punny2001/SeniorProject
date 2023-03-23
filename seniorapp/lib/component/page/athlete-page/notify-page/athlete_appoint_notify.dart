@@ -127,6 +127,11 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                           index += 1;
                         }
 
+                        mappedData.sort(
+                          (a, b) => ('${b['doDate'].toDate()}')
+                              .compareTo('${a['doDate'].toDate()}'),
+                        );
+
                         switch (snapshot.connectionState) {
                           case (ConnectionState.waiting):
                             {
@@ -211,6 +216,26 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                                               ),
                                               Text.rich(
                                                 TextSpan(
+                                                  text: 'เวลาที่นัด: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatTime(
+                                                        data['appointDate']
+                                                            .toDate(),
+                                                      ),
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
                                                   text: 'รายละเอียด: ',
                                                   style: const TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -229,7 +254,8 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                                           ),
                                         ),
                                         Visibility(
-                                          visible:
+                                          visible: data['receivedStatus'] ==
+                                                  false ||
                                               data['receivedStatus'] == null,
                                           child: Row(
                                             mainAxisAlignment:
@@ -237,15 +263,17 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                                             children: [
                                               ElevatedButton.icon(
                                                 onPressed: () {
-                                                  setState(() {
-                                                    updateData(
-                                                        data['docID'], false);
+                                                  updateData(
+                                                          data['docID'], false)
+                                                      .then((value) {
                                                     sendPushFailedMessage(
                                                       _currentStaff.token,
                                                       _currentStaff,
                                                       data,
                                                     );
-                                                  });
+                                                  }).then(
+                                                    (value) => setState(() {}),
+                                                  );
                                                 },
                                                 style: ElevatedButton.styleFrom(
                                                   primary: Colors.red[300],
@@ -370,13 +398,14 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
   }
 
   Future<void> updateData(String docID, bool status) async {
+    print(docID);
     await FirebaseFirestore.instance
         .collection('AppointmentRecord')
         .doc(docID)
         .get()
         .then((snapshot) async {
       Map<String, dynamic> data = snapshot.data();
-      if (data['receivedStatus'] == false) {
+      if (data['receivedStatus'] == false || data['receivedStatus'] == null) {
         await FirebaseFirestore.instance
             .collection('AppointmentRecord')
             .doc(docID)

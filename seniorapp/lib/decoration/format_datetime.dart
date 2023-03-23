@@ -26,5 +26,5 @@ String formatDate(DateTime dateTime, String userType) {
 }
 
 String formatTime(DateTime dateTime) {
-  return DateFormat.Hms().format(dateTime);
+  return DateFormat.Hm().format(dateTime);
 }
