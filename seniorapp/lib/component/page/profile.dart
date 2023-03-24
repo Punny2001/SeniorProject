@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(right: 10),
             ),
             Text(widget.athlete.athlete_no),
@@ -64,66 +64,85 @@ class _ProfilePageState extends State<ProfilePage> {
                   //     'https://www.example.com/profile.jpg',
                   //   ),
                   // ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Text(
                     widget.athlete.firstname + ' ' + widget.athlete.lastname,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Divider(
+                  const SizedBox(height: 10),
+                  const Divider(
                     thickness: 2,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.person,
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(right: 10),
                       ),
                       Text(
                         widget.athlete.username,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 20,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.only(right: 10),
                       ),
                       Text(
                         widget.athlete.department +
                             ' | ' +
                             widget.athlete.sportType,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    widget.athlete.email,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.email),
+                      const Padding(
+                        padding: EdgeInsets.only(right: 10),
+                      ),
+                      Text(
+                        widget.athlete.email,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 10),
-                  Text(
-                    widget.athlete.phoneNo,
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.phone),
+                      const Padding(
+                        padding: EdgeInsets.only(right: 10),
+                      ),
+                      Text(
+                        widget.athlete.phoneNo,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -140,27 +159,27 @@ class _ProfilePageState extends State<ProfilePage> {
                   //     'https://www.example.com/profile.jpg',
                   //   ),
                   // ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     widget.athlete.firstname + ' ' + widget.athlete.lastname,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     widget.athlete.department + ': ' + widget.athlete.sportType,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   Text(
                     widget.athlete.email,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w300,
                     ),

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/customer_support.dart';
-import 'package:seniorapp/component/profile.dart';
+import 'package:seniorapp/component/page/profile.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/component/page/athlete-page/profile-page/athlete_personal.dart';
 import 'package:seniorapp/decoration/padding.dart';

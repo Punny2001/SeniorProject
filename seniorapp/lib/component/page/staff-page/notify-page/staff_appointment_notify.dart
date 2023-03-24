@@ -187,6 +187,7 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Container(
+                                            width: w * 0.9,
                                             padding: const EdgeInsets.only(
                                               left: 10,
                                             ),
@@ -226,6 +227,27 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
                                                             data['appointDate']
                                                                 .toDate(),
                                                             'Staff'),
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: 'Appointed Time: ',
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    children: [
+                                                      TextSpan(
+                                                        text: formatTime(
+                                                          data['appointDate']
+                                                              .toDate(),
+                                                        ),
                                                         style: const TextStyle(
                                                           fontWeight:
                                                               FontWeight.normal,

@@ -31,6 +31,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   int unreceivedPhysicalSize = 0;
   List<Map<String, dynamic>> unreceivedMessageHealth = [];
   List<Map<String, dynamic>> unreceivedMessagePhysical = [];
+  int appointmentSize = 0;
 
   final List<Widget> _athletePageList = <Widget>[
     const AthleteHomePage(),
@@ -84,6 +85,26 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     super.dispose();
   }
 
+  getAppointmentSize() {
+    FirebaseFirestore.instance
+        .collection('AppointmentRecord')
+        .where('athleteUID', isEqualTo: uid)
+        .get()
+        .then((snapshot) {
+      int size = 0;
+      snapshot.docs.forEach((element) {
+        if (element['receivedStatus'] == false) {
+          size += 1;
+        }
+      });
+      if (mounted) {
+        setState(() {
+          appointmentSize = size;
+        });
+      }
+    });
+  }
+
   getUnreceivedMessagePhysicalSize() {
     FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
@@ -127,8 +148,10 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   void _getUnreceivedMessageSize() {
     getUnreceivedMessageHealthSize();
     getUnreceivedMessagePhysicalSize();
+    getAppointmentSize();
     setState(() {
-      notificationCount = unreceivedHealthSize + unreceivedPhysicalSize;
+      notificationCount =
+          unreceivedHealthSize + unreceivedPhysicalSize + appointmentSize;
     });
   }
 
