@@ -20,7 +20,6 @@ class StaffGraph extends StatefulWidget {
 
 class _StaffGraphState extends State<StaffGraph> {
   bool isLoading = true;
-  List<Map<String, dynamic>> latestData = [];
   Timer _timer;
   DateTime now = DateTime.now();
   DateTimeRange dateRange = DateTimeRange(
@@ -125,28 +124,6 @@ class _StaffGraphState extends State<StaffGraph> {
     setState(() {});
   }
 
-  getLatestHealthDataWeek() {
-    FirebaseFirestore.instance
-        .collection('HealthQuestionnaireResult')
-        .get()
-        .then((snapshot) {
-      setState(() {
-        latestData.add(snapshot.docs.last.data());
-      });
-    });
-  }
-
-  getLatestPhysicalDataWeek() {
-    FirebaseFirestore.instance
-        .collection('PhysicalQuestionnaireResult')
-        .get()
-        .then((snapshot) {
-      setState(() {
-        latestData.add(snapshot.docs.first.data());
-      });
-    });
-  }
-
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
     data.retainWhere((element) =>
         element['doDate']
@@ -196,7 +173,7 @@ class _StaffGraphState extends State<StaffGraph> {
       firstDate: DateTime(1900),
       lastDate: DateTime(now.year + 1),
     );
-    // if (newDateRange == null) return;
+
     setState(() {
       dateRange = newDateRange;
     });
@@ -209,11 +186,6 @@ class _StaffGraphState extends State<StaffGraph> {
       isLoading = true;
     });
     getAthleteData();
-    getLatestHealthDataWeek();
-    getLatestPhysicalDataWeek();
-    latestData.sort((a, b) =>
-        ('${a['doDate'].toDate()}').compareTo('${b['doDate'].toDate()}'));
-
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;

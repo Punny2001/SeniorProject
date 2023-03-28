@@ -38,7 +38,7 @@ class ScrollableColumnTable extends StatelessWidget {
         child: DataTable(
           showBottomBorder: true,
           headingRowColor: MaterialStateProperty.all(Colors.blue[200]),
-          columns: [
+          columns: const [
             DataColumn(label: Text('Sport Type')),
             DataColumn(label: Text('Problem Type')),
             DataColumn(label: Text('Score')),

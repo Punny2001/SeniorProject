@@ -79,12 +79,6 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     });
   }
 
-  void _previousCheckingQuestion() {
-    setState(() {
-      hasQuestion = false;
-    });
-  }
-
   void _hasProblem() {
     setState(() {
       hasProblem = false;

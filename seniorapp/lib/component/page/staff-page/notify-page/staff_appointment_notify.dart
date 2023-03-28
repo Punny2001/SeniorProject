@@ -70,11 +70,14 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
   }
 
   String _getDetail(bool appointStatus) {
+    String detail;
     if (appointStatus == false) {
-      return 'Athlete declined your appointment, please re-appoint for this case.';
+      detail =
+          'Athlete declined your appointment, please re-appoint for this case.';
     } else if (appointStatus == true) {
-      return 'Athlete accepted your appointment.';
+      detail = 'Athlete accepted your appointment.';
     }
+    return detail;
   }
 
   @override

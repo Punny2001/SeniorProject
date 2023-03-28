@@ -48,8 +48,6 @@ class _AthleteGraphState extends State<AthleteGraph> {
 
   List<int> year = [];
 
-  List<Map<String, dynamic>> latestData = [];
-
   List<String> healthSymptom = [
     'คลื่นไส้ ',
     'ชา',
@@ -113,30 +111,6 @@ class _AthleteGraphState extends State<AthleteGraph> {
 
   void choose_filter() {
     setState(() {});
-  }
-
-  getLatestHealthDataWeek() {
-    FirebaseFirestore.instance
-        .collection('HealthQuestionnaireResult')
-        .where('athleteUID', isEqualTo: widget.uid)
-        .get()
-        .then((snapshot) {
-      setState(() {
-        latestData.add(snapshot.docs.last.data());
-      });
-    });
-  }
-
-  getLatestPhysicalDataWeek() {
-    FirebaseFirestore.instance
-        .collection('PhysicalQuestionnaireResult')
-        .where('athleteUID', isEqualTo: widget.uid)
-        .get()
-        .then((snapshot) {
-      setState(() {
-        latestData.add(snapshot.docs.first.data());
-      });
-    });
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
@@ -217,16 +191,12 @@ class _AthleteGraphState extends State<AthleteGraph> {
     setState(() {
       isLoading = true;
     });
-    getLatestHealthDataWeek();
-    getLatestPhysicalDataWeek();
     for (int i = 1900; i <= DateTime.now().year; i++) {
       year.add(i);
     }
     selectedYearIndex = year.length - 1;
     scrollController =
         FixedExtentScrollController(initialItem: selectedYearIndex);
-    latestData.sort((a, b) =>
-        ('${a['doDate'].toDate()}').compareTo('${b['doDate'].toDate()}'));
 
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
