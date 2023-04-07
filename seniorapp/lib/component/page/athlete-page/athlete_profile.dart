@@ -75,6 +75,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
               MaterialPageRoute(
                 builder: (context) => ProfilePage(
                   athlete: athData,
+                  userType: 'Athlete',
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/customer_support.dart';
+import 'package:seniorapp/component/page/profile.dart';
 import 'package:seniorapp/component/page/staff-page/staff_personal.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 
@@ -81,16 +82,14 @@ class _StaffProfileState extends State<StaffProfile> {
                 ),
               ),
             ),
-            //   onTap: () => Navigator.of(context).push(
-            //     MaterialPageRoute(
-            //       builder: (context) => StaffPersonal(
-            //         email: stfData.email,
-            //         firstname: stfData.firstname,
-            //         lastname: stfData.lastname,
-            //         staff_no: stfData.staff_no,
-            //       ),
-            //     ),
-            //   ),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ProfilePage(
+                  staff: stfData,
+                  userType: 'Staff',
+                ),
+              ),
+            ),
           ),
           GestureDetector(
             child: Card(
@@ -139,7 +138,7 @@ class _StaffProfileState extends State<StaffProfile> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text('Delete Account'),
-                      content: Container(
+                      content: SizedBox(
                         height: h / 5,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
