@@ -289,65 +289,63 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(),
-                  color: Colors.green.shade300,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.home),
-                  alignment: Alignment.center,
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('ยกเลิกการบันทึกข้อมูล'),
-                            content: Container(
-                              height: h * 0.2,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                      'คุณแน่ใจจะยกเลิกการบันทึกข้อมูลใช่หรือไม่?'),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      ElevatedButton.icon(
-                                        onPressed: () {
-                                          Navigator.popUntil(
-                                              context,
-                                              ModalRoute.withName(
-                                                  '/athletePageChoosing'));
-                                        },
-                                        icon: Icon(Icons.check_rounded),
-                                        label: Text('ตกลง'),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.green[900],
-                                        ),
+            Ink(
+              decoration: ShapeDecoration(
+                shape: const CircleBorder(),
+                color: Colors.green.shade300,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.home),
+                alignment: Alignment.center,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('ยกเลิกการบันทึกข้อมูล'),
+                          content: SizedBox(
+                            height: h * 0.2,
+                            child: Column(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                    'คุณแน่ใจจะยกเลิกการบันทึกข้อมูลใช่หรือไม่?'),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        Navigator.popUntil(
+                                            context,
+                                            ModalRoute.withName(
+                                                '/athletePageChoosing'));
+                                      },
+                                      icon: const Icon(Icons.check_rounded),
+                                      label: const Text('ตกลง'),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.green[900],
                                       ),
-                                      ElevatedButton.icon(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        icon: Icon(Icons.close_rounded),
-                                        label: Text('ปฏิเสธ'),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.red[900],
-                                        ),
+                                    ),
+                                    ElevatedButton.icon(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon: const Icon(Icons.close_rounded),
+                                      label: const Text('ปฏิเสธ'),
+                                      style: ElevatedButton.styleFrom(
+                                        primary: Colors.red[900],
                                       ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          );
-                        });
-                  },
-                ),
+                          ),
+                        );
+                      });
+                },
               ),
             ),
           ],
@@ -355,8 +353,12 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
       ),
       body: Container(
         padding: (isResult == true && _questionIndex == _questions.length)
-            ? EdgeInsets.only(top: h * 0.3)
-            : EdgeInsets.only(top: h / 3),
+            ? EdgeInsets.only(
+                top: h * 0.3,
+              )
+            : EdgeInsets.only(
+                top: h / 3,
+              ),
         child: hasQuestion
             ? _bodyPartRound < 2
                 ? _questionnaireDisplay(_bodyPartRound)
@@ -516,7 +518,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
               ),
               content: hasProblem == true
                   ? Text('บันทึกข้อมูลอาการ${_bodyChoosing}เรียบร้อย')
-                  : Text('บันทึกข้อมูลอาการเรียบร้อย'),
+                  : const Text('บันทึกข้อมูลอาการเรียบร้อย'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {

@@ -38,206 +38,180 @@ class _LoginState extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Stack(
+      body: Container(
+        height: h,
+        margin: EdgeInsets.only(
+          left: w * 0.1,
+          right: w * 0.1,
+        ),
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              "assets/images/Background_login.PNG",
+              'assets/images/logo.jpg',
               fit: BoxFit.fitWidth,
-              width: w,
-              height: h * 0.5,
             ),
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(80),
-                ),
-              ),
-              // color: Colors.white,
-              height: h,
-              width: w,
-              margin: EdgeInsets.only(top: h * 0.25),
-            ),
-            Container(
-              padding: EdgeInsets.only(top: h * 0.25),
-              margin: EdgeInsets.only(
-                top: 20,
-                left: w * 0.1,
-                right: w * 0.1,
-              ),
-              width: double.infinity,
+            PaddingDecorate(10),
+            Form(
+              key: _keyForm,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/images/mahidol_logo.png',
-                    width: w / 5,
-                    fit: BoxFit.fitHeight,
+                  //////Email container
+                  TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'login_page.email_required'.tr();
+                      } else {
+                        return null;
+                      }
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: _emailController,
+                    decoration: textdecorate_login(
+                      Icons.email,
+                      'Email',
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 15),
+                  ),
+                  //////Password container
+                  TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'login_page.password_required'.tr();
+                      } else {
+                        return null;
+                      }
+                    },
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    controller: _passwordController,
+                    obscureText: _passwordhide,
+                    decoration: InputDecoration(
+                      focusedErrorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                        ),
+                      ),
+                      errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                        ),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFCFD8DC),
+                        ),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFFCFD8DC),
+                        ),
+                      ),
+                      fillColor: const Color(0xFFCFD8DC),
+                      filled: true,
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(fontFamily: 'OpenSans'),
+                      prefixIcon: const Icon(
+                        Icons.lock,
+                        color: Colors.black,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _passwordhide
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.black,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _passwordhide = !_passwordhide;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        textStyle: const TextStyle(
+                          color: Color.fromARGB(255, 113, 157, 242),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () =>
+                          Navigator.of(context).pushNamed('/forgotPassword'),
+                      child: const Text(
+                        'Forgot password',
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => signin(),
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(
+                        fontSize: h * 0.025,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(w, h * 0.07),
+                        elevation: 0,
+                        primary: const Color.fromARGB(255, 113, 157, 242),
+                        shape: const StadiumBorder()),
                   ),
                   PaddingDecorate(10),
-                  Form(
-                    key: _keyForm,
-                    child: Column(
-                      children: [
-                        //////Email container
-                        TextFormField(
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'login_page.email_required'.tr();
-                            } else {
-                              return null;
-                            }
-                          },
-                          keyboardType: TextInputType.emailAddress,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: _emailController,
-                          decoration: textdecorate_login(
-                            Icons.email,
-                            'Email',
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(right: w * 0.05),
+                          child: Divider(
+                            thickness: 2,
+                            height: h * 0.05,
+                            indent: 0,
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 15),
-                        ),
-                        //////Password container
-                        TextFormField(
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'login_page.password_required'.tr();
-                            } else {
-                              return null;
-                            }
-                          },
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          controller: _passwordController,
-                          obscureText: _passwordhide,
-                          decoration: InputDecoration(
-                            focusedErrorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.red,
-                              ),
-                            ),
-                            errorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.red,
-                              ),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFCFD8DC),
-                              ),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xFFCFD8DC),
-                              ),
-                            ),
-                            fillColor: const Color(0xFFCFD8DC),
-                            filled: true,
-                            hintText: 'Password',
-                            hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-                            prefixIcon: const Icon(
-                              Icons.lock,
-                              color: Colors.black,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _passwordhide
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                color: Colors.black,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _passwordhide = !_passwordhide;
-                                });
-                              },
-                            ),
+                      ),
+                      Text('OR'),
+                      Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(left: w * 0.05),
+                          child: Divider(
+                            thickness: 2,
+                            height: h * 0.05,
+                            indent: 0,
                           ),
                         ),
-                        Container(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              textStyle: const TextStyle(
-                                color: Color.fromARGB(255, 113, 157, 242),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed('/forgotPassword'),
-                            child: const Text(
-                              'Forgot password',
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => signin(),
-                          child: Text(
-                            'Sign In',
-                            style: TextStyle(
-                              fontSize: h * 0.025,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: Size(w, h * 0.07),
-                              elevation: 0,
-                              primary: const Color.fromARGB(255, 113, 157, 242),
-                              shape: const StadiumBorder()),
-                        ),
-                        PaddingDecorate(10),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.only(right: w * 0.05),
-                                child: Divider(
-                                  thickness: 2,
-                                  height: h * 0.05,
-                                  indent: 0,
-                                ),
-                              ),
-                            ),
-                            Text('OR'),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.only(left: w * 0.05),
-                                child: Divider(
-                                  thickness: 2,
-                                  height: h * 0.05,
-                                  indent: 0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        PaddingDecorate(10),
-                        ElevatedButton(
-                          onPressed: () =>
-                              Navigator.of(context).pushNamed('/register'),
-                          child: Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              fontSize: h * 0.025,
-                              fontWeight: FontWeight.bold,
-                              color: const Color.fromARGB(255, 113, 157, 242),
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: Size(w, h * 0.07),
-                              side: const BorderSide(
-                                color: Color.fromARGB(255, 113, 157, 242),
-                                width: 3,
-                              ),
-                              elevation: 0,
-                              primary: Colors.white,
-                              shape: const StadiumBorder()),
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  PaddingDecorate(10),
+                  ElevatedButton(
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed('/register'),
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: h * 0.025,
+                        fontWeight: FontWeight.bold,
+                        color: const Color.fromARGB(255, 113, 157, 242),
+                      ),
                     ),
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size(w, h * 0.07),
+                        side: const BorderSide(
+                          color: Color.fromARGB(255, 113, 157, 242),
+                          width: 3,
+                        ),
+                        elevation: 0,
+                        primary: Colors.white,
+                        shape: const StadiumBorder()),
                   ),
                 ],
               ),
