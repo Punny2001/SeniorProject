@@ -1,6 +1,7 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
@@ -82,367 +83,556 @@ class _RegisterState extends State<Register> {
     isAthleteCheck();
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Ink(
-              decoration: const ShapeDecoration(
-                shape: CircleBorder(),
-                color: Color.fromARGB(255, 113, 157, 242),
-              ),
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.of(context).pop();
-                  });
-                },
-                alignment: Alignment.centerRight,
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                ),
-              ),
-            ),
-          ],
+        elevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: const Color.fromARGB(255, 113, 157, 242),
+        // title: Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //   children: [
+        //     Ink(
+        //       decoration: const ShapeDecoration(
+        //         shape: CircleBorder(),
+        //         color: Color.fromARGB(255, 113, 157, 242),
+        //       ),
+        //       child: IconButton(
+        //         onPressed: () {
+        //           setState(() {
+        //             Navigator.of(context).pop();
+        //           });
+        //         },
+        //         alignment: Alignment.centerRight,
+        //         icon: const Icon(
+        //           Icons.arrow_back_ios,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
-      backgroundColor: const Color.fromARGB(255, 113, 157, 242),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Stack(
-          children: [
-            Container(
-              width: w,
-              height: h / 3.5,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/Background_register.PNG"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: h * 0.2),
-              child: Container(
-                width: w,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 113, 157, 242),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
-                  ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(top: h),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 170.0),
-              child: Container(
-                margin: EdgeInsets.all(w * 0.1),
-                decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 113, 157, 242)),
+      body: Container(
+        height: h,
+        margin: EdgeInsets.all(w * 0.1),
+        width: double.infinity,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Form(
+                key: _keyForm,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Form(
-                      key: _keyForm,
-                      child: Column(
+                    Text(
+                      'Email (อีเมล)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    TextFormField(
+                      focusNode: _emailFocusNode,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          if (!_emailFocusNode.hasFocus) {
+                            _emailFocusNode.requestFocus();
+                          }
+                          return 'Email address is required';
+                        } else {
+                          return null;
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _emailController,
+                      decoration: textdecorate_login(
+                        Icons.email,
+                        'Email Address',
+                      ),
+                    ),
+                    PaddingDecorate(15),
+
+                    /// Password registration
+                    Text(
+                      'Password (รหัสผ่าน)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    TextFormField(
+                      focusNode: _passwordFocusNode,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          if (!_passwordFocusNode.hasFocus) {
+                            _passwordFocusNode.requestFocus();
+                          }
+                          return 'register_page.password_required'.tr();
+                        }
+                        if (value.length < 8) {
+                          if (!_passwordFocusNode.hasFocus) {
+                            _passwordFocusNode.requestFocus();
+                          }
+                          return 'register_page.password_length_error'.tr();
+                        } else {
+                          return null;
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _passwordController,
+                      obscureText: _passwordhide,
+                      decoration: InputDecoration(
+                        focusedErrorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        errorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CupertinoColors.systemGrey5,
+                          ),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CupertinoColors.systemGrey5,
+                          ),
+                        ),
+                        fillColor: CupertinoColors.systemGrey5,
+                        filled: true,
+                        hintText: 'register_page.password'.tr(),
+                        hintStyle: const TextStyle(
+                          fontFamily: 'OpenSans',
+                          fontSize: 15,
+                        ),
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          color: Colors.black,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _passwordhide
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordhide = !_passwordhide;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'register_page.password_description'.tr(),
+                    ),
+                    PaddingDecorate(15),
+                    ////
+                    Text(
+                      'Confirm Password \n(ยืนยันรหัสผ่าน)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    TextFormField(
+                      focusNode: _confirmPasswordFocusNode,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          if (!_confirmPasswordFocusNode.hasFocus) {
+                            _confirmPasswordFocusNode.requestFocus();
+                          }
+                          return 'register_page.confirmpassword_required'.tr();
+                        } else if (!passwordConfirm()) {
+                          if (!_confirmPasswordFocusNode.hasFocus) {
+                            _confirmPasswordFocusNode.requestFocus();
+                          }
+                          return 'register_page.confirmpassword_notmatch'.tr();
+                        } else {
+                          return null;
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _confirmPasswordController,
+                      obscureText: _confirmPasswordhide,
+                      decoration: InputDecoration(
+                        focusedErrorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        errorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CupertinoColors.systemGrey5,
+                          ),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CupertinoColors.systemGrey5,
+                          ),
+                        ),
+                        fillColor: CupertinoColors.systemGrey5,
+                        filled: true,
+                        hintText:
+                            'register_page.confirmpassword_description'.tr(),
+                        hintStyle: const TextStyle(fontFamily: 'OpenSans'),
+                        prefixIcon: const Icon(
+                          Icons.lock,
+                          color: Colors.black,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _confirmPasswordhide
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.black,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _confirmPasswordhide = !_confirmPasswordhide;
+                            });
+                          },
+                        ),
+                      ),
+                    ),
+                    PaddingDecorate(15),
+                    Text(
+                      'Username (ชื่อผู้ใช้งาน)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    //////User container
+                    TextFormField(
+                      focusNode: _usernameFocusNode,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          if (!_usernameFocusNode.hasFocus) {
+                            _usernameFocusNode.requestFocus();
+                          }
+                          return 'register_page.username_required'.tr();
+                        } else {
+                          return null;
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _usernameController,
+                      decoration: textdecorate_login(
+                        Icons.account_circle,
+                        'register_page.username_description'.tr(),
+                      ),
+                    ),
+                    PaddingDecorate(15),
+                    Text(
+                      'Firstname (ชื่อจริง)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    TextFormField(
+                      focusNode: _firstnameFocusNode,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          if (!_firstnameFocusNode.hasFocus) {
+                            _firstnameFocusNode.requestFocus();
+                          }
+                          return 'register_page.firstname_required'.tr();
+                        } else {
+                          return null;
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _firstnameController,
+                      decoration: textdecorate_login(
+                        Icons.perm_identity,
+                        'register_page.firstname_description'.tr(),
+                      ),
+                    ),
+                    PaddingDecorate(15),
+                    ////// Lastname textbox
+                    Text(
+                      'Lastname (นามสกุล)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    TextFormField(
+                      focusNode: _lastnameFocusNode,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          if (!_lastnameFocusNode.hasFocus) {
+                            _lastnameFocusNode.requestFocus();
+                          }
+                          return 'register_page.lastname_required'.tr();
+                        } else {
+                          return null;
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _lastnameController,
+                      decoration: textdecorate_login(
+                        Icons.perm_identity,
+                        'register_page.lastname_description'.tr(),
+                      ),
+                    ),
+                    PaddingDecorate(15),
+
+                    /// BirthDate Picking
+                    Text(
+                      'Date of Birth (วันเกิด)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    DateTimePicker(
+                      focusNode: _birthdateFocusNode,
+                      type: DateTimePickerType.date,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                      decoration: InputDecoration(
+                        suffixIcon: const Icon(
+                          Icons.calendar_month,
+                          color: Colors.black,
+                        ),
+                        fillColor: CupertinoColors.systemGrey5,
+                        filled: true,
+                        hintText: 'register_page.birthdate_description'.tr(),
+                        hintStyle: const TextStyle(fontFamily: 'OpenSans'),
+                        focusedErrorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        errorBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CupertinoColors.systemGrey5,
+                          ),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CupertinoColors.systemGrey5,
+                          ),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _birthdate = DateTime.parse(value);
+                        });
+                      },
+                      dateMask: 'MMMM d, yyyy',
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          if (!_birthdateFocusNode.hasFocus) {
+                            _birthdateFocusNode.requestFocus();
+                          }
+                          return 'register_page.birthdate_required'.tr();
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                    PaddingDecorate(15),
+                    Text(
+                      'Phone No. (เบอร์โทร)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    TextFormField(
+                      focusNode: _phoneNoFocusNode,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          if (!_phoneNoFocusNode.hasFocus) {
+                            _phoneNoFocusNode.requestFocus();
+                          }
+                          return 'Please insert your phone number';
+                        }
+                        if (value.length != 10) {
+                          if (!_phoneNoFocusNode.hasFocus) {
+                            _phoneNoFocusNode.requestFocus();
+                          }
+                          return 'Please insert all 10 numbers of your phone';
+                        } else {
+                          return null;
+                        }
+                      },
+                      maxLength: 10,
+                      keyboardType: TextInputType.phone,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: _phoneNoController,
+                      decoration: textdecorate_login(
+                        Icons.phone,
+                        'Phone number',
+                      ),
+                    ),
+                    PaddingDecorate(15),
+                    Text(
+                      'Gender',
+                      style: textCustom(),
+                    ),
+                    FormField(
+                      builder: (FormFieldState<bool> state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            state.hasError
+                                ? Focus(
+                                    focusNode: _genderFocusNode,
+                                    onFocusChange: (bool value) {
+                                      if (!_genderFocusNode.hasFocus) {
+                                        _genderFocusNode.requestFocus();
+                                      }
+                                    },
+                                    child: Text(
+                                      state.errorText,
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  )
+                                : Container(),
+                            RadioListTile(
+                              activeColor: Colors.black,
+                              value: 'Male',
+                              title: const Text('Male'),
+                              groupValue: _selectedGender,
+                              onChanged: (value) {
+                                state.setValue(true);
+                                setState(() {
+                                  _selectedGender = value;
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              activeColor: Colors.black,
+                              value: 'Female',
+                              title: const Text('Female'),
+                              groupValue: _selectedGender,
+                              onChanged: (value) {
+                                state.setValue(true);
+                                setState(() {
+                                  _selectedGender = value;
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              activeColor: Colors.black,
+                              value: 'LGBTQ+',
+                              title: const Text('LGBTQ+'),
+                              groupValue: _selectedGender,
+                              onChanged: (value) {
+                                state.setValue(true);
+                                setState(() {
+                                  _selectedGender = value;
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value != true) {
+                          return 'Please select a gender';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                    PaddingDecorate(15),
+                    Text(
+                      'Department',
+                      style: textCustom(),
+                    ),
+                    FormField(
+                      builder: (FormFieldState<bool> state) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            state.hasError
+                                ? Text(
+                                    state.errorText,
+                                    style: const TextStyle(color: Colors.red),
+                                  )
+                                : Container(),
+                            RadioListTile(
+                              activeColor: Colors.black,
+                              value: 1,
+                              title: const Text('Athlete'),
+                              groupValue: _selectedDept,
+                              onChanged: (value) {
+                                state.setValue(true);
+                                setState(() {
+                                  _selectedDept = value;
+                                  isAthlete = true;
+                                  isStaff = false;
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              activeColor: Colors.black,
+                              value: 2,
+                              title: const Text('Staff'),
+                              groupValue: _selectedDept,
+                              onChanged: (value) {
+                                state.setValue(true);
+                                setState(() {
+                                  _selectedDept = value;
+                                  isAthlete = false;
+                                  isStaff = true;
+                                });
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value != true) {
+                          return 'Please select the department';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                    PaddingDecorate(10),
+                    Visibility(
+                      visible: isAthlete,
+                      child: //Athlete
+                          Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Email (อีเมล)',
+                            'register_page.sportType'.tr(),
                             style: textCustom(),
                           ),
                           PaddingDecorate(5),
-                          TextFormField(
-                            focusNode: _emailFocusNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                if (!_emailFocusNode.hasFocus) {
-                                  _emailFocusNode.requestFocus();
-                                }
-                                return 'Email address is required';
-                              } else {
-                                return null;
-                              }
-                            },
+                          DropdownButtonFormField2<String>(
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            controller: _emailController,
-                            decoration: textdecorate_login(
-                              Icons.email,
-                              'Email Address',
-                            ),
-                          ),
-                          PaddingDecorate(15),
-
-                          /// Password registration
-                          Text(
-                            'Password (รหัสผ่าน)',
-                            style: textCustom(),
-                          ),
-                          PaddingDecorate(5),
-                          TextFormField(
-                            focusNode: _passwordFocusNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                if (!_passwordFocusNode.hasFocus) {
-                                  _passwordFocusNode.requestFocus();
-                                }
-                                return 'register_page.password_required'.tr();
-                              }
-                              if (value.length < 8) {
-                                if (!_passwordFocusNode.hasFocus) {
-                                  _passwordFocusNode.requestFocus();
-                                }
-                                return 'register_page.password_length_error'
-                                    .tr();
-                              } else {
-                                return null;
-                              }
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            controller: _passwordController,
-                            obscureText: _passwordhide,
+                            icon: const Icon(Icons.arrow_drop_down_circle),
                             decoration: InputDecoration(
-                              focusedErrorBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              errorBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFFCFD8DC),
-                                ),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFFCFD8DC),
-                                ),
-                              ),
-                              fillColor: const Color(0xFFCFD8DC),
+                              fillColor: Colors.blueGrey[50],
                               filled: true,
-                              hintText: 'register_page.password'.tr(),
-                              hintStyle: const TextStyle(
-                                fontFamily: 'OpenSans',
-                                fontSize: 15,
-                              ),
-                              prefixIcon: const Icon(
-                                Icons.lock,
-                                color: Colors.black,
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _passwordhide
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Colors.black,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _passwordhide = !_passwordhide;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'register_page.password_description'.tr(),
-                          ),
-                          PaddingDecorate(15),
-                          ////
-                          Text(
-                            'Confirm Password \n(ยืนยันรหัสผ่าน)',
-                            style: textCustom(),
-                          ),
-                          PaddingDecorate(5),
-                          TextFormField(
-                            focusNode: _confirmPasswordFocusNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                if (!_confirmPasswordFocusNode.hasFocus) {
-                                  _confirmPasswordFocusNode.requestFocus();
-                                }
-                                return 'register_page.confirmpassword_required'
-                                    .tr();
-                              } else if (!passwordConfirm()) {
-                                if (!_confirmPasswordFocusNode.hasFocus) {
-                                  _confirmPasswordFocusNode.requestFocus();
-                                }
-                                return 'register_page.confirmpassword_notmatch'
-                                    .tr();
-                              } else {
-                                return null;
-                              }
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            controller: _confirmPasswordController,
-                            obscureText: _confirmPasswordhide,
-                            decoration: InputDecoration(
-                              focusedErrorBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              errorBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFFCFD8DC),
-                                ),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Color(0xFFCFD8DC),
-                                ),
-                              ),
-                              fillColor: const Color(0xFFCFD8DC),
-                              filled: true,
-                              hintText:
-                                  'register_page.confirmpassword_description'
-                                      .tr(),
-                              hintStyle:
-                                  const TextStyle(fontFamily: 'OpenSans'),
-                              prefixIcon: const Icon(
-                                Icons.lock,
-                                color: Colors.black,
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _confirmPasswordhide
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                  color: Colors.black,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _confirmPasswordhide =
-                                        !_confirmPasswordhide;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          PaddingDecorate(15),
-                          Text(
-                            'Username (ชื่อผู้ใช้งาน)',
-                            style: textCustom(),
-                          ),
-                          PaddingDecorate(5),
-                          //////User container
-                          TextFormField(
-                            focusNode: _usernameFocusNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                if (!_usernameFocusNode.hasFocus) {
-                                  _usernameFocusNode.requestFocus();
-                                }
-                                return 'register_page.username_required'.tr();
-                              } else {
-                                return null;
-                              }
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            controller: _usernameController,
-                            decoration: textdecorate_login(
-                              Icons.account_circle,
-                              'register_page.username_description'.tr(),
-                            ),
-                          ),
-                          PaddingDecorate(15),
-                          Text(
-                            'Firstname (ชื่อจริง)',
-                            style: textCustom(),
-                          ),
-                          PaddingDecorate(5),
-                          TextFormField(
-                            focusNode: _firstnameFocusNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                if (!_firstnameFocusNode.hasFocus) {
-                                  _firstnameFocusNode.requestFocus();
-                                }
-                                return 'register_page.firstname_required'.tr();
-                              } else {
-                                return null;
-                              }
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            controller: _firstnameController,
-                            decoration: textdecorate_login(
-                              Icons.perm_identity,
-                              'register_page.firstname_description'.tr(),
-                            ),
-                          ),
-                          PaddingDecorate(15),
-                          ////// Lastname textbox
-                          Text(
-                            'Lastname (นามสกุล)',
-                            style: textCustom(),
-                          ),
-                          PaddingDecorate(5),
-                          TextFormField(
-                            focusNode: _lastnameFocusNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                if (!_lastnameFocusNode.hasFocus) {
-                                  _lastnameFocusNode.requestFocus();
-                                }
-                                return 'register_page.lastname_required'.tr();
-                              } else {
-                                return null;
-                              }
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            controller: _lastnameController,
-                            decoration: textdecorate_login(
-                              Icons.perm_identity,
-                              'register_page.lastname_description'.tr(),
-                            ),
-                          ),
-                          PaddingDecorate(15),
-
-                          /// BirthDate Picking
-                          Text(
-                            'Date of Birth (วันเกิด)',
-                            style: textCustom(),
-                          ),
-                          PaddingDecorate(5),
-                          DateTimePicker(
-                            focusNode: _birthdateFocusNode,
-                            type: DateTimePickerType.date,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now(),
-                            decoration: InputDecoration(
-                              suffixIcon: const Icon(
-                                Icons.calendar_month,
-                                color: Colors.black,
-                              ),
-                              fillColor: Colors.blueGrey[100],
-                              filled: true,
-                              hintText:
-                                  'register_page.birthdate_description'.tr(),
+                              hintText: 'Select type of sport',
                               hintStyle:
                                   const TextStyle(fontFamily: 'OpenSans'),
                               focusedErrorBorder: const OutlineInputBorder(
@@ -455,462 +645,228 @@ class _RegisterState extends State<Register> {
                                   color: Colors.red,
                                 ),
                               ),
-                              enabledBorder: const OutlineInputBorder(
+                              enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Color.fromRGBO(217, 217, 217, 100),
+                                  color: Colors.blueGrey[100],
                                 ),
                               ),
-                              focusedBorder: const OutlineInputBorder(
+                              focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Color.fromRGBO(217, 217, 217, 100),
+                                  color: Colors.blueGrey[100],
                                 ),
                               ),
                             ),
+                            items: sportList
+                                .map((sport) => DropdownMenuItem(
+                                      child: Text(sport),
+                                      value: sport,
+                                    ))
+                                .toList(),
+                            value: _selectedSport,
                             onChanged: (value) {
                               setState(() {
-                                _birthdate = DateTime.parse(value);
+                                _selectedSport = value;
                               });
                             },
-                            dateMask: 'MMMM d, yyyy',
                             validator: (value) {
-                              if (value.isEmpty) {
-                                if (!_birthdateFocusNode.hasFocus) {
-                                  _birthdateFocusNode.requestFocus();
-                                }
-                                return 'register_page.birthdate_required'.tr();
+                              if (value == null) {
+                                return 'Please select the sport';
                               } else {
                                 return null;
                               }
                             },
                           ),
                           PaddingDecorate(15),
+
+                          /// Weight & Height
                           Text(
-                            'Phone No. (เบอร์โทร)',
+                            'register_page.weight'.tr(),
                             style: textCustom(),
                           ),
-                          PaddingDecorate(5),
-                          TextFormField(
-                            focusNode: _phoneNoFocusNode,
-                            validator: (value) {
-                              if (value.isEmpty) {
-                                if (!_phoneNoFocusNode.hasFocus) {
-                                  _phoneNoFocusNode.requestFocus();
-                                }
-                                return 'Please insert your phone number';
-                              }
-                              if (value.length != 10) {
-                                if (!_phoneNoFocusNode.hasFocus) {
-                                  _phoneNoFocusNode.requestFocus();
-                                }
-                                return 'Please insert all 10 numbers of your phone';
-                              } else {
-                                return null;
-                              }
-                            },
-                            maxLength: 10,
-                            keyboardType: TextInputType.phone,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            controller: _phoneNoController,
-                            decoration: textdecorate_login(
-                              Icons.phone,
-                              'Phone number',
+                          DecimalNumberPicker(
+                            minValue: 30,
+                            maxValue: 200,
+                            decimalPlaces: 1,
+                            textStyle: TextStyle(
+                              color: Colors.blueGrey[100],
+                              fontWeight: FontWeight.bold,
                             ),
-                          ),
-                          PaddingDecorate(15),
-                          Text(
-                            'Gender',
-                            style: textCustom(),
-                          ),
-                          FormField(
-                            builder: (FormFieldState<bool> state) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  state.hasError
-                                      ? Focus(
-                                          focusNode: _genderFocusNode,
-                                          onFocusChange: (bool value) {
-                                            if (!_genderFocusNode.hasFocus) {
-                                              _genderFocusNode.requestFocus();
-                                            }
-                                          },
-                                          child: Text(
-                                            state.errorText,
-                                            style: const TextStyle(
-                                              color: Colors.red,
-                                            ),
-                                          ),
-                                        )
-                                      : Container(),
-                                  RadioListTile(
-                                    activeColor: Colors.black,
-                                    value: 'Male',
-                                    title: const Text('Male'),
-                                    groupValue: _selectedGender,
-                                    onChanged: (value) {
-                                      state.setValue(true);
-                                      setState(() {
-                                        _selectedGender = value;
-                                      });
-                                    },
-                                  ),
-                                  RadioListTile(
-                                    activeColor: Colors.black,
-                                    value: 'Female',
-                                    title: const Text('Female'),
-                                    groupValue: _selectedGender,
-                                    onChanged: (value) {
-                                      state.setValue(true);
-                                      setState(() {
-                                        _selectedGender = value;
-                                      });
-                                    },
-                                  ),
-                                  RadioListTile(
-                                    activeColor: Colors.black,
-                                    value: 'LGBTQ+',
-                                    title: const Text('LGBTQ+'),
-                                    groupValue: _selectedGender,
-                                    onChanged: (value) {
-                                      state.setValue(true);
-                                      setState(() {
-                                        _selectedGender = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (value) {
-                              if (value != true) {
-                                return 'Please select a gender';
-                              } else {
-                                return null;
-                              }
-                            },
-                          ),
-                          PaddingDecorate(15),
-                          Text(
-                            'Department',
-                            style: textCustom(),
-                          ),
-                          FormField(
-                            builder: (FormFieldState<bool> state) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  state.hasError
-                                      ? Text(
-                                          state.errorText,
-                                          style: const TextStyle(
-                                              color: Colors.red),
-                                        )
-                                      : Container(),
-                                  RadioListTile(
-                                    activeColor: Colors.black,
-                                    value: 1,
-                                    title: const Text('Athlete'),
-                                    groupValue: _selectedDept,
-                                    onChanged: (value) {
-                                      state.setValue(true);
-                                      setState(() {
-                                        _selectedDept = value;
-                                        isAthlete = true;
-                                        isStaff = false;
-                                      });
-                                    },
-                                  ),
-                                  RadioListTile(
-                                    activeColor: Colors.black,
-                                    value: 2,
-                                    title: const Text('Staff'),
-                                    groupValue: _selectedDept,
-                                    onChanged: (value) {
-                                      state.setValue(true);
-                                      setState(() {
-                                        _selectedDept = value;
-                                        isAthlete = false;
-                                        isStaff = true;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            validator: (value) {
-                              if (value != true) {
-                                return 'Please select the department';
-                              } else {
-                                return null;
-                              }
+                            selectedTextStyle: TextStyle(
+                              fontSize: h * 0.03,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            value: _selectedWeight,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedWeight = value;
+                              });
                             },
                           ),
                           PaddingDecorate(10),
-                          Visibility(
-                            visible: isAthlete,
-                            child: //Athlete
-                                Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'register_page.sportType'.tr(),
-                                  style: textCustom(),
-                                ),
-                                PaddingDecorate(5),
-                                DropdownButtonFormField2<String>(
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  icon:
-                                      const Icon(Icons.arrow_drop_down_circle),
-                                  decoration: InputDecoration(
-                                    fillColor: Colors.blueGrey[50],
-                                    filled: true,
-                                    hintText: 'Select type of sport',
-                                    hintStyle:
-                                        const TextStyle(fontFamily: 'OpenSans'),
-                                    focusedErrorBorder:
-                                        const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    errorBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.blueGrey[100],
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.blueGrey[100],
-                                      ),
-                                    ),
-                                  ),
-                                  items: sportList
-                                      .map((sport) => DropdownMenuItem(
-                                            child: Text(sport),
-                                            value: sport,
-                                          ))
-                                      .toList(),
-                                  value: _selectedSport,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedSport = value;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return 'Please select the sport';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                                PaddingDecorate(15),
-
-                                /// Weight & Height
-                                Text(
-                                  'register_page.weight'.tr(),
-                                  style: textCustom(),
-                                ),
-                                DecimalNumberPicker(
-                                  minValue: 30,
-                                  maxValue: 200,
-                                  decimalPlaces: 1,
-                                  textStyle: TextStyle(
-                                    color: Colors.blueGrey[100],
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  selectedTextStyle: TextStyle(
-                                    fontSize: h * 0.03,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  value: _selectedWeight,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedWeight = value;
-                                    });
-                                  },
-                                ),
-                                PaddingDecorate(10),
-                                Text(
-                                  'register_page.height'.tr(),
-                                  style: textCustom(),
-                                ),
-                                DecimalNumberPicker(
-                                  textStyle: TextStyle(
-                                    color: Colors.blueGrey[100],
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  selectedTextStyle: TextStyle(
-                                    fontSize: h * 0.03,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  minValue: 150,
-                                  maxValue: 200,
-                                  decimalPlaces: 1,
-                                  value: _selectedHeight,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedHeight = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
+                          Text(
+                            'register_page.height'.tr(),
+                            style: textCustom(),
                           ),
-
-                          Visibility(
-                            visible: isStaff,
-                            child:
-
-                                /// Staff
-                                Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'register_page.staffType'.tr(),
-                                  style: textCustom(),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.only(bottom: 15),
-                                ),
-                                DropdownButtonFormField2<String>(
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  icon:
-                                      const Icon(Icons.arrow_drop_down_circle),
-                                  decoration: InputDecoration(
-                                    fillColor: Colors.blueGrey[50],
-                                    filled: true,
-                                    hintText: 'Select type of staff',
-                                    hintStyle:
-                                        const TextStyle(fontFamily: 'OpenSans'),
-                                    focusedErrorBorder:
-                                        const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    errorBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.blueGrey[100],
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.blueGrey[100],
-                                      ),
-                                    ),
-                                  ),
-                                  items: staffList
-                                      .map((staff) => DropdownMenuItem(
-                                            child: Text(staff),
-                                            value: staff,
-                                          ))
-                                      .toList(),
-                                  value: _selectedStaff,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedStaff = value;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return 'Please select the sport and event';
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                ),
-                              ],
+                          DecimalNumberPicker(
+                            textStyle: TextStyle(
+                              color: Colors.blueGrey[100],
+                              fontWeight: FontWeight.bold,
                             ),
-                          ),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: [
-                          //     Checkbox(
-                          //       value: _pdpaCheck,
-                          //       activeColor: Colors.white,
-                          //       checkColor: Color.fromARGB(255, 113, 157, 242),
-                          //       onChanged: (value) {
-                          //         setState(() {
-                          //           _pdpaCheck = value;
-                          //         });
-                          //       },
-                          //     ),
-                          //     TextButton(
-                          //       onPressed: () {
-                          //         Navigator.of(context).push(
-                          //           MaterialPageRoute(
-                          //             builder: (context) => const PDPAWidget(),
-                          //           ),
-                          //         );
-                          //       },
-                          //       child: const Text(
-                          //         'ข้อตกลงการใช้งาน',
-                          //         style: TextStyle(
-                          //           color: Colors.black,
-                          //           fontWeight: FontWeight.bold,
-                          //           decoration: TextDecoration.underline,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                          PaddingDecorate(15),
-
-                          /// Sign Up button
-                          ElevatedButton(
-                            onPressed: () {
-                              bool validate = _keyForm.currentState.validate();
-                              if (validate == true) {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => PDPAWidget(
-                                      signUp: signup,
-                                    ),
-                                  ),
-                                );
-                              }
+                            selectedTextStyle: TextStyle(
+                              fontSize: h * 0.03,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            minValue: 150,
+                            maxValue: 200,
+                            decimalPlaces: 1,
+                            value: _selectedHeight,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedHeight = value;
+                              });
                             },
-                            // onPressed: () => signup(),
-                            child: Text(
-                              'register_page.signup_button'.tr(),
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: h * 0.025,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: Size(w, h * 0.07),
-                                elevation: 0,
-                                primary: Colors.white70,
-                                shape: const StadiumBorder()),
                           ),
                         ],
                       ),
                     ),
+
+                    Visibility(
+                      visible: isStaff,
+                      child:
+
+                          /// Staff
+                          Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'register_page.staffType'.tr(),
+                            style: textCustom(),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 15),
+                          ),
+                          DropdownButtonFormField2<String>(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            icon: const Icon(Icons.arrow_drop_down_circle),
+                            decoration: InputDecoration(
+                              fillColor: Colors.blueGrey[50],
+                              filled: true,
+                              hintText: 'Select type of staff',
+                              hintStyle:
+                                  const TextStyle(fontFamily: 'OpenSans'),
+                              focusedErrorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.blueGrey[100],
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.blueGrey[100],
+                                ),
+                              ),
+                            ),
+                            items: staffList
+                                .map((staff) => DropdownMenuItem(
+                                      child: Text(staff),
+                                      value: staff,
+                                    ))
+                                .toList(),
+                            value: _selectedStaff,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedStaff = value;
+                              });
+                            },
+                            validator: (value) {
+                              if (value == null) {
+                                return 'Please select the sport and event';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   children: [
+                    //     Checkbox(
+                    //       value: _pdpaCheck,
+                    //       activeColor: Colors.white,
+                    //       checkColor: Color.fromARGB(255, 113, 157, 242),
+                    //       onChanged: (value) {
+                    //         setState(() {
+                    //           _pdpaCheck = value;
+                    //         });
+                    //       },
+                    //     ),
+                    //     TextButton(
+                    //       onPressed: () {
+                    //         Navigator.of(context).push(
+                    //           MaterialPageRoute(
+                    //             builder: (context) => const PDPAWidget(),
+                    //           ),
+                    //         );
+                    //       },
+                    //       child: const Text(
+                    //         'ข้อตกลงการใช้งาน',
+                    //         style: TextStyle(
+                    //           color: Colors.black,
+                    //           fontWeight: FontWeight.bold,
+                    //           decoration: TextDecoration.underline,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    PaddingDecorate(15),
+
+                    /// Sign Up button
+                    ElevatedButton(
+                      onPressed: () {
+                        bool validate = _keyForm.currentState.validate();
+                        if (validate == true) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PDPAWidget(
+                                signUp: signup,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      // onPressed: () => signup(),
+                      child: Text(
+                        'register_page.signup_button'.tr(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: h * 0.025,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: Size(w, h * 0.07),
+                          elevation: 0,
+                          primary: Colors.white70,
+                          shape: const StadiumBorder()),
+                    ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

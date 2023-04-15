@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -103,18 +104,17 @@ class _LoginState extends State<Login> {
                       ),
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFCFD8DC),
+                          color: CupertinoColors.systemGrey5,
                         ),
                       ),
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: Color(0xFFCFD8DC),
+                          color: CupertinoColors.systemGrey5,
                         ),
                       ),
-                      fillColor: const Color(0xFFCFD8DC),
+                      fillColor: CupertinoColors.systemGrey5,
                       filled: true,
                       hintText: 'Password',
-                      hintStyle: const TextStyle(fontFamily: 'OpenSans'),
                       prefixIcon: const Icon(
                         Icons.lock,
                         color: Colors.black,
@@ -137,16 +137,14 @@ class _LoginState extends State<Login> {
                   Container(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      style: TextButton.styleFrom(
-                        textStyle: const TextStyle(
-                          color: Color.fromARGB(255, 113, 157, 242),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       onPressed: () =>
                           Navigator.of(context).pushNamed('/forgotPassword'),
                       child: const Text(
                         'Forgot password',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 113, 157, 242),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

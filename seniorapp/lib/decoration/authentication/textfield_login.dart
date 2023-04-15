@@ -1,33 +1,33 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 InputDecoration textdecorate_login(IconData icon, String hinttext) {
   return InputDecoration(
-    fillColor: const Color(0xFFCFD8DC),
+    fillColor: CupertinoColors.systemGrey5,
     filled: true,
     prefixIcon: Icon(
       icon,
       color: Colors.black,
     ),
     hintText: hinttext,
-    hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-    focusedErrorBorder: OutlineInputBorder(
+    focusedErrorBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.red,
       ),
     ),
-    errorBorder: OutlineInputBorder(
+    errorBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.red,
       ),
     ),
-    enabledBorder: OutlineInputBorder(
+    enabledBorder: const OutlineInputBorder(
       borderSide: BorderSide(
-        color: Color(0xFFCFD8DC),
+        color: CupertinoColors.systemGrey5,
       ),
     ),
-    focusedBorder: OutlineInputBorder(
+    focusedBorder: const OutlineInputBorder(
       borderSide: BorderSide(
-        color: Color(0xFFCFD8DC),
+        color: CupertinoColors.systemGrey5,
       ),
     ),
   );
