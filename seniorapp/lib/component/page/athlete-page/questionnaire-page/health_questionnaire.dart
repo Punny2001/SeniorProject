@@ -24,7 +24,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
   GlobalKey updateState = GlobalKey();
   var _questionIndex = 0;
   int totalScore;
-  Map<String, int> answer_list = {"Q1": 0};
+  Map<String, int> answer_list = {"Q1": null};
   String uid = FirebaseAuth.instance.currentUser.uid;
   Athlete athData;
 
@@ -201,12 +201,37 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
     void _answerQuestion(int score) {
       answer_list["Q${_questionIndex + 1}"] = score;
-      setState(() {
-        _questionIndex += 1;
-      });
-      print('Index: $_questionIndex');
-      if (_questionIndex < _questions.length) {
+      if (_questionIndex == _questions.length - 1) {
+        if (answer_list.length != 4 || answer_list['Q1'] == null) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('ข้อมูลไม่ครบ'),
+                  content: const Text('โปรดเลือกคำตอบให้ครบทุกข้อ'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: const Text('ตกลง'),
+                    ),
+                  ],
+                );
+              });
+        } else {
+          setState(() {
+            _questionIndex++;
+            isResult = true;
+          });
+        }
+      } else if (_questionIndex < _questions.length) {
         print('We have more question');
+        setState(() {
+          _questionIndex++;
+        });
       }
     }
 
@@ -222,13 +247,38 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
     }
 
     void _nextQuestion() {
-      setState(() {
-        if (_questionIndex == _questions.length) {
-          isResult = true;
-        } else if (_questionIndex >= 0) {
-          _questionIndex++;
+      if (_questionIndex == _questions.length - 1) {
+        if (answer_list.length != 4 || answer_list['Q1'] == null) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('ข้อมูลไม่ครบ'),
+                  content: const Text('โปรดเลือกคำตอบให้ครบทุกข้อ'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: const Text('ตกลง'),
+                    ),
+                  ],
+                );
+              });
+        } else {
+          setState(() {
+            _questionIndex++;
+            isResult = true;
+          });
         }
-      });
+      } else if (_questionIndex < _questions.length) {
+        print('We have more question');
+        setState(() {
+          _questionIndex++;
+        });
+      }
     }
 
     void _previousFromResult() {

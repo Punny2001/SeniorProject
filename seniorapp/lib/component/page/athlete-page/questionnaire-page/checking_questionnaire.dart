@@ -56,8 +56,8 @@ class CheckingQuestionnaire extends StatelessWidget {
       margin: EdgeInsets.only(
         bottom: h * 0.1,
       ),
-      height: h * 0.2,
-      width: w * 0.8,
+      height: h * 0.1,
+      width: w * 0.5,
       child: RaisedButton(
         onPressed: answerText == 'ใช่ ' ? checkingHandler : problemHandler,
         color: Colors.white,
@@ -69,9 +69,10 @@ class CheckingQuestionnaire extends StatelessWidget {
         child: Text(
           answerText,
           style: TextStyle(
-              color: Colors.black,
-              fontSize: h * 0.05,
-              overflow: TextOverflow.clip),
+            color: Colors.black,
+            fontSize: h * 0.05,
+            overflow: TextOverflow.clip,
+          ),
           textAlign: TextAlign.center,
         ),
       ),

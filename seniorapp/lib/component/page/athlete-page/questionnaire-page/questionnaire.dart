@@ -405,7 +405,6 @@ class _QuestionnaireState extends State<Questionnaire> {
                       SizedBox(
                         width: w,
                         child: CupertinoSlider(
-                          
                             value: _currentSliderValue,
                             min: 0,
                             max: 10,

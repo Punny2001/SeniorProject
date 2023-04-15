@@ -83,35 +83,14 @@ class _RegisterState extends State<Register> {
     isAthleteCheck();
 
     return Scaffold(
-      // extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
-        elevation: 1,
+        elevation: 0,
+        scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
         foregroundColor: const Color.fromARGB(255, 113, 157, 242),
-        // title: Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Ink(
-        //       decoration: const ShapeDecoration(
-        //         shape: CircleBorder(),
-        //         color: Color.fromARGB(255, 113, 157, 242),
-        //       ),
-        //       child: IconButton(
-        //         onPressed: () {
-        //           setState(() {
-        //             Navigator.of(context).pop();
-        //           });
-        //         },
-        //         alignment: Alignment.centerRight,
-        //         icon: const Icon(
-        //           Icons.arrow_back_ios,
-        //         ),
-        //       ),
-        //     ),
-        //   ],
-        // ),
         leading: IconButton(
           onPressed: () {
             setState(() {
@@ -126,7 +105,11 @@ class _RegisterState extends State<Register> {
       ),
       body: Container(
         height: h,
-        margin: EdgeInsets.all(w * 0.1),
+        margin: EdgeInsets.only(
+          right: w * 0.1,
+          left: w * 0.1,
+          bottom: w * 0.1,
+        ),
         width: double.infinity,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -214,10 +197,6 @@ class _RegisterState extends State<Register> {
                         fillColor: CupertinoColors.systemGrey5,
                         filled: true,
                         hintText: 'register_page.password'.tr(),
-                        hintStyle: const TextStyle(
-                          fontFamily: 'OpenSans',
-                          fontSize: 15,
-                        ),
                         prefixIcon: const Icon(
                           Icons.lock,
                           color: Colors.black,
@@ -292,7 +271,6 @@ class _RegisterState extends State<Register> {
                         filled: true,
                         hintText:
                             'register_page.confirmpassword_description'.tr(),
-                        hintStyle: const TextStyle(fontFamily: 'OpenSans'),
                         prefixIcon: const Icon(
                           Icons.lock,
                           color: Colors.black,
@@ -510,7 +488,8 @@ class _RegisterState extends State<Register> {
                                   )
                                 : Container(),
                             RadioListTile(
-                              activeColor: Colors.black,
+                              activeColor:
+                                  const Color.fromARGB(255, 113, 157, 242),
                               value: 'Male',
                               title: const Text('Male'),
                               groupValue: _selectedGender,
@@ -522,7 +501,8 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             RadioListTile(
-                              activeColor: Colors.black,
+                              activeColor:
+                                  const Color.fromARGB(255, 113, 157, 242),
                               value: 'Female',
                               title: const Text('Female'),
                               groupValue: _selectedGender,
@@ -534,7 +514,8 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             RadioListTile(
-                              activeColor: Colors.black,
+                              activeColor:
+                                  const Color.fromARGB(255, 113, 157, 242),
                               value: 'LGBTQ+',
                               title: const Text('LGBTQ+'),
                               groupValue: _selectedGender,
@@ -574,7 +555,8 @@ class _RegisterState extends State<Register> {
                                   )
                                 : Container(),
                             RadioListTile(
-                              activeColor: Colors.black,
+                              activeColor:
+                                  const Color.fromARGB(255, 113, 157, 242),
                               value: 1,
                               title: const Text('Athlete'),
                               groupValue: _selectedDept,
@@ -588,7 +570,8 @@ class _RegisterState extends State<Register> {
                               },
                             ),
                             RadioListTile(
-                              activeColor: Colors.black,
+                              activeColor:
+                                  const Color.fromARGB(255, 113, 157, 242),
                               value: 2,
                               title: const Text('Staff'),
                               groupValue: _selectedDept,
@@ -629,30 +612,28 @@ class _RegisterState extends State<Register> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             icon: const Icon(Icons.arrow_drop_down_circle),
-                            decoration: InputDecoration(
-                              fillColor: Colors.blueGrey[50],
+                            decoration: const InputDecoration(
+                              fillColor: CupertinoColors.systemGrey5,
                               filled: true,
                               hintText: 'Select type of sport',
-                              hintStyle:
-                                  const TextStyle(fontFamily: 'OpenSans'),
-                              focusedErrorBorder: const OutlineInputBorder(
+                              focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              errorBorder: const OutlineInputBorder(
+                              errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.blueGrey[100],
+                                  color: CupertinoColors.systemGrey5,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.blueGrey[100],
+                                  color: CupertinoColors.systemGrey5,
                                 ),
                               ),
                             ),
@@ -694,6 +675,7 @@ class _RegisterState extends State<Register> {
                             selectedTextStyle: TextStyle(
                               fontSize: h * 0.03,
                               fontWeight: FontWeight.bold,
+                              color: const Color.fromARGB(255, 113, 157, 242),
                             ),
                             value: _selectedWeight,
                             onChanged: (value) {
@@ -715,6 +697,7 @@ class _RegisterState extends State<Register> {
                             selectedTextStyle: TextStyle(
                               fontSize: h * 0.03,
                               fontWeight: FontWeight.bold,
+                              color: const Color.fromARGB(255, 113, 157, 242),
                             ),
                             minValue: 150,
                             maxValue: 200,
@@ -749,30 +732,29 @@ class _RegisterState extends State<Register> {
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
                             icon: const Icon(Icons.arrow_drop_down_circle),
-                            decoration: InputDecoration(
-                              fillColor: Colors.blueGrey[50],
+                            decoration: const InputDecoration(
+                              fillColor: CupertinoColors.systemGrey5,
                               filled: true,
                               hintText: 'Select type of staff',
-                              hintStyle:
-                                  const TextStyle(fontFamily: 'OpenSans'),
-                              focusedErrorBorder: const OutlineInputBorder(
+                              hintStyle: TextStyle(fontFamily: 'OpenSans'),
+                              focusedErrorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
-                              errorBorder: const OutlineInputBorder(
+                              errorBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.red,
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.blueGrey[100],
+                                  color: CupertinoColors.systemGrey5,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Colors.blueGrey[100],
+                                  color: CupertinoColors.systemGrey5,
                                 ),
                               ),
                             ),
@@ -799,38 +781,6 @@ class _RegisterState extends State<Register> {
                         ],
                       ),
                     ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Checkbox(
-                    //       value: _pdpaCheck,
-                    //       activeColor: Colors.white,
-                    //       checkColor: Color.fromARGB(255, 113, 157, 242),
-                    //       onChanged: (value) {
-                    //         setState(() {
-                    //           _pdpaCheck = value;
-                    //         });
-                    //       },
-                    //     ),
-                    //     TextButton(
-                    //       onPressed: () {
-                    //         Navigator.of(context).push(
-                    //           MaterialPageRoute(
-                    //             builder: (context) => const PDPAWidget(),
-                    //           ),
-                    //         );
-                    //       },
-                    //       child: const Text(
-                    //         'ข้อตกลงการใช้งาน',
-                    //         style: TextStyle(
-                    //           color: Colors.black,
-                    //           fontWeight: FontWeight.bold,
-                    //           decoration: TextDecoration.underline,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                     PaddingDecorate(15),
 
                     /// Sign Up button
@@ -851,16 +801,17 @@ class _RegisterState extends State<Register> {
                       child: Text(
                         'register_page.signup_button'.tr(),
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.blueGrey[50],
                           fontSize: h * 0.025,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                          minimumSize: Size(w, h * 0.07),
-                          elevation: 0,
-                          primary: Colors.white70,
-                          shape: const StadiumBorder()),
+                        minimumSize: Size(w, h * 0.07),
+                        elevation: 0,
+                        primary: const Color.fromARGB(255, 113, 157, 242),
+                        shape: const StadiumBorder(),
+                      ),
                     ),
                   ],
                 ),

@@ -202,14 +202,15 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                        minimumSize: Size(w, h * 0.07),
-                        side: const BorderSide(
-                          color: Color.fromARGB(255, 113, 157, 242),
-                          width: 3,
-                        ),
-                        elevation: 0,
-                        primary: Colors.white,
-                        shape: const StadiumBorder()),
+                      minimumSize: Size(w, h * 0.07),
+                      side: const BorderSide(
+                        color: Color.fromARGB(255, 113, 157, 242),
+                        width: 3,
+                      ),
+                      elevation: 0,
+                      primary: Colors.white,
+                      shape: const StadiumBorder(),
+                    ),
                   ),
                 ],
               ),

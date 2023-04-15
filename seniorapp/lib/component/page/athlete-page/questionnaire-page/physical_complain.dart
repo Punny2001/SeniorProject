@@ -24,7 +24,7 @@ class PhysicalQuestionnaire extends StatefulWidget {
 class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
   var _questionIndex = 0;
   var _bodyPartRound = 0;
-  Map<String, int> answer_list = {"Q1": 0};
+  Map<String, int> answer_list = {"Q1": null};
 
   String uid = FirebaseAuth.instance.currentUser.uid;
   Athlete athData;
@@ -91,7 +91,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     });
   }
 
-  static final body_part = const [
+  static const body_part = [
     {
       'questionText': 'โปรดเลือกอวัยวะที่ได้รับการบาดเจ็บมากที่สุด',
       'answerText': [
@@ -146,6 +146,8 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
 
   @override
   Widget build(BuildContext context) {
+    final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
     final _questions = [
       {
         'questionNo': 'Q1',
@@ -225,12 +227,37 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
 
     void _answerQuestion(int score) {
       answer_list["Q${_questionIndex + 1}"] = score;
-      setState(() {
-        _questionIndex += 1;
-      });
-      print('Index: $_questionIndex');
-      if (_questionIndex < _questions.length) {
+      if (_questionIndex == _questions.length - 1) {
+        if (answer_list.length != 4 || answer_list['Q1'] == null) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('ข้อมูลไม่ครบ'),
+                  content: const Text('โปรดเลือกคำตอบให้ครบทุกข้อ'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: const Text('ตกลง'),
+                    ),
+                  ],
+                );
+              });
+        } else {
+          setState(() {
+            _questionIndex++;
+            isResult = true;
+          });
+        }
+      } else if (_questionIndex < _questions.length) {
         print('We have more question');
+        setState(() {
+          _questionIndex++;
+        });
       }
     }
 
@@ -247,13 +274,43 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     }
 
     void _nextQuestion() {
-      setState(() {
-        if (_questionIndex == _questions.length) {
-          isResult = true;
-        } else if (_questionIndex < _questions.length) {
-          _questionIndex++;
+      print('Result: $isResult');
+      print('Answer list: $answer_list');
+      print('Answer list length: ${answer_list.length}');
+      print('Question index: $_questionIndex');
+      print('Question length: ${_questions.length - 1}');
+      if (_questionIndex == _questions.length - 1) {
+        print(answer_list['Q1']);
+        if (answer_list.length != 4 || answer_list['Q1'] == null) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('ข้อมูลไม่ครบ'),
+                  content: const Text('โปรดเลือกคำตอบให้ครบทุกข้อ'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          Navigator.of(context).pop();
+                        });
+                      },
+                      child: const Text('ตกลง'),
+                    ),
+                  ],
+                );
+              });
+        } else {
+          setState(() {
+            _questionIndex++;
+            isResult = true;
+          });
         }
-      });
+      } else if (_questionIndex < _questions.length) {
+        setState(() {
+          _questionIndex++;
+        });
+      }
     }
 
     void _previousFromResult() {
@@ -273,9 +330,6 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
     }
 
     getAthData();
-
-    final w = MediaQuery.of(context).size.width;
-    final h = MediaQuery.of(context).size.height;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -306,8 +360,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                           content: SizedBox(
                             height: h * 0.2,
                             child: Column(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const Text(
                                     'คุณแน่ใจจะยกเลิกการบันทึกข้อมูลใช่หรือไม่?'),

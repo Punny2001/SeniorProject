@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 
 InputDecoration textdecorate(String hinttext) {
   return InputDecoration(
-    fillColor: Color.fromRGBO(217, 217, 217, 100),
+    fillColor: const Color.fromRGBO(217, 217, 217, 100),
     filled: true,
     hintText: hinttext,
     hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-    focusedErrorBorder: OutlineInputBorder(
+    focusedErrorBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.red,
       ),
     ),
-    errorBorder: OutlineInputBorder(
+    errorBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.red,
       ),
     ),
-    enabledBorder: OutlineInputBorder(
+    enabledBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Color.fromRGBO(217, 217, 217, 100),
       ),
     ),
-    focusedBorder: OutlineInputBorder(
+    focusedBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Color.fromRGBO(217, 217, 217, 100),
       ),
@@ -31,26 +31,26 @@ InputDecoration textdecorate(String hinttext) {
 
 InputDecoration textdecorateinday(String hinttext) {
   return InputDecoration(
-    fillColor: Color.fromRGBO(217, 217, 217, 100),
+    fillColor: const Color.fromRGBO(217, 217, 217, 100),
     filled: true,
     hintText: hinttext,
     hintStyle: const TextStyle(fontFamily: 'OpenSans'),
-    focusedErrorBorder: OutlineInputBorder(
+    focusedErrorBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.red,
       ),
     ),
-    errorBorder: OutlineInputBorder(
+    errorBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Colors.red,
       ),
     ),
-    enabledBorder: OutlineInputBorder(
+    enabledBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Color.fromRGBO(217, 217, 217, 100),
       ),
     ),
-    focusedBorder: OutlineInputBorder(
+    focusedBorder: const OutlineInputBorder(
       borderSide: BorderSide(
         color: Color.fromRGBO(217, 217, 217, 100),
       ),
