@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:seniorapp/component/page/athlete-page/athlete_choose_notify.dart
 import 'package:seniorapp/component/page/athlete-page/athlete_graph.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_history.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_home.dart';
-import 'package:seniorapp/component/page/athlete-page/notify-page/athlete_notify.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_mental.dart';
 
 class AthletePageChoosing extends StatefulWidget {

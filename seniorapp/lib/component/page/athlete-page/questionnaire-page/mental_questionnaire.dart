@@ -368,6 +368,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
                 questionType: 'Mental',
                 nextPage: _nextQuestionPart1,
                 previousPage: _previousQuestionPart1,
+                answerList: answer_list_part1,
               )
             : _questionIndexPart2 < _questionsPart2.length
                 ? Questionnaire(
@@ -377,6 +378,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
                     questionType: 'Mental',
                     previousPage: _previousQuestionPart2,
                     answerPart2: answer_list_part2,
+                    answerList: answer_list_part2,
                   )
                 : _questionIndexPart3 < _questionsPart3.length
                     ? Questionnaire(
@@ -386,6 +388,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
                         questionType: 'Mental',
                         previousPage: _previousQuestionPart3,
                         answerPart3: answer_list_part3,
+                        answerList: answer_list_part3,
                       )
                     : Result(
                         // resultScore: _findTotalScore(),

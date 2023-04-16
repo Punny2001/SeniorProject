@@ -97,7 +97,8 @@ class _QuestionnaireState extends State<Questionnaire> {
                           () => widget.answerQuestion(answer['score']),
                           answer['text'],
                           answer['score'],
-                          widget.answerList['Q${widget.questionIndex + 1}'],
+                          widget.questions[widget.questionIndex]['questionNo'],
+                          widget.answerList,
                         );
                       }).toList()
                     ],
@@ -145,7 +146,9 @@ class _QuestionnaireState extends State<Questionnaire> {
                               () => widget.answerQuestion(answer['text']),
                               answer['text'],
                               answer['score'],
-                              widget.answerList['Q${widget.questionIndex + 1}'],
+                              widget.questions[widget.questionIndex]
+                                  ['questionNo'],
+                              widget.answerList,
                             );
                           }).toList()
                           // : Text(questions[0].keys.last)
@@ -228,7 +231,9 @@ class _QuestionnaireState extends State<Questionnaire> {
                             () => widget.answerQuestion(answer['score']),
                             answer['text'],
                             answer['score'],
-                            widget.answerList['Q${widget.questionIndex + 1}'],
+                            widget.questions[widget.questionIndex]
+                                ['questionNo'],
+                            widget.answerList,
                           );
                         }).toList()
                       ],
@@ -406,7 +411,8 @@ class _QuestionnaireState extends State<Questionnaire> {
                       () => widget.answerQuestion(answer['score']),
                       answer['text'],
                       answer['score'],
-                      widget.answerList['Q${widget.questionIndex + 1}'],
+                      widget.questions[widget.questionIndex]['questionNo'],
+                      widget.answerList,
                     );
                   }).toList()
                 else

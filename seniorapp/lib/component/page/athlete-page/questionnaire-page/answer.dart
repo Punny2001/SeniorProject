@@ -4,12 +4,14 @@ class Answer extends StatefulWidget {
   final VoidCallback selectHandler;
   final String answerText;
   final int answerScore;
-  final int answerList;
+  final String questionIndex;
+  final Map<String, int> answerList;
 
   Answer(
     this.selectHandler,
     this.answerText,
     this.answerScore,
+    this.questionIndex,
     this.answerList,
   );
 
@@ -23,7 +25,9 @@ class _AnswerState extends State<Answer> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.width;
     print('Answer score: ${widget.answerScore}');
+    print('Question no: ${widget.questionIndex}');
     print('Answer list: ${widget.answerList}');
+
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
       width: w,
@@ -31,7 +35,9 @@ class _AnswerState extends State<Answer> {
         highlightColor: Colors.green[100],
         onPressed: widget.selectHandler,
         padding: EdgeInsets.zero,
-        color: Colors.white,
+        color: widget.answerScore == widget.answerList[widget.questionIndex]
+            ? Colors.green[100]
+            : Colors.white,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(15),

@@ -383,6 +383,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                         questionType: 'Health',
                         nextPage: _nextQuestion,
                         previousPage: _previousQuestion,
+                        answerList: answer_list,
                       )
                     : isResult
                         ? Result(
@@ -403,6 +404,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
                     questionType: 'Health',
                     healthChoosing: _healthChoosing,
                     previousPage: _previousCheckingQuestion,
+                    answerList: answer_list,
                   )
             : hasProblem
                 ? CheckingQuestionnaire(
