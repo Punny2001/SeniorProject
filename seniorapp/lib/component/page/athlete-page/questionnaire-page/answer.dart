@@ -3,8 +3,15 @@ import 'package:flutter/material.dart';
 class Answer extends StatefulWidget {
   final VoidCallback selectHandler;
   final String answerText;
+  final int answerScore;
+  final Map<String, int> answerList;
 
-  Answer(this.selectHandler, this.answerText);
+  Answer(
+    this.selectHandler,
+    this.answerText,
+    this.answerScore,
+    this.answerList,
+  );
 
   @override
   State<Answer> createState() => _AnswerState();
@@ -15,6 +22,8 @@ class _AnswerState extends State<Answer> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.width;
+    print('Answer score: ${widget.answerScore}');
+    print('Answer list: ${widget.answerList}');
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
       width: w,

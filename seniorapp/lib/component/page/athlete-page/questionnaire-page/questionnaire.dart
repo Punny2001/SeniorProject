@@ -6,7 +6,7 @@ import './answer.dart';
 
 class Questionnaire extends StatefulWidget {
   final List<Map<String, Object>> questions;
-  final questionIndex;
+  final int questionIndex;
   final Function answerQuestion;
   final String questionType;
   final String bodyChoosing;
@@ -17,6 +17,7 @@ class Questionnaire extends StatefulWidget {
   final Function sendBodyChoosing;
   final Map answerPart2;
   final Map answerPart3;
+  final Map answerList;
 
   const Questionnaire({
     Key key,
@@ -32,6 +33,7 @@ class Questionnaire extends StatefulWidget {
     this.sendBodyChoosing,
     this.answerPart2,
     this.answerPart3,
+    this.answerList,
   }) : super(key: key);
 
   @override
@@ -74,8 +76,8 @@ class _QuestionnaireState extends State<Questionnaire> {
         void _getPartChoosing(String bodypart) {
           _partChoosing = bodypart;
         }
-        print(widget.bodyChoosing);
-        print(widget.partChoosing);
+        // print(widget.bodyChoosing);
+        // print(widget.partChoosing);
         final _keyForm = GlobalKey<FormState>();
         return isQuestionnaire
             ? Column(
@@ -94,6 +96,8 @@ class _QuestionnaireState extends State<Questionnaire> {
                         return Answer(
                           () => widget.answerQuestion(answer['score']),
                           answer['text'],
+                          answer['score'],
+                          widget.answerList[widget.questionIndex],
                         );
                       }).toList()
                     ],
@@ -138,8 +142,11 @@ class _QuestionnaireState extends State<Questionnaire> {
                                   as List<Map<String, Object>>)
                               .map((answer) {
                             return Answer(
-                                () => widget.answerQuestion(answer['text']),
-                                answer['text']);
+                              () => widget.answerQuestion(answer['text']),
+                              answer['text'],
+                              answer['score'],
+                              widget.answerList,
+                            );
                           }).toList()
                           // : Text(questions[0].keys.last)
                         ],
@@ -218,8 +225,11 @@ class _QuestionnaireState extends State<Questionnaire> {
                                 as List<Map<String, Object>>)
                             .map((answer) {
                           return Answer(
-                              () => widget.answerQuestion(answer['score']),
-                              answer['text']);
+                            () => widget.answerQuestion(answer['score']),
+                            answer['text'],
+                            answer['score'],
+                            widget.answerList,
+                          );
                         }).toList()
                       ],
                     ),
@@ -392,8 +402,12 @@ class _QuestionnaireState extends State<Questionnaire> {
                   ...(widget.questions[widget.questionIndex]['answerText']
                           as List<Map<String, Object>>)
                       .map((answer) {
-                    return Answer(() => widget.answerQuestion(answer['score']),
-                        answer['text']);
+                    return Answer(
+                      () => widget.answerQuestion(answer['score']),
+                      answer['text'],
+                      answer['score'],
+                      widget.answerList,
+                    );
                   }).toList()
                 else
                   Column(
