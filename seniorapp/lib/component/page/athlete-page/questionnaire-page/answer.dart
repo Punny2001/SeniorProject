@@ -4,7 +4,7 @@ class Answer extends StatefulWidget {
   final VoidCallback selectHandler;
   final String answerText;
   final int answerScore;
-  final Map<String, int> answerList;
+  final int answerList;
 
   Answer(
     this.selectHandler,

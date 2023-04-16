@@ -172,7 +172,7 @@ class _AthleteHomePageState extends State<AthleteHomePage> {
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              MentalQuestionnaire(),
+                              const MentalQuestionnaire(),
                         ),
                       ),
                     ),

@@ -425,6 +425,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                         previousPage: _previousQuestion,
                         partChoosing: insertedBody,
                         bodyChoosing: _bodyChoosing,
+                        answerList: answer_list,
                       )
                     : isResult
                         ? Result(

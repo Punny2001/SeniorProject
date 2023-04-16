@@ -97,7 +97,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                           () => widget.answerQuestion(answer['score']),
                           answer['text'],
                           answer['score'],
-                          widget.answerList[widget.questionIndex],
+                          widget.answerList['Q${widget.questionIndex + 1}'],
                         );
                       }).toList()
                     ],
@@ -145,7 +145,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                               () => widget.answerQuestion(answer['text']),
                               answer['text'],
                               answer['score'],
-                              widget.answerList,
+                              widget.answerList['Q${widget.questionIndex + 1}'],
                             );
                           }).toList()
                           // : Text(questions[0].keys.last)
@@ -228,7 +228,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                             () => widget.answerQuestion(answer['score']),
                             answer['text'],
                             answer['score'],
-                            widget.answerList,
+                            widget.answerList['Q${widget.questionIndex + 1}'],
                           );
                         }).toList()
                       ],
@@ -406,7 +406,7 @@ class _QuestionnaireState extends State<Questionnaire> {
                       () => widget.answerQuestion(answer['score']),
                       answer['text'],
                       answer['score'],
-                      widget.answerList,
+                      widget.answerList['Q${widget.questionIndex + 1}'],
                     );
                   }).toList()
                 else
