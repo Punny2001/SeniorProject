@@ -29,7 +29,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
   String uid = FirebaseAuth.instance.currentUser.uid;
   Athlete athData;
 
-  bool isResult = true;
+  bool isResult = false;
   bool hasQuestion = false;
   bool hasProblem = true;
   int totalScore;
@@ -52,8 +52,9 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
   void _answerBodyPart(String body) {
     if (_bodyPartRound == 1) {
       insertedBody = body;
-      print('round: $_bodyPartRound');
+      // print('round: $_bodyPartRound');
     } else {
+      print('Hello: $body');
       _bodyChoosing = body;
     }
     setState(() {
@@ -315,6 +316,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
 
     void _previousFromResult() {
       setState(() {
+        isResult = false;
         _questionIndex = _questions.length - 1;
       });
     }
@@ -405,13 +407,11 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         ),
       ),
       body: Container(
-        padding: (isResult == true && _questionIndex == _questions.length)
+        padding: isResult == false && hasProblem == true
             ? EdgeInsets.only(
-                top: h * 0.3,
-              )
-            : EdgeInsets.only(
                 top: h / 3,
-              ),
+              )
+            : EdgeInsets.zero,
         child: hasQuestion
             ? _bodyPartRound < 2
                 ? _questionnaireDisplay(_bodyPartRound)
@@ -433,7 +433,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
                             resetHandler: _resetQuestionnaire,
                             insertHandler: savePhysicalResult,
                             questionType: 'Physical',
-                            bodyPart: _bodyChoosing,
+                            bodyPart: insertedBody,
                             previousPage: _previousFromResult,
                           )
                         : MoreQuestionnaire(
@@ -598,6 +598,7 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
   }
 
   Widget _questionnaireDisplay(int bodyPartRound) {
+    print(_bodyChoosing);
     switch (bodyPartRound) {
       case 0:
         {

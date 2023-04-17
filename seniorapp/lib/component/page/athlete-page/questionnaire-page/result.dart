@@ -80,7 +80,13 @@ class Result extends StatelessWidget {
         'https://www.nhso.go.th/page/coverage_rights_emergency_patients';
 
     return Container(
-      padding: EdgeInsets.only(left: w * 0.03, right: w * 0.03),
+      height: h,
+      width: w,
+      padding: EdgeInsets.only(
+        left: w * 0.03,
+        right: w * 0.03,
+        top: h * 0.3,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -89,7 +95,10 @@ class Result extends StatelessWidget {
               checkQuestionType(questionType, h),
               Container(
                 padding: EdgeInsets.only(
-                    left: w * 0.03, right: w * 0.03, top: h * 0.03),
+                  left: w * 0.03,
+                  right: w * 0.03,
+                  top: h * 0.03,
+                ),
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(

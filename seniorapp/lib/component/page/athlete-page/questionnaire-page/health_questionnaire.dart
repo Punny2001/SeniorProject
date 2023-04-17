@@ -28,7 +28,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
   String uid = FirebaseAuth.instance.currentUser.uid;
   Athlete athData;
 
-  bool isResult = true;
+  bool isResult = false;
   String _healthChoosing;
   bool answer_health = false;
   bool hasQuestion = false;
@@ -283,6 +283,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
 
     void _previousFromResult() {
       setState(() {
+        isResult = false;
         _questionIndex = _questions.length - 1;
       });
     }
@@ -365,13 +366,13 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
       ),
       backgroundColor: Colors.white,
       body: Container(
-        padding: (isResult == true && _questionIndex == _questions.length)
+        height: h,
+        width: w,
+        padding: isResult == false && hasProblem == true
             ? EdgeInsets.only(
-                top: h * 0.3,
-              )
-            : EdgeInsets.only(
                 top: h / 3,
-              ),
+              )
+            : EdgeInsets.zero,
         child: hasQuestion
             ? answer_health
                 ? _questionIndex < _questions.length

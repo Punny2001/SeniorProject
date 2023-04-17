@@ -68,6 +68,7 @@ dependencies:
   month_year_picker: ^0.2.0+3
   flutter_email_sender: ^5.2.0
   mailer: ^5.1.0
+  google_nav_bar: ^5.0.6
 
   
 dev_dependencies:

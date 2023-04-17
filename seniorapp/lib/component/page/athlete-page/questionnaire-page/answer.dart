@@ -31,28 +31,50 @@ class _AnswerState extends State<Answer> {
     return Container(
       padding: const EdgeInsets.only(bottom: 10),
       width: w,
-      child: RaisedButton(
-        highlightColor: Colors.green[100],
-        onPressed: widget.selectHandler,
-        padding: EdgeInsets.zero,
-        color: widget.answerScore == widget.answerList[widget.questionIndex]
-            ? Colors.green[100]
-            : Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(15),
-          ),
-        ),
-        child: Text(
-          widget.answerText,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            overflow: TextOverflow.clip,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
+      child: widget.questionIndex != null && widget.answerList != null
+          ? RaisedButton(
+              highlightColor: Colors.green[100],
+              onPressed: widget.selectHandler,
+              padding: EdgeInsets.zero,
+              color:
+                  widget.answerScore == widget.answerList[widget.questionIndex]
+                      ? Colors.green[100]
+                      : Colors.white,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              child: Text(
+                widget.answerText,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  overflow: TextOverflow.clip,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            )
+          : RaisedButton(
+              highlightColor: Colors.green[100],
+              onPressed: widget.selectHandler,
+              padding: EdgeInsets.zero,
+              color: Colors.white,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(15),
+                ),
+              ),
+              child: Text(
+                widget.answerText,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  overflow: TextOverflow.clip,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
     );
   }
 }

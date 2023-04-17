@@ -151,7 +151,6 @@ class _QuestionnaireState extends State<Questionnaire> {
                               widget.answerList,
                             );
                           }).toList()
-                          // : Text(questions[0].keys.last)
                         ],
                       ),
                       IconButton(
@@ -496,6 +495,7 @@ class _QuestionnaireState extends State<Questionnaire> {
       String widgetPartChoosing) {
     String partChoosing;
     TextEditingController _bodyHeadSearch = TextEditingController();
+    print('Body Chosen: $_bodyChoosing');
     switch (_bodyChoosing) {
       case 'ร่างกายส่วนหัวถึงลำตัว':
         return Container(
