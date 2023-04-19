@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:seniorapp/component/page/add_association.dart';
 import 'package:seniorapp/decoration/authentication/textfield_login.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
@@ -237,16 +238,38 @@ class _LoginState extends State<Login> {
           DocumentReference staffRef = db.collection('Staff').doc(uid);
           DocumentSnapshot athleteDoc = await athleteRef.get();
           DocumentSnapshot staffDoc = await staffRef.get();
+          Map<String, dynamic> data;
           if (athleteDoc.exists) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/athletePageChoosing', (route) => false);
+            data = athleteDoc.data();
+            if (data['association'] == '' || data['association'] == null) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return const AddAssociation(userType: 'Athlete');
+                  },
+                ),
+              );
+            } else {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/athletePageChoosing', (route) => false);
+            }
+            // print(data['athlete_no']);
           } else if (staffDoc.exists) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                '/staffPageChoosing', (route) => false);
+            data = staffDoc.data();
+            if (data['association'] == '' || data['association'] == null) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return const AddAssociation(userType: 'Staff');
+                  },
+                ),
+              );
+            } else {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/staffPageChoosing', (route) => false);
+            }
           } else {
-            Navigator.of(context).pushNamed(
-              '/register',
-            );
+            print('Error login');
           }
         });
       }

@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/customer_support.dart';
 import 'package:seniorapp/component/page/profile.dart';
-import 'package:seniorapp/component/page/staff-page/staff_personal.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 
 class StaffProfile extends StatefulWidget {

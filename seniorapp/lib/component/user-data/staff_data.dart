@@ -16,6 +16,7 @@ class Staff {
   final String gender;
   final int age;
   final bool pdpaAgreement;
+  final String association;
 
   Staff({
     @required this.token,
@@ -31,6 +32,7 @@ class Staff {
     @required this.gender,
     @required this.age,
     @required this.pdpaAgreement,
+    @required this.association,
   });
 
   Staff copyWith({
@@ -47,6 +49,7 @@ class Staff {
     String gender,
     int age,
     bool pdpaAgreement,
+    String association,
   }) {
     return Staff(
       token: token ?? this.token,
@@ -62,6 +65,7 @@ class Staff {
       gender: gender ?? this.gender,
       age: age ?? this.age,
       pdpaAgreement: pdpaAgreement ?? this.pdpaAgreement,
+      association: association ?? this.association,
     );
   }
 
@@ -81,6 +85,7 @@ class Staff {
     result.addAll({'gender': gender});
     result.addAll({'age': age});
     result.addAll({'pdpaAgreement': pdpaAgreement});
+    result.addAll({'association': association});
 
     return result;
   }
@@ -100,6 +105,7 @@ class Staff {
       gender: map['gender'] ?? '',
       age: map['age']?.toInt() ?? 0,
       pdpaAgreement: map['pdpaAgreement'] ?? false,
+      association: map['association'] ?? '',
     );
   }
 
@@ -109,7 +115,7 @@ class Staff {
 
   @override
   String toString() {
-    return 'Staff(token: $token, staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, phoneNo: $phoneNo, department: $department, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement)';
+    return 'Staff(token: $token, staff_no: $staff_no, username: $username, firstname: $firstname, lastname: $lastname, staffType: $staffType, birthdate: $birthdate, phoneNo: $phoneNo, department: $department, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement, association: $association)';
   }
 
   @override
@@ -129,7 +135,8 @@ class Staff {
         other.email == email &&
         other.gender == gender &&
         other.age == age &&
-        other.pdpaAgreement == pdpaAgreement;
+        other.pdpaAgreement == pdpaAgreement &&
+        other.association == association;
   }
 
   @override
@@ -146,6 +153,7 @@ class Staff {
         email.hashCode ^
         gender.hashCode ^
         age.hashCode ^
-        pdpaAgreement.hashCode;
+        pdpaAgreement.hashCode ^
+        association.hashCode;
   }
 }

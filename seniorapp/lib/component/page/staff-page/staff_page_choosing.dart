@@ -4,6 +4,7 @@ import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/staff-page/choose_history.dart';
@@ -259,68 +260,59 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
           borderRadius: BorderRadius.only(
               topRight: Radius.circular(30), topLeft: Radius.circular(30)),
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-          child: BottomNavigationBar(
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            unselectedItemColor: Colors.black,
-            backgroundColor: Colors.blue.shade200,
-            items: <BottomNavigationBarItem>[
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Badge(
-                  badgeContent: Text(
-                    '$unfinishedCaseCount',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  elevation: 0,
-                  showBadge: unfinishedCaseCount > 0 ? true : false,
-                  child: const Icon(Icons.cases_outlined),
+        child: BottomNavigationBar(
+          unselectedItemColor: CupertinoColors.inactiveGray,
+          backgroundColor: Colors.white,
+          selectedItemColor: Colors.blue[300],
+          items: <BottomNavigationBarItem>[
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Badge(
+                badgeContent: Text(
+                  '$unfinishedCaseCount',
+                  style: const TextStyle(color: Colors.white),
                 ),
-                activeIcon: const Icon(Icons.cases_rounded),
-                label: 'Cases',
+                elevation: 0,
+                showBadge: unfinishedCaseCount > 0 ? true : false,
+                child: const Icon(Icons.cases_outlined),
               ),
-              const BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.history_toggle_off,
+              activeIcon: const Icon(Icons.cases_rounded),
+              label: 'Cases',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(
+                Icons.history_toggle_off,
+              ),
+              activeIcon: Icon(Icons.history),
+              label: 'History',
+            ),
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.insert_chart_outlined),
+              activeIcon: Icon(Icons.insert_chart),
+              label: 'Statistics',
+            ),
+            BottomNavigationBarItem(
+              icon: Badge(
+                badgeContent: Text(
+                  '$notificationCount',
+                  style: const TextStyle(color: Colors.white),
                 ),
-                activeIcon: Icon(Icons.history),
-                label: 'History',
+                showBadge: notificationCount > 0 ? true : false,
+                child: const Icon(Icons.notifications_none),
               ),
-              const BottomNavigationBarItem(
-                icon: Icon(Icons.insert_chart_outlined),
-                activeIcon: Icon(Icons.insert_chart),
-                label: 'Statistics',
+              activeIcon: const Icon(
+                Icons.notifications,
               ),
-              BottomNavigationBarItem(
-                icon: Badge(
-                  badgeContent: Text(
-                    '$notificationCount',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  elevation: 0,
-                  showBadge: notificationCount > 0 ? true : false,
-                  child: const Icon(Icons.notifications_none),
-                ),
-                activeIcon: const Icon(
-                  Icons.notifications,
-                ),
-                label: 'Notification',
-              ),
-            ],
-            currentIndex: _selected_idx,
-            onTap: _onPageTap,
-            selectedItemColor: Colors.black,
-            showUnselectedLabels: false,
-          ),
+              label: 'Notification',
+            ),
+          ],
+          currentIndex: _selected_idx,
+          onTap: _onPageTap,
+          showUnselectedLabels: false,
         ),
       ),
     );

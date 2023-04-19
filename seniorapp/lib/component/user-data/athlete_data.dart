@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class Athlete {
   final String token;
@@ -18,6 +17,7 @@ class Athlete {
   final String gender;
   final int age;
   final bool pdpaAgreement;
+  final String association;
 
   Athlete({
     @required this.token,
@@ -35,6 +35,7 @@ class Athlete {
     @required this.gender,
     @required this.age,
     @required this.pdpaAgreement,
+    @required this.association,
   });
 
   Athlete copyWith({
@@ -53,6 +54,7 @@ class Athlete {
     String gender,
     int age,
     bool pdpaAgreement,
+    String association,
   }) {
     return Athlete(
       token: token ?? this.token,
@@ -70,6 +72,7 @@ class Athlete {
       gender: gender ?? this.gender,
       age: age ?? this.age,
       pdpaAgreement: pdpaAgreement ?? this.pdpaAgreement,
+      association: association ?? this.association,
     );
   }
 
@@ -91,6 +94,7 @@ class Athlete {
     result.addAll({'gender': gender});
     result.addAll({'age': age});
     result.addAll({'pdpaAgreement': pdpaAgreement});
+    result.addAll({'association': association});
 
     return result;
   }
@@ -112,6 +116,7 @@ class Athlete {
       gender: map['gender'] ?? '',
       age: map['age']?.toInt() ?? 0,
       pdpaAgreement: map['pdpaAgreement'] ?? false,
+      association: map['association'] ?? '',
     );
   }
 
@@ -122,7 +127,7 @@ class Athlete {
 
   @override
   String toString() {
-    return 'Athlete(token: $token, athlete_no: $athlete_no, username: $username, firstname: $firstname, lastname: $lastname, sportType: $sportType, birthdate: $birthdate, phoneNo: $phoneNo, department: $department, weight: $weight, height: $height, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement)';
+    return 'Athlete(token: $token, athlete_no: $athlete_no, username: $username, firstname: $firstname, lastname: $lastname, sportType: $sportType, birthdate: $birthdate, phoneNo: $phoneNo, department: $department, weight: $weight, height: $height, email: $email, gender: $gender, age: $age, pdpaAgreement: $pdpaAgreement, association: $association)';
   }
 
   @override
@@ -144,7 +149,8 @@ class Athlete {
         other.email == email &&
         other.gender == gender &&
         other.age == age &&
-        other.pdpaAgreement == pdpaAgreement;
+        other.pdpaAgreement == pdpaAgreement &&
+        other.association == association;
   }
 
   @override
@@ -163,6 +169,7 @@ class Athlete {
         email.hashCode ^
         gender.hashCode ^
         age.hashCode ^
-        pdpaAgreement.hashCode;
+        pdpaAgreement.hashCode ^
+        association.hashCode;
   }
 }

@@ -50,12 +50,6 @@ class _PDPAWidgetState extends State<PDPAWidget> {
           padding: const EdgeInsets.all(30),
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/mahidol_logo.png',
-                width: w / 5,
-                fit: BoxFit.fitHeight,
-              ),
-              PaddingDecorate(10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

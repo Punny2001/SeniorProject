@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:seniorapp/component/page/add_association.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
@@ -41,6 +42,7 @@ class _RegisterState extends State<Register> {
   final _genderFocusNode = FocusNode();
   final _birthdateFocusNode = FocusNode();
 
+  String selectedAssociation;
   String _selectedSport;
   String _selectedStaff;
   int _selectedDept;
@@ -782,6 +784,60 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     PaddingDecorate(15),
+                    Text(
+                      'Association (องค์กร)',
+                      style: textCustom(),
+                    ),
+                    PaddingDecorate(5),
+                    DropdownButtonFormField2<String>(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      icon: const Icon(Icons.arrow_drop_down_circle),
+                      decoration: const InputDecoration(
+                        fillColor: CupertinoColors.systemGrey5,
+                        filled: true,
+                        hintText: 'Choose an association',
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CupertinoColors.systemGrey5,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: CupertinoColors.systemGrey5,
+                          ),
+                        ),
+                      ),
+                      items: association
+                          .map((association) => DropdownMenuItem(
+                                child: Text(association),
+                                value: association,
+                              ))
+                          .toList(),
+                      value: selectedAssociation,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedAssociation = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'โปรดเลือกองค์กรที่คุณสังกัด';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                    PaddingDecorate(15),
 
                     /// Sign Up button
                     ElevatedButton(
@@ -891,21 +947,23 @@ class _RegisterState extends State<Register> {
                 });
 
                 Athlete athleteModel = Athlete(
-                    token: token,
-                    athlete_no: athlete_no,
-                    username: _usernameController.text.trim(),
-                    firstname: _firstnameController.text.trim(),
-                    lastname: _lastnameController.text.trim(),
-                    sportType: _selectedSport,
-                    birthdate: _birthdate,
-                    phoneNo: _phoneNoController.text.trim(),
-                    department: 'Athlete',
-                    weight: _selectedWeight,
-                    height: _selectedHeight,
-                    email: _emailController.text.trim(),
-                    gender: _selectedGender,
-                    age: age,
-                    pdpaAgreement: true);
+                  token: token,
+                  athlete_no: athlete_no,
+                  username: _usernameController.text.trim(),
+                  firstname: _firstnameController.text.trim(),
+                  lastname: _lastnameController.text.trim(),
+                  sportType: _selectedSport,
+                  birthdate: _birthdate,
+                  phoneNo: _phoneNoController.text.trim(),
+                  department: 'Athlete',
+                  weight: _selectedWeight,
+                  height: _selectedHeight,
+                  email: _emailController.text.trim(),
+                  gender: _selectedGender,
+                  age: age,
+                  pdpaAgreement: true,
+                  association: selectedAssociation,
+                );
 
                 Map<String, dynamic> data = athleteModel.toMap();
 
@@ -963,6 +1021,7 @@ class _RegisterState extends State<Register> {
                   gender: _selectedGender,
                   age: age,
                   pdpaAgreement: true,
+                  association: selectedAssociation,
                 );
 
                 Map<String, dynamic> data = staffModel.toMap();

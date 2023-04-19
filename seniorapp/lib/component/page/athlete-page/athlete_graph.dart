@@ -1,13 +1,9 @@
 import 'dart:async' show Stream, Timer;
-import 'package:age_calculator/age_calculator.dart';
 import 'package:async/async.dart' show StreamZip;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:seniorapp/component/page/athlete-page/graph-page/line_graph.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
