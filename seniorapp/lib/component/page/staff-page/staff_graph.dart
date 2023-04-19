@@ -2,12 +2,14 @@ import 'dart:async' show Stream, Timer;
 import 'package:async/async.dart' show StreamZip;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/fixed_column_widget.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/scrollable_column_widget.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/find_athlete_graph.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/staff_summary_table_graph.dart';
+import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
@@ -19,6 +21,7 @@ class StaffGraph extends StatefulWidget {
 }
 
 class _StaffGraphState extends State<StaffGraph> {
+  String uid = FirebaseAuth.instance.currentUser.uid;
   bool isLoading = true;
   Timer _timer;
   DateTime now = DateTime.now();
@@ -44,6 +47,9 @@ class _StaffGraphState extends State<StaffGraph> {
   bool isHealthCheck = false;
   bool isPhysicalCheck = false;
   bool isBodySelected = false;
+
+  List<String> athleteUIDList = [];
+  Staff staff;
 
   List<String> healthSymptom = [
     'คลื่นไส้ ',
@@ -125,6 +131,18 @@ class _StaffGraphState extends State<StaffGraph> {
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
+    for (int i = 0; i < data.length; i++) {
+      if (athleteUIDList.isEmpty) {
+        data.clear();
+      } else {
+        for (int j = 0; j < athleteUIDList.length; j++) {
+          if (data[i]['athleteUID'] != athleteUIDList[j]) {
+            data.removeAt(i);
+            j = 0;
+          }
+        }
+      }
+    }
     data.retainWhere((element) =>
         element['doDate']
             .toDate()
@@ -179,12 +197,34 @@ class _StaffGraphState extends State<StaffGraph> {
     });
   }
 
+  findAthleteAssc() {
+    athleteData.forEach((element) {
+      if (element['association'] == staff.association) {
+        athleteUIDList.add(element['athleteUID']);
+      }
+    });
+  }
+
+  getUserData() {
+    FirebaseFirestore.instance.collection('Staff').doc(uid).get().then(
+      (snapshot) {
+        Map data = snapshot.data();
+        if (mounted) {
+          setState(() {
+            staff = Staff.fromMap(data);
+          });
+        }
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     setState(() {
       isLoading = true;
     });
+    getUserData();
     getAthleteData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
@@ -203,6 +243,8 @@ class _StaffGraphState extends State<StaffGraph> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+
+    findAthleteAssc();
 
     return Column(
       children: [

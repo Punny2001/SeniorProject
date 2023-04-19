@@ -47,9 +47,11 @@ class _AthleteHistoryState extends State<AthleteMentalHistory> {
         .get()
         .then(
       (snapshot) {
-        setState(() {
-          mentalSize = snapshot.docs.length;
-        });
+        if (mounted) {
+          setState(() {
+            mentalSize = snapshot.docs.length;
+          });
+        }
       },
     );
   }

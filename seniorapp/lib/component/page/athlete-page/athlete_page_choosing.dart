@@ -183,6 +183,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
       appBar: AppBar(
         primary: true,
         elevation: 0,
+        scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         title: Row(
@@ -211,6 +212,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: CupertinoColors.inactiveGray,
         backgroundColor: Colors.white,
+        elevation: 10,
         items: <BottomNavigationBarItem>[
           const BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),

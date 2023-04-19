@@ -481,6 +481,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.blue[300],
+                              fixedSize: Size.infinite,
                               elevation: 0,
                             ),
                             onPressed: () {
@@ -505,6 +506,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                               latestAppointment['appointStatus'] != true,
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
+                              fixedSize: Size.infinite,
                               primary: Colors.white,
                               elevation: 0,
                               side: BorderSide(

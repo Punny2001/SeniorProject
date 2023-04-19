@@ -224,7 +224,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     index = 0;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         primary: true,
         elevation: 0,
@@ -254,66 +253,60 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         color: Colors.white,
         child: _staffPageList.elementAt(_selected_idx),
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
-        ),
-        child: BottomNavigationBar(
-          unselectedItemColor: CupertinoColors.inactiveGray,
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue[300],
-          items: <BottomNavigationBarItem>[
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Badge(
-                badgeContent: Text(
-                  '$unfinishedCaseCount',
-                  style: const TextStyle(color: Colors.white),
-                ),
-                elevation: 0,
-                showBadge: unfinishedCaseCount > 0 ? true : false,
-                child: const Icon(Icons.cases_outlined),
+      bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: CupertinoColors.inactiveGray,
+        selectedItemColor: Colors.blue[300],
+        backgroundColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Badge(
+              badgeContent: Text(
+                '$unfinishedCaseCount',
+                style: const TextStyle(color: Colors.white),
               ),
-              activeIcon: const Icon(Icons.cases_rounded),
-              label: 'Cases',
+              elevation: 0,
+              showBadge: unfinishedCaseCount > 0 ? true : false,
+              child: const Icon(Icons.cases_outlined),
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(
-                Icons.history_toggle_off,
+            activeIcon: const Icon(Icons.cases_rounded),
+            label: 'Cases',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(
+              Icons.history_toggle_off,
+            ),
+            activeIcon: Icon(Icons.history),
+            label: 'History',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.insert_chart_outlined),
+            activeIcon: Icon(Icons.insert_chart),
+            label: 'Statistics',
+          ),
+          BottomNavigationBarItem(
+            icon: Badge(
+              badgeContent: Text(
+                '$notificationCount',
+                style: const TextStyle(color: Colors.white),
               ),
-              activeIcon: Icon(Icons.history),
-              label: 'History',
+              showBadge: notificationCount > 0 ? true : false,
+              child: const Icon(Icons.notifications_none),
             ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.insert_chart_outlined),
-              activeIcon: Icon(Icons.insert_chart),
-              label: 'Statistics',
+            activeIcon: const Icon(
+              Icons.notifications,
             ),
-            BottomNavigationBarItem(
-              icon: Badge(
-                badgeContent: Text(
-                  '$notificationCount',
-                  style: const TextStyle(color: Colors.white),
-                ),
-                showBadge: notificationCount > 0 ? true : false,
-                child: const Icon(Icons.notifications_none),
-              ),
-              activeIcon: const Icon(
-                Icons.notifications,
-              ),
-              label: 'Notification',
-            ),
-          ],
-          currentIndex: _selected_idx,
-          onTap: _onPageTap,
-          showUnselectedLabels: false,
-        ),
+            label: 'Notification',
+          ),
+        ],
+        currentIndex: _selected_idx,
+        onTap: _onPageTap,
+        showUnselectedLabels: false,
       ),
     );
   }

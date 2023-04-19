@@ -463,6 +463,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.blue[300],
+                              fixedSize: Size.infinite,
                             ),
                             onPressed: () {
                               Navigator.push(
@@ -487,6 +488,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.white,
+                              fixedSize: Size.infinite,
                               elevation: 0,
                               side: BorderSide(
                                 width: 1,
