@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/staff-page/choose_history.dart';
+import 'package:seniorapp/component/page/staff-page/notify-page/staff_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_case.dart';
 import 'package:seniorapp/component/page/staff-page/staff_choose_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_graph.dart';
@@ -21,6 +22,7 @@ class StaffPageChoosing extends StatefulWidget {
 }
 
 class _StaffPageChoosingState extends State<StaffPageChoosing> {
+  final firestore = FirebaseFirestore.instance;
   String uid = FirebaseAuth.instance.currentUser.uid;
   int _selected_idx = 0;
   bool isRegister = false;
@@ -28,11 +30,13 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int physicalSize = 0;
   int unfinishedPhysical = 0;
   int unfinishedHealth = 0;
-  int notificationCount;
+  int notificationCount = 0;
   int index;
   int unfinishedCaseCount = 0;
   int appointmentSize = 0;
   Staff staff;
+  List<Map<String, dynamic>> athleteList = [];
+  List<String> athleteUIDList = [];
 
   getAppointmentSize() {
     FirebaseFirestore.instance
@@ -62,8 +66,21 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         .get()
         .then(
       (snapshot) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
         int size = 0;
-        snapshot.docs.forEach((data) {
+        for (int i = 0; i < list.length; i++) {
+          if (athleteUIDList.isEmpty) {
+            list.clear();
+          } else {
+            for (int j = 0; j < athleteUIDList.length; j++) {
+              if (list[i]['athleteUID'] != athleteUIDList[j]) {
+                list.removeAt(i);
+                j = 0;
+              }
+            }
+          }
+        }
+        list.forEach((data) {
           if (data['totalPoint'] > 25) {
             size += 1;
           }
@@ -84,8 +101,21 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         .get()
         .then(
       (snapshot) {
+        List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
+        for (int i = 0; i < list.length; i++) {
+          if (athleteUIDList.isEmpty) {
+            list.clear();
+          } else {
+            for (int j = 0; j < athleteUIDList.length; j++) {
+              if (list[i]['athleteUID'] != athleteUIDList[j]) {
+                list.removeAt(i);
+                j = 0;
+              }
+            }
+          }
+        }
         int size = 0;
-        snapshot.docs.forEach((data) {
+        list.forEach((data) {
           if (data['totalPoint'] > 25) {
             size += 1;
           }
@@ -127,6 +157,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       (snapshot) {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
         list.removeWhere((element) => element['caseFinished'] == true);
+
         if (mounted) {
           setState(() {
             unfinishedHealth = list.length;
@@ -189,25 +220,49 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     );
   }
 
+  getAthleteData() {
+    firestore.collection('Athlete').get().then((document) {
+      int index = 0;
+      document.docs.forEach((snapshot) {
+        athleteList.add(snapshot.data());
+        athleteList[index]['athleteUID'] = snapshot.reference.id;
+        index += 1;
+      });
+    }).then((value) => findAthleteAssc());
+  }
+
+  findAthleteAssc() {
+    athleteList.forEach((element) {
+      if (element['association'] == staff.association) {
+        athleteUIDList.add(element['athleteUID']);
+      }
+    });
+  }
+
+  getUserData() {
+    FirebaseFirestore.instance.collection('Staff').doc(uid).get().then(
+      (snapshot) {
+        Map data = snapshot.data();
+        setState(() {
+          staff = Staff.fromMap(data);
+        });
+      },
+    );
+  }
+
+  StaffNotify staffNotify = const StaffNotify();
+
   @override
   void initState() {
     super.initState();
     getToken();
+    getUserData();
+    getAthleteData();
     FirebaseMessaging.instance.unsubscribeFromTopic('Athlete');
     FirebaseMessaging.instance.subscribeToTopic('Staff');
     if (Platform.isIOS) {
       requestPermission();
     }
-    FirebaseFirestore.instance
-        .collection('Staff')
-        .doc(uid)
-        .get()
-        .then((snapshot) {
-      setState(() {
-        Map data = snapshot.data();
-        staff = Staff.fromMap(data);
-      });
-    });
   }
 
   @override
@@ -219,9 +274,9 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+
     _getNotificationCount();
     _getUnfinishedCaseCount();
-    index = 0;
 
     return Scaffold(
       appBar: AppBar(

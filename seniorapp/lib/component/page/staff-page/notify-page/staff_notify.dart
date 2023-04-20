@@ -46,7 +46,7 @@ class _StaffCaseState extends State<StaffNotify> {
         athleteData[index]['athleteUID'] = snapshot.reference.id;
         index += 1;
       });
-    });
+    }).then((value) => findAthleteAssc());
   }
 
   Stream<List<QuerySnapshot>> getData() {
@@ -130,27 +130,27 @@ class _StaffCaseState extends State<StaffNotify> {
     });
   }
 
+  getUserData() {
+    FirebaseFirestore.instance.collection('Staff').doc(uid).get().then(
+      (snapshot) {
+        Map data = snapshot.data();
+        setState(() {
+          _staff = Staff.fromMap(data);
+        });
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
     setState(() {
       isLoading = true;
     });
+    getUserData();
     getAthleteData();
     getPhysicalSize();
     getHealthSize();
-    FirebaseFirestore.instance
-        .collection('Staff')
-        .doc(uid)
-        .get()
-        .then((snapshot) {
-      if (mounted) {
-        setState(() {
-          Map data = snapshot.data();
-          _staff = Staff.fromMap(data);
-        });
-      }
-    });
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -168,7 +168,7 @@ class _StaffCaseState extends State<StaffNotify> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    findAthleteAssc();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
