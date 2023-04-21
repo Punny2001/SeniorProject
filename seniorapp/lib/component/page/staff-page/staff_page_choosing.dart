@@ -8,11 +8,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/Staff-page/staff_home.dart';
 import 'package:seniorapp/component/page/staff-page/choose_history.dart';
-import 'package:seniorapp/component/page/staff-page/notify-page/staff_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_case.dart';
 import 'package:seniorapp/component/page/staff-page/staff_choose_notify.dart';
 import 'package:seniorapp/component/page/staff-page/staff_graph.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
+import 'package:seniorapp/main.dart';
+
+final String uid = FirebaseAuth.instance.currentUser.uid;
+Staff staff;
+List<Map<String, dynamic>> athleteList = [];
+List<Map<String, dynamic>> unfinishedHealthCaseList = [];
+List<Map<String, dynamic>> unfinishedPhysicalCaseList = [];
+List<Map<String, dynamic>> notificationHealthCaseList = [];
+List<Map<String, dynamic>> notificationPhysicalCaseList = [];
 
 class StaffPageChoosing extends StatefulWidget {
   const StaffPageChoosing({Key key}) : super(key: key);
@@ -22,8 +30,6 @@ class StaffPageChoosing extends StatefulWidget {
 }
 
 class _StaffPageChoosingState extends State<StaffPageChoosing> {
-  final firestore = FirebaseFirestore.instance;
-  String uid = FirebaseAuth.instance.currentUser.uid;
   int _selected_idx = 0;
   bool isRegister = false;
   int healthSize = 0;
@@ -34,8 +40,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int index;
   int unfinishedCaseCount = 0;
   int appointmentSize = 0;
-  Staff staff;
-  List<Map<String, dynamic>> athleteList = [];
+
   List<String> athleteUIDList = [];
 
   getAppointmentSize() {
@@ -133,8 +138,8 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     FirebaseFirestore.instance
         .collection('PhysicalQuestionnaireResult')
         .where('staff_uid_received', isEqualTo: uid, isNull: false)
-        .get()
-        .then(
+        .snapshots()
+        .listen(
       (snapshot) {
         List<QueryDocumentSnapshot<Map<String, dynamic>>> list = snapshot.docs;
         list.removeWhere((element) => element['caseFinished'] == true);
@@ -218,10 +223,12 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       provisional: false,
       sound: true,
     );
+
+    print('Settings: ${settings.authorizationStatus}');
   }
 
   getAthleteData() {
-    firestore.collection('Athlete').get().then((document) {
+    athleteCollection.get().then((document) {
       int index = 0;
       document.docs.forEach((snapshot) {
         athleteList.add(snapshot.data());
@@ -250,14 +257,123 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     );
   }
 
-  StaffNotify staffNotify = const StaffNotify();
+  void listenForAthlete() {
+    athleteCollection.snapshots().listen((snapshot) {
+      List<Map<String, dynamic>> athlete = [];
+      int index = 0;
+      snapshot.docs.forEach((doc) {
+        athlete.add(doc.data());
+        athlete[index]['athleteUID'] = doc.reference.id;
+        index += 1;
+      });
+      setState(() {
+        athleteList = athlete;
+      });
+    }, onError: (error) {
+      print(error);
+    });
+  }
+
+  void listenForUser() {
+    staffCollection.doc(uid).snapshots().listen((snapshot) {
+      Staff staffUser = Staff.fromMap(snapshot.data());
+      setState(() {
+        staff = staffUser;
+      });
+    });
+  }
+
+  void listenForUnfinishedHealthCase() {
+    healthQuestionnaireCollection
+        .where('totalPoint', isGreaterThan: 25)
+        .where('staff_uid_received', isEqualTo: uid)
+        .where('caseFinished', isEqualTo: false)
+        .snapshots()
+        .listen((snapshot) {
+      int index = 0;
+      List<Map<String, dynamic>> healthQuestionnaire = [];
+      snapshot.docs.forEach((doc) {
+        healthQuestionnaire.add(doc.data());
+        healthQuestionnaire[index]['questionnaireID'] = doc.reference.id;
+        index += 1;
+      });
+      setState(() {
+        unfinishedHealthCaseList = healthQuestionnaire;
+      });
+    });
+  }
+
+  void listenForUnfinishedPhysicalCase() {
+    physicalQuestionnaireCollection
+        .where('totalPoint', isGreaterThan: 25)
+        .where('staff_uid_received', isEqualTo: uid)
+        .snapshots()
+        .listen((snapshot) {
+      List<Map<String, dynamic>> physicalQuestionnaire = [];
+      snapshot.docs.forEach((doc) {
+        physicalQuestionnaire.add(doc.data());
+        physicalQuestionnaire[index]['questionnaireID'] = doc.reference.id;
+        index += 1;
+      });
+      setState(() {
+        unfinishedPhysicalCaseList = physicalQuestionnaire;
+      });
+    });
+  }
+
+  void listenForNotifyHealthCase() {
+    healthQuestionnaireCollection
+        .where('totalPoint', isGreaterThan: 25)
+        .where('caseReceived', isEqualTo: false)
+        .snapshots()
+        .listen((snapshot) {
+      List<Map<String, dynamic>> healthQuestionnaire = [];
+      index = 0;
+      snapshot.docs.forEach((doc) {
+        healthQuestionnaire.add(doc.data());
+        healthQuestionnaire[index]['questionnaireID'] = doc.reference.id;
+        index += 1;
+      });
+      setState(() {
+        notificationHealthCaseList = healthQuestionnaire;
+      });
+    }, onError: (error) {
+      print(error);
+    });
+  }
+
+  void listenForNotifyPhysicalCase() {
+    final Query query = physicalQuestionnaireCollection
+        .where('totalPoint', isGreaterThan: 25)
+        .where('caseReceived', isEqualTo: false);
+    query.snapshots().listen((snapshot) {
+      List<Map<String, dynamic>> physicalQuestionnaire = [];
+      snapshot.docs.forEach((doc) {
+        physicalQuestionnaire.add(doc.data());
+        physicalQuestionnaire[index]['questionnaireID'] = doc.reference.id;
+        index += 1;
+      });
+      setState(() {
+        notificationPhysicalCaseList = physicalQuestionnaire;
+      });
+    }, onError: (error) {
+      print(error);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     getToken();
-    getUserData();
-    getAthleteData();
+    listenForUser();
+    listenForAthlete();
+    listenForUnfinishedHealthCase();
+    // listenForUnfinishedPhysicalCase();
+    // listenForNotifyHealthCase();
+    // getUserData();
+    // getAthleteData();
+
+    // listenForNotifyPhysicalCase();
     FirebaseMessaging.instance.unsubscribeFromTopic('Athlete');
     FirebaseMessaging.instance.subscribeToTopic('Staff');
     if (Platform.isIOS) {
@@ -275,8 +391,10 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
-    _getNotificationCount();
-    _getUnfinishedCaseCount();
+    // print(unfinishedHealthCaseList);
+
+    // _getNotificationCount();
+    // _getUnfinishedCaseCount();
 
     return Scaffold(
       appBar: AppBar(

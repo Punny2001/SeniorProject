@@ -20,6 +20,21 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
+final CollectionReference staffCollection =
+    FirebaseFirestore.instance.collection('Staff');
+final CollectionReference athleteCollection =
+    FirebaseFirestore.instance.collection('Athlete');
+final CollectionReference healthQuestionnaireCollection =
+    FirebaseFirestore.instance.collection('HealthQuestionnaireResult');
+final CollectionReference physicalQuestionnaireCollection =
+    FirebaseFirestore.instance.collection('PhysicalQuestionnaireResult');
+final CollectionReference illnessRecordCollection =
+    FirebaseFirestore.instance.collection('IllnessRecord');
+final CollectionReference injuryRecordCollection =
+    FirebaseFirestore.instance.collection('InjuryRecord');
+
+final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
