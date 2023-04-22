@@ -7,6 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
@@ -18,13 +19,9 @@ import 'package:seniorapp/decoration/textfield_normal.dart';
 import 'package:http/http.dart' as http;
 
 class IllnessReport extends StatefulWidget {
-  final HealthResultData healthResultData;
-  final String docID;
-  final Athlete athlete;
+  final Map<String, dynamic> data;
 
-  const IllnessReport(this.healthResultData, this.docID, this.athlete,
-      {Key key})
-      : super(key: key);
+  const IllnessReport(this.data, {Key key}) : super(key: key);
 
   @override
   _IllnessReportState createState() => _IllnessReportState();
@@ -63,29 +60,15 @@ class _IllnessReportState extends State<IllnessReport> {
   bool isRepeat = false;
   bool valueAdded = false;
 
-  Staff staff;
   String uid;
-
-  void getStaff() {
-    uid = FirebaseAuth.instance.currentUser.uid;
-    FirebaseFirestore.instance
-        .collection('Staff')
-        .doc(uid)
-        .get()
-        .then((snapshot) {
-      Map data = snapshot.data();
-      staff = Staff.fromMap(data);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    getStaff();
-    if (widget.healthResultData != null) {
-      _athleteNo.text = widget.healthResultData.athleteNo;
-      _selectedSport = widget.athlete.sportType;
+    if (widget.data != null) {
+      _athleteNo.text = widget.data['athleteNo'];
+      _selectedSport = widget.data['sportType'];
 
-      _occuredDate = widget.healthResultData.doDate;
+      _occuredDate = widget.data['doDate'];
     }
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
@@ -133,7 +116,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   PaddingDecorate(10),
-                  widget.healthResultData != null
+                  widget.data != null
                       ? TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: textdecorate('Athlete No.'),
@@ -245,8 +228,9 @@ class _IllnessReportState extends State<IllnessReport> {
                     padding: EdgeInsets.all(10),
                   ),
                   DateTimePicker(
-                    initialValue:
-                        widget.docID == null ? null : _occuredDate.toString(),
+                    initialValue: widget.data['questionnaireID'] == null
+                        ? null
+                        : _occuredDate.toString(),
                     dateLabelText: 'Occured Date',
                     dateMask: 'MMMM d, yyyy',
                     decoration: textdecorate('Occured date'),
@@ -761,11 +745,11 @@ class _IllnessReportState extends State<IllnessReport> {
               bool isValidate = _illnessKey.currentState.validate();
               bool addingValidate = _mainSymptomListKey.currentState.validate();
               if (isValidate && addingValidate) {
-                if (widget.docID != null) {
-                  updateData(widget.docID);
+                if (widget.data['questionnaireID'] != null) {
+                  updateData(widget.data['questionnaireID']);
                 }
-                if (widget.athlete != null) {
-                  sendPushMessage(widget.athlete.token, staff);
+                if (widget.data['athlete_no'] != null) {
+                  sendPushMessage(widget.data['token'], staff);
                 }
                 saveIllnessReport();
               }
@@ -894,16 +878,14 @@ class _IllnessReportState extends State<IllnessReport> {
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
             'status': 'done',
-            'title':
-                'ข้อมูล ${widget.healthResultData.questionnaireNo} บันทึกเสร็จสิ้น',
+            'title': 'ข้อมูล ${widget.data['questionnaireNo']} บันทึกเสร็จสิ้น',
             'body':
-                'ข้อมูล ${widget.healthResultData.questionnaireNo} ถูกบันทึกโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${widget.data['questionnaireNo']} ถูกบันทึกโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
           },
           'notification': {
-            'title':
-                'ข้อมูล ${widget.healthResultData.questionnaireNo} บันทึกเสร็จสิ้น',
+            'title': 'ข้อมูล ${widget.data['questionnaireNo']} บันทึกเสร็จสิ้น',
             'body':
-                'ข้อมูล ${widget.healthResultData.questionnaireNo} ถูกบันทึกโดยสตาฟ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${widget.data['questionnaireNo']} ถูกบันทึกโดยสตาฟ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
           },
           'to': token,
         }),
@@ -1006,7 +988,7 @@ class _IllnessReportState extends State<IllnessReport> {
 
     if (isValidate && (addingValidator || valueAdded == true)) {
       IllnessReportData illnessReportModel = IllnessReportData(
-          caseUid: widget.docID,
+          caseUid: widget.data['questionnaireID'],
           report_no: report_no,
           staff_uid: uid,
           athlete_no: _athleteNo.text.trim(),

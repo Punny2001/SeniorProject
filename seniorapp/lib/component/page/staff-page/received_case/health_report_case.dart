@@ -1,12 +1,9 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_time_picker/date_time_picker.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/appointment.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
@@ -19,13 +16,11 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class HealthReportCase extends StatefulWidget {
-  HealthResultData healthResultData;
-  String docID;
+  Map<String, dynamic> data;
 
   HealthReportCase({
     Key key,
-    @required this.healthResultData,
-    @required this.docID,
+    @required this.data,
   }) : super(key: key);
 
   @override
@@ -39,23 +34,10 @@ class _HealthReportCaseState extends State<HealthReportCase> {
   bool isLoading = false;
   Map<String, dynamic> latestAppointment;
 
-  void _getAthleteData() {
-    FirebaseFirestore.instance
-        .collection('Athlete')
-        .doc(widget.healthResultData.athleteUID)
-        .get()
-        .then((snapshot) {
-      Map data = snapshot.data();
-      setState(() {
-        athlete = Athlete.fromMap(data);
-      });
-    });
-  }
-
   void _getAppointmentData() {
     FirebaseFirestore.instance
         .collection('AppointmentRecord')
-        .where('caseID', isEqualTo: widget.docID)
+        .where('caseID', isEqualTo: widget.data['questionnaireID'])
         .get()
         .then((snapshot) {
       setState(() {
@@ -70,11 +52,11 @@ class _HealthReportCaseState extends State<HealthReportCase> {
 
   @override
   void initState() {
+    super.initState();
     setState(() {
       isLoading = true;
     });
     _getAppointmentData();
-    _getAthleteData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -93,14 +75,14 @@ class _HealthReportCaseState extends State<HealthReportCase> {
   @override
   Widget build(BuildContext context) {
     String resultPhrase =
-        result.resultPhrase('Health', widget.healthResultData.totalPoint);
+        result.resultPhrase('Health', widget.data['totalPoint']);
     resultPhrase =
-        resultPhrase.replaceAll('null', widget.healthResultData.healthSymptom);
+        resultPhrase.replaceAll('null', widget.data['healthSymptom']);
     final _questions = [
       {
         'questionNo': 'Q1',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${widget.healthResultData.healthSymptom}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
+            'ใน 7 วันที่ผ่านมา อาการ${widget.data['healthSymptom']}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
         'answerText': [
           {
             'text':
@@ -127,7 +109,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
       {
         'questionNo': 'Q2',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${widget.healthResultData.healthSymptom}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ${widget.data['healthSymptom']}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันเลย', 'score': 0},
           {'text': 'การฝึกซ้อมหรือแข่งขันลดลงเล็กน้อย', 'score': 6},
@@ -139,7 +121,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
       {
         'questionNo': 'Q3',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${widget.healthResultData.healthSymptom}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ${widget.data['healthSymptom']}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อความสามารถในการเล่นกีฬาเลย', 'score': 0},
           {'text': 'ความสามารถในการเล่นกีฬาลดลงเล็กน้อย', 'score': 6},
@@ -151,7 +133,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
       {
         'questionNo': 'Q4',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${widget.healthResultData.healthSymptom}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
+            'ใน 7 วันที่ผ่านมา อาการ${widget.data['healthSymptom']}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
         'answerText': [
           {'text': 'ไม่เจ็บเลย', 'score': 0},
           {'text': 'เจ็บเล็กน้อย', 'score': 6},
@@ -171,7 +153,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
       question.forEach((map) {
         (map['answerText'] as List<Map<String, Object>>).forEach((answer) {
           // print('${answerList['Q$i']} and ${answer['score']}');
-          if (widget.healthResultData.answerList['Q$i'] == answer['score']) {
+          if (widget.data['answerList']['Q$i'] == answer['score']) {
             answerText.add(answer['text'].toString());
             i++;
           }
@@ -224,7 +206,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                 child: Column(
                   children: [
                     Text(
-                      'Case: ${widget.healthResultData.questionnaireNo}',
+                      'Case: ${widget.data['questionnaireNo']}',
                       style: TextStyle(
                         fontSize: h * 0.03,
                         fontWeight: FontWeight.bold,
@@ -348,10 +330,9 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                             children: [
                               TextSpan(
                                 style: TextStyle(
-                                  color: score_color(
-                                      widget.healthResultData.totalPoint),
+                                  color: score_color(widget.data['totalPoint']),
                                 ),
-                                text: '${widget.healthResultData.totalPoint} ',
+                                text: '${widget.data['totalPoint']} ',
                               ),
                               const TextSpan(
                                 text: 'points',
@@ -380,7 +361,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                   fontWeight: FontWeight.normal,
                                 ),
                               ),
-                              widget.healthResultData.totalPoint >= 75
+                              widget.data['totalPoint'] >= 75
                                   ? TextSpan(
                                       text: 'คลิกที่นี่',
                                       style: const TextStyle(
@@ -412,7 +393,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
-                                    '${formatDate(widget.healthResultData.doDate, 'Staff')} | ${formatTime(widget.healthResultData.doDate)} ',
+                                    '${formatDate(widget.data['doDate'], 'Staff')} | ${formatTime(widget.data['doDate'])} ',
                               ),
                             ],
                           ),
@@ -420,9 +401,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                       ],
                     ),
                     PaddingDecorate(10),
-                    for (int i = 0;
-                        i < widget.healthResultData.answerList.length;
-                        i++)
+                    for (int i = 0; i < widget.data['answerList'].length; i++)
                       Column(
                         children: [
                           Text(
@@ -456,7 +435,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                     ),
                                   ),
                                   Text(
-                                    '${widget.healthResultData.answerList['Q${i + 1}']}',
+                                    '${widget.data['answerList']['Q${i + 1}']}',
                                     style: TextStyle(
                                       fontSize: h * 0.02,
                                     ),
@@ -476,8 +455,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Visibility(
-                          visible:
-                              widget.healthResultData.caseFinished == false,
+                          visible: widget.data['caseFinished'] == false,
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.blue[300],
@@ -488,10 +466,8 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => IllnessReport(
-                                      widget.healthResultData,
-                                      widget.docID,
-                                      athlete),
+                                  builder: (context) =>
+                                      IllnessReport(widget.data),
                                 ),
                               );
                             },
@@ -525,9 +501,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AppointmentPage(
-                                            data:
-                                                widget.healthResultData.toMap(),
-                                            docID: widget.docID,
+                                            data: widget.data,
                                           );
                                         });
                                   }

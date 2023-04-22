@@ -15,12 +15,10 @@ import 'package:seniorapp/decoration/textfield_normal.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class PhysicalReportCase extends StatefulWidget {
-  PhysicalResultData physicalResultData;
-  String docID;
+  Map<String, dynamic> data;
 
   PhysicalReportCase({
-    @required this.physicalResultData,
-    @required this.docID,
+    @required this.data
   });
 
   @override
@@ -28,14 +26,13 @@ class PhysicalReportCase extends StatefulWidget {
 }
 
 class _PhysicalReportCaseState extends State<PhysicalReportCase> {
-  Athlete athlete;
   Timer _timer;
   bool isLoading = false;
   Map<String, dynamic> latestAppointment;
   void _getAppointmentData() {
     FirebaseFirestore.instance
         .collection('AppointmentRecord')
-        .where('caseID', isEqualTo: widget.docID)
+        .where('caseID', isEqualTo: widget.data['questionnaireID'])
         .get()
         .then((snapshot) {
       setState(() {
@@ -48,27 +45,12 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
     });
   }
 
-  void _getAthleteData() {
-    FirebaseFirestore.instance
-        .collection('Athlete')
-        .doc(widget.physicalResultData.athleteUID)
-        .get()
-        .then((snapshot) {
-      Map data = snapshot.data();
-
-      setState(() {
-        athlete = Athlete.fromMap(data);
-      });
-    });
-  }
-
+  
   @override
   void initState() {
     setState(() {
       isLoading = true;
     });
-    _getAppointmentData();
-    _getAthleteData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -82,7 +64,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
     super.dispose();
   }
 
-  Result result = Result();
+  Result result = const Result();
 
   @override
   Widget build(BuildContext context) {
@@ -506,9 +488,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AppointmentPage(
-                                            data: widget.physicalResultData
-                                                .toMap(),
-                                            docID: widget.docID,
+                                            data: widget.data,
                                           );
                                         });
                                   }

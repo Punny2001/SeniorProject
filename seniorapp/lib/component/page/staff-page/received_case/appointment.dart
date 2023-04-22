@@ -10,11 +10,9 @@ import 'package:seniorapp/decoration/textfield_normal.dart';
 
 class AppointmentPage extends StatefulWidget {
   final Map<String, dynamic> data;
-  final String docID;
   const AppointmentPage({
     Key key,
     this.data,
-    this.docID,
   }) : super(key: key);
 
   @override
@@ -173,7 +171,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
 
     if (isValidate) {
       AppointmentData appointmentDataModel = AppointmentData(
-        caseID: widget.docID,
+        caseID: widget.data['questionnaireID'],
         appointmentNo: appointNo,
         appointDate: _datetime,
         detail: _detailController.text,

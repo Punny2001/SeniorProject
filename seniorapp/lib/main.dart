@@ -32,6 +32,8 @@ final CollectionReference illnessRecordCollection =
     FirebaseFirestore.instance.collection('IllnessRecord');
 final CollectionReference injuryRecordCollection =
     FirebaseFirestore.instance.collection('InjuryRecord');
+final CollectionReference appointmentCollection =
+    FirebaseFirestore.instance.collection('AppointmentRecord');
 
 final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 

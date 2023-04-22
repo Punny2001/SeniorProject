@@ -224,7 +224,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              const IllnessReport(null, null, null),
+                              const IllnessReport(null),
                         ),
                       ),
                     ),
