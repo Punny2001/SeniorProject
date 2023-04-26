@@ -2,24 +2,18 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/appointment.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
-import 'package:seniorapp/component/result-data/physical_result_data.dart';
-import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class PhysicalReportCase extends StatefulWidget {
   Map<String, dynamic> data;
 
-  PhysicalReportCase({
-    @required this.data
-  });
+  PhysicalReportCase({@required this.data});
 
   @override
   State<PhysicalReportCase> createState() => _PhysicalReportCaseState();
@@ -29,6 +23,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
   Timer _timer;
   bool isLoading = false;
   Map<String, dynamic> latestAppointment;
+
   void _getAppointmentData() {
     FirebaseFirestore.instance
         .collection('AppointmentRecord')
@@ -45,12 +40,13 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
     });
   }
 
-  
   @override
   void initState() {
+    super.initState();
     setState(() {
       isLoading = true;
     });
+    _getAppointmentData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -69,14 +65,13 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
   @override
   Widget build(BuildContext context) {
     String resultPhrase =
-        result.resultPhrase('Physical', widget.physicalResultData.totalPoint);
-    resultPhrase =
-        resultPhrase.replaceAll('null', widget.physicalResultData.bodyPart);
+        result.resultPhrase('Physical', widget.data['totalPoint']);
+    resultPhrase = resultPhrase.replaceAll('null', widget.data['bodyPart']);
     final _questions = [
       {
         'questionNo': 'Q1',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${widget.physicalResultData.bodyPart}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
+            'ใน 7 วันที่ผ่านมา อาการ${widget.data['bodyPart']}ของท่านทำให้การเข้าร่วมฝึกซ้อมหรือแข่งขันกีฬามีปัญหาหรือไม่',
         'answerText': [
           {
             'text':
@@ -103,7 +98,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
       {
         'questionNo': 'Q2',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${widget.physicalResultData.bodyPart}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ${widget.data['bodyPart']}ของท่านส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันมากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อการฝึกซ้อมหรือแข่งขันเลย', 'score': 0},
           {'text': 'การฝึกซ้อมหรือแข่งขันลดลงเล็กน้อย', 'score': 6},
@@ -115,7 +110,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
       {
         'questionNo': 'Q3',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${widget.physicalResultData.bodyPart}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
+            'ใน 7 วันที่ผ่านมา อาการ${widget.data['bodyPart']}ของท่านส่งผลกระทบต่อความสามารถในการเล่นกีฬามากน้อยเพียงใด',
         'answerText': [
           {'text': 'ไม่ส่งผลกระทบต่อความสามารถในการเล่นกีฬาเลย', 'score': 0},
           {'text': 'ความสามารถในการเล่นกีฬาลดลงเล็กน้อย', 'score': 6},
@@ -127,7 +122,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
       {
         'questionNo': 'Q4',
         'questionText':
-            'ใน 7 วันที่ผ่านมา อาการ${widget.physicalResultData.bodyPart}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
+            'ใน 7 วันที่ผ่านมา อาการ${widget.data['bodyPart']}ของท่านซึ่งเป็นผลมาจากการเข้าร่วมการแข่งขันหรือฝึกซ้อมกีฬาอยู่ในระดับใด',
         'answerText': [
           {'text': 'ไม่เจ็บเลย', 'score': 0},
           {'text': 'เจ็บเล็กน้อย', 'score': 6},
@@ -147,7 +142,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
       question.forEach((map) {
         (map['answerText'] as List<Map<String, Object>>).forEach((answer) {
           // print('${answerList['Q$i']} and ${answer['score']}');
-          if (widget.physicalResultData.answerList['Q$i'] == answer['score']) {
+          if (widget.data['answerList']['Q$i'] == answer['score']) {
             answerText.add(answer['text'].toString());
             i++;
           }
@@ -157,7 +152,6 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
     }
 
     List<String> answerTextList = find_answer(_questions);
-    print(answerTextList);
 
     return Scaffold(
       appBar: AppBar(
@@ -201,7 +195,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                 child: Column(
                   children: [
                     Text(
-                      'Case: ${widget.physicalResultData.questionnaireNo}',
+                      'Case: ${widget.data['questionnaireNo']}',
                       style: TextStyle(
                         fontSize: h * 0.03,
                         fontWeight: FontWeight.bold,
@@ -226,7 +220,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
-                                    '${athlete.firstname + ' ' + athlete.lastname} ',
+                                    '${widget.data['firstname'] + ' ' + widget.data['lastname']} ',
                               ),
                             ],
                           ),
@@ -270,7 +264,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                text: '${athlete.gender} ',
+                                text: '${widget.data['gender']} ',
                               ),
                             ],
                           ),
@@ -289,7 +283,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                text: '${athlete.age} years',
+                                text: '${widget.data['age']} years',
                               ),
                             ],
                           ),
@@ -308,7 +302,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                text: athlete.sportType,
+                                text: widget.data['sportType'],
                               ),
                             ],
                           ),
@@ -325,11 +319,9 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                             children: [
                               TextSpan(
                                 style: TextStyle(
-                                  color: score_color(
-                                      widget.physicalResultData.totalPoint),
+                                  color: score_color(widget.data['totalPoint']),
                                 ),
-                                text:
-                                    '${widget.physicalResultData.totalPoint} ',
+                                text: '${widget.data['totalPoint']} ',
                               ),
                               const TextSpan(
                                 text: 'points',
@@ -376,7 +368,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
-                                    '${formatDate(widget.physicalResultData.doDate, 'Staff')} | ${formatTime(widget.physicalResultData.doDate)}',
+                                    '${formatDate(widget.data['doDate'].toDate(), 'Staff')} | ${formatTime(widget.data['doDate'].toDate())}',
                               ),
                             ],
                           ),
@@ -384,9 +376,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                       ],
                     ),
                     PaddingDecorate(10),
-                    for (int i = 0;
-                        i < widget.physicalResultData.answerList.length;
-                        i++)
+                    for (int i = 0; i < widget.data['answerList'].length; i++)
                       Column(
                         children: [
                           Text(
@@ -420,7 +410,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                     ),
                                   ),
                                   Text(
-                                    '${widget.physicalResultData.answerList['Q${i + 1}']}',
+                                    '${widget.data['answerList']['Q${i + 1}']}',
                                     style: TextStyle(
                                       fontSize: h * 0.02,
                                     ),
@@ -440,8 +430,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Visibility(
-                          visible:
-                              widget.physicalResultData.caseFinished == false,
+                          visible: widget.data['caseFinished'] == false,
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
                               primary: Colors.blue[300],
@@ -451,10 +440,8 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => InjuryReport(
-                                      widget.physicalResultData,
-                                      widget.docID,
-                                      athlete),
+                                  builder: (context) =>
+                                      InjuryReport(widget.data),
                                 ),
                               );
                             },

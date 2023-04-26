@@ -68,7 +68,7 @@ class _IllnessReportState extends State<IllnessReport> {
       _athleteNo.text = widget.data['athleteNo'];
       _selectedSport = widget.data['sportType'];
 
-      _occuredDate = widget.data['doDate'];
+      _occuredDate = widget.data['doDate'].toDate();
     }
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
@@ -230,7 +230,7 @@ class _IllnessReportState extends State<IllnessReport> {
                   DateTimePicker(
                     initialValue: widget.data['questionnaireID'] == null
                         ? null
-                        : _occuredDate.toString(),
+                        : formatDate(_occuredDate, 'Staff'),
                     dateLabelText: 'Occured Date',
                     dateMask: 'MMMM d, yyyy',
                     decoration: textdecorate('Occured date'),

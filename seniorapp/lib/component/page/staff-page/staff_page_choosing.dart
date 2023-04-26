@@ -272,6 +272,9 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
+    print('Health Case: ${unfinishedHealthCaseList.length}');
+    print('Physical Case: ${unfinishedPhysicalCaseList.length}');
+
     return Scaffold(
       appBar: AppBar(
         primary: true,
@@ -299,6 +302,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         ),
       ),
       body: Container(
+        padding: const EdgeInsets.only(bottom: 10),
         color: Colors.white,
         child: _staffPageList.elementAt(_selected_idx),
       ),

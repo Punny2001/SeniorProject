@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
+import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'dart:async' show Stream, StreamController, Timer;
 import 'package:async/async.dart' show StreamZip;
@@ -98,26 +99,43 @@ class _StaffCaseState extends State<StaffCase> {
     setState(() {
       isLoading = true;
     });
+
     List<Map<String, dynamic>> combinedList =
         unfinishedHealthCaseList + unfinishedPhysicalCaseList;
+    print('Combined List Case: ${combinedList.length}');
 
-    Map<String, Map<String, dynamic>> athleteMap = Map.fromIterable(athleteList,
-        key: (athlete) => athlete['athleteUID'], value: (athlete) => athlete);
-    Map<String, Map<String, dynamic>> combinedMap = Map.fromIterable(
-        combinedList,
-        key: (unfinishedCase) => unfinishedCase['athleteUID'],
-        value: (data) => data);
+    Map<String, Map<String, dynamic>> athleteMap =
+        athleteList.fold({}, (Map<String, Map<String, dynamic>> map, athlete) {
+      String athleteId = athlete['athleteUID'];
+      map[athleteId] = athlete;
+      return map;
+    });
 
-    Map<String, Map<String, dynamic>> result = Map.fromIterable(
-      athleteMap.keys.where((id) => combinedMap.containsKey(id)),
-      key: (id) => id,
-      value: (id) => LinkedHashMap.of({
-        ...athleteMap[id],
-        ...combinedMap[id],
-      }),
-    );
+    Map<String, List<Map<String, dynamic>>> questionnaireMap = combinedList
+        .fold({}, (Map<String, List<Map<String, dynamic>>> map, questionnaire) {
+      String athleteId = questionnaire['athleteUID'];
+      if (!map.containsKey(athleteId)) {
+        map[athleteId] = [];
+      }
+      map[athleteId].add(questionnaire);
+      return map;
+    });
 
-    unfinishedCaseList = result.values.toList();
+    List<Map<String, dynamic>> resultAsList = [];
+    for (var athlete in athleteList) {
+      String athleteId = athlete['athleteUID'];
+      if (questionnaireMap.containsKey(athleteId)) {
+        for (var questionnaire in questionnaireMap[athleteId]) {
+          Map<String, dynamic> combined = LinkedHashMap.of({
+            ...athlete,
+            ...questionnaire,
+          });
+          resultAsList.add(combined);
+        }
+      }
+    }
+
+    unfinishedCaseList = resultAsList;
 
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
@@ -177,9 +195,7 @@ class _StaffCaseState extends State<StaffCase> {
                       builder: (BuildContext context) {
                         return StatefulBuilder(builder: (context, setState) {
                           return AlertDialog(
-                            title: Container(
-                              child: const Text('Filter'),
-                            ),
+                            title: const Text('Filter'),
                             content: Column(
                               children: [
                                 const Text('Order by'),
@@ -393,1052 +409,452 @@ class _StaffCaseState extends State<StaffCase> {
                 )
               : unfinishedCaseList.isNotEmpty
                   ? ListView.builder(
+                      itemCount: unfinishedCaseList.length,
                       itemBuilder: (BuildContext context, int index) {
-                      Map<String, dynamic> data = unfinishedCaseList[index];
-                      switch (data['questionnaireType']) {
-                        case 'Health':
-                          {
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: BorderSide(
-                                    width: 2, color: Colors.blue[200]),
-                              ),
-                              elevation: 0,
-                              child: SizedBox(
-                                // height: h * 0.25,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.only(left: w * 0.03),
-                                      width: w * 0.7,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: <Widget>[
-                                          const Padding(
-                                            padding: EdgeInsets.only(
-                                              top: 15,
-                                            ),
-                                          ),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: 'ประเภทแบบสอบถาม: ',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: typeToThai[data[
-                                                      'questionnaireType']],
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddingDecorate(5),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: 'ปัญหาสุขภาพ: ',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: data['healthSymptom'],
-                                                  style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddingDecorate(5),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: 'วันที่บันทึก: ',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: formatDate(
-                                                    data['doDate'],
-                                                    'Athlete',
-                                                  ),
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddingDecorate(5),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: 'เวลาที่บันทึก: ',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text:
-                                                      '${DateFormat.Hms().format(
-                                                    data['doDate'],
-                                                  )} น.',
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddingDecorate(5),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              ElevatedButton.icon(
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: Colors.white,
-                                                  elevation: 0,
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          HealthReportCase(
-                                                        data: data,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                icon: const Icon(
-                                                  Icons.article_rounded,
-                                                  color: Colors.black,
-                                                ),
-                                                label: const Text(
-                                                  'Details',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                  ),
-                                                ),
-                                              ),
-                                              data['caseFinished'] == false
-                                                  ? ElevatedButton.icon(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        primary:
-                                                            Colors.blue[400],
-                                                        elevation: 0,
-                                                      ),
-                                                      onPressed: () {
-                                                        Navigator.of(context)
-                                                            .push(
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                IllnessReport(
-                                                              data,
-                                                            ),
-                                                          ),
-                                                        );
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.add_box,
-                                                      ),
-                                                      label: const Text(
-                                                        'Record',
-                                                      ),
-                                                    )
-                                                  : Container()
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: w * 0.2,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${data['totalPoint']}',
-                                            style: TextStyle(
-                                                color: score_color(
-                                                    data['totalPoint']),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: h * 0.05),
-                                          ),
-                                          Text(
-                                            'คะแนน',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: h * 0.02),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                        Map<String, dynamic> data = unfinishedCaseList[index];
+                        switch (data['questionnaireType']) {
+                          case 'Health':
+                            {
+                              return Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                  side: BorderSide(
+                                      width: 2, color: Colors.blue[200]),
                                 ),
-                              ),
-                            );
-                          }
-                          break;
-                        case 'Physical':
-                          {
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: BorderSide(
-                                    width: 2, color: Colors.blue[200]),
-                              ),
-                              elevation: 0,
-                              child: SizedBox(
-                                // height: h * 0.25,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.only(left: w * 0.03),
-                                      width: w * 0.7,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: <Widget>[
-                                          const Padding(
-                                            padding: EdgeInsets.only(top: 15),
-                                          ),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: 'ประเภทแบบสอบถาม: ',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
+                                elevation: 0,
+                                child: SizedBox(
+                                  // height: h * 0.25,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.only(left: w * 0.03),
+                                        width: w * 0.7,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: <Widget>[
+                                            const Padding(
+                                              padding: EdgeInsets.only(
+                                                top: 15,
                                               ),
-                                              children: [
-                                                TextSpan(
-                                                  text: typeToThai[data['questionnaireType']],
-                                                  style: const TextStyle(
+                                            ),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'นักกีฬา: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: data['firstname'] +
+                                                        ' ' +
+                                                        data['lastname'],
+                                                    style: const TextStyle(
                                                       fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddingDecorate(5),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: 'ส่วนที่บาดเจ็บ: ',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: data['bodyPart'],
-                                                  style: const TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.normal,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddingDecorate(5),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: 'วันที่บันทึก: ',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text: formatDate(
-                                                    data['doDate'],
-                                                    'Athlete',
-                                                  ),
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddingDecorate(5),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: 'เวลาที่บันทึก: ',
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              children: [
-                                                TextSpan(
-                                                  text:
-                                                      '${DateFormat.Hms().format(
-                                                    data['doDate'],
-                                                  )} น.',
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          PaddingDecorate(5),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              ElevatedButton.icon(
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: Colors.white,
-                                                  elevation: 0,
-                                                ),
-                                                onPressed: () {
-                                                  PhysicalResultData
-                                                      physicalResultData =
-                                                      PhysicalResultData
-                                                          .fromMap(data);
-                                                  formatDate(
-                                                    physicalResultData.doDate,
-                                                    'Staff',
-                                                  );
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          PhysicalReportCase(
-                                                              physicalResultData:
-                                                                  physicalResultData,
-                                                              docID: data[
-                                                                  'docID']),
+                                                          FontWeight.normal,
                                                     ),
-                                                  );
-                                                },
-                                                icon: const Icon(
-                                                  Icons.article_rounded,
-                                                  color: Colors.black,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'ประเภทแบบสอบถาม: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
                                                 ),
-                                                label: const Text(
-                                                  'Details',
-                                                  style: TextStyle(
+                                                children: [
+                                                  TextSpan(
+                                                    text: typeToThai[data[
+                                                        'questionnaireType']],
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'ปัญหาสุขภาพ: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: data['healthSymptom'],
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'วันที่บันทึก: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: formatDate(
+                                                      data['doDate'].toDate(),
+                                                      'Athlete',
+                                                    ),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'เวลาที่บันทึก: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text:
+                                                        '${DateFormat.Hms().format(
+                                                      data['doDate'].toDate(),
+                                                    )} น.',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ElevatedButton.icon(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: Colors.white,
+                                                    elevation: 0,
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            HealthReportCase(
+                                                          data: data,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.article_rounded,
                                                     color: Colors.black,
                                                   ),
+                                                  label: const Text(
+                                                    'Details',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
                                                 ),
+                                                data['caseFinished'] == false
+                                                    ? ElevatedButton.icon(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Colors.blue[400],
+                                                          elevation: 0,
+                                                        ),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .push(
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  IllnessReport(
+                                                                data,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.add_box,
+                                                        ),
+                                                        label: const Text(
+                                                          'Record',
+                                                        ),
+                                                      )
+                                                    : Container()
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: w * 0.2,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${data['totalPoint']}',
+                                              style: TextStyle(
+                                                  color: score_color(
+                                                      data['totalPoint']),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: h * 0.05),
+                                            ),
+                                            Text(
+                                              'คะแนน',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: h * 0.02),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            break;
+                          case 'Physical':
+                            {
+                              return Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50),
+                                  side: BorderSide(
+                                      width: 2, color: Colors.blue[200]),
+                                ),
+                                elevation: 0,
+                                child: SizedBox(
+                                  // height: h * 0.25,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.only(left: w * 0.03),
+                                        width: w * 0.7,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          children: <Widget>[
+                                            const Padding(
+                                              padding: EdgeInsets.only(top: 15),
+                                            ),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'นักกีฬา: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: data['firstname'] +
+                                                        ' ' +
+                                                        data['lastname'],
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              physicalData.caseFinished == false
-                                                  ? ElevatedButton.icon(
-                                                      style: ElevatedButton
-                                                          .styleFrom(
-                                                        primary:
-                                                            Colors.blue[400],
-                                                        elevation: 0,
+                                            ),
+                                            PaddingDecorate(5),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'ประเภทแบบสอบถาม: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: typeToThai[data[
+                                                        'questionnaireType']],
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'ส่วนที่บาดเจ็บ: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: data['bodyPart'],
+                                                    style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'วันที่บันทึก: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: formatDate(
+                                                      data['doDate'].toDate(),
+                                                      'Athlete',
+                                                    ),
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Text.rich(
+                                              TextSpan(
+                                                text: 'เวลาที่บันทึก: ',
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text:
+                                                        '${DateFormat.Hms().format(
+                                                      data['doDate'].toDate(),
+                                                    )} น.',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            PaddingDecorate(5),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ElevatedButton.icon(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: Colors.white,
+                                                    elevation: 0,
+                                                  ),
+                                                  onPressed: () {
+                                                    formatDate(
+                                                      data['doDate'].toDate(),
+                                                      'Staff',
+                                                    );
+                                                    Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PhysicalReportCase(
+                                                          data: data,
+                                                        ),
                                                       ),
-                                                      onPressed: () {
-                                                        physicalData =
-                                                            PhysicalResultData
-                                                                .fromMap(data);
-                                                        FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'Athlete')
-                                                            .doc(physicalData
-                                                                .athleteUID)
-                                                            .get()
-                                                            .then((snapshot) {
-                                                          Map athleteData =
-                                                              snapshot.data();
-                                                          Athlete athlete =
-                                                              Athlete.fromMap(
-                                                                  athleteData);
+                                                    );
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.article_rounded,
+                                                    color: Colors.black,
+                                                  ),
+                                                  label: const Text(
+                                                    'Details',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                                data['caseFinished'] == false
+                                                    ? ElevatedButton.icon(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          primary:
+                                                              Colors.blue[400],
+                                                          elevation: 0,
+                                                        ),
+                                                        onPressed: () {
                                                           Navigator.of(context)
                                                               .push(
                                                             MaterialPageRoute(
                                                               builder: (context) =>
                                                                   InjuryReport(
-                                                                      physicalData,
-                                                                      data[
-                                                                          'docID'],
-                                                                      athlete),
+                                                                data,
+                                                              ),
                                                             ),
                                                           );
-                                                        });
-                                                      },
-                                                      icon: const Icon(
-                                                        Icons.add_box,
-                                                      ),
-                                                      label: const Text(
-                                                        'Record',
-                                                      ),
-                                                    )
-                                                  : Container()
-                                            ],
-                                          ),
-                                        ],
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.add_box,
+                                                        ),
+                                                        label: const Text(
+                                                          'Record',
+                                                        ),
+                                                      )
+                                                    : Container()
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: w * 0.2,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${physicalData.totalPoint}',
-                                            style: TextStyle(
-                                                color: score_color(
-                                                    physicalData.totalPoint),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: h * 0.05),
-                                          ),
-                                          Text(
-                                            'คะแนน',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: h * 0.02),
-                                          ),
-                                        ],
+                                      SizedBox(
+                                        width: w * 0.2,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '${data['totalPoint']}',
+                                              style: TextStyle(
+                                                  color: score_color(
+                                                      data['totalPoint']),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: h * 0.05),
+                                            ),
+                                            Text(
+                                              'คะแนน',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: h * 0.02),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        default:
-                      }
-                    })
-                  // ? StreamBuilder(
-                  //     stream: getData(),
-                  //     builder: (BuildContext context, snapshot) {
-                  //       if (snapshot.hasData) {
-                  //         List<QuerySnapshot> querySnapshot =
-                  //             snapshot.data.toList();
-
-                  //         List<QueryDocumentSnapshot> documentSnapshot = [];
-                  //         querySnapshot.forEach((query) {
-                  //           documentSnapshot.addAll(query.docs);
-                  //         });
-
-                  //         int index = 0;
-                  //         List<Map<String, dynamic>> mappedData = [];
-                  //         for (QueryDocumentSnapshot doc in documentSnapshot) {
-                  //           mappedData.add(doc.data());
-                  //           mappedData[index]['docID'] = doc.reference.id;
-
-                  //           index += 1;
-                  //         }
-                  //         mappedData = add_filter(mappedData);
-                  //         return mappedData.isEmpty
-                  //             ? const Center(
-                  //                 child: Text(
-                  //                   'Empty athlete case received',
-                  //                   textAlign: TextAlign.center,
-                  //                   style: TextStyle(
-                  //                     fontSize: 50,
-                  //                     fontWeight: FontWeight.bold,
-                  //                   ),
-                  //                 ),
-                  //               )
-                  //             : ListView.builder(
-                  //                 itemCount: mappedData.length,
-                  //                 itemBuilder: (context, index) {
-                  //                   Map<String, dynamic> data =
-                  //                       mappedData[index];
-                  //                   switch (data['questionnaireType']) {
-                  //                     case 'Health':
-                  //                       {
-                  //                         healthData =
-                  //                             HealthResultData.fromMap(data);
-                  //                         return Card(
-                  //                           shape: RoundedRectangleBorder(
-                  //                             borderRadius:
-                  //                                 BorderRadius.circular(50),
-                  //                             side: BorderSide(
-                  //                                 width: 2,
-                  //                                 color: Colors.blue[200]),
-                  //                           ),
-                  //                           elevation: 0,
-                  //                           child: SizedBox(
-                  //                             // height: h * 0.25,
-                  //                             child: Row(
-                  //                               mainAxisAlignment:
-                  //                                   MainAxisAlignment
-                  //                                       .spaceAround,
-                  //                               children: [
-                  //                                 Container(
-                  //                                   padding: EdgeInsets.only(
-                  //                                       left: w * 0.03),
-                  //                                   width: w * 0.7,
-                  //                                   child: Column(
-                  //                                     mainAxisAlignment:
-                  //                                         MainAxisAlignment
-                  //                                             .center,
-                  //                                     crossAxisAlignment:
-                  //                                         CrossAxisAlignment
-                  //                                             .stretch,
-                  //                                     children: <Widget>[
-                  //                                       const Padding(
-                  //                                         padding:
-                  //                                             EdgeInsets.only(
-                  //                                           top: 15,
-                  //                                         ),
-                  //                                       ),
-                  //                                       Text.rich(
-                  //                                         TextSpan(
-                  //                                           text:
-                  //                                               'ประเภทแบบสอบถาม: ',
-                  //                                           style:
-                  //                                               const TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                           ),
-                  //                                           children: [
-                  //                                             TextSpan(
-                  //                                               text: typeToThai[
-                  //                                                   healthData
-                  //                                                       .questionnaireType],
-                  //                                               style: const TextStyle(
-                  //                                                   fontWeight:
-                  //                                                       FontWeight
-                  //                                                           .normal),
-                  //                                             ),
-                  //                                           ],
-                  //                                         ),
-                  //                                       ),
-                  //                                       PaddingDecorate(5),
-                  //                                       Text.rich(
-                  //                                         TextSpan(
-                  //                                           text:
-                  //                                               'ปัญหาสุขภาพ: ',
-                  //                                           style:
-                  //                                               const TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                           ),
-                  //                                           children: [
-                  //                                             TextSpan(
-                  //                                               text: healthData
-                  //                                                   .healthSymptom,
-                  //                                               style:
-                  //                                                   const TextStyle(
-                  //                                                 fontWeight:
-                  //                                                     FontWeight
-                  //                                                         .normal,
-                  //                                               ),
-                  //                                             ),
-                  //                                           ],
-                  //                                         ),
-                  //                                       ),
-                  //                                       PaddingDecorate(5),
-                  //                                       Text.rich(
-                  //                                         TextSpan(
-                  //                                           text:
-                  //                                               'วันที่บันทึก: ',
-                  //                                           style:
-                  //                                               const TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                           ),
-                  //                                           children: [
-                  //                                             TextSpan(
-                  //                                               text:
-                  //                                                   formatDate(
-                  //                                                 healthData
-                  //                                                     .doDate,
-                  //                                                 'Athlete',
-                  //                                               ),
-                  //                                               style: const TextStyle(
-                  //                                                   fontWeight:
-                  //                                                       FontWeight
-                  //                                                           .normal),
-                  //                                             ),
-                  //                                           ],
-                  //                                         ),
-                  //                                       ),
-                  //                                       PaddingDecorate(5),
-                  //                                       Text.rich(
-                  //                                         TextSpan(
-                  //                                           text:
-                  //                                               'เวลาที่บันทึก: ',
-                  //                                           style:
-                  //                                               const TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                           ),
-                  //                                           children: [
-                  //                                             TextSpan(
-                  //                                               text:
-                  //                                                   '${DateFormat.Hms().format(
-                  //                                                 healthData
-                  //                                                     .doDate,
-                  //                                               )} น.',
-                  //                                               style: const TextStyle(
-                  //                                                   fontWeight:
-                  //                                                       FontWeight
-                  //                                                           .normal),
-                  //                                             ),
-                  //                                           ],
-                  //                                         ),
-                  //                                       ),
-                  //                                       PaddingDecorate(5),
-                  //                                       Row(
-                  //                                         mainAxisAlignment:
-                  //                                             MainAxisAlignment
-                  //                                                 .spaceEvenly,
-                  //                                         children: [
-                  //                                           ElevatedButton.icon(
-                  //                                             style:
-                  //                                                 ElevatedButton
-                  //                                                     .styleFrom(
-                  //                                               primary: Colors
-                  //                                                   .white,
-                  //                                               elevation: 0,
-                  //                                             ),
-                  //                                             onPressed: () {
-                  //                                               HealthResultData
-                  //                                                   healthResultData =
-                  //                                                   HealthResultData
-                  //                                                       .fromMap(
-                  //                                                           data);
-                  //                                               formatDate(
-                  //                                                 healthResultData
-                  //                                                     .doDate,
-                  //                                                 'Staff',
-                  //                                               );
-                  //                                               Navigator.of(
-                  //                                                       context)
-                  //                                                   .push(
-                  //                                                 MaterialPageRoute(
-                  //                                                   builder: (context) => HealthReportCase(
-                  //                                                       healthResultData:
-                  //                                                           healthResultData,
-                  //                                                       docID: data[
-                  //                                                           'docID']),
-                  //                                                 ),
-                  //                                               );
-                  //                                             },
-                  //                                             icon: const Icon(
-                  //                                               Icons
-                  //                                                   .article_rounded,
-                  //                                               color: Colors
-                  //                                                   .black,
-                  //                                             ),
-                  //                                             label: const Text(
-                  //                                               'Details',
-                  //                                               style:
-                  //                                                   TextStyle(
-                  //                                                 color: Colors
-                  //                                                     .black,
-                  //                                               ),
-                  //                                             ),
-                  //                                           ),
-                  //                                           healthData.caseFinished ==
-                  //                                                   false
-                  //                                               ? ElevatedButton
-                  //                                                   .icon(
-                  //                                                   style: ElevatedButton
-                  //                                                       .styleFrom(
-                  //                                                     primary:
-                  //                                                         Colors
-                  //                                                             .blue[400],
-                  //                                                     elevation:
-                  //                                                         0,
-                  //                                                   ),
-                  //                                                   onPressed:
-                  //                                                       () {
-                  //                                                     healthData =
-                  //                                                         HealthResultData.fromMap(
-                  //                                                             data);
-                  //                                                     FirebaseFirestore
-                  //                                                         .instance
-                  //                                                         .collection(
-                  //                                                             'Athlete')
-                  //                                                         .doc(healthData
-                  //                                                             .athleteUID)
-                  //                                                         .get()
-                  //                                                         .then(
-                  //                                                             (snapshot) {
-                  //                                                       Map athleteData =
-                  //                                                           snapshot.data();
-                  //                                                       Athlete
-                  //                                                           athlete =
-                  //                                                           Athlete.fromMap(athleteData);
-                  //                                                       Navigator.of(context)
-                  //                                                           .push(
-                  //                                                         MaterialPageRoute(
-                  //                                                           builder: (context) =>
-                  //                                                               IllnessReport(
-                  //                                                             healthData,
-                  //                                                             data['docID'],
-                  //                                                             athlete,
-                  //                                                           ),
-                  //                                                         ),
-                  //                                                       );
-                  //                                                     });
-                  //                                                   },
-                  //                                                   icon:
-                  //                                                       const Icon(
-                  //                                                     Icons
-                  //                                                         .add_box,
-                  //                                                   ),
-                  //                                                   label:
-                  //                                                       const Text(
-                  //                                                     'Record',
-                  //                                                   ),
-                  //                                                 )
-                  //                                               : Container()
-                  //                                         ],
-                  //                                       ),
-                  //                                     ],
-                  //                                   ),
-                  //                                 ),
-                  //                                 SizedBox(
-                  //                                   width: w * 0.2,
-                  //                                   child: Column(
-                  //                                     mainAxisAlignment:
-                  //                                         MainAxisAlignment
-                  //                                             .center,
-                  //                                     children: [
-                  //                                       Text(
-                  //                                         '${healthData.totalPoint}',
-                  //                                         style: TextStyle(
-                  //                                             color: score_color(
-                  //                                                 healthData
-                  //                                                     .totalPoint),
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                             fontSize:
-                  //                                                 h * 0.05),
-                  //                                       ),
-                  //                                       Text(
-                  //                                         'คะแนน',
-                  //                                         style: TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                             fontSize:
-                  //                                                 h * 0.02),
-                  //                                       ),
-                  //                                     ],
-                  //                                   ),
-                  //                                 ),
-                  //                               ],
-                  //                             ),
-                  //                           ),
-                  //                         );
-                  //                       }
-                  //                       break;
-                  //                     case 'Physical':
-                  //                       {
-                  //                         physicalData =
-                  //                             PhysicalResultData.fromMap(data);
-                  //                         return Card(
-                  //                           shape: RoundedRectangleBorder(
-                  //                             borderRadius:
-                  //                                 BorderRadius.circular(50),
-                  //                             side: BorderSide(
-                  //                                 width: 2,
-                  //                                 color: Colors.blue[200]),
-                  //                           ),
-                  //                           elevation: 0,
-                  //                           child: SizedBox(
-                  //                             // height: h * 0.25,
-                  //                             child: Row(
-                  //                               mainAxisAlignment:
-                  //                                   MainAxisAlignment
-                  //                                       .spaceAround,
-                  //                               children: [
-                  //                                 Container(
-                  //                                   padding: EdgeInsets.only(
-                  //                                       left: w * 0.03),
-                  //                                   width: w * 0.7,
-                  //                                   child: Column(
-                  //                                     mainAxisAlignment:
-                  //                                         MainAxisAlignment
-                  //                                             .center,
-                  //                                     crossAxisAlignment:
-                  //                                         CrossAxisAlignment
-                  //                                             .stretch,
-                  //                                     children: <Widget>[
-                  //                                       const Padding(
-                  //                                         padding:
-                  //                                             EdgeInsets.only(
-                  //                                                 top: 15),
-                  //                                       ),
-                  //                                       Text.rich(
-                  //                                         TextSpan(
-                  //                                           text:
-                  //                                               'ประเภทแบบสอบถาม: ',
-                  //                                           style:
-                  //                                               const TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                           ),
-                  //                                           children: [
-                  //                                             TextSpan(
-                  //                                               text: typeToThai[
-                  //                                                   physicalData
-                  //                                                       .questionnaireType],
-                  //                                               style: const TextStyle(
-                  //                                                   fontWeight:
-                  //                                                       FontWeight
-                  //                                                           .normal),
-                  //                                             ),
-                  //                                           ],
-                  //                                         ),
-                  //                                       ),
-                  //                                       PaddingDecorate(5),
-                  //                                       Text.rich(
-                  //                                         TextSpan(
-                  //                                           text:
-                  //                                               'ส่วนที่บาดเจ็บ: ',
-                  //                                           style:
-                  //                                               const TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                           ),
-                  //                                           children: [
-                  //                                             TextSpan(
-                  //                                               text: physicalData
-                  //                                                   .bodyPart,
-                  //                                               style:
-                  //                                                   const TextStyle(
-                  //                                                 fontWeight:
-                  //                                                     FontWeight
-                  //                                                         .normal,
-                  //                                               ),
-                  //                                             ),
-                  //                                           ],
-                  //                                         ),
-                  //                                       ),
-                  //                                       PaddingDecorate(5),
-                  //                                       Text.rich(
-                  //                                         TextSpan(
-                  //                                           text:
-                  //                                               'วันที่บันทึก: ',
-                  //                                           style:
-                  //                                               const TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                           ),
-                  //                                           children: [
-                  //                                             TextSpan(
-                  //                                               text:
-                  //                                                   formatDate(
-                  //                                                 physicalData
-                  //                                                     .doDate,
-                  //                                                 'Athlete',
-                  //                                               ),
-                  //                                               style: const TextStyle(
-                  //                                                   fontWeight:
-                  //                                                       FontWeight
-                  //                                                           .normal),
-                  //                                             ),
-                  //                                           ],
-                  //                                         ),
-                  //                                       ),
-                  //                                       PaddingDecorate(5),
-                  //                                       Text.rich(
-                  //                                         TextSpan(
-                  //                                           text:
-                  //                                               'เวลาที่บันทึก: ',
-                  //                                           style:
-                  //                                               const TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                           ),
-                  //                                           children: [
-                  //                                             TextSpan(
-                  //                                               text:
-                  //                                                   '${DateFormat.Hms().format(
-                  //                                                 physicalData
-                  //                                                     .doDate,
-                  //                                               )} น.',
-                  //                                               style: const TextStyle(
-                  //                                                   fontWeight:
-                  //                                                       FontWeight
-                  //                                                           .normal),
-                  //                                             ),
-                  //                                           ],
-                  //                                         ),
-                  //                                       ),
-                  //                                       PaddingDecorate(5),
-                  //                                       Row(
-                  //                                         mainAxisAlignment:
-                  //                                             MainAxisAlignment
-                  //                                                 .spaceEvenly,
-                  //                                         children: [
-                  //                                           ElevatedButton.icon(
-                  //                                             style:
-                  //                                                 ElevatedButton
-                  //                                                     .styleFrom(
-                  //                                               primary: Colors
-                  //                                                   .white,
-                  //                                               elevation: 0,
-                  //                                             ),
-                  //                                             onPressed: () {
-                  //                                               PhysicalResultData
-                  //                                                   physicalResultData =
-                  //                                                   PhysicalResultData
-                  //                                                       .fromMap(
-                  //                                                           data);
-                  //                                               formatDate(
-                  //                                                 physicalResultData
-                  //                                                     .doDate,
-                  //                                                 'Staff',
-                  //                                               );
-                  //                                               Navigator.of(
-                  //                                                       context)
-                  //                                                   .push(
-                  //                                                 MaterialPageRoute(
-                  //                                                   builder: (context) => PhysicalReportCase(
-                  //                                                       physicalResultData:
-                  //                                                           physicalResultData,
-                  //                                                       docID: data[
-                  //                                                           'docID']),
-                  //                                                 ),
-                  //                                               );
-                  //                                             },
-                  //                                             icon: const Icon(
-                  //                                               Icons
-                  //                                                   .article_rounded,
-                  //                                               color: Colors
-                  //                                                   .black,
-                  //                                             ),
-                  //                                             label: const Text(
-                  //                                               'Details',
-                  //                                               style:
-                  //                                                   TextStyle(
-                  //                                                 color: Colors
-                  //                                                     .black,
-                  //                                               ),
-                  //                                             ),
-                  //                                           ),
-                  //                                           physicalData.caseFinished ==
-                  //                                                   false
-                  //                                               ? ElevatedButton
-                  //                                                   .icon(
-                  //                                                   style: ElevatedButton
-                  //                                                       .styleFrom(
-                  //                                                     primary:
-                  //                                                         Colors
-                  //                                                             .blue[400],
-                  //                                                     elevation:
-                  //                                                         0,
-                  //                                                   ),
-                  //                                                   onPressed:
-                  //                                                       () {
-                  //                                                     physicalData =
-                  //                                                         PhysicalResultData.fromMap(
-                  //                                                             data);
-                  //                                                     FirebaseFirestore
-                  //                                                         .instance
-                  //                                                         .collection(
-                  //                                                             'Athlete')
-                  //                                                         .doc(physicalData
-                  //                                                             .athleteUID)
-                  //                                                         .get()
-                  //                                                         .then(
-                  //                                                             (snapshot) {
-                  //                                                       Map athleteData =
-                  //                                                           snapshot.data();
-                  //                                                       Athlete
-                  //                                                           athlete =
-                  //                                                           Athlete.fromMap(athleteData);
-                  //                                                       Navigator.of(context)
-                  //                                                           .push(
-                  //                                                         MaterialPageRoute(
-                  //                                                           builder: (context) => InjuryReport(
-                  //                                                               physicalData,
-                  //                                                               data['docID'],
-                  //                                                               athlete),
-                  //                                                         ),
-                  //                                                       );
-                  //                                                     });
-                  //                                                   },
-                  //                                                   icon:
-                  //                                                       const Icon(
-                  //                                                     Icons
-                  //                                                         .add_box,
-                  //                                                   ),
-                  //                                                   label:
-                  //                                                       const Text(
-                  //                                                     'Record',
-                  //                                                   ),
-                  //                                                 )
-                  //                                               : Container()
-                  //                                         ],
-                  //                                       ),
-                  //                                     ],
-                  //                                   ),
-                  //                                 ),
-                  //                                 SizedBox(
-                  //                                   width: w * 0.2,
-                  //                                   child: Column(
-                  //                                     mainAxisAlignment:
-                  //                                         MainAxisAlignment
-                  //                                             .center,
-                  //                                     children: [
-                  //                                       Text(
-                  //                                         '${physicalData.totalPoint}',
-                  //                                         style: TextStyle(
-                  //                                             color: score_color(
-                  //                                                 physicalData
-                  //                                                     .totalPoint),
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                             fontSize:
-                  //                                                 h * 0.05),
-                  //                                       ),
-                  //                                       Text(
-                  //                                         'คะแนน',
-                  //                                         style: TextStyle(
-                  //                                             fontWeight:
-                  //                                                 FontWeight
-                  //                                                     .bold,
-                  //                                             fontSize:
-                  //                                                 h * 0.02),
-                  //                                       ),
-                  //                                     ],
-                  //                                   ),
-                  //                                 ),
-                  //                               ],
-                  //                             ),
-                  //                           ),
-                  //                         );
-                  //                       }
-                  //                       break;
-                  //                     default:
-                  //                       return const SizedBox();
-                  //                   }
-                  //                 },
-                  //               );
-                  //       } else {
-                  //         return const Center(
-                  //           child: CircularProgressIndicator(),
-                  //         );
-                  //       }
-                  //     },
-                  //   )
+                              );
+                            }
+                          default:
+                            return const SizedBox();
+                            break;
+                        }
+                      })
                   : const Center(
                       child: Text(
                         'Empty received case',

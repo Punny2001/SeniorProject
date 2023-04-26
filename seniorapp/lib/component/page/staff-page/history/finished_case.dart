@@ -611,11 +611,12 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                                       context)
                                                                   .push(
                                                                     MaterialPageRoute(
-                                                                      builder: (context) => HealthReportCase(
-                                                                          healthResultData:
-                                                                              healthData,
-                                                                          docID:
-                                                                              data['docID']),
+                                                                      builder:
+                                                                          (context) =>
+                                                                              HealthReportCase(
+                                                                        data:
+                                                                            data,
+                                                                      ),
                                                                     ),
                                                                   )
                                                                   .then((_) =>
@@ -824,11 +825,12 @@ class _StaffFinishedCaseState extends State<StaffFinishedCase> {
                                                                       context)
                                                                   .push(
                                                                     MaterialPageRoute(
-                                                                      builder: (context) => PhysicalReportCase(
-                                                                          physicalResultData:
-                                                                              physicalData,
-                                                                          docID:
-                                                                              data['docID']),
+                                                                      builder:
+                                                                          (context) =>
+                                                                              PhysicalReportCase(
+                                                                        data:
+                                                                            data,
+                                                                      ),
                                                                     ),
                                                                   )
                                                                   .then(

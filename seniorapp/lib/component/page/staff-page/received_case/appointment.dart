@@ -43,18 +43,19 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 DateTimePicker(
                   locale: const Locale('en'),
                   use24HourFormat: false,
-                  dateMask: 'MMMM d, yyyy hh:mm a',
+                  dateMask: 'MMMM d, yyyy',
                   dateLabelText: 'Date',
                   timeLabelText: 'Time',
+                  timeHintText: 'Time',
+                  dateHintText: 'Date',
                   icon: const Icon(Icons.event),
-                  type: DateTimePickerType.dateTime,
+                  type: DateTimePickerType.dateTimeSeparate,
                   lastDate: DateTime(DateTime.now().year + 1),
                   firstDate: DateTime.now(),
                   initialDate: DateTime.now(),
                   decoration: const InputDecoration(
                     fillColor: Color.fromRGBO(217, 217, 217, 100),
                     filled: true,
-                    hintText: 'Occured date & time',
                     hintStyle: TextStyle(fontFamily: 'OpenSans'),
                     focusedErrorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -79,6 +80,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                   ),
                   onChanged: (value) {
                     setState(() {
+                      print(value);
                       _datetime = DateTime.tryParse(value);
                     });
                   },

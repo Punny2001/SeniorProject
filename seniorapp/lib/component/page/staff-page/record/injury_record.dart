@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
 import 'package:seniorapp/component/result-data/physical_result_data.dart';
@@ -17,14 +19,13 @@ import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
-import 'package:http/http.dart' as http;
 
 class InjuryReport extends StatefulWidget {
-  final PhysicalResultData physicalResultData;
-  final String docID;
-  final Athlete athlete;
+  final Map<String, dynamic> data;
 
-  InjuryReport(this.physicalResultData, this.docID, this.athlete);
+  const InjuryReport(
+    this.data,
+  );
 
   @override
   _InjuryReportState createState() => _InjuryReportState();
@@ -104,10 +105,10 @@ class _InjuryReportState extends State<InjuryReport> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.physicalResultData != null) {
-      _athleteNo.text = widget.physicalResultData.athleteNo;
-      _selectedSport = widget.athlete.sportType;
-      _datetime = widget.physicalResultData.doDate;
+    if (widget.data != null) {
+      _athleteNo.text = widget.data['athleteNo'];
+      _selectedSport = widget.data['sportType'];
+      _datetime = widget.data['doDate'].toDate();
     }
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
@@ -159,7 +160,7 @@ class _InjuryReportState extends State<InjuryReport> {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(10)),
-                  widget.physicalResultData != null
+                  widget.data != null
                       ? TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: textdecorate('Athlete No.'),
@@ -281,11 +282,12 @@ class _InjuryReportState extends State<InjuryReport> {
                   PaddingDecorate(5),
                   DateTimePicker(
                     focusNode: _occuredDateTimeFocusNode,
-                    initialValue:
-                        widget.docID == null ? null : _datetime.toString(),
+                    initialValue: widget.data['questionnaireID'] == null
+                        ? null
+                        : formatDate(_datetime, 'Staff'),
                     dateLabelText: 'Date',
                     timeLabelText: 'Time',
-                    dateMask: 'MMMM d, yyyy hh:mm',
+                    dateMask: 'MMMM d, yyyy hh:mm a',
                     icon: const Icon(Icons.event),
                     type: DateTimePickerType.dateTime,
                     lastDate: DateTime.now(),
@@ -909,11 +911,11 @@ class _InjuryReportState extends State<InjuryReport> {
             onPressed: () {
               bool isValidate = _injuryKey.currentState.validate();
               if (isValidate) {
-                if (widget.docID != null) {
-                  updateData(widget.docID);
+                if (widget.data['questionnaireID'] != null) {
+                  updateData(widget.data['questionnaireID']);
                 }
-                if (widget.athlete != null) {
-                  sendPushMessage(widget.athlete.token, staff);
+                if (widget.data['athleteUID'] != null) {
+                  sendPushMessage(widget.data['token'], staff);
                 }
                 // saveMessage();
                 saveInjuryReport();
@@ -1154,7 +1156,7 @@ class _InjuryReportState extends State<InjuryReport> {
       });
       if (bodyType == 1) {
         InjuryReportData injuryReportModel = InjuryReportData(
-            caseUid: widget.docID,
+            caseUid: widget.data['questionnaireID'],
             report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),
@@ -1198,7 +1200,7 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       } else if (bodyType == 2) {
         InjuryReportData injuryReportModel = InjuryReportData(
-            caseUid: widget.docID,
+            caseUid: widget.data['questionnaireID'],
             report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),
@@ -1242,7 +1244,7 @@ class _InjuryReportState extends State<InjuryReport> {
         });
       } else if (bodyType == 3) {
         InjuryReportData injuryReportModel = InjuryReportData(
-            caseUid: widget.docID,
+            caseUid: widget.data['questionnaireID'],
             report_no: report_no,
             staff_uid: uid,
             athlete_no: _athleteNo.text.trim(),
@@ -1303,16 +1305,14 @@ class _InjuryReportState extends State<InjuryReport> {
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
             'status': 'done',
-            'title':
-                'ข้อมูล ${widget.physicalResultData.questionnaireNo} บันทึกเสร็จสิ้น',
+            'title': 'ข้อมูล ${widget.data['questionnaireNo']} บันทึกเสร็จสิ้น',
             'body':
-                'ข้อมูล ${widget.physicalResultData.questionnaireNo} ถูกบันทึกโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${widget.data['questionnaireNo']} ถูกบันทึกโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
           },
           'notification': {
-            'title':
-                'ข้อมูล ${widget.physicalResultData.questionnaireNo} บันทึกเสร็จสิ้น',
+            'title': 'ข้อมูล ${widget.data['questionnaireNo']} บันทึกเสร็จสิ้น',
             'body':
-                'ข้อมูล ${widget.physicalResultData.questionnaireNo} ถูกบันทึกโดยสตาฟ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${widget.data['questionnaireNo']} ถูกบันทึกโดยสตาฟ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
           },
           'to': token,
         }),

@@ -29,7 +29,6 @@ class HealthReportCase extends StatefulWidget {
 
 class _HealthReportCaseState extends State<HealthReportCase> {
   bool isTexting = false;
-  Athlete athlete;
   Timer _timer;
   bool isLoading = false;
   Map<String, dynamic> latestAppointment;
@@ -231,7 +230,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
-                                    '${athlete.firstname + ' ' + athlete.lastname} ',
+                                    '${widget.data['firstname'] + ' ' + widget.data['lastname']} ',
                               ),
                             ],
                           ),
@@ -252,10 +251,10 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                   color: Colors.blue,
                                   decoration: TextDecoration.underline,
                                 ),
-                                text: athlete.phoneNo,
+                                text: widget.data['phoneNo'],
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    launchUrlString('tel:${athlete.phoneNo}');
+                                    launchUrlString('tel:${widget.data['phoneNo']}');
                                   },
                               ),
                             ],
@@ -275,7 +274,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                text: '${athlete.gender} ',
+                                text: '${widget.data['gender']} ',
                               ),
                             ],
                           ),
@@ -294,7 +293,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                text: '${athlete.age} years',
+                                text: '${widget.data['age']} years',
                               ),
                             ],
                           ),
@@ -313,7 +312,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 style: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                 ),
-                                text: athlete.sportType,
+                                text: widget.data['sportType'],
                               ),
                             ],
                           ),
@@ -393,7 +392,7 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
-                                    '${formatDate(widget.data['doDate'], 'Staff')} | ${formatTime(widget.data['doDate'])} ',
+                                    '${formatDate(widget.data['doDate'].toDate(), 'Staff')} | ${formatTime(widget.data['doDate'].toDate())} ',
                               ),
                             ],
                           ),
