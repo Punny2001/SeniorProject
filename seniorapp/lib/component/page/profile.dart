@@ -57,13 +57,13 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   void dispose() {
-    nameController.dispose();
-    usernameController.dispose();
-    departmentController.dispose();
-    emailController.dispose();
-    sportController.dispose();
-    staffTypeController.dispose();
-    phoneController.dispose();
+    nameController?.dispose();
+    usernameController?.dispose();
+    departmentController?.dispose();
+    emailController?.dispose();
+    sportController?.dispose();
+    staffTypeController?.dispose();
+    phoneController?.dispose();
     super.dispose();
   }
 

@@ -6,14 +6,12 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:seniorapp/component/report-data/injury_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
-import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
@@ -24,8 +22,9 @@ class InjuryReport extends StatefulWidget {
   final Map<String, dynamic> data;
 
   const InjuryReport(
-    this.data,
-  );
+    this.data, {
+    Key key,
+  }) : super(key: key);
 
   @override
   _InjuryReportState createState() => _InjuryReportState();
@@ -54,7 +53,6 @@ class _InjuryReportState extends State<InjuryReport> {
   final _sporteventFocusNode = FocusNode();
   final _occuredDateTimeFocusNode = FocusNode();
   final _injuredPartFocusNode = FocusNode();
-  final _absenceDayFocusNode = FocusNode();
 
   DateTime _datetime;
   String _selectedSport;
@@ -180,7 +178,6 @@ class _InjuryReportState extends State<InjuryReport> {
                           focusNode: _athleteFocusNode,
                           decoration: textdecorate('Athlete No.'),
                           controller: _athleteNo,
-                          onChanged: (value) {},
                           validator: (value) {
                             if (value.isEmpty) {
                               if (!_athleteFocusNode.hasFocus) {
@@ -282,7 +279,7 @@ class _InjuryReportState extends State<InjuryReport> {
                   PaddingDecorate(5),
                   DateTimePicker(
                     focusNode: _occuredDateTimeFocusNode,
-                    initialValue: widget.data['questionnaireID'] == null
+                    initialValue: widget.data == null
                         ? null
                         : formatDate(_datetime, 'Staff'),
                     dateLabelText: 'Date',

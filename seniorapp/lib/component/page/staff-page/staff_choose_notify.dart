@@ -23,43 +23,41 @@ class _StaffChooseNotifyPageState extends State<StaffChooseNotifyPage> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            CupertinoSlidingSegmentedControl(
-              backgroundColor: Colors.blue[200],
-              thumbColor: Colors.blue[100],
-              groupValue: _selectedNotifyPage,
-              onValueChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _selectedNotifyPage = value;
-                  });
-                }
-              },
-              children: const {
-                'unreceivedCase': Text(
-                  'Unreceived Case',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+    return Container(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          CupertinoSlidingSegmentedControl(
+            backgroundColor: Colors.blue[200],
+            thumbColor: Colors.blue[100],
+            groupValue: _selectedNotifyPage,
+            onValueChanged: (value) {
+              if (value != null) {
+                setState(() {
+                  _selectedNotifyPage = value;
+                });
+              }
+            },
+            children: const {
+              'unreceivedCase': Text(
+                'Unreceived Case',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
-                'appointmentNotify': Text(
-                  'Appointment',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              'appointmentNotify': Text(
+                'Appointment',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
-              },
-            ),
-            PaddingDecorate(5),
-            Expanded(
-              child: _notifyPage[_selectedNotifyPage],
-            )
-          ],
-        ),
+              ),
+            },
+          ),
+          PaddingDecorate(5),
+          Expanded(
+            child: _notifyPage[_selectedNotifyPage],
+          )
+        ],
       ),
     );
   }

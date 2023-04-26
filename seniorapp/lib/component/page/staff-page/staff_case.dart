@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,12 +9,15 @@ import 'package:seniorapp/component/page/staff-page/received_case/physical_repor
 import 'package:seniorapp/component/page/staff-page/record/illness_record.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
-import 'dart:async' show Stream, StreamController, Timer;
-import 'package:async/async.dart' show StreamZip;
-import 'package:seniorapp/component/result-data/health_result_data.dart';
+import 'dart:async' show Timer;
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
+
+Map<String, String> typeToThai = {
+  'Health': 'อาการเจ็บป่วย',
+  'Physical': 'อาการบาดเจ็บ'
+};
 
 class StaffCase extends StatefulWidget {
   const StaffCase({Key key}) : super(key: key);
@@ -37,11 +39,6 @@ class _StaffCaseState extends State<StaffCase> {
   List<bool> _selectedOrderType = <bool>[true, false];
   bool isDefault = true;
   RangeValues _currentRangeValues = const RangeValues(0, 100);
-
-  Map<String, String> typeToThai = {
-    'Health': 'อาการเจ็บป่วย',
-    'Physical': 'อาการบาดเจ็บ'
-  };
 
   void choose_filter() {
     setState(() {});
@@ -93,13 +90,7 @@ class _StaffCaseState extends State<StaffCase> {
     return data;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      isLoading = true;
-    });
-
+  addData() {
     List<Map<String, dynamic>> combinedList =
         unfinishedHealthCaseList + unfinishedPhysicalCaseList;
     print('Combined List Case: ${combinedList.length}');
@@ -136,7 +127,15 @@ class _StaffCaseState extends State<StaffCase> {
     }
 
     unfinishedCaseList = resultAsList;
+  }
 
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      isLoading = true;
+    });
+    addData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -384,17 +383,20 @@ class _StaffCaseState extends State<StaffCase> {
                   value: isDefault,
                   activeColor: Colors.blue[200],
                   onChanged: (bool value) {
-                    setState(() {
-                      if (isDefault == true) {
+                    if (isDefault == true) {
+                      setState(() {
                         isDefault = false;
-                      } else {
+                      });
+                    } else {
+                      addData();
+                      setState(() {
                         isDefault = true;
                         _selectedOrder = <bool>[true, false];
                         _selectedQuestionnaire = <bool>[true, true];
                         _selectedOrderType = <bool>[true, false];
                         _currentRangeValues = const RangeValues(0, 100);
-                      }
-                    });
+                      });
+                    }
                   },
                 ),
               ],

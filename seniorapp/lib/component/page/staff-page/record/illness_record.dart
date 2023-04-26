@@ -10,8 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/report-data/illness_report_data.dart';
 import 'package:seniorapp/component/report-data/sport_list.dart';
-import 'package:seniorapp/component/result-data/health_result_data.dart';
-import 'package:seniorapp/component/user-data/athlete_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
@@ -228,7 +226,7 @@ class _IllnessReportState extends State<IllnessReport> {
                     padding: EdgeInsets.all(10),
                   ),
                   DateTimePicker(
-                    initialValue: widget.data['questionnaireID'] == null
+                    initialValue: widget.data == null
                         ? null
                         : formatDate(_occuredDate, 'Staff'),
                     dateLabelText: 'Occured Date',

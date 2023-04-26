@@ -4,22 +4,10 @@ import 'package:seniorapp/component/page/staff-page/graph-page/staff_personnel_g
 
 class FixedColumnTable extends StatelessWidget {
   final List<Map<String, dynamic>> resultDataList;
-  final List<Map<String, dynamic>> athleteList;
   const FixedColumnTable({
     Key key,
     @required this.resultDataList,
-    @required this.athleteList,
   }) : super(key: key);
-
-  String getAthleteName(Map<String, dynamic> resultData) {
-    String name;
-    athleteList.forEach((element) {
-      if (element['athleteUID'] == resultData['athleteUID']) {
-        name = element['firstname'] + '\n' + element['lastname'];
-      }
-    });
-    return name;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +46,9 @@ class FixedColumnTable extends StatelessWidget {
                       ),
                     );
                   },
-                  child: Text(
-                    getAthleteName(resultDataList[i]),
-                  ),
+                  child: Text(resultDataList[i]['firstname'] +
+                      ' ' +
+                      resultDataList[i]['lastname']),
                 ),
               ),
             ],

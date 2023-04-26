@@ -1,4 +1,5 @@
 import 'dart:async' show Stream, Timer;
+import 'dart:collection';
 import 'package:async/async.dart' show StreamZip;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -9,6 +10,7 @@ import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/fix
 import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/scrollable_column_widget.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/find_athlete_graph.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/staff_summary_table_graph.dart';
+import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
@@ -21,7 +23,6 @@ class StaffGraph extends StatefulWidget {
 }
 
 class _StaffGraphState extends State<StaffGraph> {
-  String uid = FirebaseAuth.instance.currentUser.uid;
   bool isLoading = true;
   Timer _timer;
   DateTime now = DateTime.now();
@@ -48,8 +49,7 @@ class _StaffGraphState extends State<StaffGraph> {
   bool isPhysicalCheck = false;
   bool isBodySelected = false;
 
-  List<String> athleteUIDList = [];
-  Staff staff;
+  List<Map<String, dynamic>> allCaseList = [];
 
   List<String> healthSymptom = [
     'คลื่นไส้ ',
@@ -112,37 +112,11 @@ class _StaffGraphState extends State<StaffGraph> {
     ]
   };
 
-  List<Map<String, dynamic>> athleteData = [];
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-  getAthleteData() {
-    firestore.collection('Athlete').get().then((document) {
-      int index = 0;
-      document.docs.forEach((snapshot) {
-        athleteData.add(snapshot.data());
-        athleteData[index]['athleteUID'] = snapshot.reference.id;
-        index += 1;
-      });
-    });
-  }
-
   void choose_filter() {
     setState(() {});
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
-    for (int i = 0; i < data.length; i++) {
-      if (athleteUIDList.isEmpty) {
-        data.clear();
-      } else {
-        for (int j = 0; j < athleteUIDList.length; j++) {
-          if (data[i]['athleteUID'] != athleteUIDList[j]) {
-            data.removeAt(i);
-            j = 0;
-          }
-        }
-      }
-    }
     data.retainWhere((element) =>
         element['doDate']
             .toDate()
@@ -173,17 +147,6 @@ class _StaffGraphState extends State<StaffGraph> {
     return data;
   }
 
-  Stream<List<QuerySnapshot>> getData() {
-    Stream healthQuestionnaire = FirebaseFirestore.instance
-        .collection('HealthQuestionnaireResult')
-        .snapshots();
-    Stream physicalQuestionnaire = FirebaseFirestore.instance
-        .collection('PhysicalQuestionnaireResult')
-        .snapshots();
-
-    return StreamZip([healthQuestionnaire, physicalQuestionnaire]);
-  }
-
   Future pickDateRange() async {
     DateTimeRange newDateRange = await showDateRangePicker(
       context: context,
@@ -197,25 +160,42 @@ class _StaffGraphState extends State<StaffGraph> {
     });
   }
 
-  findAthleteAssc() {
-    athleteData.forEach((element) {
-      if (element['association'] == staff.association) {
-        athleteUIDList.add(element['athleteUID']);
-      }
-    });
-  }
+  addData() {
+    List<Map<String, dynamic>> combinedList = healthCaseList + physicalCaseList;
+    print('Combined List Case: ${combinedList.length}');
 
-  getUserData() {
-    FirebaseFirestore.instance.collection('Staff').doc(uid).get().then(
-      (snapshot) {
-        Map data = snapshot.data();
-        if (mounted) {
-          setState(() {
-            staff = Staff.fromMap(data);
+    Map<String, Map<String, dynamic>> athleteMap =
+        athleteList.fold({}, (Map<String, Map<String, dynamic>> map, athlete) {
+      String athleteId = athlete['athleteUID'];
+      map[athleteId] = athlete;
+      return map;
+    });
+
+    Map<String, List<Map<String, dynamic>>> questionnaireMap = combinedList
+        .fold({}, (Map<String, List<Map<String, dynamic>>> map, questionnaire) {
+      String athleteId = questionnaire['athleteUID'];
+      if (!map.containsKey(athleteId)) {
+        map[athleteId] = [];
+      }
+      map[athleteId].add(questionnaire);
+      return map;
+    });
+
+    List<Map<String, dynamic>> resultAsList = [];
+    for (var athlete in athleteList) {
+      String athleteId = athlete['athleteUID'];
+      if (questionnaireMap.containsKey(athleteId)) {
+        for (var questionnaire in questionnaireMap[athleteId]) {
+          Map<String, dynamic> combined = LinkedHashMap.of({
+            ...athlete,
+            ...questionnaire,
           });
+          resultAsList.add(combined);
         }
-      },
-    );
+      }
+    }
+
+    allCaseList = resultAsList;
   }
 
   @override
@@ -224,8 +204,7 @@ class _StaffGraphState extends State<StaffGraph> {
     setState(() {
       isLoading = true;
     });
-    getUserData();
-    getAthleteData();
+    addData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -244,491 +223,27 @@ class _StaffGraphState extends State<StaffGraph> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
-    findAthleteAssc();
+    allCaseList = add_filter(allCaseList);
+    List<Map<String, dynamic>> healthDataList = [];
+    List<Map<String, dynamic>> physicalDataList = [];
+
+    allCaseList.forEach((element) {
+      if (element['questionnaireType'] == 'Health') {
+        healthDataList.add(element);
+      } else if (element['questionnaireType'] == 'Physical') {
+        physicalDataList.add(element);
+      }
+    });
+
+    print(healthDataList);
+    print(physicalDataList);
 
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: EdgeInsets.only(
-                left: w * 0.05,
-                right: w * 0.05,
-              ),
-              width: w * 0.65,
-              height: h * 0.052,
-              child: ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.filter_list,
-                  color: Colors.black,
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue[200],
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                    side: BorderSide(color: Colors.blue[700]),
-                  ),
-                ),
-                label: Text(
-                  'Filter',
-                  style: TextStyle(
-                    fontSize: h * 0.025,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return StatefulBuilder(builder: (context, setState) {
-                          return AlertDialog(
-                            title: const Text('ตัวกรอง'),
-                            content: SingleChildScrollView(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'ประเภทของแบบสอบถาม',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(5),
-                                  ),
-                                  ToggleButtons(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    fillColor: Colors.blue[200],
-                                    borderColor: Colors.grey,
-                                    selectedBorderColor: Colors.blue[700],
-                                    selectedColor: Colors.white,
-                                    color: Colors.blue,
-                                    constraints: BoxConstraints(
-                                      minHeight: h * 0.05,
-                                      minWidth: w * 0.3,
-                                    ),
-                                    children: const [
-                                      Text('การบาดเจ็บ'),
-                                      Text('การเจ็บป่วย')
-                                    ],
-                                    isSelected: _selectedQuestionnaire,
-                                    onPressed: (int index) {
-                                      // All buttons are selectable.
-                                      setState(() {
-                                        _selectedQuestionnaire[index] =
-                                            !_selectedQuestionnaire[index];
-                                        isDefault = false;
-                                      });
-                                    },
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(10),
-                                  ),
-                                  const Text(
-                                    'ช่วงเวลาที่ต้องการแสดงกราฟ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () async {
-                                      DateTimeRange newDateRange =
-                                          await showDateRangePicker(
-                                        context: context,
-                                        initialDateRange: dateRange,
-                                        firstDate: DateTime(1900),
-                                        lastDate: DateTime(now.year + 1),
-                                      );
-                                      if (newDateRange == null) {
-                                        return;
-                                      }
-                                      setState(() {
-                                        dateRange = newDateRange;
-                                        isDefault = false;
-                                      });
-                                    },
-                                    child: Text(
-                                        '${formatDate(dateRange.start, 'StaffShort')} - ${formatDate(dateRange.end, 'StaffShort')}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      primary: Colors.blue[200],
-                                      side: BorderSide(
-                                        width: 1,
-                                        color: Colors.blue[700],
-                                      ),
-                                    ),
-                                  ),
-                                  PaddingDecorate(10),
-                                  const Text(
-                                    'ช่วงคะแนน',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  RangeSlider(
-                                    values: _currentRangeValues,
-                                    min: 0,
-                                    max: 100,
-                                    divisions: 5,
-                                    activeColor: Colors.blue[200],
-                                    inactiveColor: Colors.grey[200],
-                                    labels: RangeLabels(
-                                      _currentRangeValues.start
-                                          .round()
-                                          .toString(),
-                                      _currentRangeValues.end
-                                          .round()
-                                          .toString(),
-                                    ),
-                                    onChanged: (RangeValues values) {
-                                      setState(() {
-                                        _currentRangeValues = values;
-                                        isDefault = false;
-                                      });
-                                    },
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(_currentRangeValues.start
-                                          .toInt()
-                                          .toString()),
-                                      Text(_currentRangeValues.end
-                                          .toInt()
-                                          .toString()),
-                                    ],
-                                  ),
-                                  PaddingDecorate(10),
-                                  const Text(
-                                    'เลือกปัญหาเฉพาะ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  CheckboxListTile(
-                                    value: isHealthCheck,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        if (isHealthCheck == true) {
-                                          healthChoosing = null;
-                                        }
-                                        isHealthCheck = value;
-                                        isDefault = false;
-                                      });
-                                    },
-                                    title: const Text('ระบุปัญหาสุขภาพ'),
-                                    controlAffinity:
-                                        ListTileControlAffinity.leading,
-                                  ),
-                                  DropdownButtonFormField2(
-                                    isExpanded: true,
-                                    selectedItemHighlightColor:
-                                        Colors.grey[300],
-                                    value: healthChoosing,
-                                    items: healthSymptom
-                                        .map(
-                                          (health) => DropdownMenuItem(
-                                            child: Text(
-                                              health,
-                                            ),
-                                            value: health,
-                                          ),
-                                        )
-                                        .toList(),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: isHealthCheck == true
-                                          ? Colors.white
-                                          : Colors.grey[350],
-                                      hintText: 'โปรดเลือกปัญหาสุขภาพ',
-                                      focusedErrorBorder:
-                                          const OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      errorBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.blueGrey[100],
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.blueGrey[100],
-                                        ),
-                                      ),
-                                    ),
-                                    onChanged: isHealthCheck == true
-                                        ? (value) {
-                                            healthChoosing = value;
-                                          }
-                                        : null,
-                                    searchController: _healthSearch,
-                                    searchInnerWidget: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 20,
-                                        right: 20,
-                                        bottom: 10,
-                                        top: 10,
-                                      ),
-                                      child: TextFormField(
-                                        controller: _healthSearch,
-                                        decoration: InputDecoration(
-                                          border: const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(20),
-                                            ),
-                                          ),
-                                          suffixIcon: IconButton(
-                                            onPressed: () =>
-                                                _healthSearch.clear(),
-                                            icon: const Icon(Icons.close),
-                                          ),
-                                          hintText: 'ค้นหา ...',
-                                        ),
-                                      ),
-                                    ),
-                                    searchMatchFn: (item, searchValue) {
-                                      return (item.value.toString().contains(
-                                            searchValue,
-                                          ));
-                                    },
-                                  ),
-                                  CheckboxListTile(
-                                    value: isPhysicalCheck,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        if (isPhysicalCheck == true) {
-                                          bodyChoosing = null;
-                                          bodyPartChoosing = null;
-                                          isBodySelected = false;
-                                        }
-                                        isPhysicalCheck = value;
-                                        isDefault = false;
-                                      });
-                                    },
-                                    title: const Text('ระบุอาการบาดเจ็บ'),
-                                    controlAffinity:
-                                        ListTileControlAffinity.leading,
-                                  ),
-                                  DropdownButtonFormField2(
-                                    dropdownPadding:
-                                        EdgeInsets.only(bottom: h * 0.5),
-                                    isExpanded: true,
-                                    selectedItemHighlightColor:
-                                        Colors.grey[300],
-                                    value: bodyChoosing,
-                                    items: physicalList.keys
-                                        .map(
-                                          (body) => DropdownMenuItem(
-                                            child: Text(
-                                              body,
-                                            ),
-                                            value: body,
-                                          ),
-                                        )
-                                        .toList(),
-                                    decoration: InputDecoration(
-                                      filled: true,
-                                      fillColor: isPhysicalCheck == true
-                                          ? Colors.white
-                                          : Colors.grey[350],
-                                      hintText: 'โปรดเลือกอวัยวะ',
-                                      focusedErrorBorder:
-                                          const OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      errorBorder: const OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.blueGrey[100],
-                                        ),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.blueGrey[100],
-                                        ),
-                                      ),
-                                    ),
-                                    onChanged: isPhysicalCheck == true
-                                        ? (value) {
-                                            setState(() {
-                                              bodyChoosing = value;
-                                              isBodySelected = true;
-                                              bodyPartChoosing = null;
-                                            });
-                                          }
-                                        : null,
-                                    searchController: _bodySearch,
-                                    searchInnerWidget: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 20,
-                                        right: 20,
-                                        bottom: 10,
-                                        top: 10,
-                                      ),
-                                      child: TextFormField(
-                                        controller: _bodySearch,
-                                        decoration: InputDecoration(
-                                          border: const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(20),
-                                            ),
-                                          ),
-                                          suffixIcon: IconButton(
-                                            onPressed: () =>
-                                                _bodySearch.clear(),
-                                            icon: const Icon(Icons.close),
-                                          ),
-                                          hintText: 'ค้นหา ...',
-                                        ),
-                                      ),
-                                    ),
-                                    searchMatchFn: (item, searchValue) {
-                                      return (item.value.toString().contains(
-                                            searchValue,
-                                          ));
-                                    },
-                                  ),
-                                  PaddingDecorate(10),
-                                  Visibility(
-                                    visible: isBodySelected,
-                                    child: DropdownButtonFormField2(
-                                      dropdownPadding:
-                                          EdgeInsets.only(bottom: h * 0.5),
-                                      isExpanded: true,
-                                      selectedItemHighlightColor:
-                                          Colors.grey[300],
-                                      value: bodyPartChoosing,
-                                      items: isBodySelected == true
-                                          ? physicalList[bodyChoosing]
-                                              .map(
-                                                (body) => DropdownMenuItem(
-                                                  child: Text(
-                                                    body,
-                                                  ),
-                                                  value: body,
-                                                ),
-                                              )
-                                              .toList()
-                                          : null,
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        hintText: 'โปรดเลือกส่วนของอวัยวะ',
-                                        focusedErrorBorder:
-                                            const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                        errorBorder: const OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.blueGrey[100],
-                                          ),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.blueGrey[100],
-                                          ),
-                                        ),
-                                      ),
-                                      onChanged: isBodySelected == true
-                                          ? (value) {
-                                              setState(() {
-                                                bodyPartChoosing = value;
-                                              });
-                                            }
-                                          : null,
-                                      searchController: _bodyPartSearch,
-                                      searchInnerWidget: Padding(
-                                        padding: const EdgeInsets.only(
-                                          left: 20,
-                                          right: 20,
-                                          bottom: 10,
-                                          top: 10,
-                                        ),
-                                        child: TextFormField(
-                                          controller: _bodyPartSearch,
-                                          decoration: InputDecoration(
-                                            border: const OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(20),
-                                              ),
-                                            ),
-                                            suffixIcon: IconButton(
-                                              onPressed: () =>
-                                                  _bodyPartSearch.clear(),
-                                              icon: const Icon(Icons.close),
-                                            ),
-                                            hintText: 'ค้นหา ...',
-                                          ),
-                                        ),
-                                      ),
-                                      searchMatchFn: (item, searchValue) {
-                                        return (item.value.toString().contains(
-                                              searchValue,
-                                            ));
-                                      },
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            actions: [
-                              SizedBox(
-                                width: w,
-                                child: RaisedButton(
-                                  color: Colors.blue[200],
-                                  child: const Text(
-                                    'ใช้งาน',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    choose_filter();
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                        });
-                      });
-                },
-              ),
-            ),
+            filterButton(w, h),
             Row(
               children: [
                 const Text(
@@ -741,8 +256,9 @@ class _StaffGraphState extends State<StaffGraph> {
                   value: isDefault,
                   activeColor: Colors.blue[200],
                   onChanged: (bool value) {
-                    setState(() {
-                      if (isDefault == false) {
+                    if (isDefault == false) {
+                      setState(() {
+                        addData();
                         _selectedQuestionnaire = <bool>[true, true];
                         _currentRangeValues = const RangeValues(0, 100);
                         isHealthCheck = false;
@@ -756,9 +272,13 @@ class _StaffGraphState extends State<StaffGraph> {
                           start: DateTime.now().add(const Duration(days: -7)),
                           end: DateTime.now(),
                         );
-                      }
+                      });
                       isDefault = value;
-                    });
+                    } else {
+                      setState(() {
+                        isDefault = value;
+                      });
+                    }
                   },
                 ),
               ],
@@ -766,103 +286,523 @@ class _StaffGraphState extends State<StaffGraph> {
           ],
         ),
         PaddingDecorate(5),
-        isLoading
-            ? const Expanded(
-                child: Center(
+        Expanded(
+          child: isLoading
+              ? const Center(
                   child: CupertinoActivityIndicator(),
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      'Summary Data Between \n${formatDate(dateRange.start, 'StaffShort')} - ${formatDate(dateRange.end, 'StaffShort')}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: h * 0.03,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    StaffSummaryTableGraph(
+                      healthResultDataList: healthDataList,
+                      physicalResultDataList: physicalDataList,
+                    ),
+                    CupertinoButton(
+                      alignment: Alignment.centerRight,
+                      child: const Text(
+                        'View Specific Athlete Graph',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => FindAthleteGraph(
+                            athleteList: allCaseList,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Row(
+                          children: [
+                            FixedColumnTable(
+                              resultDataList: allCaseList,
+                            ),
+                            ScrollableColumnTable(
+                              resultDataList: allCaseList,
+                              athleteList: allCaseList,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              )
-            : StreamBuilder(
-                stream: getData(),
-                builder: (BuildContext context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<QuerySnapshot> querySnapshot = snapshot.data.toList();
+        ),
+      ],
+    );
+  }
 
-                    List<QueryDocumentSnapshot> documentSnapshot = [];
-                    querySnapshot.forEach((query) {
-                      documentSnapshot.addAll(query.docs);
-                    });
-
-                    List<Map<String, dynamic>> mappedData = [];
-                    for (QueryDocumentSnapshot doc in documentSnapshot) {
-                      mappedData.add(doc.data());
-                    }
-
-                    mappedData = add_filter(mappedData);
-
-                    List<Map<String, dynamic>> healthDataList = [];
-                    List<Map<String, dynamic>> physicalDataList = [];
-
-                    mappedData.forEach((element) {
-                      if (element['questionnaireType'] == 'Health') {
-                        healthDataList.add(element);
-                      } else if (element['questionnaireType'] == 'Physical') {
-                        physicalDataList.add(element);
-                      }
-                    });
-
-                    return Expanded(
+  Widget filterButton(double w, double h) {
+    return Container(
+      padding: EdgeInsets.only(
+        left: w * 0.05,
+        right: w * 0.05,
+      ),
+      width: w * 0.65,
+      height: h * 0.052,
+      child: ElevatedButton.icon(
+        icon: const Icon(
+          Icons.filter_list,
+          color: Colors.black,
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.blue[200],
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(
+              Radius.circular(8),
+            ),
+            side: BorderSide(color: Colors.blue[700]),
+          ),
+        ),
+        label: Text(
+          'Filter',
+          style: TextStyle(
+            fontSize: h * 0.025,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return StatefulBuilder(builder: (context, setState) {
+                  return AlertDialog(
+                    title: const Text('ตัวกรอง'),
+                    content: SingleChildScrollView(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            'Summary Data Between \n${formatDate(dateRange.start, 'StaffShort')} - ${formatDate(dateRange.end, 'StaffShort')}',
+                          const Text(
+                            'ประเภทของแบบสอบถาม',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: h * 0.03,
                             ),
-                            textAlign: TextAlign.center,
                           ),
-                          StaffSummaryTableGraph(
-                            healthResultDataList: healthDataList,
-                            physicalResultDataList: physicalDataList,
+                          const Padding(
+                            padding: EdgeInsets.all(5),
                           ),
-                          CupertinoButton(
-                            alignment: Alignment.centerRight,
-                            child: const Text(
-                              'View Specific Athlete Graph',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
+                          ToggleButtons(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            fillColor: Colors.blue[200],
+                            borderColor: Colors.grey,
+                            selectedBorderColor: Colors.blue[700],
+                            selectedColor: Colors.white,
+                            color: Colors.blue,
+                            constraints: BoxConstraints(
+                              minHeight: h * 0.05,
+                              minWidth: w * 0.3,
+                            ),
+                            children: const [
+                              Text('การบาดเจ็บ'),
+                              Text('การเจ็บป่วย')
+                            ],
+                            isSelected: _selectedQuestionnaire,
+                            onPressed: (int index) {
+                              // All buttons are selectable.
+                              setState(() {
+                                _selectedQuestionnaire[index] =
+                                    !_selectedQuestionnaire[index];
+                                isDefault = false;
+                              });
+                            },
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.all(10),
+                          ),
+                          const Text(
+                            'ช่วงเวลาที่ต้องการแสดงกราฟ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () async {
+                              DateTimeRange newDateRange =
+                                  await showDateRangePicker(
+                                context: context,
+                                initialDateRange: dateRange,
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(now.year + 1),
+                              );
+                              if (newDateRange == null) {
+                                return;
+                              }
+                              setState(() {
+                                dateRange = newDateRange;
+                                isDefault = false;
+                              });
+                            },
+                            child: Text(
+                                '${formatDate(dateRange.start, 'StaffShort')} - ${formatDate(dateRange.end, 'StaffShort')}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            style: ElevatedButton.styleFrom(
+                              elevation: 0,
+                              primary: Colors.blue[200],
+                              side: BorderSide(
+                                width: 1,
+                                color: Colors.blue[700],
                               ),
                             ),
-                            onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    FindAthleteGraph(
-                                  athleteList: athleteData,
+                          ),
+                          PaddingDecorate(10),
+                          const Text(
+                            'ช่วงคะแนน',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          RangeSlider(
+                            values: _currentRangeValues,
+                            min: 0,
+                            max: 100,
+                            divisions: 5,
+                            activeColor: Colors.blue[200],
+                            inactiveColor: Colors.grey[200],
+                            labels: RangeLabels(
+                              _currentRangeValues.start.round().toString(),
+                              _currentRangeValues.end.round().toString(),
+                            ),
+                            onChanged: (RangeValues values) {
+                              setState(() {
+                                _currentRangeValues = values;
+                                isDefault = false;
+                              });
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                  _currentRangeValues.start.toInt().toString()),
+                              Text(_currentRangeValues.end.toInt().toString()),
+                            ],
+                          ),
+                          PaddingDecorate(10),
+                          const Text(
+                            'เลือกปัญหาเฉพาะ',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          CheckboxListTile(
+                            value: isHealthCheck,
+                            onChanged: (value) {
+                              setState(() {
+                                if (isHealthCheck == true) {
+                                  healthChoosing = null;
+                                }
+                                isHealthCheck = value;
+                                isDefault = false;
+                              });
+                            },
+                            title: const Text('ระบุปัญหาสุขภาพ'),
+                            controlAffinity: ListTileControlAffinity.leading,
+                          ),
+                          DropdownButtonFormField2(
+                            isExpanded: true,
+                            selectedItemHighlightColor: Colors.grey[300],
+                            value: healthChoosing,
+                            items: healthSymptom
+                                .map(
+                                  (health) => DropdownMenuItem(
+                                    child: Text(
+                                      health,
+                                    ),
+                                    value: health,
+                                  ),
+                                )
+                                .toList(),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: isHealthCheck == true
+                                  ? Colors.white
+                                  : Colors.grey[350],
+                              hintText: 'โปรดเลือกปัญหาสุขภาพ',
+                              focusedErrorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.blueGrey[100],
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.blueGrey[100],
                                 ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Row(
-                                children: [
-                                  FixedColumnTable(
-                                    resultDataList: mappedData,
-                                    athleteList: athleteData,
+                            onChanged: isHealthCheck == true
+                                ? (value) {
+                                    healthChoosing = value;
+                                  }
+                                : null,
+                            searchController: _healthSearch,
+                            searchInnerWidget: Padding(
+                              padding: const EdgeInsets.only(
+                                left: 20,
+                                right: 20,
+                                bottom: 10,
+                                top: 10,
+                              ),
+                              child: TextFormField(
+                                controller: _healthSearch,
+                                decoration: InputDecoration(
+                                  border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
                                   ),
-                                  ScrollableColumnTable(
-                                    resultDataList: mappedData,
-                                    athleteList: athleteData,
+                                  suffixIcon: IconButton(
+                                    onPressed: () => _healthSearch.clear(),
+                                    icon: const Icon(Icons.close),
                                   ),
-                                ],
+                                  hintText: 'ค้นหา ...',
+                                ),
                               ),
                             ),
+                            searchMatchFn: (item, searchValue) {
+                              return (item.value.toString().contains(
+                                    searchValue,
+                                  ));
+                            },
                           ),
+                          CheckboxListTile(
+                            value: isPhysicalCheck,
+                            onChanged: (value) {
+                              setState(() {
+                                if (isPhysicalCheck == true) {
+                                  bodyChoosing = null;
+                                  bodyPartChoosing = null;
+                                  isBodySelected = false;
+                                }
+                                isPhysicalCheck = value;
+                                isDefault = false;
+                              });
+                            },
+                            title: const Text('ระบุอาการบาดเจ็บ'),
+                            controlAffinity: ListTileControlAffinity.leading,
+                          ),
+                          DropdownButtonFormField2(
+                            dropdownPadding: EdgeInsets.only(bottom: h * 0.5),
+                            isExpanded: true,
+                            selectedItemHighlightColor: Colors.grey[300],
+                            value: bodyChoosing,
+                            items: physicalList.keys
+                                .map(
+                                  (body) => DropdownMenuItem(
+                                    child: Text(
+                                      body,
+                                    ),
+                                    value: body,
+                                  ),
+                                )
+                                .toList(),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: isPhysicalCheck == true
+                                  ? Colors.white
+                                  : Colors.grey[350],
+                              hintText: 'โปรดเลือกอวัยวะ',
+                              focusedErrorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              errorBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.blueGrey[100],
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.blueGrey[100],
+                                ),
+                              ),
+                            ),
+                            onChanged: isPhysicalCheck == true
+                                ? (value) {
+                                    setState(() {
+                                      bodyChoosing = value;
+                                      isBodySelected = true;
+                                      bodyPartChoosing = null;
+                                    });
+                                  }
+                                : null,
+                            searchController: _bodySearch,
+                            searchInnerWidget: Padding(
+                              padding: const EdgeInsets.only(
+                                left: 20,
+                                right: 20,
+                                bottom: 10,
+                                top: 10,
+                              ),
+                              child: TextFormField(
+                                controller: _bodySearch,
+                                decoration: InputDecoration(
+                                  border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20),
+                                    ),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    onPressed: () => _bodySearch.clear(),
+                                    icon: const Icon(Icons.close),
+                                  ),
+                                  hintText: 'ค้นหา ...',
+                                ),
+                              ),
+                            ),
+                            searchMatchFn: (item, searchValue) {
+                              return (item.value.toString().contains(
+                                    searchValue,
+                                  ));
+                            },
+                          ),
+                          PaddingDecorate(10),
+                          Visibility(
+                            visible: isBodySelected,
+                            child: DropdownButtonFormField2(
+                              dropdownPadding: EdgeInsets.only(bottom: h * 0.5),
+                              isExpanded: true,
+                              selectedItemHighlightColor: Colors.grey[300],
+                              value: bodyPartChoosing,
+                              items: isBodySelected == true
+                                  ? physicalList[bodyChoosing]
+                                      .map(
+                                        (body) => DropdownMenuItem(
+                                          child: Text(
+                                            body,
+                                          ),
+                                          value: body,
+                                        ),
+                                      )
+                                      .toList()
+                                  : null,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'โปรดเลือกส่วนของอวัยวะ',
+                                focusedErrorBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                errorBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.blueGrey[100],
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.blueGrey[100],
+                                  ),
+                                ),
+                              ),
+                              onChanged: isBodySelected == true
+                                  ? (value) {
+                                      setState(() {
+                                        bodyPartChoosing = value;
+                                      });
+                                    }
+                                  : null,
+                              searchController: _bodyPartSearch,
+                              searchInnerWidget: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 20,
+                                  right: 20,
+                                  bottom: 10,
+                                  top: 10,
+                                ),
+                                child: TextFormField(
+                                  controller: _bodyPartSearch,
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20),
+                                      ),
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () => _bodyPartSearch.clear(),
+                                      icon: const Icon(Icons.close),
+                                    ),
+                                    hintText: 'ค้นหา ...',
+                                  ),
+                                ),
+                              ),
+                              searchMatchFn: (item, searchValue) {
+                                return (item.value.toString().contains(
+                                      searchValue,
+                                    ));
+                              },
+                            ),
+                          )
                         ],
                       ),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                },
-              ),
-      ],
+                    ),
+                    actions: [
+                      SizedBox(
+                        width: w,
+                        child: RaisedButton(
+                          color: Colors.blue[200],
+                          child: const Text(
+                            'ใช้งาน',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            choose_filter();
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                });
+              });
+        },
+      ),
     );
   }
 }

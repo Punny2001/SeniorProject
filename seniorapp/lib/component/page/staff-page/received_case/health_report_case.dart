@@ -254,7 +254,8 @@ class _HealthReportCaseState extends State<HealthReportCase> {
                                 text: widget.data['phoneNo'],
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    launchUrlString('tel:${widget.data['phoneNo']}');
+                                    launchUrlString(
+                                        'tel:${widget.data['phoneNo']}');
                                   },
                               ),
                             ],
