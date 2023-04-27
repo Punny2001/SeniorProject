@@ -256,11 +256,12 @@ class _StaffCaseState extends State<StaffNotify> {
                                     ],
                                   )
                                 : Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Container(
-                                        width: w * 0.7,
                                         padding:
                                             EdgeInsets.only(left: w * 0.03),
+                                        width: w * 0.7,
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -340,29 +341,26 @@ class _StaffCaseState extends State<StaffNotify> {
                                           ],
                                         ),
                                       ),
-                                      Container(
-                                        width: w * 0.2,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${data['totalPoint']}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  color: score_color(
-                                                      data['totalPoint']),
-                                                  fontSize: h * 0.05),
-                                            ),
-                                            Text(
-                                              'Point',
-                                              style: TextStyle(
-                                                fontSize: h * 0.02,
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${data['totalPoint']}',
+                                            style: TextStyle(
                                                 fontWeight: FontWeight.bold,
-                                              ),
+                                                color: score_color(
+                                                    data['totalPoint']),
+                                                fontSize: h * 0.05),
+                                          ),
+                                          Text(
+                                            'Point',
+                                            style: TextStyle(
+                                              fontSize: h * 0.02,
+                                              fontWeight: FontWeight.bold,
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       )
                                     ],
                                   ),

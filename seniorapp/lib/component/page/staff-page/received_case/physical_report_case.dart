@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import 'package:seniorapp/component/page/athlete-page/questionnaire-page/result.dart';
 import 'package:seniorapp/component/page/staff-page/received_case/appointment.dart';
 import 'package:seniorapp/component/page/staff-page/record/injury_record.dart';
@@ -13,7 +14,10 @@ import 'package:seniorapp/decoration/textfield_normal.dart';
 class PhysicalReportCase extends StatefulWidget {
   Map<String, dynamic> data;
 
-  PhysicalReportCase({@required this.data});
+  PhysicalReportCase({
+    Key key,
+    @required this.data,
+  }) : super(key: key);
 
   @override
   State<PhysicalReportCase> createState() => _PhysicalReportCaseState();

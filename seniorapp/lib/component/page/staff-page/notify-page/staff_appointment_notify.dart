@@ -26,6 +26,8 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
   int appointmentSize = 0;
   Timer _timer;
 
+  Map<String, dynamic> unfinishedCaseList;
+
   List<Map<String, dynamic>> appointmentCaseList = [];
 
   String _getDetail(bool appointStatus) {
@@ -39,7 +41,7 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
     return detail;
   }
 
-  addData() {
+  addAthleteData() {
     print('Combined List Case: ${appointmentRecordList.length}');
 
     Map<String, Map<String, dynamic>> athleteMap =
@@ -77,13 +79,59 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
     appointmentCaseList = resultAsList;
   }
 
+  addCaseData() {
+    List<Map<String, dynamic>> combinedList = physicalCaseList + healthCaseList;
+    print('Combined List Case: ${appointmentRecordList.length}');
+
+    Map<String, List<Map<String, dynamic>>> questionnaireMap = combinedList
+        .fold({}, (Map<String, List<Map<String, dynamic>>> map, questionnaire) {
+      String questionnaireID = questionnaire['questionnaireID'];
+      if (!map.containsKey(questionnaireID)) {
+        map[questionnaireID] = [];
+      }
+      map[questionnaireID].add(questionnaire);
+      return map;
+    });
+
+    Map<String, List<Map<String, dynamic>>> appointmentMap =
+        appointmentRecordList.fold({},
+            (Map<String, List<Map<String, dynamic>>> map, appointment) {
+      String caseID = appointment['caseID'];
+      if (!map.containsKey(caseID)) {
+        map[caseID] = [];
+      }
+      map[caseID].add(appointment);
+      return map;
+    });
+
+    List<Map<String, dynamic>> resultAsList = [];
+    for (var appointment in appointmentCaseList) {
+      String caseID = appointment['caseID'];
+      if (questionnaireMap.containsKey(caseID)) {
+        for (var questionnaire in questionnaireMap[caseID]) {
+          Map<String, dynamic> combined = LinkedHashMap.of({
+            ...appointment,
+            ...questionnaire,
+          });
+          resultAsList.add(combined);
+        }
+      }
+    }
+
+    resultAsList.forEach((element) {
+      print(element['questionnaireID']);
+    });
+    appointmentCaseList = resultAsList;
+  }
+
   @override
   void initState() {
     super.initState();
     setState(() {
       isLoading = true;
     });
-    addData();
+    addAthleteData();
+    addCaseData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -113,10 +161,95 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
 
                   return GestureDetector(
                     onTap: () {
-                      updateData(data[], caseID)
+                      updateData(data['appointmentID'], data['caseID'], data);
                     },
                     child: Container(
+                      color: Colors.white,
                       width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text.rich(
+                                  TextSpan(
+                                    text: 'Athlete: ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            '${data['firstname']} ${data['lastname']}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    text: 'Appointed Date: ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: formatDate(
+                                            // data['appointDate'].toDate(),
+                                            DateTime.now(),
+                                            'Staff'),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    text: 'Appointed Time: ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: formatTime(
+                                          data['appointDate'].toDate(),
+                                        ),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    text: 'Detail: ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: _getDetail(data['appointStatus']),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Divider(
+                            thickness: 2.0,
+                          )
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -133,87 +266,46 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
               );
   }
 
-  void updateData(String docID, String caseID) {
-    print(docID);
-    appointmentCollection.doc(docID).update({
-      'staffReadStatus': true,
-      'staffReadDate': DateTime.now(),
-    }).then(
-      (value) => setState(() {
-        addData();
-      }),
-    );
+  addData(Map<String, dynamic> data, Map<String, dynamic> appointmentData) {
+    String joinKey = 'athleteUID';
+    Map<String, dynamic> result = {};
+
+    if (data.containsKey(joinKey) &&
+        appointmentData.containsKey(joinKey) &&
+        data[joinKey] == appointmentData[joinKey]) {
+      result.addAll(data);
+      result.addAll(appointmentData);
+    }
+    return result;
+  }
+
+  void updateData(String docID, String caseID, Map<String, dynamic> data) {
+    if (data['questionnaireType'] == 'Health') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            return HealthReportCase(data: data);
+          },
+        ),
+      ).then((value) {
+        appointmentCollection.doc(docID).update({
+          'staffReadStatus': true,
+          'staffReadDate': DateTime.now(),
+        });
+      });
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            return PhysicalReportCase(data: data);
+          },
+        ),
+      ).then((value) {
+        appointmentCollection.doc(docID).update({
+          'staffReadStatus': true,
+          'staffReadDate': DateTime.now(),
+        });
+      });
+    }
   }
 }
-
-// Text.rich(
-//                           TextSpan(
-//                             text: 'Athlete: ',
-//                             style: const TextStyle(
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                             children: [
-//                               TextSpan(
-//                                 text:
-//                                     '${data['firstname']} ${data['lastname']}',
-//                                 style: const TextStyle(
-//                                     fontWeight: FontWeight.normal),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         Text.rich(
-//                           TextSpan(
-//                             text: 'Appointed Date: ',
-//                             style: const TextStyle(
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                             children: [
-//                               TextSpan(
-//                                 text: formatDate(
-//                                     // data['appointDate'].toDate(),
-//                                     DateTime.now(),
-//                                     'Staff'),
-//                                 style: const TextStyle(
-//                                   fontWeight: FontWeight.normal,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         Text.rich(
-//                           TextSpan(
-//                             text: 'Appointed Time: ',
-//                             style: const TextStyle(
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                             children: [
-//                               TextSpan(
-//                                 text: formatTime(
-//                                   data['appointDate'].toDate(),
-//                                 ),
-//                                 style: const TextStyle(
-//                                   fontWeight: FontWeight.normal,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         Text.rich(
-//                           TextSpan(
-//                             text: 'Detail: ',
-//                             style: const TextStyle(
-//                               fontWeight: FontWeight.bold,
-//                             ),
-//                             children: [
-//                               TextSpan(
-//                                 text: _getDetail(data['appointStatus']),
-//                                 style: const TextStyle(
-//                                     fontWeight: FontWeight.normal),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         const Divider(
-//                           thickness: 2.0,
-//                         )

@@ -30,6 +30,7 @@ List<Map<String, dynamic>> notificationPhysicalCaseList = [];
 List<Map<String, dynamic>> illnessRecordList = [];
 List<Map<String, dynamic>> injuryRecordList = [];
 List<Map<String, dynamic>> appointmentRecordList = [];
+List<Map<String, dynamic>> readAppointmentRecordList = [];
 
 List<String> athleteUIDList = [];
 
@@ -49,7 +50,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int unfinishedHealth = 0;
   int notificationCount = 0;
   int unfinishedCaseCount = 0;
-  int appointmentSize = 0;
+  int unreadAppointmentCount = 0;
 
   bool isLoading;
   Timer _timer;
@@ -385,14 +386,19 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
         .snapshots()
         .listen((snapshot) {
       List<Map<String, dynamic>> appointmentRecord = [];
+      int count = 0;
       int index = 0;
       snapshot.docs.forEach((doc) {
         appointmentRecord.add(doc.data());
         appointmentRecord[index]['appointmentID'] = doc.reference.id;
+        if (appointmentRecord[index]['staffReadStatus'] == false) {
+          count += 1;
+        }
         index += 1;
       });
       setState(() {
         appointmentRecordList = appointmentRecord;
+        unreadAppointmentCount = count;
       });
     }, onError: (error) {
       print(error);
@@ -443,10 +449,9 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
-    // print('Health Case: ${unfinishedHealthCaseList.length}');
-    // print('Physical Case: ${unfinishedPhysicalCaseList.length}');
-    notificationCount =
-        notificationHealthCaseList.length + notificationPhysicalCaseList.length;
+    notificationCount = notificationHealthCaseList.length +
+        notificationPhysicalCaseList.length +
+        unreadAppointmentCount;
 
     unfinishedCaseCount =
         unfinishedHealthCaseList.length + unfinishedPhysicalCaseList.length;
