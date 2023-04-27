@@ -156,719 +156,739 @@ class _StaffCaseState extends State<StaffCase> {
 
     unfinishedCaseList = add_filter(unfinishedCaseList);
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
-              width: w * 0.65,
-              height: h * 0.052,
-              child: ElevatedButton.icon(
-                icon: const Icon(
-                  Icons.filter_list,
-                  color: Colors.black,
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue[200],
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8),
-                    ),
-                    side: BorderSide(color: Colors.blue[700]),
-                  ),
-                ),
-                label: Text(
-                  'Filter',
-                  style: TextStyle(
-                    fontSize: h * 0.025,
-                    fontWeight: FontWeight.bold,
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
+                width: w * 0.65,
+                height: h * 0.052,
+                child: ElevatedButton.icon(
+                  icon: const Icon(
+                    Icons.filter_list,
                     color: Colors.black,
                   ),
-                ),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return StatefulBuilder(builder: (context, setState) {
-                          return AlertDialog(
-                            title: const Text('Filter'),
-                            content: Column(
-                              children: [
-                                const Text('Order by'),
-                                const Padding(
-                                  padding: EdgeInsets.all(5),
-                                ),
-                                ToggleButtons(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue[200],
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                      side: BorderSide(color: Colors.blue[700]),
+                    ),
+                  ),
+                  label: Text(
+                    'Filter',
+                    style: TextStyle(
+                      fontSize: h * 0.025,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(builder: (context, setState) {
+                            return AlertDialog(
+                              title: const Text('Filter'),
+                              content: Column(
+                                children: [
+                                  const Text('Order by'),
+                                  const Padding(
+                                    padding: EdgeInsets.all(5),
                                   ),
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                  ToggleButtons(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    fillColor: Colors.blue[200],
+                                    borderColor: Colors.grey,
+                                    selectedBorderColor: Colors.blue[700],
+                                    selectedColor: Colors.white,
+                                    color: Colors.blue,
+                                    constraints: BoxConstraints(
+                                      minHeight: h * 0.05,
+                                      minWidth: w * 0.3,
+                                    ),
+                                    children: const [
+                                      Text('Date'),
+                                      Text('Score')
+                                    ],
+                                    isSelected: _selectedOrder,
+                                    onPressed: (int index) {
+                                      setState(() {
+                                        // The button that is tapped is set to true, and the others to false.
+                                        for (int i = 0;
+                                            i < _selectedOrder.length;
+                                            i++) {
+                                          _selectedOrder[i] = i == index;
+                                        }
+                                        isDefault = false;
+                                      });
+                                    },
                                   ),
-                                  fillColor: Colors.blue[200],
-                                  borderColor: Colors.grey,
-                                  selectedBorderColor: Colors.blue[700],
-                                  selectedColor: Colors.white,
-                                  color: Colors.blue,
-                                  constraints: BoxConstraints(
-                                    minHeight: h * 0.05,
-                                    minWidth: w * 0.3,
+                                  const Padding(
+                                    padding: EdgeInsets.all(5),
                                   ),
-                                  children: const [Text('Date'), Text('Score')],
-                                  isSelected: _selectedOrder,
-                                  onPressed: (int index) {
-                                    setState(() {
-                                      // The button that is tapped is set to true, and the others to false.
-                                      for (int i = 0;
-                                          i < _selectedOrder.length;
-                                          i++) {
-                                        _selectedOrder[i] = i == index;
-                                      }
-                                      isDefault = false;
-                                    });
-                                  },
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(5),
-                                ),
-                                ToggleButtons(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8),
+                                  ToggleButtons(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    fillColor: Colors.blue[200],
+                                    borderColor: Colors.grey,
+                                    selectedBorderColor: Colors.blue[700],
+                                    selectedColor: Colors.white,
+                                    color: Colors.blue,
+                                    constraints: BoxConstraints(
+                                      minHeight: h * 0.05,
+                                      minWidth: w * 0.3,
+                                    ),
+                                    children: const [
+                                      Text('Descending'),
+                                      Text('Ascending')
+                                    ],
+                                    isSelected: _selectedOrderType,
+                                    onPressed: (int index) {
+                                      setState(() {
+                                        // The button that is tapped is set to true, and the others to false.
+                                        for (int i = 0;
+                                            i < _selectedOrderType.length;
+                                            i++) {
+                                          _selectedOrderType[i] = i == index;
+                                        }
+                                        isDefault = false;
+                                      });
+                                    },
                                   ),
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                  const Padding(
+                                    padding: EdgeInsets.all(10),
                                   ),
-                                  fillColor: Colors.blue[200],
-                                  borderColor: Colors.grey,
-                                  selectedBorderColor: Colors.blue[700],
-                                  selectedColor: Colors.white,
-                                  color: Colors.blue,
-                                  constraints: BoxConstraints(
-                                    minHeight: h * 0.05,
-                                    minWidth: w * 0.3,
+                                  const Text('Type of problem'),
+                                  const Padding(
+                                    padding: EdgeInsets.all(5),
                                   ),
-                                  children: const [
-                                    Text('Descending'),
-                                    Text('Ascending')
-                                  ],
-                                  isSelected: _selectedOrderType,
-                                  onPressed: (int index) {
-                                    setState(() {
-                                      // The button that is tapped is set to true, and the others to false.
-                                      for (int i = 0;
-                                          i < _selectedOrderType.length;
-                                          i++) {
-                                        _selectedOrderType[i] = i == index;
-                                      }
-                                      isDefault = false;
-                                    });
-                                  },
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(10),
-                                ),
-                                const Text('Type of problem'),
-                                const Padding(
-                                  padding: EdgeInsets.all(5),
-                                ),
-                                ToggleButtons(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8),
+                                  ToggleButtons(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    fillColor: Colors.blue[200],
+                                    borderColor: Colors.grey,
+                                    selectedBorderColor: Colors.blue[700],
+                                    selectedColor: Colors.white,
+                                    color: Colors.blue,
+                                    constraints: BoxConstraints(
+                                      minHeight: h * 0.05,
+                                      minWidth: w * 0.3,
+                                    ),
+                                    children: const [
+                                      Text('Physical'),
+                                      Text('Health')
+                                    ],
+                                    isSelected: _selectedQuestionnaire,
+                                    onPressed: (int index) {
+                                      // All buttons are selectable.
+                                      setState(() {
+                                        _selectedQuestionnaire[index] =
+                                            !_selectedQuestionnaire[index];
+                                        isDefault = false;
+                                      });
+                                    },
                                   ),
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
+                                  const Padding(
+                                    padding: EdgeInsets.all(10),
                                   ),
-                                  fillColor: Colors.blue[200],
-                                  borderColor: Colors.grey,
-                                  selectedBorderColor: Colors.blue[700],
-                                  selectedColor: Colors.white,
-                                  color: Colors.blue,
-                                  constraints: BoxConstraints(
-                                    minHeight: h * 0.05,
-                                    minWidth: w * 0.3,
+                                  const Text('Range of score'),
+                                  const Padding(
+                                    padding: EdgeInsets.all(5),
                                   ),
-                                  children: const [
-                                    Text('Physical'),
-                                    Text('Health')
-                                  ],
-                                  isSelected: _selectedQuestionnaire,
-                                  onPressed: (int index) {
-                                    // All buttons are selectable.
-                                    setState(() {
-                                      _selectedQuestionnaire[index] =
-                                          !_selectedQuestionnaire[index];
-                                      isDefault = false;
-                                    });
-                                  },
-                                ),
-                                const Padding(
-                                  padding: EdgeInsets.all(10),
-                                ),
-                                const Text('Range of score'),
-                                const Padding(
-                                  padding: EdgeInsets.all(5),
-                                ),
-                                RangeSlider(
-                                  values: _currentRangeValues,
-                                  min: 0,
-                                  max: 100,
-                                  divisions: 5,
-                                  activeColor: Colors.blue[200],
-                                  inactiveColor: Colors.blue[50],
-                                  labels: RangeLabels(
-                                    _currentRangeValues.start
-                                        .round()
-                                        .toString(),
-                                    _currentRangeValues.end.round().toString(),
-                                  ),
-                                  onChanged: (RangeValues values) {
-                                    setState(() {
-                                      _currentRangeValues = values;
-                                      isDefault = false;
-                                    });
-                                  },
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
+                                  RangeSlider(
+                                    values: _currentRangeValues,
+                                    min: 0,
+                                    max: 100,
+                                    divisions: 5,
+                                    activeColor: Colors.blue[200],
+                                    inactiveColor: Colors.blue[50],
+                                    labels: RangeLabels(
                                       _currentRangeValues.start
-                                          .ceil()
+                                          .round()
+                                          .toString(),
+                                      _currentRangeValues.end
+                                          .round()
                                           .toString(),
                                     ),
-                                    Text(
-                                      _currentRangeValues.end.ceil().toString(),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            actions: [
-                              SizedBox(
-                                width: w,
-                                child: RaisedButton(
-                                  color: Colors.blue[200],
-                                  child: const Text(
-                                    'Accept',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                                    onChanged: (RangeValues values) {
+                                      setState(() {
+                                        _currentRangeValues = values;
+                                        isDefault = false;
+                                      });
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                    choose_filter();
-                                  },
-                                ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        _currentRangeValues.start
+                                            .ceil()
+                                            .toString(),
+                                      ),
+                                      Text(
+                                        _currentRangeValues.end
+                                            .ceil()
+                                            .toString(),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                            ],
-                          );
+                              actions: [
+                                SizedBox(
+                                  width: w,
+                                  child: RaisedButton(
+                                    color: Colors.blue[200],
+                                    child: const Text(
+                                      'Accept',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      choose_filter();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          });
                         });
-                      });
-                },
-              ),
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Default',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CupertinoSwitch(
-                  value: isDefault,
-                  activeColor: Colors.blue[200],
-                  onChanged: (bool value) {
-                    if (isDefault == true) {
-                      setState(() {
-                        isDefault = false;
-                      });
-                    } else {
-                      addData();
-                      setState(() {
-                        isDefault = true;
-                        _selectedOrder = <bool>[true, false];
-                        _selectedQuestionnaire = <bool>[true, true];
-                        _selectedOrderType = <bool>[true, false];
-                        _currentRangeValues = const RangeValues(0, 100);
-                      });
-                    }
                   },
                 ),
-              ],
-            ),
-          ],
-        ),
-        PaddingDecorate(5),
-        Expanded(
-          child: isLoading == true
-              ? const Center(
-                  child: CupertinoActivityIndicator(),
-                )
-              : unfinishedCaseList.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: unfinishedCaseList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Map<String, dynamic> data = unfinishedCaseList[index];
-                        switch (data['questionnaireType']) {
-                          case 'Health':
-                            {
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                  side: BorderSide(
-                                      width: 2, color: Colors.blue[200]),
-                                ),
-                                elevation: 0,
-                                child: SizedBox(
-                                  // height: h * 0.25,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        padding:
-                                            EdgeInsets.only(left: w * 0.03),
-                                        width: w * 0.7,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: <Widget>[
-                                            const Padding(
-                                              padding: EdgeInsets.only(
-                                                top: 15,
-                                              ),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'นักกีฬา: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
+              ),
+              Row(
+                children: [
+                  const Text(
+                    'Default',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  CupertinoSwitch(
+                    value: isDefault,
+                    activeColor: Colors.blue[200],
+                    onChanged: (bool value) {
+                      if (isDefault == true) {
+                        setState(() {
+                          isDefault = false;
+                        });
+                      } else {
+                        addData();
+                        setState(() {
+                          isDefault = true;
+                          _selectedOrder = <bool>[true, false];
+                          _selectedQuestionnaire = <bool>[true, true];
+                          _selectedOrderType = <bool>[true, false];
+                          _currentRangeValues = const RangeValues(0, 100);
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          PaddingDecorate(5),
+          Expanded(
+            child: isLoading == true
+                ? const Center(
+                    child: CupertinoActivityIndicator(),
+                  )
+                : unfinishedCaseList.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: unfinishedCaseList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Map<String, dynamic> data = unfinishedCaseList[index];
+                          switch (data['questionnaireType']) {
+                            case 'Health':
+                              {
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    side: BorderSide(
+                                        width: 2, color: Colors.blue[200]),
+                                  ),
+                                  elevation: 0,
+                                  child: SizedBox(
+                                    // height: h * 0.25,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.only(left: w * 0.03),
+                                          width: w * 0.7,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: <Widget>[
+                                              const Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: 15,
                                                 ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data['firstname'] +
-                                                        ' ' +
-                                                        data['lastname'],
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'นักกีฬา: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'ประเภทแบบสอบถาม: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: typeToThai[data[
-                                                        'questionnaireType']],
-                                                    style: const TextStyle(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data['firstname'] +
+                                                          ' ' +
+                                                          data['lastname'],
+                                                      style: const TextStyle(
                                                         fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'ปัญหาสุขภาพ: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data['healthSymptom'],
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'วันที่บันทึก: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: formatDate(
-                                                      data['doDate'].toDate(),
-                                                      'Athlete',
-                                                    ),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'เวลาที่บันทึก: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        '${DateFormat.Hms().format(
-                                                      data['doDate'].toDate(),
-                                                    )} น.',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                ElevatedButton.icon(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary: Colors.white,
-                                                    elevation: 0,
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            HealthReportCase(
-                                                          data: data,
-                                                        ),
+                                                            FontWeight.normal,
                                                       ),
-                                                    );
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.article_rounded,
-                                                    color: Colors.black,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'ประเภทแบบสอบถาม: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  label: const Text(
-                                                    'Details',
-                                                    style: TextStyle(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: typeToThai[data[
+                                                          'questionnaireType']],
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'ปัญหาสุขภาพ: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          data['healthSymptom'],
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'วันที่บันทึก: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatDate(
+                                                        data['doDate'].toDate(),
+                                                        'Athlete',
+                                                      ),
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'เวลาที่บันทึก: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          '${DateFormat.Hms().format(
+                                                        data['doDate'].toDate(),
+                                                      )} น.',
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  ElevatedButton.icon(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Colors.white,
+                                                      elevation: 0,
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              HealthReportCase(
+                                                            data: data,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.article_rounded,
                                                       color: Colors.black,
                                                     ),
-                                                  ),
-                                                ),
-                                                data['caseFinished'] == false
-                                                    ? ElevatedButton.icon(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          primary:
-                                                              Colors.blue[400],
-                                                          elevation: 0,
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .push(
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  IllnessReport(
-                                                                data,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.add_box,
-                                                        ),
-                                                        label: const Text(
-                                                          'Record',
-                                                        ),
-                                                      )
-                                                    : Container()
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: w * 0.2,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${data['totalPoint']}',
-                                              style: TextStyle(
-                                                  color: score_color(
-                                                      data['totalPoint']),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: h * 0.05),
-                                            ),
-                                            Text(
-                                              'คะแนน',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: h * 0.02),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }
-                            break;
-                          case 'Physical':
-                            {
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(50),
-                                  side: BorderSide(
-                                      width: 2, color: Colors.blue[200]),
-                                ),
-                                elevation: 0,
-                                child: SizedBox(
-                                  // height: h * 0.25,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        padding:
-                                            EdgeInsets.only(left: w * 0.03),
-                                        width: w * 0.7,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: <Widget>[
-                                            const Padding(
-                                              padding: EdgeInsets.only(top: 15),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'นักกีฬา: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data['firstname'] +
-                                                        ' ' +
-                                                        data['lastname'],
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'ประเภทแบบสอบถาม: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: typeToThai[data[
-                                                        'questionnaireType']],
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'ส่วนที่บาดเจ็บ: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data['bodyPart'],
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'วันที่บันทึก: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: formatDate(
-                                                      data['doDate'].toDate(),
-                                                      'Athlete',
-                                                    ),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'เวลาที่บันทึก: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        '${DateFormat.Hms().format(
-                                                      data['doDate'].toDate(),
-                                                    )} น.',
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            PaddingDecorate(5),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                ElevatedButton.icon(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    primary: Colors.white,
-                                                    elevation: 0,
-                                                  ),
-                                                  onPressed: () {
-                                                    formatDate(
-                                                      data['doDate'].toDate(),
-                                                      'Staff',
-                                                    );
-                                                    Navigator.of(context).push(
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PhysicalReportCase(
-                                                          data: data,
-                                                        ),
+                                                    label: const Text(
+                                                      'Details',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
                                                       ),
-                                                    );
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.article_rounded,
-                                                    color: Colors.black,
+                                                    ),
                                                   ),
-                                                  label: const Text(
-                                                    'Details',
-                                                    style: TextStyle(
+                                                  data['caseFinished'] == false
+                                                      ? ElevatedButton.icon(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            primary: Colors
+                                                                .blue[400],
+                                                            elevation: 0,
+                                                          ),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        IllnessReport(
+                                                                  data,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                          icon: const Icon(
+                                                            Icons.add_box,
+                                                          ),
+                                                          label: const Text(
+                                                            'Record',
+                                                          ),
+                                                        )
+                                                      : Container()
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: w * 0.2,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '${data['totalPoint']}',
+                                                style: TextStyle(
+                                                    color: score_color(
+                                                        data['totalPoint']),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: h * 0.05),
+                                              ),
+                                              Text(
+                                                'คะแนน',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: h * 0.02),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                              break;
+                            case 'Physical':
+                              {
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50),
+                                    side: BorderSide(
+                                        width: 2, color: Colors.blue[200]),
+                                  ),
+                                  elevation: 0,
+                                  child: SizedBox(
+                                    // height: h * 0.25,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.only(left: w * 0.03),
+                                          width: w * 0.7,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: <Widget>[
+                                              const Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 15),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'นักกีฬา: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data['firstname'] +
+                                                          ' ' +
+                                                          data['lastname'],
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'ประเภทแบบสอบถาม: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: typeToThai[data[
+                                                          'questionnaireType']],
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'ส่วนที่บาดเจ็บ: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data['bodyPart'],
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'วันที่บันทึก: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatDate(
+                                                        data['doDate'].toDate(),
+                                                        'Athlete',
+                                                      ),
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'เวลาที่บันทึก: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          '${DateFormat.Hms().format(
+                                                        data['doDate'].toDate(),
+                                                      )} น.',
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              PaddingDecorate(5),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  ElevatedButton.icon(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      primary: Colors.white,
+                                                      elevation: 0,
+                                                    ),
+                                                    onPressed: () {
+                                                      formatDate(
+                                                        data['doDate'].toDate(),
+                                                        'Staff',
+                                                      );
+                                                      Navigator.of(context)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PhysicalReportCase(
+                                                            data: data,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.article_rounded,
                                                       color: Colors.black,
                                                     ),
+                                                    label: const Text(
+                                                      'Details',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                                data['caseFinished'] == false
-                                                    ? ElevatedButton.icon(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          primary:
-                                                              Colors.blue[400],
-                                                          elevation: 0,
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .push(
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  InjuryReport(
-                                                                data,
+                                                  data['caseFinished'] == false
+                                                      ? ElevatedButton.icon(
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            primary: Colors
+                                                                .blue[400],
+                                                            elevation: 0,
+                                                          ),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        InjuryReport(
+                                                                  data,
+                                                                ),
                                                               ),
-                                                            ),
-                                                          );
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.add_box,
-                                                        ),
-                                                        label: const Text(
-                                                          'Record',
-                                                        ),
-                                                      )
-                                                    : Container()
-                                              ],
-                                            ),
-                                          ],
+                                                            );
+                                                          },
+                                                          icon: const Icon(
+                                                            Icons.add_box,
+                                                          ),
+                                                          label: const Text(
+                                                            'Record',
+                                                          ),
+                                                        )
+                                                      : Container()
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: w * 0.2,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '${data['totalPoint']}',
-                                              style: TextStyle(
-                                                  color: score_color(
-                                                      data['totalPoint']),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: h * 0.05),
-                                            ),
-                                            Text(
-                                              'คะแนน',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: h * 0.02),
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          width: w * 0.2,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                '${data['totalPoint']}',
+                                                style: TextStyle(
+                                                    color: score_color(
+                                                        data['totalPoint']),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: h * 0.05),
+                                              ),
+                                              Text(
+                                                'คะแนน',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: h * 0.02),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          default:
-                            return const SizedBox();
-                            break;
-                        }
-                      })
-                  : const Center(
-                      child: Text(
-                        'Empty received case',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 50,
-                          fontWeight: FontWeight.bold,
+                                );
+                              }
+                            default:
+                              return const SizedBox();
+                              break;
+                          }
+                        })
+                    : const Center(
+                        child: Text(
+                          'Empty received case',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 50,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }

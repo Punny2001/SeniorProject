@@ -83,7 +83,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Image.asset(
-                              'assets/images/staff_badge.jpg',
+                              'assets/images/injury.jpg',
                               height: h / 4,
                               fit: BoxFit.fitWidth,
                             ),
@@ -125,7 +125,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             Image.asset(
-                              'assets/images/staff_badge.jpg',
+                              'assets/images/illness.jpg',
                               height: h / 4,
                               fit: BoxFit.fitWidth,
                             ),

@@ -1,9 +1,6 @@
-import 'dart:async' show Stream, Timer;
+import 'dart:async' show Timer;
 import 'dart:collection';
-import 'package:async/async.dart' show StreamZip;
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/fixed_column_widget.dart';
@@ -11,7 +8,6 @@ import 'package:seniorapp/component/page/staff-page/graph-page/column-widget/scr
 import 'package:seniorapp/component/page/staff-page/graph-page/find_athlete_graph.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/staff_summary_table_graph.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
-import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 

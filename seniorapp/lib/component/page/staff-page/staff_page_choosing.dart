@@ -382,7 +382,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     appointmentCollection
         .where('staffUID', isEqualTo: uid)
         .where('receivedStatus', isEqualTo: true)
-        .where('staffReadStatus', isEqualTo: false)
         .snapshots()
         .listen((snapshot) {
       List<Map<String, dynamic>> appointmentRecord = [];
@@ -463,8 +462,10 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
               automaticallyImplyLeading: false,
               primary: true,
               elevation: 0,
-              backgroundColor: Colors.blue.shade200,
-              foregroundColor: Colors.white,
+              backgroundColor:
+                  _selected_idx == 0 ? Colors.blue.shade200 : Colors.white,
+              foregroundColor:
+                  _selected_idx == 0 ? Colors.white : Colors.blue[200],
               leading: IconButton(
                 onPressed: () {
                   setState(() {
