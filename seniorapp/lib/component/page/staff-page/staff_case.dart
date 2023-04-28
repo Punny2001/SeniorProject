@@ -213,8 +213,10 @@ class _StaffCaseState extends State<StaffCase> {
                                     fillColor: Colors.blue[200],
                                     borderColor: Colors.grey,
                                     selectedBorderColor: Colors.blue[700],
-                                    selectedColor: Colors.white,
-                                    color: Colors.blue,
+                                    color: Colors
+                                        .grey, // Set the default color to grey
+                                    selectedColor: Colors
+                                        .white, 
                                     constraints: BoxConstraints(
                                       minHeight: h * 0.05,
                                       minWidth: w * 0.3,

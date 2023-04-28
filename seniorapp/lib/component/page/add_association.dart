@@ -188,4 +188,9 @@ class _AddAssociationState extends State<AddAssociation> {
   }
 }
 
-List<String> association = ['Mahidol University', 'Individual'];
+List<String> association = [
+  'Football Tournament',
+  'Mahidol University',
+  'Individual',
+  'Sports Authority of Thailand'
+];
