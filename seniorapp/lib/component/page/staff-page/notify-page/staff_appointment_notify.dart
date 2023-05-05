@@ -218,8 +218,8 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
                                     children: [
                                       TextSpan(
                                         text: formatTime(
-                                          data['appointDate'].toDate(),
-                                        ),
+                                            data['appointDate'].toDate(),
+                                            'Staff'),
                                         style: const TextStyle(
                                           fontWeight: FontWeight.normal,
                                         ),

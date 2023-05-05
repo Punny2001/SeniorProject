@@ -28,6 +28,8 @@ final CollectionReference healthQuestionnaireCollection =
     FirebaseFirestore.instance.collection('HealthQuestionnaireResult');
 final CollectionReference physicalQuestionnaireCollection =
     FirebaseFirestore.instance.collection('PhysicalQuestionnaireResult');
+final CollectionReference mentalQuestionnaireCollection =
+    FirebaseFirestore.instance.collection('MentalQuestionnaireResult');
 final CollectionReference illnessRecordCollection =
     FirebaseFirestore.instance.collection('IllnessRecord');
 final CollectionReference injuryRecordCollection =

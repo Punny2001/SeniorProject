@@ -9,7 +9,7 @@ import 'package:seniorapp/decoration/textfield_normal.dart';
 class ProfilePage extends StatefulWidget {
   final Athlete athlete;
   final Staff staff;
-  final userType;
+  final String userType;
   const ProfilePage({
     Key key,
     this.athlete,
@@ -140,46 +140,36 @@ class ProfilePageState extends State<ProfilePage> {
     final w = MediaQuery.of(context).size.width;
 
     return Scaffold(
+        backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Ink(
-                  decoration: ShapeDecoration(
-                    shape: const CircleBorder(),
-                    color: widget.athlete != null
-                        ? Colors.green[300]
-                        : Colors.blue[200],
-                  ),
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    alignment: Alignment.centerRight,
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(right: 10),
-                ),
-                if (widget.userType == 'Athlete')
-                  Text(widget.athlete.athlete_no)
-                else
-                  Text(widget.staff.staff_no),
-              ],
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor:
+            widget.userType == 'Athlete' ? Colors.green[300] : Colors.blue[200],
+        centerTitle: true,
+        title: widget.userType == 'Athlete'
+            ? Text(widget.athlete.athlete_no)
+            : Text(widget.staff.staff_no),
+        actions: [
+          if (!isEditing)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: startEditing,
             ),
-            if (!isEditing)
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: startEditing,
-              ),
-          ],
+        ],
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: SingleChildScrollView(

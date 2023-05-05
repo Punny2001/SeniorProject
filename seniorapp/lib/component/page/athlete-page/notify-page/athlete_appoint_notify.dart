@@ -1,16 +1,14 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/user-data/athlete_data.dart';
-import 'package:seniorapp/component/user-data/staff_data.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_page_choosing.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart' show StreamZip;
 
-import 'dart:async' show Stream, StreamController, Timer;
+import 'dart:async' show Timer;
 
 class AthleteAppointmentNotify extends StatefulWidget {
   const AthleteAppointmentNotify({Key key, this.refreshNotification})
@@ -22,44 +20,89 @@ class AthleteAppointmentNotify extends StatefulWidget {
 }
 
 class _StaffCaseState extends State<AthleteAppointmentNotify> {
-  String uid = FirebaseAuth.instance.currentUser.uid;
-  final firestore = FirebaseFirestore.instance;
-  User user;
   bool isLoading = false;
-  int appointmentSize = 0;
   Timer _timer;
-  Athlete _athlete;
-  List<Map<String, dynamic>> staffData = [];
+  List<Map<String, dynamic>> appointmentForAthleteList = [];
 
-  Stream<List<QuerySnapshot>> getData() {
-    Stream appointmentSnapshot = FirebaseFirestore.instance
-        .collection('AppointmentRecord')
-        .where('athleteUID', isEqualTo: uid)
-        .snapshots();
-    return StreamZip([appointmentSnapshot]);
+  addStaffData() {
+    Map<String, Map<String, dynamic>> staffMap =
+        staffList.fold({}, (Map<String, Map<String, dynamic>> map, staff) {
+      String staffId = staff['staffUID'];
+      map[staffId] = staff;
+      return map;
+    });
+
+    Map<String, List<Map<String, dynamic>>> appointmentMap =
+        athleteAppointmentRecordList.fold({},
+            (Map<String, List<Map<String, dynamic>>> map, appointment) {
+      String staffId = appointment['staffUID'];
+      if (!map.containsKey(staffId)) {
+        map[staffId] = [];
+      }
+      map[staffId].add(appointment);
+      return map;
+    });
+
+    List<Map<String, dynamic>> resultAsList = [];
+    for (var staff in staffList) {
+      print(staff['staffUID']);
+      String staffId = staff['staffUID'];
+      if (appointmentMap.containsKey(staffId)) {
+        print(appointmentMap['staffUID']);
+        for (var appointment in appointmentMap[staffId]) {
+          Map<String, dynamic> combined = LinkedHashMap.of({
+            ...staff,
+            ...appointment,
+          });
+          resultAsList.add(combined);
+        }
+      }
+    }
+
+    appointmentForAthleteList = resultAsList;
   }
 
-  getAppointSize() {
-    FirebaseFirestore.instance
-        .collection('AppointmentRecord')
-        .where('athleteUID', isEqualTo: uid)
-        .get()
-        .then((snapshot) {
-      setState(() {
-        appointmentSize = snapshot.docs.length;
-      });
-    });
-  }
+  addHistoryData() {
+    List<Map<String, dynamic>> combinedList =
+        physicalHistoryList + healthHistoryList;
+    print('Combined List Case: ${appointmentForAthleteList.length}');
 
-  getStaffData() {
-    firestore.collection('Staff').get().then((document) {
-      int index = 0;
-      document.docs.forEach((snapshot) {
-        staffData.add(snapshot.data());
-        staffData[index]['staffUID'] = snapshot.reference.id;
-        index += 1;
-      });
+    Map<String, List<Map<String, dynamic>>> questionnaireMap = combinedList
+        .fold({}, (Map<String, List<Map<String, dynamic>>> map, questionnaire) {
+      String questionnaireID = questionnaire['questionnaireID'];
+      if (!map.containsKey(questionnaireID)) {
+        map[questionnaireID] = [];
+      }
+      map[questionnaireID].add(questionnaire);
+      return map;
     });
+
+    Map<String, List<Map<String, dynamic>>> appointmentMap =
+        athleteAppointmentRecordList.fold({},
+            (Map<String, List<Map<String, dynamic>>> map, appointment) {
+      String caseID = appointment['caseID'];
+      if (!map.containsKey(caseID)) {
+        map[caseID] = [];
+      }
+      map[caseID].add(appointment);
+      return map;
+    });
+
+    List<Map<String, dynamic>> resultAsList = [];
+    for (var appointment in athleteAppointmentRecordList) {
+      String caseID = appointment['caseID'];
+      if (questionnaireMap.containsKey(caseID)) {
+        for (var questionnaire in questionnaireMap[caseID]) {
+          Map<String, dynamic> combined = LinkedHashMap.of({
+            ...appointment,
+            ...questionnaire,
+          });
+          resultAsList.add(combined);
+        }
+      }
+    }
+
+    appointmentForAthleteList = resultAsList;
   }
 
   @override
@@ -68,18 +111,9 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
     setState(() {
       isLoading = true;
     });
-    getAppointSize();
-    getStaffData();
-    FirebaseFirestore.instance
-        .collection('Athlete')
-        .doc(uid)
-        .get()
-        .then((snapshot) {
-      setState(() {
-        Map data = snapshot.data();
-        _athlete = Athlete.fromMap(data);
-      });
-    });
+    addStaffData();
+    addHistoryData();
+
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -95,8 +129,6 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
 
   @override
   Widget build(BuildContext context) {
-    Staff _currentStaff;
-
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -106,214 +138,137 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
             ? const Center(
                 child: CupertinoActivityIndicator(),
               )
-            : appointmentSize != 0
-                ? StreamBuilder(
-                    stream: getData(),
-                    builder: (BuildContext context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<QuerySnapshot> querySnapshot =
-                            snapshot.data.toList();
+            : appointmentForAthleteList.isNotEmpty
+                ? ListView.builder(
+                    itemCount: appointmentForAthleteList.length,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic> data = appointmentForAthleteList[index];
 
-                        List<QueryDocumentSnapshot> documentSnapshot = [];
-                        querySnapshot.forEach((query) {
-                          documentSnapshot.addAll(query.docs);
-                        });
-
-                        int index = 0;
-                        List<Map<String, dynamic>> mappedData = [];
-                        for (QueryDocumentSnapshot doc in documentSnapshot) {
-                          mappedData.add(doc.data());
-                          mappedData[index]['docID'] = doc.reference.id;
-                          index += 1;
-                        }
-
-                        mappedData.sort(
-                          (a, b) => ('${b['doDate'].toDate()}')
-                              .compareTo('${a['doDate'].toDate()}'),
-                        );
-
-                        switch (snapshot.connectionState) {
-                          case (ConnectionState.waiting):
-                            {
-                              return const Center(
-                                child: CupertinoActivityIndicator(),
-                              );
-                            }
-                            break;
-                          default:
-                            {
-                              return ListView.builder(
-                                itemCount: mappedData.length,
-                                itemBuilder: (context, index) {
-                                  Map<String, dynamic> data = mappedData[index];
-
-                                  String staffToken;
-                                  staffData.forEach((staff) {
-                                    if (data['staffUID'] == staff['staffUID']) {
-                                      staffToken = staff['token'];
-                                    }
-                                  });
-                                  for (int i = 0; i < staffData.length; i++) {
-                                    if (data['staffUID'] ==
-                                        staffData[i]['staffUID']) {
-                                      _currentStaff =
-                                          Staff.fromMap(staffData[i]);
-                                    }
-                                  }
-                                  return Card(
-                                    elevation: 5,
-                                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          padding: const EdgeInsets.only(
-                                            left: 10,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text.rich(
-                                                TextSpan(
-                                                  text: 'สตาฟ: ',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text:
-                                                          '${_currentStaff.firstname} ${_currentStaff.lastname}',
-                                                      style: const TextStyle(
-                                                          fontWeight: FontWeight
-                                                              .normal),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text.rich(
-                                                TextSpan(
-                                                  text: 'วันที่นัด: ',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text: formatDate(
-                                                          data['appointDate']
-                                                              .toDate(),
-                                                          'Athlete'),
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text.rich(
-                                                TextSpan(
-                                                  text: 'เวลาที่นัด: ',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text: formatTime(
-                                                        data['appointDate']
-                                                            .toDate(),
-                                                      ),
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text.rich(
-                                                TextSpan(
-                                                  text: 'รายละเอียด: ',
-                                                  style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  children: [
-                                                    TextSpan(
-                                                      text: data['detail'],
-                                                      style: const TextStyle(
-                                                          fontWeight: FontWeight
-                                                              .normal),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Visibility(
-                                          visible: data['receivedStatus'] ==
-                                                  false ||
-                                              data['receivedStatus'] == null,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              ElevatedButton.icon(
-                                                onPressed: () {
-                                                  updateData(
-                                                          data['docID'], false)
-                                                      .then((value) {
-                                                    sendPushFailedMessage(
-                                                      _currentStaff.token,
-                                                      _currentStaff,
-                                                      data,
-                                                    );
-                                                  }).then(
-                                                    (value) => setState(() {}),
-                                                  );
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: Colors.red[300],
-                                                ),
-                                                icon: const Icon(Icons.close),
-                                                label: const Text('ปฏิเสธ'),
-                                              ),
-                                              ElevatedButton.icon(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    updateData(
-                                                        data['docID'], true);
-                                                    sendPushSuccessMessage(
-                                                      _currentStaff.token,
-                                                      _currentStaff,
-                                                      data,
-                                                    );
-                                                  });
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  primary: Colors.green[400],
-                                                ),
-                                                icon: const Icon(Icons.check),
-                                                label: const Text('ตกลง'),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: w * 0.03,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text.rich(
+                                  TextSpan(
+                                    text: 'สตาฟ: ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                  );
-                                },
-                              );
-                            }
-                        }
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            '${data['firstname']} ${data['lastname']}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    text: 'วันที่นัด: ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: formatDate(
+                                            data['appointDate'].toDate(),
+                                            'Athlete'),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    text: 'เวลาที่นัด: ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            '${formatTime(data['appointDate'].toDate(), 'Athlete')} น.',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    text: 'รายละเอียด: ',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text: data['detail'],
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.normal),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Visibility(
+                            visible: data['receivedStatus'] == false ||
+                                data['receivedStatus'] == null,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    updateData(data['docID'], false)
+                                        .then((value) {
+                                      sendPushFailedMessage(
+                                        data['token'],
+                                        data,
+                                      );
+                                    }).then(
+                                      (value) => setState(() {}),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.red[300],
+                                  ),
+                                  icon: const Icon(Icons.close),
+                                  label: const Text('ปฏิเสธ'),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      updateData(data['docID'], true);
+                                      sendPushSuccessMessage(
+                                        data['token'],
+                                        data,
+                                      );
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.green[400],
+                                  ),
+                                  icon: const Icon(Icons.check),
+                                  label: const Text('ตกลง'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
                     },
                   )
                 : Container(
@@ -331,8 +286,7 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
     );
   }
 
-  void sendPushSuccessMessage(
-      String token, Staff staff, Map<String, dynamic> data) async {
+  void sendPushSuccessMessage(String token, Map<String, dynamic> data) async {
     print(token);
     try {
       await http.post(
@@ -349,12 +303,12 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
             'status': 'done',
             'title': 'การนัดหมาย ${data['appointNo']} เสร็จสิ้น',
             'body':
-                'นักกีฬา ${_athlete.firstname} ${_athlete.lastname} ยอมรับการนัดหมายเข้าพบแพทย์ในวันที่ ${formatDate(data['appointDate'], 'Staff')} น.',
+                'นักกีฬา ${athlete.firstname} ${athlete.lastname} ยอมรับการนัดหมายเข้าพบแพทย์ในวันที่ ${formatDate(data['appointDate'], 'Staff')} น.',
           },
           'notification': {
             'title': 'การนัดหมาย ${data['appointNo']} เสร็จสิ้น',
             'body':
-                'นักกีฬา ${_athlete.firstname} ${_athlete.lastname} ยอมรับการนัดหมายเข้าพบแพทย์ในวันที่ ${formatDate(data['appointDate'], 'Staff')} น.',
+                'นักกีฬา ${athlete.firstname} ${athlete.lastname} ยอมรับการนัดหมายเข้าพบแพทย์ในวันที่ ${formatDate(data['appointDate'], 'Staff')} น.',
           },
           'to': token,
         }),
@@ -364,8 +318,7 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
     }
   }
 
-  void sendPushFailedMessage(
-      String token, Staff staff, Map<String, dynamic> data) async {
+  void sendPushFailedMessage(String token, Map<String, dynamic> data) async {
     print(token);
     try {
       await http.post(
@@ -382,12 +335,12 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
             'status': 'done',
             'title': 'การนัดหมาย ${data['appointNo']} ล้มเหลว',
             'body':
-                'นักกีฬา ${_athlete.firstname} ${_athlete.lastname} ไม่สามารถเข้าพบแพทย์ในวันที่ ${formatDate(data['appointDate'], 'Staff')} น.\nโปรดทำการนัดหมายอีกครั้ง',
+                'นักกีฬา ${athlete.firstname} ${athlete.lastname} ไม่สามารถเข้าพบแพทย์ในวันที่ ${formatDate(data['appointDate'], 'Staff')} น.\nโปรดทำการนัดหมายอีกครั้ง',
           },
           'notification': {
             'title': 'การนัดหมาย ${data['appointNo']} ล้มเหลว',
             'body':
-                'นักกีฬา ${_athlete.firstname} ${_athlete.lastname} ไม่สามารถเข้าพบแพทย์ในวันที่ ${formatDate(data['appointDate'], 'Staff')} น.\nโปรดทำการนัดหมายอีกครั้ง',
+                'นักกีฬา ${athlete.firstname} ${athlete.lastname} ไม่สามารถเข้าพบแพทย์ในวันที่ ${formatDate(data['appointDate'], 'Staff')} น.\nโปรดทำการนัดหมายอีกครั้ง',
           },
           'to': token,
         }),

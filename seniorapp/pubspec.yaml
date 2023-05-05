@@ -69,6 +69,7 @@ dependencies:
   flutter_email_sender: ^5.2.0
   mailer: ^5.1.0
   google_nav_bar: ^5.0.6
+  font_awesome_flutter: ^10.4.0
 
   
 dev_dependencies:

@@ -53,25 +53,19 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: const CircleBorder(),
-                  color: Colors.blue.shade200,
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ),
-          ],
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.blue[200],
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: Container(
@@ -139,8 +133,7 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
                         children: <TextSpan>[
                           const TextSpan(
                               text: 'Main symptom(s): ',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           for (int i = 0; i < widget.mainSymptoms.length; i++)
                             TextSpan(
                                 text:
@@ -157,8 +150,7 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
                         children: <TextSpan>[
                           const TextSpan(
                               text: 'Illness cause: ',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(
                               text:
                                   '${widget.illness_cause_code} | ${widget.illness_cause}\n'),
@@ -174,8 +166,7 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
                         children: <TextSpan>[
                           const TextSpan(
                               text: 'Date of injury: ',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(
                             text: '${formatDate(
                               widget.occured_date,
@@ -196,8 +187,7 @@ class _ReportIllnessDescriptionState extends State<ReportIllnessDescription> {
                         children: <TextSpan>[
                           const TextSpan(
                               text: 'Time of injury: ',
-                              style:
-                                  TextStyle(fontWeight: FontWeight.bold)),
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           TextSpan(
                             text:
                                 '${DateFormat.Hms().format(widget.occured_date)}\n',

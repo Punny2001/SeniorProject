@@ -34,6 +34,110 @@ List<Map<String, dynamic>> readAppointmentRecordList = [];
 
 List<String> athleteUIDList = [];
 
+List<String> problemList = [
+  'คลื่นไส้ ',
+  'ชา',
+  'ต่อมอักเสบ',
+  'ท้องผูก',
+  'ท้องเสีย',
+  'น้ำมูก จาม ขัดจมูก',
+  'ปวดกล้ามเนื้อส่วนท้อง',
+  'ปวดบริเวณอื่น',
+  'ปวดหัว',
+  'ผื่นคัน',
+  'มีอาการที่ตา',
+  'มีอาการที่หู ',
+  'อ่อนล้า',
+  'อาเจียน',
+  'อาการที่ทางเดินปัสสาวะและอวัยวะเพศ',
+  'หงุดหงิดง่าย',
+  'หดหู่ เศร้า',
+  'หายใจลำบาก',
+  'หัวใจเต้นผิดจังหวะ',
+  'เครียด',
+  'เจ็บคอ',
+  'เจ็บหน้าอก',
+  'เป็นลม',
+  'ไข้ ',
+  'ไอ',
+  'ใบหน้า',
+  'ศีรษะ',
+  'คอ / กระดูกสันหลังส่วนคอ',
+  'กระดูกสันหลังทรวงอก / หลังส่วนบน',
+  'กระดูกอก / ซี่โครง',
+  'กระดูกสันหลังส่วนเอว / หลังส่วนล่าง',
+  'หน้าท้อง',
+  'กระดูกเชิงกราน / กระดูกสันหลังส่วนกระเบ็นเหน็บ / ก้น',
+  'ไหล่ / กระดูกไหปลาร้า',
+  'ต้นแขน',
+  'ข้อศอก',
+  'ปลายแขน',
+  'ข้อมือ',
+  'มือ',
+  'นิ้ว',
+  'นิ้วหัวแม่มือ',
+  'สะโพก',
+  'ขาหนีบ',
+  'ต้นขา',
+  'เข่า',
+  'ขาส่วนล่าง',
+  'เอ็นร้อยหวาย',
+  'ข้อเท้า',
+  'เท้า / นิ้วเท้า',
+];
+
+List<bool> isProblemChooseList = [
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+  false,
+];
+
 class StaffPageChoosing extends StatefulWidget {
   const StaffPageChoosing({Key key}) : super(key: key);
 
@@ -96,18 +200,20 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   void listenForAthlete() {
     athleteCollection.snapshots().listen((snapshot) {
       List<Map<String, dynamic>> athlete = [];
-      int index = 0;
       snapshot.docs.forEach((doc) {
-        athlete.add(doc.data());
-        athlete[index]['athleteUID'] = doc.reference.id;
-        if (athlete[index]['association'] == staff.association) {
+        Map<String, dynamic> data = doc.data();
+        data['athleteUID'] = doc.reference.id;
+        print(data);
+        if (data['association'] == staff.association) {
+          athlete.add(data);
           athleteUIDList.add(doc.reference.id);
         }
-        index += 1;
       });
-      setState(() {
-        athleteList = athlete;
-      });
+      if (mounted) {
+        setState(() {
+          athleteList = athlete;
+        });
+      }
     }, onError: (error) {
       print(error);
     });
@@ -448,6 +554,8 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+
+    print(athleteList.length);
 
     notificationCount = notificationHealthCaseList.length +
         notificationPhysicalCaseList.length +

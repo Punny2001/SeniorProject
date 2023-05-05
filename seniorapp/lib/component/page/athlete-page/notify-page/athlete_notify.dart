@@ -1,8 +1,11 @@
+import 'dart:collection';
+
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/athlete-page/athlete_page_choosing.dart';
 import 'package:seniorapp/component/page/athlete-page/history-details/health_report_detail.dart';
 import 'package:seniorapp/component/page/athlete-page/history-details/physical_report_detail.dart';
 import 'package:seniorapp/component/result-data/health_result_data.dart';
@@ -10,7 +13,6 @@ import 'package:seniorapp/component/result-data/physical_result_data.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 
 import 'dart:async' show Stream, StreamController, Timer;
-import 'package:async/async.dart' show StreamZip;
 import 'package:url_launcher/url_launcher_string.dart';
 
 class AthleteCaseNotify extends StatefulWidget {
@@ -28,127 +30,53 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
   final List<bool> isDefault = <bool>[true];
   RangeValues _currentRangeValues = const RangeValues(0, 100);
   Timer _timer;
-  String uid = FirebaseAuth.instance.currentUser.uid;
-  String athleteNo;
-  int healthSize;
-  int physicalSize;
   bool isLoading = false;
   bool isFilter = false;
 
-  List<Map<String, dynamic>> staffData = [];
+  List<Map<String, dynamic>> notificationList = [];
 
   void choose_filter() {
     setState(() {});
   }
 
-  Stream<List<QuerySnapshot>> getData() {
-    Stream healthQuestionnaire = FirebaseFirestore.instance
-        .collection('HealthQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid, isNull: false)
-        .snapshots();
-    Stream physicalQuestionnaire = FirebaseFirestore.instance
-        .collection('PhysicalQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid, isNull: false)
-        .snapshots();
+  addData() {
+    List<Map<String, dynamic>> combinedList =
+        notificationHealthList + notificationPhysicalList;
+    print('Combined List Case: ${combinedList.length}');
 
-    return StreamZip([healthQuestionnaire, physicalQuestionnaire]);
-  }
-
-  getHealthSize() {
-    FirebaseFirestore.instance
-        .collection('HealthQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid, isNull: false)
-        .get()
-        .then(
-      (snapshot) {
-        snapshot.docs
-            .removeWhere((element) => element['caseFinished'] == false);
-        setState(() {
-          healthSize = snapshot.docs.length;
-        });
-      },
-    );
-  }
-
-  getPhysicalSize() {
-    FirebaseFirestore.instance
-        .collection('PhysicalQuestionnaireResult')
-        .where('athleteUID', isEqualTo: uid, isNull: false)
-        .get()
-        .then(
-      (snapshot) {
-        snapshot.docs
-            .removeWhere((element) => element['caseFinished'] == false);
-        setState(() {
-          physicalSize = snapshot.docs.length;
-        });
-      },
-    );
-  }
-
-  getAthleteData() {
-    firestore.collection('Athlete').doc(uid).get().then((snapshot) {
-      Map data = snapshot.data();
-      athleteNo = data['athlete_no'];
+    Map<String, Map<String, dynamic>> staffMap =
+        staffList.fold({}, (Map<String, Map<String, dynamic>> map, staff) {
+      String staffId = staff['staffUID'];
+      map[staffId] = staff;
+      return map;
     });
-  }
 
-  getStaffData() {
-    firestore.collection('Staff').get().then((document) {
-      int index = 0;
-      document.docs.forEach((snapshot) {
-        staffData.add(snapshot.data());
-        staffData[index]['staffUID'] = snapshot.reference.id;
-        index += 1;
-      });
+    Map<String, List<Map<String, dynamic>>> notificationMap = combinedList
+        .fold({}, (Map<String, List<Map<String, dynamic>>> map, notification) {
+      String staffId = notification['staff_uid_received'];
+      if (!map.containsKey(staffId)) {
+        map[staffId] = [];
+      }
+      map[staffId].add(notification);
+      return map;
     });
+
+    List<Map<String, dynamic>> resultAsList = [];
+    for (var staff in staffList) {
+      String staffId = staff['staffUID'];
+      if (notificationMap.containsKey(staffId)) {
+        for (var notification in notificationMap[staffId]) {
+          Map<String, dynamic> combined = LinkedHashMap.of({
+            ...staff,
+            ...notification,
+          });
+          resultAsList.add(combined);
+        }
+      }
+    }
+
+    notificationList = resultAsList;
   }
-
-  // List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
-  //   if (_selectedOrder[0] == true) {
-  //     if (_selectedOrderType[0] == true) {
-  //       data.sort(
-  //         (a, b) => (b['doDate'].toDate()).compareTo(
-  //           a['doDate'].toDate(),
-  //         ),
-  //       );
-  //     } else {
-  //       data.sort(
-  //         (a, b) => (a['doDate'].toDate()).compareTo(
-  //           b['doDate'].toDate(),
-  //         ),
-  //       );
-  //     }
-  //   } else if (_selectedOrder[1] == true) {
-  //     if (_selectedOrderType[0] == true) {
-  //       data.sort(
-  //         (a, b) => (b['totalPoint']).compareTo(
-  //           a['totalPoint'],
-  //         ),
-  //       );
-  //     } else {
-  //       data.sort(
-  //         (a, b) => (a['totalPoint']).compareTo(
-  //           b['totalPoint'],
-  //         ),
-  //       );
-  //     }
-  //   }
-
-  //   if (_selectedQuestionnaire[0] == false) {
-  //     data.removeWhere((element) => element['questionnaireType'] == 'Physical');
-  //   }
-  //   if (_selectedQuestionnaire[1] == false) {
-  //     data.removeWhere((element) => element['questionnaireType'] == 'Health');
-  //   }
-
-  //   data.removeWhere(
-  //       (element) => element['totalPoint'] < _currentRangeValues.start);
-  //   data.removeWhere(
-  //       (element) => element['totalPoint'] > _currentRangeValues.end);
-
-  //   return data;
-  // }
 
   @override
   void initState() {
@@ -156,9 +84,7 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
     setState(() {
       isLoading = true;
     });
-    getStaffData();
-    getPhysicalSize();
-    getHealthSize();
+    addData();
     _timer = Timer(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
@@ -188,9 +114,6 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
     super.dispose();
   }
 
-  HealthResultData healthData;
-  PhysicalResultData physicalData;
-
   @override
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
@@ -200,248 +123,6 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
       color: Colors.white,
       child: Column(
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.start,
-          //   children: [
-          //     Container(
-          //       padding: EdgeInsets.only(left: w * 0.05, right: w * 0.05),
-          //       width: w * 0.65,
-          //       height: h * 0.052,
-          //       child: ElevatedButton.icon(
-          //         icon: const Icon(
-          //           Icons.filter_list,
-          //           color: Colors.black,
-          //         ),
-          //         style: ElevatedButton.styleFrom(
-          //           primary: Colors.green.shade300,
-          //           elevation: 0,
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: const BorderRadius.all(
-          //               Radius.circular(8),
-          //             ),
-          //             side: BorderSide(color: Colors.green[800]),
-          //           ),
-          //         ),
-          //         label: Text(
-          //           'ตัวกรอง',
-          //           style: TextStyle(
-          //             fontSize: h * 0.025,
-          //             fontWeight: FontWeight.bold,
-          //             color: Colors.black,
-          //           ),
-          //         ),
-          //         onPressed: () {
-          //           showDialog(
-          //               context: context,
-          //               builder: (BuildContext context) {
-          //                 return StatefulBuilder(builder: (context, setState) {
-          //                   return AlertDialog(
-          //                     title: Container(
-          //                       child: const Text('ตัวกรอง'),
-          //                     ),
-          //                     content: Column(
-          //                       children: [
-          //                         const Text('จัดเรียงโดย'),
-          //                         const Padding(
-          //                           padding: const EdgeInsets.all(5),
-          //                         ),
-          //                         ToggleButtons(
-          //                           borderRadius: const BorderRadius.all(
-          //                             Radius.circular(8),
-          //                           ),
-          //                           textStyle: const TextStyle(
-          //                             fontWeight: FontWeight.bold,
-          //                           ),
-          //                           fillColor: Colors.green[300],
-          //                           borderColor: Colors.grey,
-          //                           selectedBorderColor: Colors.green[800],
-          //                           selectedColor: Colors.white,
-          //                           color: Colors.green,
-          //                           constraints: BoxConstraints(
-          //                             minHeight: h * 0.05,
-          //                             minWidth: w * 0.3,
-          //                           ),
-          //                           children: [
-          //                             const Text('วันที่'),
-          //                             const Text('คะแนน')
-          //                           ],
-          //                           isSelected: _selectedOrder,
-          //                           onPressed: (int index) {
-          //                             setState(() {
-          //                               // The button that is tapped is set to true, and the others to false.
-          //                               for (int i = 0;
-          //                                   i < _selectedOrder.length;
-          //                                   i++) {
-          //                                 _selectedOrder[i] = i == index;
-          //                               }
-          //                               isDefault[0] = false;
-          //                             });
-          //                           },
-          //                         ),
-          //                         const Padding(
-          //                           padding: const EdgeInsets.all(5),
-          //                         ),
-          //                         ToggleButtons(
-          //                           borderRadius: const BorderRadius.all(
-          //                             Radius.circular(8),
-          //                           ),
-          //                           textStyle: const TextStyle(
-          //                             fontWeight: FontWeight.bold,
-          //                           ),
-          //                           fillColor: Colors.green[300],
-          //                           borderColor: Colors.grey,
-          //                           selectedBorderColor: Colors.green[800],
-          //                           selectedColor: Colors.white,
-          //                           color: Colors.green,
-          //                           constraints: BoxConstraints(
-          //                             minHeight: h * 0.05,
-          //                             minWidth: w * 0.3,
-          //                           ),
-          //                           children: [
-          //                             const Text('มาก => น้อย'),
-          //                             const Text('น้อย => มาก')
-          //                           ],
-          //                           isSelected: _selectedOrderType,
-          //                           onPressed: (int index) {
-          //                             setState(() {
-          //                               // The button that is tapped is set to true, and the others to false.
-          //                               for (int i = 0;
-          //                                   i < _selectedOrderType.length;
-          //                                   i++) {
-          //                                 _selectedOrderType[i] = i == index;
-          //                               }
-          //                               isDefault[0] = false;
-          //                             });
-          //                           },
-          //                         ),
-          //                         const Padding(
-          //                           padding: EdgeInsets.all(10),
-          //                         ),
-          //                         const Text('ประเภทของแบบสอบถาม'),
-          //                         const Padding(
-          //                           padding: const EdgeInsets.all(5),
-          //                         ),
-          //                         ToggleButtons(
-          //                           borderRadius: const BorderRadius.all(
-          //                             Radius.circular(8),
-          //                           ),
-          //                           textStyle: const TextStyle(
-          //                             fontWeight: FontWeight.bold,
-          //                           ),
-          //                           fillColor: Colors.green[300],
-          //                           borderColor: Colors.grey,
-          //                           selectedBorderColor: Colors.green[800],
-          //                           selectedColor: Colors.white,
-          //                           color: Colors.green,
-          //                           constraints: BoxConstraints(
-          //                             minHeight: h * 0.05,
-          //                             minWidth: w * 0.3,
-          //                           ),
-          //                           children: [
-          //                             const Text('การบาดเจ็บ'),
-          //                             const Text('การเจ็บป่วย')
-          //                           ],
-          //                           isSelected: _selectedQuestionnaire,
-          //                           onPressed: (int index) {
-          //                             // All buttons are selectable.
-          //                             setState(() {
-          //                               _selectedQuestionnaire[index] =
-          //                                   !_selectedQuestionnaire[index];
-          //                               isDefault[0] = false;
-          //                             });
-          //                           },
-          //                         ),
-          //                         const Padding(
-          //                           padding: const EdgeInsets.all(10),
-          //                         ),
-          //                         const Text('ช่วงคะแนน'),
-          //                         const Padding(
-          //                           padding: EdgeInsets.all(5),
-          //                         ),
-          //                         RangeSlider(
-          //                           values: _currentRangeValues,
-          //                           min: 0,
-          //                           max: 100,
-          //                           divisions: 5,
-          //                           activeColor: Colors.green[300],
-          //                           inactiveColor: Colors.green[100],
-          //                           labels: RangeLabels(
-          //                             _currentRangeValues.start
-          //                                 .round()
-          //                                 .toString(),
-          //                             _currentRangeValues.end
-          //                                 .round()
-          //                                 .toString(),
-          //                           ),
-          //                           onChanged: (RangeValues values) {
-          //                             setState(() {
-          //                               _currentRangeValues = values;
-          //                               isDefault[0] = false;
-          //                             });
-          //                           },
-          //                         ),
-          //                       ],
-          //                     ),
-          //                     actions: [
-          //                       Container(
-          //                         width: w xcode,
-          //                         child: RaisedButton(
-          //                           color: Colors.green[300],
-          //                           child: const Text(
-          //                             'ใช้งาน',
-          //                             style: const TextStyle(
-          //                                 fontWeight: FontWeight.bold,
-          //                                 color: Colors.white),
-          //                           ),
-          //                           onPressed: () {
-          //                             Navigator.of(context).pop();
-          //                             choose_filter();
-          //                           },
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   );
-          //                 });
-          //               });
-          //         },
-          //       ),
-          //     ),
-          //     ToggleButtons(
-          //       children: [const Text('ค่าเริ่มต้น')],
-          //       isSelected: isDefault,
-          //       borderRadius: const BorderRadius.all(
-          //         Radius.circular(8),
-          //       ),
-          //       textStyle: TextStyle(
-          //         fontWeight: FontWeight.bold,
-          //         fontSize: h * 0.02,
-          //       ),
-          //       fillColor: Colors.green[300],
-          //       borderColor: Colors.grey,
-          //       selectedBorderColor: Colors.green[800],
-          //       selectedColor: Colors.black,
-          //       color: Colors.green,
-          //       constraints: BoxConstraints(
-          //         minHeight: h * 0.05,
-          //         minWidth: w * 0.3,
-          //       ),
-          //       onPressed: (int index) {
-          //         setState(() {
-          //           if (isDefault[0] == true) {
-          //             isDefault[0] = false;
-          //           } else {
-          //             isDefault[0] = true;
-          //             _selectedOrder = <bool>[true, false];
-          //             _selectedQuestionnaire = <bool>[true, true];
-          //             _selectedOrderType = <bool>[true, false];
-          //             _currentRangeValues = const RangeValues(0, 100);
-          //           }
-          //         });
-          //       },
-          //     ),
-          //   ],
-          // ),
-          // PaddingDecorate(1),
           Expanded(
             child: SizedBox(
               height: h,
@@ -450,58 +131,17 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
                   ? const Center(
                       child: CupertinoActivityIndicator(),
                     )
-                  : healthSize + physicalSize != 0
-                      ? StreamBuilder(
-                          stream: getData(),
-                          builder: (BuildContext context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CupertinoActivityIndicator(),
-                              );
-                            }
-                            if (snapshot.hasData) {
-                              List<QuerySnapshot> querySnapshot =
-                                  snapshot.data.toList();
+                  : notificationList.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: notificationList.length,
+                          itemBuilder: (context, index) {
+                            Map<String, dynamic> data = notificationList[index];
+                            print(data['messageReceived']);
 
-                              List<QueryDocumentSnapshot> documentSnapshot = [];
-                              querySnapshot.forEach((query) {
-                                documentSnapshot.addAll(query.docs);
-                              });
-
-                              int index = 0;
-                              List<Map<String, dynamic>> mappedData = [];
-                              for (QueryDocumentSnapshot doc
-                                  in documentSnapshot) {
-                                mappedData.add(doc.data());
-                                mappedData[index]['docID'] = doc.reference.id;
-                                index += 1;
-                              }
-
-                              // mappedData = add_filter(mappedData);
-                              mappedData.sort(
-                                (a, b) => (b['caseFinishedDateTime'].toDate())
-                                    .compareTo(
-                                  a['caseFinishedDateTime'].toDate(),
-                                ),
-                              );
-
-                              return ListView.builder(
-                                itemCount: mappedData.length,
-                                itemBuilder: (context, index) {
-                                  Map<String, dynamic> data = mappedData[index];
-
-                                  if (data['caseFinished'] == true) {
-                                    return _showFinishedHistory(data, h, w);
-                                  } else {
-                                    return const SizedBox();
-                                  }
-                                },
-                              );
+                            if (data['caseFinished'] == true) {
+                              return _showFinishedHistory(data, h, w);
                             } else {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
+                              return const SizedBox();
                             }
                           },
                         )
@@ -523,213 +163,190 @@ class _AthleteCaseNotifyState extends State<AthleteCaseNotify> {
   }
 
   Column _showFinishedHistory(Map<String, dynamic> data, double h, double w) {
-    Staff _currentStaff;
-    for (int i = 0; i < staffData.length; i++) {
-      if (data['staff_uid_received'] == staffData[i]['staffUID']) {
-        _currentStaff = Staff.fromMap(staffData[i]);
-      }
-    }
     return Column(
       children: [
-        GestureDetector(
-          child: Card(
-            elevation: 0,
-            child: Container(
-              padding: EdgeInsets.only(
-                left: w * 0.05,
-              ),
-              child: data['questionnaireType'] == 'Health'
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          width: w * 0.7,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Text(
-                                '${_currentStaff.firstname} ${_currentStaff.lastname}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: h * 0.023,
-                                ),
+        Container(
+          padding: EdgeInsets.only(left: w * 0.03, right: w * 0.03),
+          child: GestureDetector(
+            child: data['questionnaireType'] == 'Health'
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: w * 0.7,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Text(
+                              '${data['firstname']} ${data['lastname']}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: h * 0.023,
                               ),
-                              Text(
-                                  'ข้อมูล ${data['questionnaireNo']} รายงานเสร็จสิ้น'),
-                              data['adviceMessage'] != '' ||
-                                      data['adviceMessage'] != null
-                                  ? Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          const TextSpan(
-                                            text: 'คำแนะนำจากทีมแพทย์: ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          TextSpan(
-                                            text: data['adviceMessage'],
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                        ),
-                        Badge(
-                          badgeContent: const Text('  '),
-                          showBadge:
-                              data['messageReceived'] == false ? true : false,
-                        )
-                      ],
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: w * 0.03),
-                          width: w * 0.7,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Text(
-                                '${_currentStaff.firstname} ${_currentStaff.lastname}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: h * 0.023,
-                                ),
-                              ),
-                              Text(
-                                  'ข้อมูล ${data['questionnaireNo']} รายงานเสร็จสิ้น'),
-                              data['adviceMessage'] != '' ||
-                                      data['adviceMessage'] != null
-                                  ? Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          const TextSpan(
-                                            text: 'คำแนะนำจากทีมแพทย์: ',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          TextSpan(
-                                            text: data['adviceMessage'],
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                        ),
-                        Badge(
-                          badgeContent: const Text('  '),
-                          showBadge:
-                              data['messageReceived'] == false ? true : false,
-                          child: SizedBox(
-                            width: w * 0.2,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    launchUrlString(
-                                        'tel:${_currentStaff.phoneNo}');
-                                  },
-                                  icon: const Icon(Icons.phone),
-                                ),
-                                const Text(
-                                  'ติดต่อสตาฟ',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
-                        )
-                      ],
+                            Text(
+                                'ข้อมูล ${data['questionnaireNo']} รายงานเสร็จสิ้น'),
+                            data['adviceMessage'] != '' ||
+                                    data['adviceMessage'] != null
+                                ? Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: 'คำแนะนำจากทีมแพทย์: ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        TextSpan(
+                                          text: data['adviceMessage'],
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        ),
+                      ),
+                      Badge(
+                        badgeContent: const Text('  '),
+                        showBadge:
+                            data['messageReceived'] == false ? true : false,
+                      )
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: w * 0.03),
+                        width: w * 0.7,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Text(
+                              '${data['firstname']} ${data['lastname']}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: h * 0.023,
+                              ),
+                            ),
+                            Text(
+                                'ข้อมูล ${data['questionnaireNo']} รายงานเสร็จสิ้น'),
+                            data['adviceMessage'] != '' ||
+                                    data['adviceMessage'] != null
+                                ? Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: 'คำแนะนำจากทีมแพทย์: ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        TextSpan(
+                                          text: data['adviceMessage'],
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        ),
+                      ),
+                      Badge(
+                        badgeContent: const Text('  '),
+                        showBadge:
+                            data['messageReceived'] == false ? true : false,
+                      )
+                    ],
+                  ),
+            onTap: () {
+              switch (data['questionnaireType']) {
+                case 'Health':
+                  HealthResultData health = HealthResultData.fromMap(data);
+
+                  Navigator.of(context)
+                      .push(
+                    MaterialPageRoute(
+                      builder: (context) => HealthReportDetail(
+                        answerList: health.answerList,
+                        athleteNo: health.athleteNo,
+                        doDate: health.doDate,
+                        healthSymptom: health.healthSymptom,
+                        questionnaireType: health.questionnaireType,
+                        questionnaireNo: health.questionnaireNo,
+                        totalPoint: health.totalPoint,
+                      ),
                     ),
-            ),
+                  )
+                      .then((value) {
+                    if (data['messageReceived'] == false ||
+                        data['messageReceived'] == null) {
+                      setState(() {
+                        updateReadMessage(
+                            data['docID'], 'HealthQuestionnaireResult');
+                      });
+                    } else {
+                      print('Message is already received');
+                    }
+                  });
+                  break;
+                case 'Physical':
+                  PhysicalResultData physical =
+                      PhysicalResultData.fromMap(data);
+                  Navigator.of(context)
+                      .push(
+                    MaterialPageRoute(
+                      builder: (context) => PhysicalReportDetail(
+                        answerList: physical.answerList,
+                        athleteNo: physical.athleteNo,
+                        doDate: physical.doDate,
+                        bodyPart: physical.bodyPart,
+                        questionnaireType: physical.questionnaireType,
+                        questionnaireNo: physical.questionnaireNo,
+                        totalPoint: physical.totalPoint,
+                      ),
+                    ),
+                  )
+                      .then((value) {
+                    if (data['messageReceived'] == false ||
+                        data['messageReceived'] == null) {
+                      setState(() {
+                        updateReadMessage(
+                            data['docID'], 'HealthQuestionnaireResult');
+                      });
+                    } else {
+                      print('Message is already received');
+                    }
+                  });
+                  break;
+                default:
+              }
+            },
           ),
-          onTap: () {
-            switch (data['questionnaireType']) {
-              case 'Health':
-                HealthResultData health = HealthResultData.fromMap(data);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => HealthReportDetail(
-                      answerList: health.answerList,
-                      athleteNo: health.athleteNo,
-                      doDate: health.doDate,
-                      healthSymptom: health.healthSymptom,
-                      questionnaireType: health.questionnaireType,
-                      questionnaireNo: health.questionnaireNo,
-                      totalPoint: health.totalPoint,
-                    ),
-                  ),
-                );
-                setState(() {
-                  updateReadMessage(data['docID'], 'HealthQuestionnaireResult');
-                });
-                break;
-              case 'Physical':
-                PhysicalResultData physical = PhysicalResultData.fromMap(data);
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => PhysicalReportDetail(
-                      answerList: physical.answerList,
-                      athleteNo: physical.athleteNo,
-                      doDate: physical.doDate,
-                      bodyPart: physical.bodyPart,
-                      questionnaireType: physical.questionnaireType,
-                      questionnaireNo: physical.questionnaireNo,
-                      totalPoint: physical.totalPoint,
-                    ),
-                  ),
-                );
-                setState(() {
-                  updateReadMessage(
-                      data['docID'], 'PhysicalQuestionnaireResult');
-                });
-                break;
-              default:
-            }
-          },
         ),
-        Divider(
+        const Divider(
           thickness: 2,
-          height: h * 0.01,
-          indent: w * 0.05,
-          endIndent: w * 0.05,
         ),
       ],
     );
   }
 
   Future<void> updateReadMessage(String docID, String collection) async {
-    print('docID: $docID');
-    print('collection: $collection');
     await FirebaseFirestore.instance
         .collection(collection)
         .doc(docID)
         .get()
         .then((snapshot) async {
       Map<String, dynamic> data = snapshot.data();
-      if (data['messageReceived'] == false) {
-        await FirebaseFirestore.instance
-            .collection(collection)
-            .doc(docID)
-            .update({
-          'messageReceived': true,
-          'messageReceivedDateTime': DateTime.now(),
-        });
-      } else {
-        setState(() {
-          print('Message is already received');
-        });
-      }
+
+      await FirebaseFirestore.instance
+          .collection(collection)
+          .doc(docID)
+          .update({
+        'messageReceived': true,
+        'messageReceivedDateTime': DateTime.now(),
+      });
     });
   }
 }

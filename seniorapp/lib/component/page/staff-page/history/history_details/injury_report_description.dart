@@ -53,25 +53,19 @@ class _ReportInjuryDescriptionState extends State<ReportInjuryDescription> {
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: CircleBorder(),
-                  color: Colors.blue.shade200,
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ),
-          ],
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.blue[200],
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: Container(

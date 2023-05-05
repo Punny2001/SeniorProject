@@ -474,12 +474,12 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
             'status': 'done',
             'title': 'ปัญหาอาการบาดเจ็บถูกรายงาน',
             'body':
-                'ข้อมูล ${physicalResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${physicalResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now(), 'Staff')} น.',
           },
           'notification': {
             'title': 'ปัญหาอาการบาดเจ็บถูกรายงาน',
             'body':
-                'ข้อมูล ${physicalResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${physicalResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now(), 'Staff')} น.',
           },
           'to': '/topics/Staff',
         }),
@@ -532,25 +532,27 @@ class _PhysicalQuestionnaire extends State<PhysicalQuestionnaire> {
         caseFinishedDateTime: defaultDate,
         caseReceivedDateTime: defaultDate,
         messageReceivedDateTime: defaultDate,
+        messageReceived: false,
       );
     } else {
       for (int i = 0; i < questionSize; i++) {
         answer_list["Q${i + 1}"] = 0;
       }
       physicalResultModel = PhysicalResultData(
-          questionnaireNo: questionnaireNo,
-          athleteNo: athData.athlete_no,
-          athleteUID: uid,
-          doDate: DateTime.now(),
-          questionnaireType: 'Physical',
-          totalPoint: 0,
-          answerList: answer_list,
-          bodyPart: 'None',
-          caseReceived: false,
-          caseFinished: false,
-          caseFinishedDateTime: defaultDate,
-          caseReceivedDateTime: defaultDate,
-          messageReceivedDateTime: defaultDate);
+        questionnaireNo: questionnaireNo,
+        athleteNo: athData.athlete_no,
+        athleteUID: uid,
+        doDate: DateTime.now(),
+        questionnaireType: 'Physical',
+        totalPoint: 0,
+        answerList: answer_list,
+        bodyPart: 'None',
+        caseReceived: false,
+        caseFinished: false,
+        caseFinishedDateTime: defaultDate,
+        caseReceivedDateTime: defaultDate,
+        messageReceivedDateTime: defaultDate,
+      );
     }
     Map<String, dynamic> data = physicalResultModel.toMap();
 

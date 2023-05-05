@@ -151,8 +151,6 @@ class MentalReportDetail extends StatelessWidget {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
-    print(mentalResultData);
-
     List<String> find_answer(
         List<Map<String, Object>> question, Map<String, int> answerList) {
       List<String> answerText = [];
@@ -173,27 +171,22 @@ class MentalReportDetail extends StatelessWidget {
         find_answer(_questionsPart1, mentalResultData.answerListPart1);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Ink(
-              decoration: ShapeDecoration(
-                shape: const CircleBorder(),
-                color: Colors.green.shade300,
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                alignment: Alignment.centerRight,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          ],
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.green[300],
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: Container(
@@ -210,10 +203,9 @@ class MentalReportDetail extends StatelessWidget {
               Text(
                 'ข้อมูล ${mentalResultData.questionnaireNo}',
                 style: TextStyle(
-                  fontSize: h * 0.03,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: ''
-                ),
+                    fontSize: h * 0.03,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: ''),
               ),
               PaddingDecorate(10),
               Column(
@@ -233,7 +225,7 @@ class MentalReportDetail extends StatelessWidget {
                             fontWeight: FontWeight.normal,
                           ),
                           text:
-                              '${formatDate(mentalResultData.doDate, 'Athlete')} | ${formatTime(mentalResultData.doDate)} น.',
+                              '${formatDate(mentalResultData.doDate, 'Athlete')} | ${formatTime(mentalResultData.doDate, 'Athlete')} น.',
                         ),
                       ],
                     ),

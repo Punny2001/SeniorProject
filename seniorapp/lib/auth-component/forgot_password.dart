@@ -20,37 +20,26 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        primary: true,
         automaticallyImplyLeading: false,
+        primary: true,
         elevation: 0,
         scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Ink(
-              decoration: ShapeDecoration(
-                shape: const CircleBorder(),
-                color: Colors.blue.shade200,
-              ),
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.of(context).pop();
-                  });
-                },
-                alignment: Alignment.centerRight,
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                ),
-              ),
-            ),
-          ],
+        foregroundColor: const Color.fromARGB(255, 113, 157, 242),
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: Container(
-        margin: const EdgeInsets.all(30),
+        margin:  EdgeInsets.only(left:w*0.05, right: w*0.05),
         width: w,
         height: h,
         child: Column(
@@ -62,22 +51,22 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(bottom: 10),
+            const SizedBox(
+              height: 20,
             ),
             TextFormField(
               controller: _emailController,
               decoration: textdecorate('Your email address'),
             ),
-            Padding(
-              padding: EdgeInsets.only(bottom: h * 0.02),
+            const SizedBox(
+              height: 50,
             ),
             ElevatedButton(
               onPressed: () => resetPassword(),
               child: Text(
                 'Reset password',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.blueGrey[50],
                   fontSize: h * 0.025,
                   fontWeight: FontWeight.bold,
                 ),
@@ -85,7 +74,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(w, h * 0.07),
                 elevation: 0,
-                primary: Colors.blue[200],
+                primary: const Color.fromARGB(255, 113, 157, 242),
                 shape: const StadiumBorder(),
               ),
             ),

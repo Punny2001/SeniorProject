@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/customer_support.dart';
 import 'package:seniorapp/component/page/profile.dart';
 import 'package:seniorapp/component/user-data/athlete_data.dart';
-import 'package:seniorapp/component/page/athlete-page/profile-page/athlete_personal.dart';
-import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteProfile extends StatefulWidget {
   const AthleteProfile({Key key}) : super(key: key);
@@ -30,26 +27,21 @@ class _AthleteProfileState extends State<AthleteProfile> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        primary: true,
         elevation: 0,
+        scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: const CircleBorder(),
-                  color: Colors.green.shade300,
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ),
-          ],
+        foregroundColor: Colors.green[300],
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: Column(

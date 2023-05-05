@@ -25,6 +25,16 @@ String formatDate(DateTime dateTime, String userType) {
   }
 }
 
-String formatTime(DateTime dateTime) {
-  return DateFormat('hh:mm a').format(dateTime);
+String formatTime(DateTime dateTime, String userType) {
+  switch (userType) {
+    case 'Staff':
+      return DateFormat('hh:mm a').format(dateTime);
+      break;
+
+    case 'Athlete':
+      return DateFormat('hh:mm').format(dateTime);
+      break;
+    default:
+      break;
+  }
 }

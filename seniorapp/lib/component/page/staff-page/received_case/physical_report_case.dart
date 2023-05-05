@@ -158,29 +158,24 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
     List<String> answerTextList = find_answer(_questions);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: const CircleBorder(),
-                  color: Colors.blue[200],
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ),
-          ],
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.blue[200],
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: isLoading
@@ -372,7 +367,7 @@ class _PhysicalReportCaseState extends State<PhysicalReportCase> {
                                   fontWeight: FontWeight.normal,
                                 ),
                                 text:
-                                    '${formatDate(widget.data['doDate'].toDate(), 'Staff')} | ${formatTime(widget.data['doDate'].toDate())}',
+                                    '${formatDate(widget.data['doDate'].toDate(), 'Staff')} | ${formatTime(widget.data['doDate'].toDate(), 'Staff')}',
                               ),
                             ],
                           ),

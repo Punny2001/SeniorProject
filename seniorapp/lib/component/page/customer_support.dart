@@ -257,30 +257,25 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
           : const Text('อีเมลถูกส่งเรียบร้อย'),
     );
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
         scrolledUnderElevation: 1,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Ink(
-              decoration: ShapeDecoration(
-                shape: const CircleBorder(),
-                color: widget.userType == 'Staff'
-                    ? Colors.blue[200]
-                    : Colors.green[300],
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                alignment: Alignment.centerRight,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          ],
+        backgroundColor: Colors.white,
+        foregroundColor:
+            widget.userType == 'Staff' ? Colors.blue[200] : Colors.green[300],
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -353,6 +348,7 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    elevation: 0,
                     shape: const StadiumBorder(),
                     fixedSize:
                         Size.fromWidth(MediaQuery.of(context).size.width / 2),
@@ -373,7 +369,11 @@ class _CustomerSupportPageState extends State<CustomerSupportPage> {
                     }
                   },
                   child: Text(
-                      widget.userType == 'Staff' ? 'Send Email' : 'ส่งอีเมล'),
+                    widget.userType == 'Staff' ? 'Send Email' : 'ส่งอีเมล',
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
                 ),
               ),
             ],

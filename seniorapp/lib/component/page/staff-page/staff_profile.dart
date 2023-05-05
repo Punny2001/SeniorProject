@@ -42,24 +42,17 @@ class _StaffProfileState extends State<StaffProfile> {
         elevation: 0,
         scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              child: Ink(
-                decoration: ShapeDecoration(
-                  shape: const CircleBorder(),
-                  color: Colors.blue.shade200,
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  alignment: Alignment.centerRight,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ),
-            ),
-          ],
+        foregroundColor: Colors.blue[200],
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: Column(

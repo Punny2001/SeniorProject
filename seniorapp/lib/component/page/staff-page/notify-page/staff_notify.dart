@@ -6,6 +6,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:seniorapp/component/page/staff-page/received_case/health_report_case.dart';
+import 'package:seniorapp/component/page/staff-page/received_case/physical_report_case.dart';
 import 'package:seniorapp/component/page/staff-page/staff_page_choosing.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/decoration/format_datetime.dart';
@@ -145,224 +147,285 @@ class _StaffCaseState extends State<StaffNotify> {
                               left: w * 0.05,
                             ),
                             child: data['questionnaireType'] == 'Health'
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        padding:
-                                            EdgeInsets.only(left: w * 0.03),
-                                        width: w * 0.7,
-                                        child: Column(
+                                ? GestureDetector(
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                        return HealthReportCase(data: data);
+                                      }),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.only(left: w * 0.03),
+                                          width: w * 0.7,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: <Widget>[
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Athlete name: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data['firstname'] +
+                                                          ' ' +
+                                                          data['lastname'],
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          overflow: TextOverflow
+                                                              .clip),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Problem type: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data[
+                                                          'questionnaireType'],
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Health Symptom: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text:
+                                                          data['healthSymptom'],
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Done on: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatDate(
+                                                          data['doDate']
+                                                              .toDate(),
+                                                          'Staff'),
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Time: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatTime(
+                                                          data['doDate']
+                                                              .toDate(),
+                                                          'Staff'),
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: <Widget>[
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'Problem type: ',
-                                                style: const TextStyle(
+                                          children: [
+                                            Text(
+                                              '${data['totalPoint']}',
+                                              style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data[
-                                                        'questionnaireType'],
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
+                                                  color: score_color(
+                                                      data['totalPoint']),
+                                                  fontSize: h * 0.05),
                                             ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'Health Symptom: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data['healthSymptom'],
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'Done on: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: formatDate(
-                                                        data['doDate'].toDate(),
-                                                        'Staff'),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'Time: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        DateFormat.Hms().format(
-                                                      data['doDate'].toDate(),
-                                                    ),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
+                                            Text(
+                                              'Point',
+                                              style: TextStyle(
+                                                fontSize: h * 0.02,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${data['totalPoint']}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: score_color(
-                                                    data['totalPoint']),
-                                                fontSize: h * 0.05),
-                                          ),
-                                          Text(
-                                            'Point',
-                                            style: TextStyle(
-                                              fontSize: h * 0.02,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   )
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        padding:
-                                            EdgeInsets.only(left: w * 0.03),
-                                        width: w * 0.7,
-                                        child: Column(
+                                : GestureDetector(
+                                    onTap: () => Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                        return PhysicalReportCase(data: data);
+                                      }),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding:
+                                              EdgeInsets.only(left: w * 0.03),
+                                          width: w * 0.7,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: <Widget>[
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Athlete name: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data['firstname'] +
+                                                          ' ' +
+                                                          data['lastname'],
+                                                      style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                          overflow: TextOverflow
+                                                              .clip),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Problem type: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data[
+                                                          'questionnaireType'],
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Injured body: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: data['bodyPart'],
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Done on: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatDate(
+                                                        data['doDate'].toDate(),
+                                                        'Staff',
+                                                      ),
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: 'Time: ',
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  children: [
+                                                    TextSpan(
+                                                      text: formatTime(
+                                                          data['doDate']
+                                                              .toDate(),
+                                                          'Staff'),
+                                                      style: const TextStyle(
+                                                          fontWeight: FontWeight
+                                                              .normal),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
-                                          children: <Widget>[
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'Problem type: ',
-                                                style: const TextStyle(
+                                          children: [
+                                            Text(
+                                              '${data['totalPoint']}',
+                                              style: TextStyle(
                                                   fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data[
-                                                        'questionnaireType'],
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
+                                                  color: score_color(
+                                                      data['totalPoint']),
+                                                  fontSize: h * 0.05),
                                             ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'Injured body: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: data['bodyPart'],
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'Done on: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: formatDate(
-                                                      data['doDate'].toDate(),
-                                                      'Staff',
-                                                    ),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Text.rich(
-                                              TextSpan(
-                                                text: 'Time: ',
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text: DateFormat.Hms()
-                                                        .format(data['doDate']
-                                                            .toDate()),
-                                                    style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                  ),
-                                                ],
+                                            Text(
+                                              'Point',
+                                              style: TextStyle(
+                                                fontSize: h * 0.02,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${data['totalPoint']}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: score_color(
-                                                    data['totalPoint']),
-                                                fontSize: h * 0.05),
-                                          ),
-                                          Text(
-                                            'Point',
-                                            style: TextStyle(
-                                              fontSize: h * 0.02,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                           ),
                           GestureDetector(
@@ -423,12 +486,12 @@ class _StaffCaseState extends State<StaffNotify> {
             'status': 'done',
             'title': 'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟเรียบร้อย',
             'body':
-                'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now(), 'Athlete')} น.',
           },
           'notification': {
             'title': 'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟเรียบร้อย',
             'body':
-                'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${questionnaireNo} ถูกรับโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now(), 'Athlete')} น.',
           },
           'to': token,
         }),

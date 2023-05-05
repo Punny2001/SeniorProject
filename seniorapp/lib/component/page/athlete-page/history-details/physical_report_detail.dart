@@ -118,27 +118,22 @@ class PhysicalReportDetail extends StatelessWidget {
     print(answerTextList);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Ink(
-              decoration: ShapeDecoration(
-                shape: const CircleBorder(),
-                color: Colors.green.shade300,
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                alignment: Alignment.centerRight,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          ],
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white, 
+        foregroundColor: Colors.green[300],
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: Container(
@@ -224,7 +219,7 @@ class PhysicalReportDetail extends StatelessWidget {
                             fontWeight: FontWeight.normal,
                           ),
                           text:
-                              '${formatDate(doDate, 'Athlete')} | ${formatTime(doDate)} น.',
+                              '${formatDate(doDate, 'Athlete')} | ${formatTime(doDate, 'Athlete')} น.',
                         ),
                       ],
                     ),

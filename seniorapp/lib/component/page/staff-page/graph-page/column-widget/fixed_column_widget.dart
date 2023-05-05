@@ -41,7 +41,7 @@ class FixedColumnTable extends StatelessWidget {
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) => StaffPersonnelGraph(
-                          athleteUID: resultDataList[i]['athleteUID'],
+                          athleteData: resultDataList[i],
                         ),
                       ),
                     );

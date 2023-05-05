@@ -23,44 +23,39 @@ class _AthleteChooseNotifyState extends State<AthleteChooseNotify> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.only(top: 10),
-        child: Column(
-          children: [
-            CupertinoSlidingSegmentedControl(
-              backgroundColor: Colors.green[300],
-              thumbColor: Colors.green[200],
-              groupValue: _selectedNotify,
-              onValueChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    _selectedNotify = value;
-                  });
-                }
-              },
-              children: const {
-                'caseNotify': Text(
-                  'เคสที่เสร็จสิ้น',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                'appointmentNotify': Text(
-                  'การนัดหมาย',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              },
+    return Column(
+      children: [
+        CupertinoSlidingSegmentedControl(
+          backgroundColor: Colors.green[300],
+          thumbColor: Colors.green[200],
+          groupValue: _selectedNotify,
+          onValueChanged: (value) {
+            if (value != null) {
+              setState(() {
+                _selectedNotify = value;
+              });
+            }
+          },
+          children: const {
+            'caseNotify': Text(
+              'เคสที่เสร็จสิ้น',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            PaddingDecorate(5),
-            Expanded(
-              child: _notifyType[_selectedNotify],
-            )
-          ],
+            'appointmentNotify': Text(
+              'การนัดหมาย',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          },
         ),
-      ),
+        PaddingDecorate(5),
+        Expanded(
+          child: _notifyType[_selectedNotify],
+        )
+      ],
     );
   }
 }

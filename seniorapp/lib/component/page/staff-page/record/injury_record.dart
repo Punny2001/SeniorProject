@@ -118,22 +118,17 @@ class _InjuryReportState extends State<InjuryReport> {
         elevation: 0,
         scrolledUnderElevation: 1,
         backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Ink(
-              decoration: ShapeDecoration(
-                shape: const CircleBorder(),
-                color: Colors.blue.shade200,
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                alignment: Alignment.centerRight,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          ],
+        foregroundColor: Colors.blue[200],
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: SizedBox(
@@ -895,8 +890,8 @@ class _InjuryReportState extends State<InjuryReport> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding:
-            EdgeInsets.only(left: w * 0.2, right: w * 0.2, bottom: h * 0.03),
+        padding: EdgeInsets.only(
+            left: w * 0.2, right: w * 0.2, bottom: h * 0.03, top: h * 0.03),
         child: SizedBox(
           width: w,
           height: h * 0.06,
@@ -918,9 +913,12 @@ class _InjuryReportState extends State<InjuryReport> {
                 saveInjuryReport();
               }
             },
-            child: const Text(
+            child: Text(
               'Save',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: h * 0.025,
+                  fontWeight: FontWeight.bold),
             ),
           ),
         ),
@@ -1304,12 +1302,12 @@ class _InjuryReportState extends State<InjuryReport> {
             'status': 'done',
             'title': 'ข้อมูล ${widget.data['questionnaireNo']} บันทึกเสร็จสิ้น',
             'body':
-                'ข้อมูล ${widget.data['questionnaireNo']} ถูกบันทึกโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${widget.data['questionnaireNo']} ถูกบันทึกโดยสตาฟ ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now(), 'Athlete')} น.',
           },
           'notification': {
             'title': 'ข้อมูล ${widget.data['questionnaireNo']} บันทึกเสร็จสิ้น',
             'body':
-                'ข้อมูล ${widget.data['questionnaireNo']} ถูกบันทึกโดยสตาฟ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${widget.data['questionnaireNo']} ถูกบันทึกโดยสตาฟ${staff.firstname} ${staff.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now(), 'Athlete')} น.',
           },
           'to': token,
         }),

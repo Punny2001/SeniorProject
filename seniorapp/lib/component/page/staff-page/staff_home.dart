@@ -38,6 +38,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
     return Column(
       children: [
         Container(
+          width: w,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(20),

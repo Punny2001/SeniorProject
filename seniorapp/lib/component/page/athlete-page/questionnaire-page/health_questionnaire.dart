@@ -441,12 +441,12 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
             'status': 'done',
             'title': 'ปัญหาอาการเจ็บป่วยถูกรายงาน',
             'body':
-                'ข้อมูล ${healthResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${healthResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now(), 'Staff')} น.',
           },
           'notification': {
             'title': 'ปัญหาอาการเจ็บป่วยถูกรายงาน',
             'body':
-                'ข้อมูล ${healthResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now())} น.',
+                'ข้อมูล ${healthResultData.questionnaireNo} ถูกรายงานโดยนักกีฬา ${athlete.firstname} ${athlete.lastname} ณ วันที่ ${formatDate(DateTime.now(), 'Athlete')} เวลา ${formatTime(DateTime.now(), 'Staff')} น.',
           },
           'to': '/topics/Staff',
         }),
@@ -500,6 +500,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
         caseFinishedDateTime: defaultDate,
         caseReceivedDateTime: defaultDate,
         messageReceivedDateTime: defaultDate,
+        messageReceived: false,
       );
     } else {
       for (int i = 0; i < questionSize; i++) {
@@ -515,7 +516,7 @@ class _HealthQuestionnaire extends State<HealthQuestionnaire> {
         answerList: answer_list,
         healthSymptom: 'None',
         caseReceived: false,
-        caseFinished: false,
+        caseFinished: true,
         caseFinishedDateTime: defaultDate,
         caseReceivedDateTime: defaultDate,
         messageReceivedDateTime: defaultDate,
