@@ -283,6 +283,8 @@ class _AthleteHistoryState extends State<AthleteHistory> {
                               isHealthButtonActive = false;
                               isPhysicalButtonActive = false;
                               specificProblem = 'ดูทั้งหมด';
+                              _currentRangeValues = const RangeValues(0, 100);
+                              isProblemChooseList = List.filled(49, false);
                             });
                           },
                           child: const Text(

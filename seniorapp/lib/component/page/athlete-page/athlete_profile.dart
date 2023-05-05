@@ -47,19 +47,15 @@ class _AthleteProfileState extends State<AthleteProfile> {
       body: Column(
         children: <Widget>[
           GestureDetector(
-            child: Card(
-              elevation: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: w * 0.05),
-                width: w,
-                height: h / 10,
-                child: const Text(
-                  'ข้อมูลส่วนตัว',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: Container(
+              padding: EdgeInsets.only(left: w * 0.05),
+              width: w,
+              height: h / 10,
+              child: const Text(
+                'ข้อมูลส่วนตัว',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -72,20 +68,17 @@ class _AthleteProfileState extends State<AthleteProfile> {
               ),
             ),
           ),
+          const Divider(thickness: 2),
           GestureDetector(
-            child: Card(
-              elevation: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: w * 0.05),
-                width: w,
-                height: h / 10,
-                child: const Text(
-                  'ช่วยเหลือ',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: Container(
+              padding: EdgeInsets.only(left: w * 0.05),
+              width: w,
+              height: h / 10,
+              child: const Text(
+                'ช่วยเหลือ',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -96,20 +89,17 @@ class _AthleteProfileState extends State<AthleteProfile> {
               }));
             },
           ),
+          const Divider(thickness: 2),
           GestureDetector(
-            child: Card(
-              elevation: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: w * 0.05),
-                width: w,
-                height: h / 10,
-                child: const Text(
-                  'ลบบัญชี',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: Container(
+              padding: EdgeInsets.only(left: w * 0.05),
+              width: w,
+              height: h / 10,
+              child: const Text(
+                'ลบบัญชี',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -174,20 +164,17 @@ class _AthleteProfileState extends State<AthleteProfile> {
                   });
             },
           ),
+          const Divider(thickness: 2),
           GestureDetector(
-            child: Card(
-              elevation: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: w * 0.05),
-                width: w,
-                height: h / 10,
-                child: const Text(
-                  'ลงชื่อออก',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: Container(
+              padding: EdgeInsets.only(left: w * 0.05),
+              width: w,
+              height: h / 10,
+              child: const Text(
+                'ลงชื่อออก',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -201,6 +188,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
               );
             },
           ),
+          const Divider(thickness: 2),
         ],
       ),
     );

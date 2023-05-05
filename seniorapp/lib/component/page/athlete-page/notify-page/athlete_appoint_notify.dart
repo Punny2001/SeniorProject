@@ -78,7 +78,7 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
     });
 
     Map<String, List<Map<String, dynamic>>> appointmentMap =
-        athleteAppointmentRecordList.fold({},
+        appointmentForAthleteList.fold({},
             (Map<String, List<Map<String, dynamic>>> map, appointment) {
       String caseID = appointment['caseID'];
       if (!map.containsKey(caseID)) {
@@ -89,7 +89,7 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
     });
 
     List<Map<String, dynamic>> resultAsList = [];
-    for (var appointment in athleteAppointmentRecordList) {
+    for (var appointment in appointmentForAthleteList) {
       String caseID = appointment['caseID'];
       if (questionnaireMap.containsKey(caseID)) {
         for (var questionnaire in questionnaireMap[caseID]) {
@@ -142,7 +142,8 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                 ? ListView.builder(
                     itemCount: appointmentForAthleteList.length,
                     itemBuilder: (context, index) {
-                      Map<String, dynamic> data = appointmentForAthleteList[index];
+                      Map<String, dynamic> data =
+                          appointmentForAthleteList[index];
 
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -267,6 +268,9 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                               ],
                             ),
                           ),
+                          const Divider(
+                            thickness: 2,
+                          )
                         ],
                       );
                     },

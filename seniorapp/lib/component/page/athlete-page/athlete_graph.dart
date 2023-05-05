@@ -46,11 +46,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
   }
 
   List<Map<String, dynamic>> add_filter(List<Map<String, dynamic>> data) {
-    data.retainWhere(
-        (element) => element['doDate'].toDate().year == selectYear);
-    data.forEach((element) {
-      print(element['doDate'].toDate().year);
-    });
+    data.removeWhere((element) =>
+        element['doDate'].toDate().year != year[selectedYearIndex]);
+
     data.sort((a, b) => ('${b['doDate']}').compareTo('${a['doDate']}'));
 
     if (isPhysicalButtonActive == true && isHealthButtonActive == false) {
@@ -274,6 +272,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                               _selectedWeek = 5;
                               selectedYearIndex = year.length - 1;
                               selectYear = DateTime.now().year;
+                              isProblemChooseList = List.filled(49, false);
                             });
                           },
                           child: const Text(
@@ -407,75 +406,94 @@ class _AthleteGraphState extends State<AthleteGraph> {
                             ],
                           ),
                           PaddingDecorate(15),
-                          const Text(
-                            'ช่วงเวลาที่ต้องการแสดงกราฟ',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              CupertinoButton(
-                                child: Text(
-                                  'ปี $selectYear',
-                                  style: TextStyle(
-                                    color: widget.isStaff
-                                        ? Colors.blue[200]
-                                        : Colors.green[300],
-                                  ),
+                              const Text(
+                                'ช่วงเวลาที่ต้องการแสดงกราฟ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                onPressed: () {
-                                  scrollController.dispose();
-                                  scrollController =
-                                      FixedExtentScrollController(
-                                          initialItem: selectedYearIndex);
-                                  _showDialog(
-                                    CupertinoPicker(
-                                      itemExtent: 32,
-                                      scrollController: scrollController,
-                                      onSelectedItemChanged: (int index) {
-                                        setState(() {
-                                          selectedYearIndex = index;
-                                        });
-                                        selectYear = year[selectedYearIndex];
-                                      },
-                                      useMagnifier: true,
-                                      children: List<Widget>.generate(
-                                          year.length, (index) {
-                                        return Center(
-                                          child: Text('${year[index]}'),
-                                        );
-                                      }),
-                                    ),
-                                  );
-                                },
                               ),
+                              Row(
+                                children: [
+                                  CupertinoButton(
+                                    child: Text(
+                                      'ปี $selectYear',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: widget.isStaff
+                                            ? Colors.blue[200]
+                                            : Colors.green[300],
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      scrollController.dispose();
+                                      scrollController =
+                                          FixedExtentScrollController(
+                                              initialItem: selectedYearIndex);
+                                      _showDialog(
+                                        CupertinoPicker(
+                                          itemExtent: 32,
+                                          scrollController: scrollController,
+                                          onSelectedItemChanged: (int index) {
+                                            setState(() {
+                                              selectedYearIndex = index;
+                                              selectYear =
+                                                  year[selectedYearIndex];
+                                            });
+                                          },
+                                          useMagnifier: true,
+                                          children: List<Widget>.generate(
+                                              year.length, (index) {
+                                            return Center(
+                                              child: Text('${year[index]}'),
+                                            );
+                                          }),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const Icon(
+                                    Icons.keyboard_arrow_right,
+                                    color: Colors.green,
+                                  ),
+                                ],
+                              )
                             ],
                           ),
-                          CupertinoSlider(
-                            max: 52,
-                            min: 1,
-                            divisions: 52,
-                            activeColor: widget.isStaff
-                                ? getColors(200)
-                                : getColors(300),
-                            value: _selectedWeek.toDouble(),
-                            onChanged: (values) {
-                              setState(() {
-                                _selectedWeek = values.floor();
-                                // print(_selectedWeek.toString());
-                                isDefault = false;
-                              });
-                            },
-                          ),
-                          Text.rich(
-                            TextSpan(
+                          SizedBox(
+                            width: w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                TextSpan(
-                                  text: '${_selectedWeek.toString()} ',
+                                CupertinoSlider(
+                                  max: 52,
+                                  min: 1,
+                                  divisions: 52,
+                                  activeColor: widget.isStaff
+                                      ? getColors(200)
+                                      : getColors(300),
+                                  value: _selectedWeek.toDouble(),
+                                  onChanged: (values) {
+                                    setState(() {
+                                      _selectedWeek = values.floor();
+                                      // print(_selectedWeek.toString());
+                                      isDefault = false;
+                                    });
+                                  },
                                 ),
-                                const TextSpan(text: 'สัปดาห์ '),
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: '${_selectedWeek.toString()} ',
+                                      ),
+                                      const TextSpan(text: 'สัปดาห์ '),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -531,6 +549,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                   ),
                   child: ElevatedButton(
                     onPressed: () {
+                      physicalGraphList = [];
+                      healthGraphList = [];
+                      addData();
                       choose_filter();
                       Navigator.pop(context);
                     },
@@ -569,6 +590,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
     setState(() {
       isLoading = true;
     });
+    isProblemChooseList = List.filled(49, false);
     addData();
     for (int i = 1900; i <= DateTime.now().year; i++) {
       year.add(i);
@@ -597,16 +619,16 @@ class _AthleteGraphState extends State<AthleteGraph> {
     final w = MediaQuery.of(context).size.width;
 
     historyList = add_filter(historyList);
+    historyList.forEach((element) {
+      if (element['questionnaireType'] == 'Physical') {
+        physicalGraphList.add(element);
+      } else if (element['questionnaireType'] == 'Health') {
+        healthGraphList.add(element);
+      }
+    });
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      historyList.forEach((element) {
-        if (element['questionnaireType'] == 'Physical') {
-          physicalGraphList.add(element);
-        } else if (element['questionnaireType'] == 'Health') {
-          healthGraphList.add(element);
-        }
-      });
       return Column(
         children: [
           Row(
