@@ -38,7 +38,7 @@ class _AnswerState extends State<Answer> {
               padding: EdgeInsets.zero,
               color:
                   widget.answerScore == widget.answerList[widget.questionIndex]
-                      ? Colors.green[100]
+                      ? Colors.yellow[200]
                       : Colors.white,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(

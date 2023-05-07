@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:seniorapp/component/progress_bar.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -85,13 +86,17 @@ class Result extends StatelessWidget {
       padding: EdgeInsets.only(
         left: w * 0.03,
         right: w * 0.03,
-        top: h * 0.3,
+        top: h * 0.2,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             children: [
+              ProgressBar(scores: resultScore),
+              Padding(
+                padding: EdgeInsets.only(top: h * 0.05),
+              ),
               checkQuestionType(questionType, h),
               Container(
                 padding: EdgeInsets.only(
@@ -177,7 +182,7 @@ class Result extends StatelessWidget {
     );
   }
 
-  RichText checkQuestionType(String questionType, double h) {
+  Widget checkQuestionType(String questionType, double h) {
     switch (questionType) {
       case 'Physical':
         if (resultScore == 0) {

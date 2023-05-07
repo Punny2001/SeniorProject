@@ -70,6 +70,8 @@ dependencies:
   mailer: ^5.1.0
   google_nav_bar: ^5.0.6
   font_awesome_flutter: ^10.4.0
+  fl_score_bar: ^0.2.4
+  percent_indicator: ^4.2.3
 
   
 dev_dependencies:

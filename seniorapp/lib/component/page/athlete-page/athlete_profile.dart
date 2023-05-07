@@ -48,6 +48,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
         children: <Widget>[
           GestureDetector(
             child: Container(
+              alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: w * 0.05),
               width: w,
               height: h / 10,
@@ -71,6 +72,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
           const Divider(thickness: 2),
           GestureDetector(
             child: Container(
+              alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: w * 0.05),
               width: w,
               height: h / 10,
@@ -92,6 +94,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
           const Divider(thickness: 2),
           GestureDetector(
             child: Container(
+              alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: w * 0.05),
               width: w,
               height: h / 10,
@@ -167,6 +170,7 @@ class _AthleteProfileState extends State<AthleteProfile> {
           const Divider(thickness: 2),
           GestureDetector(
             child: Container(
+              alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: w * 0.05),
               width: w,
               height: h / 10,

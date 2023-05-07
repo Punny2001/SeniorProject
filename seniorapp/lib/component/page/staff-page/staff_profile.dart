@@ -58,19 +58,16 @@ class _StaffProfileState extends State<StaffProfile> {
       body: Column(
         children: <Widget>[
           GestureDetector(
-            child: Card(
-              elevation: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: w * 0.05),
-                width: w,
-                height: h / 10,
-                child: const Text(
-                  'Personal Information',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: w * 0.05),
+              width: w,
+              height: h / 10,
+              child: const Text(
+                'Personal Information',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -83,20 +80,20 @@ class _StaffProfileState extends State<StaffProfile> {
               ),
             ),
           ),
+          const Divider(
+            thickness: 2,
+          ),
           GestureDetector(
-            child: Card(
-              elevation: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: w * 0.05),
-                width: w,
-                height: h / 10,
-                child: const Text(
-                  'Customer Support',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: w * 0.05),
+              width: w,
+              height: h / 10,
+              child: const Text(
+                'Customer Support',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -107,20 +104,20 @@ class _StaffProfileState extends State<StaffProfile> {
               }));
             },
           ),
+          const Divider(
+            thickness: 2,
+          ),
           GestureDetector(
-            child: Card(
-              elevation: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: w * 0.05),
-                width: w,
-                height: h / 10,
-                child: const Text(
-                  'Delete Account',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: w * 0.05),
+              width: w,
+              height: h / 10,
+              child: const Text(
+                'Delete Account',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -185,20 +182,20 @@ class _StaffProfileState extends State<StaffProfile> {
                   });
             },
           ),
+          const Divider(
+            thickness: 2,
+          ),
           GestureDetector(
-            child: Card(
-              elevation: 1,
-              child: Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: w * 0.05),
-                width: w,
-                height: h / 10,
-                child: const Text(
-                  'Log Out',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+            child: Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: w * 0.05),
+              width: w,
+              height: h / 10,
+              child: const Text(
+                'Log Out',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -211,6 +208,9 @@ class _StaffProfileState extends State<StaffProfile> {
                 (route) => false,
               );
             },
+          ),
+          const Divider(
+            thickness: 2,
           ),
         ],
       ),

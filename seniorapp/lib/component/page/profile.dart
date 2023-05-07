@@ -140,7 +140,7 @@ class ProfilePageState extends State<ProfilePage> {
     final w = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         primary: true,
