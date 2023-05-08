@@ -33,7 +33,7 @@ class _AnswerState extends State<Answer> {
       width: w,
       child: widget.questionIndex != null && widget.answerList != null
           ? RaisedButton(
-              highlightColor: Colors.green[100],
+              highlightColor: Colors.yellow[200],
               onPressed: widget.selectHandler,
               padding: EdgeInsets.zero,
               color:
@@ -56,7 +56,7 @@ class _AnswerState extends State<Answer> {
               ),
             )
           : RaisedButton(
-              highlightColor: Colors.green[100],
+              highlightColor: Colors.yellow[200],
               onPressed: widget.selectHandler,
               padding: EdgeInsets.zero,
               color: Colors.white,

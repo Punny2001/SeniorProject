@@ -50,7 +50,6 @@ class _FindAthleteGraphState extends State<FindAthleteGraph> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
     final groupedStrings = groupStringsByFirstCharacter();
-    print(athleteList.length);
 
     return Scaffold(
       appBar: AppBar(

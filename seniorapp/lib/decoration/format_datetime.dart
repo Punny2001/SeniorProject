@@ -38,3 +38,9 @@ String formatTime(DateTime dateTime, String userType) {
       break;
   }
 }
+
+String formatDateAndTime(DateTime dateTime) {
+  Intl.defaultLocale = 'en';
+  initializeDateFormatting();
+  return DateFormat('MMM dd, yyyy | hh:mm a').format(dateTime);
+}

@@ -152,7 +152,7 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
     const AthleteHomePage(),
     const AthleteMentalHistory(),
     const AthleteHistory(),
-    AthleteGraph(uid: FirebaseAuth.instance.currentUser.uid, isStaff: false),
+    const AthleteGraph(isStaff: false),
     const AthleteChooseNotify(),
   ];
 
@@ -208,9 +208,11 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   void listenForUser() {
     athleteCollection.doc(uid).snapshots().listen((snapshot) {
       Athlete athleteUser = Athlete.fromMap(snapshot.data());
-      setState(() {
-        athlete = athleteUser;
-      });
+      if (mounted) {
+        setState(() {
+          athlete = athleteUser;
+        });
+      }
     });
   }
 
@@ -371,7 +373,6 @@ class _AthletePageChoosingState extends State<AthletePageChoosing> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
-    
 
     return isLoading
         ? const Scaffold(

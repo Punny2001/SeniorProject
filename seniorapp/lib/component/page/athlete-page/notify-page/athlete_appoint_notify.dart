@@ -131,6 +131,13 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
   Widget build(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
+
+    appointmentForAthleteList.sort(
+      (a, b) => (b['doDate'].toDate()).compareTo(
+        a['doDate'].toDate(),
+      ),
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(

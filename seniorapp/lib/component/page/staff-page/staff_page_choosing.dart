@@ -222,9 +222,11 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   void listenForUser() {
     staffCollection.doc(uid).snapshots().listen((snapshot) {
       Staff staffUser = Staff.fromMap(snapshot.data());
-      setState(() {
-        staff = staffUser;
-      });
+      if (mounted) {
+        setState(() {
+          staff = staffUser;
+        });
+      }
     });
   }
 

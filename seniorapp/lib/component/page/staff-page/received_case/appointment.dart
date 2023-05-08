@@ -1,12 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:seniorapp/component/appointment_data.dart';
+import 'package:seniorapp/decoration/format_datetime.dart';
 import 'package:seniorapp/decoration/padding.dart';
 import 'package:seniorapp/decoration/textfield_normal.dart';
+
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class AppointmentPage extends StatefulWidget {
   final Map<String, dynamic> data;
@@ -20,7 +24,7 @@ class AppointmentPage extends StatefulWidget {
 }
 
 class _AppointmentPageState extends State<AppointmentPage> {
-  DateTime _datetime;
+  DateTime _datetime = DateTime.now();
   final _keyForm = GlobalKey<FormState>();
   final _detailController = TextEditingController();
   @override
@@ -40,58 +44,98 @@ class _AppointmentPageState extends State<AppointmentPage> {
               children: [
                 const Text('Choose a date'),
                 PaddingDecorate(5),
-                DateTimePicker(
-                  locale: const Locale('en'),
-                  use24HourFormat: false,
-                  dateMask: 'MMMM d, yyyy',
-                  dateLabelText: 'Date',
-                  timeLabelText: 'Time',
-                  timeHintText: 'Time',
-                  dateHintText: 'Date',
-                  icon: const Icon(Icons.event),
-                  type: DateTimePickerType.dateTimeSeparate,
-                  lastDate: DateTime(DateTime.now().year + 1),
-                  firstDate: DateTime.now(),
-                  initialDate: DateTime.now(),
-                  decoration: const InputDecoration(
-                    fillColor: Color.fromRGBO(217, 217, 217, 100),
-                    filled: true,
-                    hintStyle: TextStyle(fontFamily: 'OpenSans'),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.red,
+                Row(
+                  children: [
+                    const Icon(Icons.event),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          primary: Colors.grey[300],
+                          onPrimary: Colors.grey[700],
+                        ),
+                        child: Text(formatDateAndTime(_datetime)),
+                        onPressed: () {
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                color: CupertinoColors.systemGrey5,
+                                height: 300,
+                                child: CupertinoDatePicker(
+                                  initialDateTime: _datetime,
+                                  onDateTimeChanged: (DateTime newDateTime) {
+                                    setState(() {
+                                      _datetime = newDateTime;
+                                    });
+                                  },
+                                  mode: CupertinoDatePickerMode.dateAndTime,
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
                     ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.red,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromRGBO(217, 217, 217, 100),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color.fromRGBO(217, 217, 217, 100),
-                      ),
-                    ),
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      print(value);
-                      _datetime = DateTime.tryParse(value);
-                    });
-                  },
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Date and Time is required';
-                    } else {
-                      return null;
-                    }
-                  },
+                  ],
                 ),
+                // CupertinoDatePicker(
+                //   mode: CupertinoDatePickerMode.dateAndTime,
+                //   onDateTimeChanged: (value) {
+                //     setState(() {
+                //       _datetime = value;
+                //     });
+                //   },
+                //   initialDateTime: DateTime.now(),
+                // ),
+                // maximumDate: DateTime.now(),
+                // minimumDate: DateTime(DateTime.now().year + 1)),
+                // DateTimePicker(
+                //   locale: const Locale('en'),
+                //   use24HourFormat: false,
+                //   dateMask: 'MMMM d, yyyy',
+                //   icon: const Icon(Icons.event),
+                //   type: DateTimePickerType.dateTimeSeparate,
+                //   lastDate: DateTime(DateTime.now().year + 1),
+                //   firstDate: DateTime.now(),
+                //   initialDate: DateTime.now(),
+                //   dateHintText: 'Date',
+                //   timeHintText: 'Time',
+                // decoration: const InputDecoration(
+                //   fillColor: Colors.transparent,
+                //   focusedErrorBorder: OutlineInputBorder(
+                //     borderSide: BorderSide(
+                //       color: Colors.red,
+                //     ),
+                //   ),
+                //   errorBorder: OutlineInputBorder(
+                //     borderSide: BorderSide(
+                //       color: Colors.red,
+                //     ),
+                //   ),
+                //   enabledBorder: OutlineInputBorder(
+                //     borderSide: BorderSide(
+                //       color: Color.fromRGBO(217, 217, 217, 100),
+                //     ),
+                //   ),
+                //   focusedBorder: OutlineInputBorder(
+                //     borderSide: BorderSide(
+                //       color: Color.fromRGBO(217, 217, 217, 100),
+                //     ),
+                //   ),
+                // ),
+                // onChanged: (value) {},
+                // validator: (value) {
+                //   if (value.isEmpty) {
+                //     return 'Date and Time is required';
+                //   } else {
+                //     return null;
+                //   }
+                // },
+                // ),
                 PaddingDecorate(10),
                 const Text('Detail'),
                 PaddingDecorate(5),
@@ -126,7 +170,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 primary: Colors.red[300],
               ),
               onPressed: () {
-                _datetime = null;
+                // _datetime = null;
                 _detailController.clear();
                 Navigator.of(context).pop();
               },

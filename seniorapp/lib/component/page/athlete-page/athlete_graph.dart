@@ -2,13 +2,20 @@ import 'dart:async' show Timer;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seniorapp/component/page/athlete-page/athlete_page_choosing.dart';
-import 'package:seniorapp/component/page/athlete-page/graph-page/line_graph.dart';
+import 'package:seniorapp/component/page/athlete-page/graph-page/plot_graph.dart';
 import 'package:seniorapp/decoration/padding.dart';
 
 class AthleteGraph extends StatefulWidget {
-  const AthleteGraph({Key key, this.uid, this.isStaff}) : super(key: key);
+  const AthleteGraph(
+      {Key key,
+      this.healthHistoryListForStaff,
+      this.physicalHistoryListForStaff,
+      this.isStaff})
+      : super(key: key);
 
-  final String uid;
+  final List<Map<String, dynamic>> healthHistoryListForStaff;
+  final List<Map<String, dynamic>> physicalHistoryListForStaff;
+
   final bool isStaff;
 
   @override
@@ -66,12 +73,12 @@ class _AthleteGraphState extends State<AthleteGraph> {
     return data;
   }
 
-  Color getColors(int shade) {
+  Color getColors() {
     Color colors;
     if (widget.isStaff == true) {
-      colors = Colors.blue[shade];
+      colors = Colors.blue;
     } else {
-      colors = Colors.green[shade];
+      colors = Colors.green;
     }
     return colors;
   }
@@ -137,10 +144,10 @@ class _AthleteGraphState extends State<AthleteGraph> {
                           isProblemChooseList = List.filled(49, false);
                         });
                       },
-                      child: const Text(
+                      child: Text(
                         'รีเซ็ต',
                         style: TextStyle(
-                          color: Colors.green,
+                          color: getColors(),
                         ),
                       ),
                     ),
@@ -194,7 +201,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                               }
                             });
                           },
-                          activeColor: Colors.green[300],
+                          activeColor: getColors(),
                           title: Text(problemList[index]),
                         );
                       } else {
@@ -275,10 +282,10 @@ class _AthleteGraphState extends State<AthleteGraph> {
                               isProblemChooseList = List.filled(49, false);
                             });
                           },
-                          child: const Text(
+                          child: Text(
                             'รีเซ็ต',
                             style: TextStyle(
-                              color: Colors.green,
+                              color: getColors(),
                             ),
                           ),
                         ),
@@ -320,13 +327,19 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       ),
                                       elevation: 0,
                                       shape: const StadiumBorder(),
-                                      side:
-                                          BorderSide(color: Colors.green[300]),
+                                      side: BorderSide(
+                                          color: widget.isStaff
+                                              ? Colors.blue[200]
+                                              : Colors.green[300]),
                                       onPrimary: isPhysicalButtonActive == false
-                                          ? Colors.green
+                                          ? widget.isStaff
+                                              ? Colors.blue
+                                              : Colors.green
                                           : Colors.white,
                                       primary: isPhysicalButtonActive == true
-                                          ? Colors.green[300]
+                                          ? widget.isStaff
+                                              ? Colors.blue[200]
+                                              : Colors.green[300]
                                           : Colors.white,
                                     ),
                                     child: const Text('อาการบาดเจ็บ'),
@@ -350,13 +363,19 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       ),
                                       elevation: 0,
                                       shape: const StadiumBorder(),
-                                      side:
-                                          BorderSide(color: Colors.green[300]),
+                                      side: BorderSide(
+                                          color: widget.isStaff
+                                              ? Colors.blue[200]
+                                              : Colors.green[300]),
                                       onPrimary: isHealthButtonActive == false
-                                          ? Colors.green
+                                          ? widget.isStaff
+                                              ? Colors.blue
+                                              : Colors.green
                                           : Colors.white,
                                       primary: isHealthButtonActive == true
-                                          ? Colors.green[300]
+                                          ? widget.isStaff
+                                              ? Colors.blue[200]
+                                              : Colors.green[300]
                                           : Colors.white,
                                     ),
                                     child: const Text('อาการเจ็บป่วย'),
@@ -389,16 +408,16 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   children: [
                                     Text(
                                       specificProblem,
-                                      style: const TextStyle(
-                                        color: Colors.green,
+                                      style: TextStyle(
+                                        color: getColors(),
                                         fontWeight: FontWeight.bold,
                                       ),
                                       overflow: TextOverflow.clip,
                                     ),
                                     const SizedBox(width: 5),
-                                    const Icon(
+                                    Icon(
                                       Icons.keyboard_arrow_right,
-                                      color: Colors.green,
+                                      color: getColors(),
                                     ),
                                   ],
                                 ),
@@ -406,7 +425,6 @@ class _AthleteGraphState extends State<AthleteGraph> {
                             ],
                           ),
                           PaddingDecorate(15),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -423,9 +441,7 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       'ปี $selectYear',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        color: widget.isStaff
-                                            ? Colors.blue[200]
-                                            : Colors.green[300],
+                                        color: getColors(),
                                       ),
                                     ),
                                     onPressed: () {
@@ -455,9 +471,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                       );
                                     },
                                   ),
-                                  const Icon(
+                                  Icon(
                                     Icons.keyboard_arrow_right,
-                                    color: Colors.green,
+                                    color: getColors(),
                                   ),
                                 ],
                               )
@@ -472,14 +488,11 @@ class _AthleteGraphState extends State<AthleteGraph> {
                                   max: 52,
                                   min: 1,
                                   divisions: 52,
-                                  activeColor: widget.isStaff
-                                      ? getColors(200)
-                                      : getColors(300),
+                                  activeColor: getColors(),
                                   value: _selectedWeek.toDouble(),
                                   onChanged: (values) {
                                     setState(() {
                                       _selectedWeek = values.floor();
-                                      // print(_selectedWeek.toString());
                                       isDefault = false;
                                     });
                                   },
@@ -510,9 +523,9 @@ class _AthleteGraphState extends State<AthleteGraph> {
                               ),
                               Text(
                                 '${_currentRangeValues.start.ceil().toString()} - ${_currentRangeValues.end.ceil().toString()} คะแนน',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.green,
+                                  color: getColors(),
                                 ),
                               ),
                             ],
@@ -524,8 +537,12 @@ class _AthleteGraphState extends State<AthleteGraph> {
                             values: _currentRangeValues,
                             min: 0,
                             max: 100,
-                            activeColor: Colors.green[300],
-                            inactiveColor: Colors.green[50],
+                            activeColor: widget.isStaff
+                                ? Colors.blue[200]
+                                : Colors.green[300],
+                            inactiveColor: widget.isStaff
+                                ? Colors.blue[50]
+                                : Colors.green[50],
                             labels: RangeLabels(
                               _currentRangeValues.start.round().toString(),
                               _currentRangeValues.end.round().toString(),
@@ -566,7 +583,8 @@ class _AthleteGraphState extends State<AthleteGraph> {
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(w, bodyHeight * 0.05),
                       elevation: 0,
-                      primary: Colors.green[400],
+                      primary:
+                          widget.isStaff ? Colors.blue[400] : Colors.green[400],
                     ),
                   ),
                 ),
@@ -579,9 +597,15 @@ class _AthleteGraphState extends State<AthleteGraph> {
   }
 
   void addData() {
-    List<Map<String, dynamic>> combinedList =
-        physicalHistoryList + healthHistoryList;
-    historyList = combinedList;
+    if (widget.isStaff == true) {
+      List<Map<String, dynamic>> combinedList =
+          widget.healthHistoryListForStaff + widget.physicalHistoryListForStaff;
+      historyList = combinedList;
+    } else {
+      List<Map<String, dynamic>> combinedList =
+          physicalHistoryList + healthHistoryList;
+      historyList = combinedList;
+    }
   }
 
   @override
@@ -643,7 +667,8 @@ class _AthleteGraphState extends State<AthleteGraph> {
                       color: Colors.black,
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.green[300],
+                      primary:
+                          widget.isStaff ? Colors.blue[200] : Colors.green[300],
                       elevation: 0,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(

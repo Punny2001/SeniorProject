@@ -59,6 +59,7 @@ class _StaffProfileState extends State<StaffProfile> {
         children: <Widget>[
           GestureDetector(
             child: Container(
+              color: Colors.white,
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: w * 0.05),
               width: w,
@@ -86,6 +87,7 @@ class _StaffProfileState extends State<StaffProfile> {
           GestureDetector(
             child: Container(
               alignment: Alignment.centerLeft,
+              color: Colors.white,
               padding: EdgeInsets.only(left: w * 0.05),
               width: w,
               height: h / 10,
@@ -110,6 +112,7 @@ class _StaffProfileState extends State<StaffProfile> {
           GestureDetector(
             child: Container(
               alignment: Alignment.centerLeft,
+              color: Colors.white,
               padding: EdgeInsets.only(left: w * 0.05),
               width: w,
               height: h / 10,
@@ -187,6 +190,7 @@ class _StaffProfileState extends State<StaffProfile> {
           ),
           GestureDetector(
             child: Container(
+              color: Colors.white,
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: w * 0.05),
               width: w,
