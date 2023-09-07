@@ -150,7 +150,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => signin(),
+                    onPressed: signin,
                     child: Text(
                       'Sign In',
                       style: TextStyle(
@@ -177,7 +177,7 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                       ),
-                      Text('OR'),
+                      const Text('OR'),
                       Expanded(
                         child: Container(
                           padding: EdgeInsets.only(left: w * 0.05),
@@ -233,6 +233,7 @@ class _LoginState extends State<Login> {
         )
             .then((value) async {
           String uid = value.user.uid;
+          print('User uid: $uid');
           final db = FirebaseFirestore.instance;
           DocumentReference athleteRef = db.collection('Athlete').doc(uid);
           DocumentReference staffRef = db.collection('Staff').doc(uid);

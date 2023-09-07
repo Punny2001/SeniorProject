@@ -22,7 +22,7 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
   var _questionIndexPart2 = 0;
   var _questionIndexPart3 = 0;
   int totalScore;
-  Map<String, int> answer_list_part1 = {"Q1": 0};
+  Map<String, int> answer_list_part1 = {};
   Map<String, int> answer_list_part2 = {'Q1': 0};
   Map<String, int> answer_list_part3 = {'Q1': 0};
   String uid = FirebaseAuth.instance.currentUser.uid;
@@ -164,28 +164,25 @@ class _MentalQuestionnaire extends State<MentalQuestionnaire> {
         'questionNo': 'Q10',
         'questionText': 'ตอนนี้คุณมีสภาพจิดใจที่ร่าเริงหรือไม่?',
       },
+     
       {
         'questionNo': 'Q11',
-        'questionText': 'คุณมีอาการเหนืื่อยหรือเปล่า?',
-      },
-      {
-        'questionNo': 'Q12',
         'questionText': 'คุณในตอนนี้ยังสามารถมองเห็นได้ปกติหรือเปล่า?',
       },
       {
-        'questionNo': 'Q13',
+        'questionNo': 'Q12',
         'questionText': 'คุณยังสามารถขยับส่วนของร่างกายได้ปกใช่หรือไม่?',
       },
       {
-        'questionNo': 'Q14',
+        'questionNo': 'Q13',
         'questionText': 'คุณยังสามารถมีสมาธิจดจ่อกับการเล่นกีฬาได้หรือไม่?',
       },
       {
-        'questionNo': 'Q15',
+        'questionNo': 'Q14',
         'questionText': 'คุณยังสามารถโต้ตอบบทสนทนาได้แบบปกติใช่หรือไม่?',
       },
       {
-        'questionNo': 'Q16',
+        'questionNo': 'Q15',
         'questionText': 'คุณอยากที่จะนอนพักหรือไม่?',
       },
     ];

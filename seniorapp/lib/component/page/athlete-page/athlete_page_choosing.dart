@@ -23,7 +23,6 @@ class AthletePageChoosing extends StatefulWidget {
   State<AthletePageChoosing> createState() => _AthletePageChoosingState();
 }
 
-final String uid = FirebaseAuth.instance.currentUser.uid;
 Athlete athlete;
 
 List<Map<String, dynamic>> staffList = [];
@@ -141,6 +140,8 @@ List<bool> isProblemChooseList = [
 ];
 
 class _AthletePageChoosingState extends State<AthletePageChoosing> {
+  String uid = FirebaseAuth.instance.currentUser.uid;
+
   Timer _timer;
   bool isLoading = false;
   int _selected_idx = 0;

@@ -16,7 +16,6 @@ import 'package:seniorapp/component/page/staff-page/staff_graph.dart';
 import 'package:seniorapp/component/user-data/staff_data.dart';
 import 'package:seniorapp/main.dart';
 
-final String uid = FirebaseAuth.instance.currentUser.uid;
 Staff staff;
 List<Map<String, dynamic>> athleteList = [];
 List<Map<String, dynamic>> unfinishedHealthCaseList = [];
@@ -146,6 +145,7 @@ class StaffPageChoosing extends StatefulWidget {
 }
 
 class _StaffPageChoosingState extends State<StaffPageChoosing> {
+  String uid = FirebaseAuth.instance.currentUser.uid;
   int _selected_idx = 0;
   bool isRegister = false;
   int healthSize = 0;
@@ -155,6 +155,7 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   int notificationCount = 0;
   int unfinishedCaseCount = 0;
   int unreadAppointmentCount = 0;
+  String associationType;
 
   bool isLoading;
   Timer _timer;
@@ -203,7 +204,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
       snapshot.docs.forEach((doc) {
         Map<String, dynamic> data = doc.data();
         data['athleteUID'] = doc.reference.id;
-        print(data);
         if (data['association'] == staff.association) {
           athlete.add(data);
           athleteUIDList.add(doc.reference.id);
@@ -322,25 +322,32 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             athleteList.add(element.reference.id);
           }
         });
-        print(athleteList);
-        healthQuestionnaireCollection
-            .where('totalPoint', isGreaterThan: 25)
-            .where('athleteUID', whereIn: athleteList)
-            .snapshots()
-            .listen((snapshot) {
-          List<Map<String, dynamic>> healthQuestionnaire = [];
-          int index = 0;
-          snapshot.docs.forEach((doc) {
-            healthQuestionnaire.add(doc.data());
-            healthQuestionnaire[index]['questionnaireID'] = doc.reference.id;
-            index += 1;
+        // print(athleteList);
+        if (athleteList.isNotEmpty) {
+          healthQuestionnaireCollection
+              .where('totalPoint', isGreaterThan: 25)
+              .snapshots()
+              .listen((snapshot) {
+            List<Map<String, dynamic>> healthQuestionnaire = [];
+            int index = 0;
+            snapshot.docs.forEach((doc) {
+              Map<String, dynamic> data = doc.data();
+              if (athleteList.contains(data['athleteUID'])) {
+                healthQuestionnaire.add(doc.data());
+                healthQuestionnaire[index]['questionnaireID'] =
+                    doc.reference.id;
+                index += 1;
+              }
+            });
+            setState(() {
+              healthCaseList = healthQuestionnaire;
+            });
+          }, onError: (error) {
+            print(error);
           });
-          setState(() {
-            healthCaseList = healthQuestionnaire;
-          });
-        }, onError: (error) {
-          print(error);
-        });
+        } else {
+          healthCaseList = [];
+        }
       });
     });
   }
@@ -357,25 +364,32 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             athleteList.add(element.reference.id);
           }
         });
-        print(athleteList);
-        physicalQuestionnaireCollection
-            .where('totalPoint', isGreaterThan: 25)
-            .where('athleteUID', whereIn: athleteList)
-            .snapshots()
-            .listen((snapshot) {
-          List<Map<String, dynamic>> physicalQuestionnaire = [];
-          int index = 0;
-          snapshot.docs.forEach((doc) {
-            physicalQuestionnaire.add(doc.data());
-            physicalQuestionnaire[index]['questionnaireID'] = doc.reference.id;
-            index += 1;
+        // print(athleteList);
+        if (athleteList.isNotEmpty) {
+          physicalQuestionnaireCollection
+              .where('totalPoint', isGreaterThan: 25)
+              .snapshots()
+              .listen((snapshot) {
+            List<Map<String, dynamic>> physicalQuestionnaire = [];
+            int index = 0;
+            snapshot.docs.forEach((doc) {
+              Map<String, dynamic> data = doc.data();
+              if (athleteList.contains(data['athleteUID'])) {
+                physicalQuestionnaire.add(doc.data());
+                physicalQuestionnaire[index]['questionnaireID'] =
+                    doc.reference.id;
+                index += 1;
+              }
+            });
+            setState(() {
+              physicalCaseList = physicalQuestionnaire;
+            });
+          }, onError: (error) {
+            print(error);
           });
-          setState(() {
-            physicalCaseList = physicalQuestionnaire;
-          });
-        }, onError: (error) {
-          print(error);
-        });
+        } else {
+          physicalCaseList = [];
+        }
       });
     });
   }
@@ -428,26 +442,33 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             athleteList.add(element.reference.id);
           }
         });
-        print(athleteList);
-        healthQuestionnaireCollection
-            .where('totalPoint', isGreaterThan: 25)
-            .where('caseReceived', isEqualTo: false)
-            .where('athleteUID', whereIn: athleteList)
-            .snapshots()
-            .listen((snapshot) {
-          List<Map<String, dynamic>> healthQuestionnaire = [];
-          int index = 0;
-          snapshot.docs.forEach((doc) {
-            healthQuestionnaire.add(doc.data());
-            healthQuestionnaire[index]['questionnaireID'] = doc.reference.id;
-            index += 1;
+        // print(athleteList);
+        if (athleteList.isNotEmpty) {
+          healthQuestionnaireCollection
+              .where('totalPoint', isGreaterThan: 25)
+              .where('caseReceived', isEqualTo: false)
+              .snapshots()
+              .listen((snapshot) {
+            List<Map<String, dynamic>> healthQuestionnaire = [];
+            int index = 0;
+            snapshot.docs.forEach((doc) {
+              Map<String, dynamic> data = doc.data();
+              if (athleteList.contains(data['athleteUID'])) {
+                healthQuestionnaire.add(doc.data());
+                healthQuestionnaire[index]['questionnaireID'] =
+                    doc.reference.id;
+                index += 1;
+              }
+            });
+            setState(() {
+              notificationHealthCaseList = healthQuestionnaire;
+            });
+          }, onError: (error) {
+            print(error);
           });
-          setState(() {
-            notificationHealthCaseList = healthQuestionnaire;
-          });
-        }, onError: (error) {
-          print(error);
-        });
+        } else {
+          notificationHealthCaseList = [];
+        }
       });
     });
   }
@@ -464,25 +485,32 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             athleteList.add(element.reference.id);
           }
         });
-        physicalQuestionnaireCollection
-            .where('totalPoint', isGreaterThan: 25)
-            .where('caseReceived', isEqualTo: false)
-            .where('athleteUID', whereIn: athleteList)
-            .snapshots()
-            .listen((snapshot) {
-          List<Map<String, dynamic>> physicalQuestionnaire = [];
-          int index = 0;
-          snapshot.docs.forEach((doc) {
-            physicalQuestionnaire.add(doc.data());
-            physicalQuestionnaire[index]['questionnaireID'] = doc.reference.id;
-            index += 1;
+        if (athleteList.isNotEmpty) {
+          physicalQuestionnaireCollection
+              .where('totalPoint', isGreaterThan: 25)
+              .where('caseReceived', isEqualTo: false)
+              .snapshots()
+              .listen((snapshot) {
+            List<Map<String, dynamic>> physicalQuestionnaire = [];
+            int index = 0;
+            snapshot.docs.forEach((doc) {
+              Map<String, dynamic> data = doc.data();
+              if (athleteList.contains(data['athleteUID'])) {
+                physicalQuestionnaire.add(doc.data());
+                physicalQuestionnaire[index]['questionnaireID'] =
+                    doc.reference.id;
+                index += 1;
+              }
+            });
+            setState(() {
+              notificationPhysicalCaseList = physicalQuestionnaire;
+            });
+          }, onError: (error) {
+            print(error);
           });
-          setState(() {
-            notificationPhysicalCaseList = physicalQuestionnaire;
-          });
-        }, onError: (error) {
-          print(error);
-        });
+        } else {
+          notificationPhysicalCaseList == [];
+        }
       });
     });
   }
@@ -513,6 +541,43 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     });
   }
 
+  void getNotificationType() {
+    staffCollection.doc(uid).get().then((snapshot) {
+      Map<String, dynamic> data = snapshot.data();
+      Staff tempStaff = Staff.fromMap(data);
+      print('Asscoication: ${tempStaff.association}');
+      switch (tempStaff.association) {
+        case 'Mahidol University':
+          setState(() {
+            associationType = 'StaffMU';
+          });
+          break;
+        case 'Physiotherapy Khun Nirinrat':
+          setState(() {
+            associationType = 'StaffPHNR';
+          });
+          break;
+        case 'Rugby':
+          setState(() {
+            associationType = 'StaffRB';
+          });
+          break;
+        case 'Sports Authority of Thailand':
+          setState(() {
+            associationType = 'StaffSAT';
+          });
+          break;
+        case 'Taekwondo':
+          setState(() {
+            associationType = 'StaffTKD';
+          });
+          break;
+        default:
+      }
+      FirebaseMessaging.instance.subscribeToTopic(associationType);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -533,9 +598,10 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
     listenForNotifyHealthCase();
     listenForNotifyPhysicalCase();
     listenForAppointment();
+    getNotificationType();
 
     FirebaseMessaging.instance.unsubscribeFromTopic('Athlete');
-    FirebaseMessaging.instance.subscribeToTopic('Staff');
+
     if (Platform.isIOS) {
       requestPermission();
     }
@@ -556,8 +622,6 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
-
-    print(athleteList.length);
 
     notificationCount = notificationHealthCaseList.length +
         notificationPhysicalCaseList.length +

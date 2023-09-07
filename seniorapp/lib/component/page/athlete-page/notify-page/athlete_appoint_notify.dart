@@ -133,8 +133,8 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
     final h = MediaQuery.of(context).size.height;
 
     appointmentForAthleteList.sort(
-      (a, b) => (b['doDate'].toDate()).compareTo(
-        a['doDate'].toDate(),
+      (a, b) => (b['appointDate'].toDate()).compareTo(
+        a['appointDate'].toDate(),
       ),
     );
 
@@ -240,7 +240,7 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                               children: [
                                 ElevatedButton.icon(
                                   onPressed: () {
-                                    updateData(data['docID'], false)
+                                    updateData(data['appointmentID'], false)
                                         .then((value) {
                                       sendPushFailedMessage(
                                         data['token'],
@@ -258,13 +258,13 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
                                 ),
                                 ElevatedButton.icon(
                                   onPressed: () {
-                                    setState(() {
-                                      updateData(data['docID'], true);
+                                    updateData(data['appointmentID'], true)
+                                        .then((value) {
                                       sendPushSuccessMessage(
                                         data['token'],
                                         data,
                                       );
-                                    });
+                                    }).then((value) => setState(() {}));
                                   },
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.green[400],
@@ -362,7 +362,7 @@ class _StaffCaseState extends State<AthleteAppointmentNotify> {
   }
 
   Future<void> updateData(String docID, bool status) async {
-    print(docID);
+    print('Document ID: $docID');
     await FirebaseFirestore.instance
         .collection('AppointmentRecord')
         .doc(docID)

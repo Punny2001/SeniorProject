@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +25,7 @@ class StaffNotify extends StatefulWidget {
 }
 
 class _StaffCaseState extends State<StaffNotify> {
+  String uid = FirebaseAuth.instance.currentUser.uid;
   User user;
   bool isLoading = false;
   int healthSize = 0;
@@ -142,7 +142,7 @@ class _StaffCaseState extends State<StaffNotify> {
                       child: Column(
                         children: [
                           Container(
-                            height: h * 0.15,
+                            height: h * 0.18,
                             padding: EdgeInsets.only(
                               left: w * 0.05,
                             ),
@@ -432,7 +432,7 @@ class _StaffCaseState extends State<StaffNotify> {
                             onTap: () {
                               updateData(
                                 data['questionnaireType'],
-                                data['docID'],
+                                data['questionnaireID'],
                               ).then((value) {
                                 sendPushMessage(data['token'], staff,
                                     data['questionnaireNo']);
@@ -511,7 +511,8 @@ class _StaffCaseState extends State<StaffNotify> {
               .get()
               .then((snapshot) async {
             Map<String, dynamic> data = snapshot.data();
-            if (data['caseReceived'] == false) {
+            print('Is Case Received : ${data['caseReceived']}');
+            if (data['caseReceived'] == false || data['caseReceived'] == null) {
               await FirebaseFirestore.instance
                   .collection('HealthQuestionnaireResult')
                   .doc(docID)
@@ -539,7 +540,7 @@ class _StaffCaseState extends State<StaffNotify> {
               .get()
               .then((snapshot) async {
             Map<String, dynamic> data = snapshot.data();
-            if (data['caseReceived'] == false) {
+            if (data['caseReceived'] == false || data['caseReceived'] == null) {
               await FirebaseFirestore.instance
                   .collection('PhysicalQuestionnaireResult')
                   .doc(docID)

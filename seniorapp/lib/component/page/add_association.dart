@@ -189,8 +189,10 @@ class _AddAssociationState extends State<AddAssociation> {
 }
 
 List<String> association = [
-  'Football Tournament',
-  'Mahidol University',
   'Individual',
-  'Sports Authority of Thailand'
+  'Mahidol University',
+  'Physiotherapy Khun Nirinrat',
+  'Rugby',
+  'Sports Authority of Thailand',
+  'Taekwondo',
 ];

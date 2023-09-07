@@ -256,7 +256,7 @@ class _StaffCaseState extends State<StaffAppointmentNotify> {
               )
             : const Center(
                 child: Text(
-                  'Empty notification',
+                  'Empty appointment',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 50,

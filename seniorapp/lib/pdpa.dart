@@ -26,23 +26,19 @@ class _PDPAWidgetState extends State<PDPAWidget> {
         automaticallyImplyLeading: false,
         primary: true,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.black,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Ink(
-              decoration: ShapeDecoration(
-                shape: const CircleBorder(),
-                color: Colors.blue[200],
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                alignment: Alignment.centerRight,
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          ],
+        scrolledUnderElevation: 1,
+        backgroundColor: Colors.white,
+        foregroundColor: const Color.fromARGB(255, 113, 157, 242),
+        leading: IconButton(
+          onPressed: () {
+            setState(() {
+              Navigator.of(context).pop();
+            });
+          },
+          alignment: Alignment.centerRight,
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
         ),
       ),
       body: SingleChildScrollView(

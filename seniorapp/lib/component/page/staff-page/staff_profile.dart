@@ -204,7 +204,36 @@ class _StaffProfileState extends State<StaffProfile> {
               ),
             ),
             onTap: () {
-              FirebaseMessaging.instance.unsubscribeFromTopic('Staff');
+              String associationType;
+              switch (stfData.association) {
+                case 'Mahidol University':
+                  setState(() {
+                    associationType = 'StaffMU';
+                  });
+                  break;
+                case 'Physiotherapy Khun Nirinrat':
+                  setState(() {
+                    associationType = 'StaffPHNR';
+                  });
+                  break;
+                case 'Rugby':
+                  setState(() {
+                    associationType = 'StaffRB';
+                  });
+                  break;
+                case 'Sports Authority of Thailand':
+                  setState(() {
+                    associationType = 'StaffSAT';
+                  });
+                  break;
+                case 'Taekwondo':
+                  setState(() {
+                    associationType = 'StaffTKD';
+                  });
+                  break;
+                default:
+              }
+              FirebaseMessaging.instance.unsubscribeFromTopic(associationType);
               FirebaseMessaging.instance.deleteToken();
               FirebaseAuth.instance.signOut();
               Navigator.of(context).pushNamedAndRemoveUntil(
