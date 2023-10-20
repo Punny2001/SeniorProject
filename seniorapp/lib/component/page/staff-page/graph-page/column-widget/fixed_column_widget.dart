@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:seniorapp/component/page/athlete-page/athlete_graph.dart';
 import 'package:seniorapp/component/page/staff-page/graph-page/staff_personnel_graph.dart';
 
 class FixedColumnTable extends StatelessWidget {
