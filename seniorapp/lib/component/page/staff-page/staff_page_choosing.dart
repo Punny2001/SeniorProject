@@ -557,9 +557,9 @@ class _StaffPageChoosingState extends State<StaffPageChoosing> {
             associationType = 'StaffPHNR';
           });
           break;
-        case 'Rugby':
+        case 'Football':
           setState(() {
-            associationType = 'StaffRB';
+            associationType = 'StaffFB';
           });
           break;
         case 'Sports Authority of Thailand':

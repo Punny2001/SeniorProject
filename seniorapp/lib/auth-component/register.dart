@@ -83,6 +83,7 @@ class _RegisterState extends State<Register> {
     final w = MediaQuery.of(context).size.width;
     final h = MediaQuery.of(context).size.height;
     isAthleteCheck();
+    association.sort();
 
     return Scaffold(
       backgroundColor: Colors.white,

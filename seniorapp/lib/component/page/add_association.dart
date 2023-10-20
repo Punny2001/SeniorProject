@@ -19,10 +19,13 @@ class AddAssociation extends StatefulWidget {
 class _AddAssociationState extends State<AddAssociation> {
   String selectedAssociation;
   final associationKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
+
+    association.sort();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -192,7 +195,7 @@ List<String> association = [
   'Individual',
   'Mahidol University',
   'Physiotherapy Khun Nirinrat',
-  'Rugby',
+  'Football',
   'Sports Authority of Thailand',
   'Taekwondo',
 ];
